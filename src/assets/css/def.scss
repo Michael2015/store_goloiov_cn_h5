@@ -114,3 +114,8 @@ $root-size: (32 / 2) * 1px;
   word-wrap: break-word;
   word-break: break-all;
 }
+
+@mixin bg($url) {
+  background-image: url($url);
+  background-size: 100% 100%;
+}
