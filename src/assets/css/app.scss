@@ -1,0 +1,48 @@
+@import "def";
+@import "reset";
+@import "common";
+html {
+  font-size: 100%;
+}
+body, html {
+  line-height: 1;
+  font-family: 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif, 'Droid Sans Fallback';
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  background-color: #fff;
+  color: $font-color-default;
+}
+@media only screen and (max-width: 319px) {
+  html{
+    font-size: (300/375) * 100%
+  }
+}
+@media only screen and (max-width: 320px) and (max-width: 374px){
+  html{
+    font-size: (320/375) * 100%
+  }
+}
+
+@media only screen  and (min-width: 375px) and (max-width: 413px) {
+  html{
+    font-size: 100%
+  }
+}
+
+@media only screen and (min-width: 414px) and (max-width: 767px) {
+  html{
+    font-size: (414/375) * 100%
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1279px) {
+  html{
+    font-size: 100%
+  }
+}
+
+@media only screen and (min-width: 1280px) {
+  html{
+    font-size: 100%
+  }
+}
