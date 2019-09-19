@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from 'com/index'
 import Order from 'com/order'
-import Income from 'com/order'
+import Income from 'com/income'
 import Me from 'com/me'
 
 Vue.use(Router)

@@ -73,6 +73,15 @@
     padding:size(8) size(13);
   }
 }
+.btn-inline{
+  display: inline-block;
+  font-size: size(28);
+  color: #666;
+  border: 1px solid #e4e4e4;
+  padding: size(16) size(32);
+  border-radius: size((28 + 16 * 2) / 2);
+  text-align: center;
+}
 .btn{
   display: block;
   background: $color-primary;
@@ -94,11 +103,31 @@
   bottom: 0;
   right: 0;
   background: rgba(0, 0, 0, .3);
-  z-index: 999;
+  z-index: 99;
   &.transparent{
     background: rgba(0, 0, 0, 0);
   }
 }
 .mint-indicator-wrapper{
   z-index: 999;
+}
+
+// 左右渐变，右下角有个圆的样式
+.top-spec-bg{
+  background: linear-gradient(to right, #ef5456, #e70002);
+  position: relative;
+  overflow: hidden;
+  &:after{
+    content: ' ';
+    display: block;
+    position: absolute;
+    @include circle(496);
+    background-color: #ec3536;
+    bottom: size(-366);
+    right: size(-240);
+  }
+  >div{
+    position: relative;
+    z-index: 1;
+  }
 }
