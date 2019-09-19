@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from 'com/index'
 import Order from 'com/order'
+import OrderDetail from 'com/order/order-detail'
 import Income from 'com/income'
 import Me from 'com/me'
 
@@ -17,6 +18,10 @@ export default new Router({
     {
       path: '/order',
       component: Order
+    },
+    {
+      path: '/order-detail',
+      component: OrderDetail
     },
     {
       path: '/income',
