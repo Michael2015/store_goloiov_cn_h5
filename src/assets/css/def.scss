@@ -119,3 +119,25 @@ $root-size: (32 / 2) * 1px;
   background-image: url($url);
   background-size: 100% 100%;
 }
+
+@mixin mid {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@function p($x) {
+  // 保留两位小数
+  @return percentage( floor($x * 10000) / 10000 )
+}
+
+@mixin circle($size) {
+  width: size($size);
+  height: size($size);
+  border-radius: 50%;
+}
+
+@mixin fill{
+  width: 100%;
+  height: 100%;
+}
