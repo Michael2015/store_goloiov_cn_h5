@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w">
     <div class="big-status">已收货</div>
     <div class="wrap">
       <div class="con">
@@ -64,9 +64,11 @@ export default {
   font-size: size(36);
   font-weight: 800;
 }
-.wrap{
+.w{
   min-height: 100vh;
   background-color: $color-body-bg;
+}
+.wrap{
   padding: size(110) 0 size(100);
 }
 .con{

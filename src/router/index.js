@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Index from 'com/index'
+import Goods from 'com/index/goods'
+import GoodsBuyRecords from 'com/index/goods-buy-records'
+import GoodsPrice from 'com/index/goods-price'
 import Order from 'com/order'
 import OrderDetail from 'com/order/order-detail'
 import Income from 'com/income'
@@ -14,6 +17,24 @@ export default new Router({
     {
       path: '/index',
       component: Index
+    },
+    {
+      path: '/goods',
+      component: Goods,
+      children: [
+        {
+          path: '',
+          redirect: 'price'
+        },
+        {
+          path: 'price',
+          component: GoodsPrice
+        },
+        {
+          path: 'buy-records',
+          component: GoodsBuyRecords
+        }
+      ],
     },
     {
       path: '/order',
