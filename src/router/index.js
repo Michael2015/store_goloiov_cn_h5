@@ -1,9 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from 'com/index'
-import Order from 'com/order'
-import Income from 'com/order'
-import Me from 'com/me'
 
 Vue.use(Router)
 
@@ -12,19 +8,27 @@ export default new Router({
   routes: [
     {
       path: '/index',
-      component: Index
+      component : () => import(/* webpackChunkName: "index" */ 'com/index'),
+      meta: { haveTab: true }
     },
     {
       path: '/order',
-      component: Order
+      component: () => import(/* webpackChunkName: "order" */ 'com/order'),
+      meta: { haveTab: true }
     },
     {
       path: '/income',
-      component: Income
+      component: () => import(/* webpackChunkName: "income" */ 'com/income'),
+      meta: { haveTab: true }
     },
     {
       path: '/me',
-      component: Me
+      component: () => import(/* webpackChunkName: "me" */ 'com/me'),
+      meta: { haveTab: true }
+    },
+    {
+      path: '/',
+      redirect:'/index'
     }
   ]
 })
