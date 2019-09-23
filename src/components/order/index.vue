@@ -1,5 +1,4 @@
 <template>
-  <div>
   <div class="wrap">
     <div class="top top-spec-bg">
       <div>
