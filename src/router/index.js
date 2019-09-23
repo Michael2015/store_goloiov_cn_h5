@@ -17,7 +17,8 @@ export default new Router({
   routes: [
     {
       path: '/index',
-      component: Index
+      component : () => import(/* webpackChunkName: "index" */ 'com/index'),
+      meta: { haveTab: true }
     },
     {
       path: '/goods',
@@ -43,7 +44,8 @@ export default new Router({
     },
     {
       path: '/order',
-      component: Order
+      component: () => import(/* webpackChunkName: "order" */ 'com/order'),
+      meta: { haveTab: true }
     },
     {
       path: '/order-detail',
@@ -51,11 +53,17 @@ export default new Router({
     },
     {
       path: '/income',
-      component: Income
+      component: () => import(/* webpackChunkName: "income" */ 'com/income'),
+      meta: { haveTab: true }
     },
     {
       path: '/me',
-      component: Me
+      component: () => import(/* webpackChunkName: "me" */ 'com/me'),
+      meta: { haveTab: true }
+    },
+    {
+      path: '/',
+      redirect:'/index'
     }
   ]
 })
