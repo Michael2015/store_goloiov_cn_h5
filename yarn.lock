@@ -7959,17 +7959,6 @@ terser@^4.1.2:
     source-map "~0.6.1"
     source-map-support "~0.5.12"
 
-test@./:
-  version "0.1.0"
-  dependencies:
-    axios "^0.19.0"
-    core-js "^2.6.5"
-    mint-ui "^2.2.13"
-    postcss-px-to-viewport "^1.1.1"
-    qs "^6.8.0"
-    vue "^2.6.10"
-    vue-router "^3.0.6"
-
 text-table@^0.2.0, text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
