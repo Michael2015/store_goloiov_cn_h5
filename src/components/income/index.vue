@@ -2,9 +2,8 @@
   <div class="income_warp">
     <div class="topbox">
       <div class="banner">
-        <div class="circle"></div>
         <div class="content">
-          <div class="title">可提现金额</div>
+          <div class="title">可提现金额:</div>
           <div class="all_money">
             <span>¥</span>7694.28
           </div>
@@ -16,25 +15,28 @@
           <div class="withdraw">提现</div>
         </div>
       </div>
-      <div class="in-title">
-        <span
-          :class="active === 'tab-container1'?'active':''"
-          @click="checkShow('tab-container1')"
-        >我的免单</span>
-        <span
-          :class="active === 'tab-container2'?'active':''"
-          @click="checkShow('tab-container2')"
-        >收益</span>
-      </div>
+      <!-- <div class="in-title">
+        <span :class="active === 'charge'?'active':''" @click="checkShow('charge')">我的免单</span>
+        <span :class="active === 'earnings'?'active':''" @click="checkShow('earnings')">收益</span>
+      </div> -->
     </div>
-    <mt-tab-container v-model="active" swipeable>
-      <mt-tab-container-item id="tab-container1">
+    <!-- <mt-tab-container v-model="active" swipeable>
+      <mt-tab-container-item
+        id="charge"
+        v-infinite-scroll="loadCharge"
+        infinite-scroll-disabled="leftLoading"
+        infinite-scroll-distance="10"
+        infinite-scroll-immediate-check="false"
+      >
         <div class="tojump">如何免单，查看介绍>></div>
-        <div class="pub-list">
-          <div class="item">
+        <div class="pub_list">
+          <div class="item" v-for="(item,index) in leftList" :key="index">
             <div class="detail border-bottom">
               <div class="img_warp">
-                <img src="https://storemp.golodata.com/public/uploads/attach/2019/04/03/5ca422d1310a3.png" alt="">
+                <img
+                  src="https://storemp.golodata.com/public/uploads/attach/2019/04/03/5ca422d1310a3.png"
+                  alt
+                />
               </div>
               <div class="desc">
                 <div class="name">元征goloX3 智能车联网车载智慧终端汽车诊断仪车载wifi智能盒子行车电脑</div>
@@ -51,10 +53,28 @@
           </div>
         </div>
       </mt-tab-container-item>
-      <mt-tab-container-item id="tab-container2">
+
+      <mt-tab-container-item
+        id="earnings"
+        v-infinite-scroll="loadEarnings"
+        infinite-scroll-disabled="rightLoading"
+        infinite-scroll-distance="10"
+      >
         <div class="tojump">收益及提现介绍>></div>
+        <div class="in_record">
+          <div class="item border-bottom" v-for="(item,index) in rightList" :key="index">
+            <div class="left">
+              <div class="name">
+                免单奖励（待结算）
+                <span>2019-09-16 15:43:19</span>
+              </div>
+              <div class="reason">订单尾号810006免单奖励</div>
+            </div>
+            <div class="right">+ 1199.00</div>
+          </div>
+        </div>
       </mt-tab-container-item>
-    </mt-tab-container>
+    </mt-tab-container> -->
   </div>
 </template>
 
@@ -62,15 +82,54 @@
 export default {
   data() {
     return {
-      active: "tab-container2"
+      active: "earnings",
+      leftLoading: false,
+      leftList: [1, 2, 3, 4, 5],
+      rightLoading: false,
+      rightList: [1, 2, 3, 4, 5]
     };
   },
-  mounted() {
-    // this.active =
-  },
+  mounted() {},
   methods: {
     checkShow(demo) {
       this.active = demo;
+    },
+    loadCharge() {
+      this.leftLoading = true;
+      if (this.active === "charge") {
+        setTimeout(() => {
+          console.log("111");
+          let last = this.leftList[this.leftList.length - 1];
+          for (let i = 1; i <= 5; i++) {
+            this.leftList.push(last + i);
+          }
+          this.leftLoading = false;
+        }, 500);
+      }
+    },
+    loadEarnings() {
+      this.rightLoading = true;
+      if (this.active === "earnings") {
+        setTimeout(() => {
+          console.log("222");
+          let last = this.rightList[this.rightList.length - 1];
+          for (let i = 1; i <= 5; i++) {
+            this.rightList.push(last + i);
+          }
+          this.rightLoading = false;
+        }, 500);
+      }
+    }
+  },
+  watch: {
+    active(oldVal) {
+      if (oldVal === "earnings") {
+        this.leftLoading = true;
+        this.rightLoading = false;
+      } else if (oldVal === "charge") {
+        this.leftLoading = false;
+        this.rightLoading = true;
+      }
     }
   }
 };
@@ -81,78 +140,76 @@ export default {
 @import "~css/def";
 
 .income_warp {
-  padding-bottom: 96px;
+  padding-bottom: size(96);
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
   .topbox {
-    padding: 24px 24px 0;
+    // padding: size(24) size(24) 0;
     .banner {
-      padding: 46px 58px 46px 48px;
-      background: linear-gradient(to right, #ef5456, #e70002);
-      border-radius: 8px;
+      width: 100%;
+      // height: size(336);
+      height: size(445);
+      padding: size(21) size(58) size(46);
+      background-image: url('~img/shouyi-bg.png');
+      background-size: 100% 100%;
       color: #fff;
       line-height: 1;
-      overflow: hidden;
       position: relative;
       .content {
         position: relative;
         z-index: 3;
         .title {
-          font-size: 28px;
+          font-size: size(28);
         }
         .all_money {
-          font-size: 48px;
-          font-weight: 800;
-          padding: 30px 0;
+          font-size: size(59);
+          font-weight: normal;
+          font-family: Helvetica;
+          font-stretch: normal;
+          letter-spacing: size(1);
+          padding: size(30) 0;
+          text-align: center;
           & > span {
-            margin-left: 10px;
-            font-size: 28px;
+            margin-right: size(10);
+            font-size: size(35);
             font-weight: 500;
           }
         }
         .detail {
-          font-size: 24px;
+          font-size: size(24);
           & > span {
-            margin-left: 10px;
-            font-size: 28px;
+            margin-left: size(10);
+            font-size: size(28);
             font-weight: 800;
           }
         }
         .withdraw {
-          font-size: 30px;
+          font-size: size(30);
           position: absolute;
-          top: 0px;
-          right: 0px;
-          line-height: 60px;
-          height: 64px;
-          border: 1px solid #fff;
-          border-radius: 30px;
-          padding: 0 16px;
+          top: 0;
+          right: 0;
+          line-height: size(60);
+          height: size(64);
+          border: size(1) solid #fff;
+          border-radius: size(30);
+          padding: 0 size(16);
           box-sizing: border-box;
-          min-width: 120px;
+          min-width: size(120);
           text-align: center;
         }
-      }
-      .circle {
-        width: 496px;
-        height: 496px;
-        border-radius: 50%;
-        background: #ec3335;
-        position: absolute;
-        left: 502px;
-        top: 120px;
-        z-index: 2;
       }
     }
     .in-title {
       font-size: 0;
       color: #999;
-      padding: 50px 0 50px;
+      padding: size(50) 0 size(50);
       line-height: 1;
       & > span {
-        font-size: 32px;
+        font-size: size(32);
         display: inline-block;
-        padding: 0 22px;
+        padding: 0 size(22);
         &.active {
           color: #333;
           font-weight: 800;
@@ -160,90 +217,143 @@ export default {
           &:after {
             content: " ";
             display: block;
-            width: 36px;
-            height: 5px;
+            width: size(36);
+            height: size(5);
             background: #e70002;
             position: absolute;
-            bottom: -20px;
+            bottom: size(-20);
             left: 50%;
-            margin-left: -18px;
+            margin-left: size(-18);
           }
         }
       }
     }
   }
-  .tojump {
-    line-height: 80px;
-    text-align: center;
-    font-size: 30px;
-    color: #e80709;
-    background: #f9eded;
-  }
-  .pub-list{
-    padding: 0 24px;
-    .item{
-      padding: 0 24px;
-      background: #fff;
-      border-radius: 4px;
-      margin-top: 10px;
-      .detail{
-        padding-top: 32px;
-        height: 108px;
-        position: relative;
-        .img_warp{
-          width: 90px;
-          height: 90px;
-          background: #ddd;
-          overflow: hidden;
-          position: absolute;
-          left: 0;
-          top: 28px;
-          &>img{
-            display: block;
-            width: 100%;
-            height: auto;
+  .mint-tab-container {
+    flex: 1;
+    overflow: auto;
+
+    // /deep/ .mint-tab-container-wrap {
+    //   flex: 1;
+    //   overflow: auto;
+    // }
+    // .mint-tab-container-item{
+    //   overflow: auto;
+    // }
+    .tojump {
+      line-height: size(80);
+      text-align: center;
+      font-size: size(30);
+      color: #e80709;
+      background: #f9eded;
+    }
+    .border-bottom {
+      position: relative;
+    }
+    .border-bottom::after {
+      content: " ";
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: size(1);
+      background: #e4e4e4;
+      transform: scaleY(0.5);
+      left: 0;
+      bottom: 0;
+    }
+    .pub_list {
+      padding: 0 size(24);
+      .item {
+        padding: 0 size(24);
+        background: #fff;
+        border-radius: size(4);
+        margin-top: size(10);
+        .detail {
+          padding-top: size(32);
+          height: size(108);
+          position: relative;
+          .img_warp {
+            width: size(80);
+            height: size(80);
+            background: #ddd;
+            overflow: hidden;
+            position: absolute;
+            left: 0;
+            top: size(28);
+            & > img {
+              display: block;
+              width: 100%;
+              height: auto;
+            }
+          }
+          .desc {
+            padding-left: size(114);
+            .name {
+              font-size: size(28);
+              font-weight: 800;
+              color: #333;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+            .ordernum {
+              font-size: size(24);
+              color: #999;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              margin-top: size(12);
+            }
           }
         }
-        .desc{
-          padding-left: 114px;
-          .name{
-            font-size: 28px;
-            font-weight: 800;
-            color: #333;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-          .ordernum{
-            font-size: 24px;
-            color: #999;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-top: 12px;
-          }
+        .footer {
+          min-height: size(50);
+          display: flex;
+          align-items: center;
+          font-size: size(24);
+          color: #999;
+          // .txt-count{
+          //   &>span{}
+          // }
         }
       }
-      .border-bottom::after{
-        content: ' ';
-        display: block;
-        position: absolute;
-        width: 100%;
-        height: 1px;
-        background: #e4e4e4;
-        transform: scaleY(.5);
-        left: 0;
-        bottom: 0;
-      }
-      .footer{
-        min-height: 50px;
+    }
+    .in_record {
+      padding: 0 size(24) 0;
+      .item {
         display: flex;
+        min-height: size(146);
         align-items: center;
-        font-size: 24px;
-        color: #999;
-        // .txt-count{
-        //   &>span{}
-        // }
+        padding-left: size(20);
+        .left {
+          width: 70%;
+          .name {
+            color: #333;
+            font-size: size(28);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            & > span {
+              font-size: size(24);
+              color: #999;
+            }
+          }
+          .reason {
+            color: #666;
+            font-size: size(24);
+            margin-top: size(16);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+        .right {
+          width: 30%;
+          text-align: right;
+          font-size: size(28);
+          color: #e70002;
+          font-weight: 800;
+        }
       }
     }
   }

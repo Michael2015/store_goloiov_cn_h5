@@ -62,6 +62,10 @@ export default new Router({
       meta: { haveTab: true }
     },
     {
+      path: '/mymsg',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/myMsg'),
+    },
+    {
       path: '/',
       redirect:'/index'
     }

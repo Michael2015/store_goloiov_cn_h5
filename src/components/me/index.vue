@@ -1,6 +1,6 @@
 <template>
   <div class="me_warp">
-    <div class="header">
+    <div class="header" @click="tojump('/mymsg')">
       <div class="circle"></div>
       <div class="content">
         <div class="avatar"><img src="https://wx.qlogo.cn/mmopen/vi_32/bYDM1OWAZ92xNWTAiadjrrIBLIwalWdvYx6t7PN36gkSMP3UDsa0LD8dibwfdEudKHQmnj41BJksnIqmYRmj5yoA/132" alt=""></div>
@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="group">
-      <div class="nav">
+      <div class="nav"> 
         <div class="icon">
           <img src="../../assets/img/icon/my_coupon.png" alt="">
         </div>
@@ -89,6 +89,11 @@
 
 <script>
 export default {
+  methods:{
+    tojump(url){
+      this.$router.push(url)
+    }
+  }
 }
 </script>
 
@@ -104,23 +109,23 @@ export default {
     overflow: hidden;
     .circle{
       position: absolute;
-      width: 496px;
-      height: 496px;
+      width: size(496);
+      height: size(496);
       border-radius: 50%;
       background: #ec3537;
       z-index: 1;
-      right: -350px;
+      right: size(-350);
       top: 0;
     }
     .content{
       position: relative;
       z-index: 2;
-      padding: 24px 24px 48px;
+      padding: size(24) size(24) size(48);
       display: flex;
       align-items: center;
       .avatar{
-        width: 88px;
-        height: 88px;
+        width: size(88);
+        height: size(88);
         position: relative;
         overflow: hidden;
         &>img{
@@ -132,25 +137,25 @@ export default {
       }
       .info{
         color: #fff;
-        padding-left: 24px;
+        padding-left: size(24);
         flex: 1;
         .name{
-          font-size: 32px;
+          font-size: size(32);
           &>span{
-            font-size: 24px;
+            font-size: size(24);
             background: rgba(255, 255, 255, 0.2953);
-            border-radius: 8px;
-            padding: 5px 20px;
+            border-radius: size(8);
+            padding: size(5) size(20);
             color: #fff;
           }
         }
         .num{
-          font-size: 24px;
-          margin-top: 15px;
+          font-size: size(24);
+          margin-top: size(15);
         }
       }
       .right{
-        width: 18px;
+        width: size(18);
         &>img{
           display: block;
           width: 100%;
@@ -162,15 +167,15 @@ export default {
   .tabs{
     display: flex;
     align-items: center;
-    padding: 0 24px;
+    padding: 0 size(24);
     background: #fff;
-    min-height: 120px;
-    margin-bottom: 24px;
+    min-height: size(120);
+    margin-bottom: size(24);
     position: relative;
     &::after{
       content: ' ';
       display: block;
-      width: 1px;
+      width: size(1);
       height: 60%;
       left: 50%;
       top: 20%;
@@ -180,12 +185,12 @@ export default {
     .tab{
       flex: 1;
       text-align: center;
-      font-size: 28px;
+      font-size: size(28);
       color: #666;
       &>img{
-        width: 48px;
+        width: size(48);
         vertical-align: middle;
-        margin-right: 24px;
+        margin-right: size(24);
         height: auto;
       }
       // &>span{}
@@ -193,35 +198,35 @@ export default {
   }
   .group{
     background: #fff;
-    padding-left: 24px;
-    margin-bottom: 24px;
+    padding-left: size(24);
+    margin-bottom: size(24);
     .nav{
       display: flex;
       align-items: center;
-      padding-right: 24px;
-      min-height: 90px;
+      padding-right: size(24);
+      min-height: size(90);
       position: relative;
       .icon{
-        width: 40px;
+        width: size(40);
         &>img{
           width: 100%;
           height: auto;
         }
       }
       .name{
-        font-size: 28px;
-        margin-left: 24px;
+        font-size: size(28);
+        margin-left: size(24);
         color: #666;
       }
       .right_text{
         flex: 1;
         text-align: right;
-        padding-right: 16px;
-        font-size: 24px;
+        padding-right: size(16);
+        font-size: size(24);
         color: #333;
       }
       .right_icon{
-        width: 16px;
+        width: size(16);
         &>img{
           width: 100%;
           height: auto;
