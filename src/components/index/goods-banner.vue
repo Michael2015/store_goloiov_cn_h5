@@ -16,7 +16,7 @@ export default {
   props: {
     imgs: {
       type: Array,
-      default: () => []
+      default: () => ['https://storemp.golodata.com/public/uploads/attach/2019/04/25/5cc10d7f80a66.png', 'https://storemp.golodata.com/public/uploads/attach/2019/04/25/5cc115121901d.png']
     }
   },
   data() {
@@ -35,7 +35,7 @@ export default {
 <style lang="scss" scoped>
 @import "~css/def";
 .banner{
-  height: size(360);
+  height: size(630);
   position: relative;
   .num{
     position: absolute;

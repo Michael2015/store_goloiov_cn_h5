@@ -12,17 +12,14 @@
     <div class="list">
       <order-item class="item" v-for="i in 2" :key="i"></order-item>
     </div>
-    <tab></tab>
   </div>
 </template>
 
 <script>
-import Tab from 'base/tab'
 import SearchInput from 'base/ui/search-input'
 import OrderItem from './order-item'
 export default {
   components: {
-    Tab,
     SearchInput,
     OrderItem
   },
