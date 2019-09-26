@@ -88,12 +88,9 @@
 </template>
 
 <script>
+import tojump from 'mixins/tojump'
 export default {
-  methods:{
-    tojump(url){
-      this.$router.push(url)
-    }
-  }
+  mixins:[tojump]
 }
 </script>
 

@@ -7,78 +7,91 @@
           <div class="all_money">
             <span>¥</span>7694.28
           </div>
+          <div class="record" @click="tojump('/record')">提现记录</div>
           <div class="detail">
-            待结算 ¥
-            <span>30614.07</span> | 总收入 ¥
-            <span>40017.25</span>
-          </div>
-          <div class="withdraw">提现</div>
-        </div>
-      </div>
-      <!-- <div class="in-title">
-        <span :class="active === 'charge'?'active':''" @click="checkShow('charge')">我的免单</span>
-        <span :class="active === 'earnings'?'active':''" @click="checkShow('earnings')">收益</span>
-      </div> -->
-    </div>
-    <!-- <mt-tab-container v-model="active" swipeable>
-      <mt-tab-container-item
-        id="charge"
-        v-infinite-scroll="loadCharge"
-        infinite-scroll-disabled="leftLoading"
-        infinite-scroll-distance="10"
-        infinite-scroll-immediate-check="false"
-      >
-        <div class="tojump">如何免单，查看介绍>></div>
-        <div class="pub_list">
-          <div class="item" v-for="(item,index) in leftList" :key="index">
-            <div class="detail border-bottom">
-              <div class="img_warp">
-                <img
-                  src="https://storemp.golodata.com/public/uploads/attach/2019/04/03/5ca422d1310a3.png"
-                  alt
-                />
-              </div>
-              <div class="desc">
-                <div class="name">元征goloX3 智能车联网车载智慧终端汽车诊断仪车载wifi智能盒子行车电脑</div>
-                <div class="ordernum">幸运码711</div>
-              </div>
-            </div>
-            <div class="footer">
-              <div class="txt-count">
-                <span>订单尾号：810006</span>
-                <span>|</span>
-                <span>已优惠金额：0.00</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </mt-tab-container-item>
-
-      <mt-tab-container-item
-        id="earnings"
-        v-infinite-scroll="loadEarnings"
-        infinite-scroll-disabled="rightLoading"
-        infinite-scroll-distance="10"
-      >
-        <div class="tojump">收益及提现介绍>></div>
-        <div class="in_record">
-          <div class="item border-bottom" v-for="(item,index) in rightList" :key="index">
             <div class="left">
-              <div class="name">
-                免单奖励（待结算）
-                <span>2019-09-16 15:43:19</span>
-              </div>
-              <div class="reason">订单尾号810006免单奖励</div>
+              <span>待结算</span>
+              <span class="money">
+                <span>¥</span> 30614.07
+              </span>
             </div>
-            <div class="right">+ 1199.00</div>
+            <div class="right">
+              <span>总收入</span>
+              <span class="money">
+                <span>¥</span> 40017.25
+              </span>
+            </div>
           </div>
         </div>
-      </mt-tab-container-item>
-    </mt-tab-container> -->
+        <div class="withdraw" @click="tojump('/withdraw')">提现</div>
+      </div>
+      <div class="in-title">
+        <span :class="active === 'charge'?'active':''" @click="checkShow('charge')">免单</span>
+        <span :class="active === 'earnings'?'active':''" @click="checkShow('earnings')">收益</span>
+        <div class="showtitle">{{showtitle}}</div>
+      </div>
+    </div>
+    <keep-alive>
+      <mt-tab-container v-model="active" swipeable>
+        <mt-tab-container-item
+          id="charge"
+          v-infinite-scroll="loadCharge"
+          infinite-scroll-disabled="leftLoading"
+          infinite-scroll-distance="10"
+          infinite-scroll-immediate-check="false"
+        >
+          <div class="pub_list">
+            <div class="item" v-for="(item,index) in leftList" :key="index">
+              <div class="queue border-bottom">已成功推荐2人，还剩余4单即可免单</div>
+              <div class="detail">
+                <div class="img_warp">
+                  <img
+                    src="https://storemp.golodata.com/public/uploads/attach/2019/04/03/5ca422d1310a3.png"
+                    alt
+                  />
+                </div>
+                <div class="desc border-bottom">
+                  <div class="name">元征goloX3 智能车联网车载智慧终端汽车诊断仪车载wifi智能盒子行车电脑</div>
+                  <div class="ordernum">幸运码640，还有31人等待免单</div>
+                </div>
+              </div>
+              <div class="footer">
+                <div class="txt-count">
+                  <span>订单尾号810006</span>
+                  <span>|</span>
+                  <span>已优惠金额 ¥0.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mt-tab-container-item>
+
+        <mt-tab-container-item
+          id="earnings"
+          v-infinite-scroll="loadEarnings"
+          infinite-scroll-disabled="rightLoading"
+          infinite-scroll-distance="10"
+        >
+          <div class="in_record">
+            <div class="item" v-for="(item,index) in rightList" :key="index">
+              <div class="left">
+                <div class="name">
+                  销售返利
+                  <span>/待结算</span>
+                </div>
+                <div class="reason">订单尾号762534销售返利</div>
+              </div>
+              <div class="right">+10000.00元</div>
+            </div>
+          </div>
+        </mt-tab-container-item>
+      </mt-tab-container>
+    </keep-alive>
   </div>
 </template>
 
 <script>
+import tojump from 'mixins/tojump'
 export default {
   data() {
     return {
@@ -131,9 +144,21 @@ export default {
         this.rightLoading = true;
       }
     }
-  }
+  },
+  computed: {
+    showtitle: function() {
+      let title;
+      const { active } = this;
+      if (active === "earnings") {
+        title = "收益及提现结算";
+      } else if (active === "charge") {
+        title = "如何免单";
+      }
+      return title;
+    }
+  },
+  mixins:[tojump]
 };
-// tab-container
 </script>
 
 <style lang="scss" scoped>
@@ -149,11 +174,9 @@ export default {
     // padding: size(24) size(24) 0;
     .banner {
       width: 100%;
-      // height: size(336);
-      height: size(445);
+      height: size(336);
       padding: size(21) size(58) size(46);
-      background-image: url('~img/shouyi-bg.png');
-      background-size: 100% 100%;
+      @include bg("~img/shouyi-bg.png");
       color: #fff;
       line-height: 1;
       position: relative;
@@ -169,7 +192,7 @@ export default {
           font-family: Helvetica;
           font-stretch: normal;
           letter-spacing: size(1);
-          padding: size(30) 0;
+          padding-top: size(30);
           text-align: center;
           & > span {
             margin-right: size(10);
@@ -177,55 +200,100 @@ export default {
             font-weight: 500;
           }
         }
+        .record {
+          font-family: PingFangSC-Light;
+          text-decoration: underline;
+          font-size: size(26);
+          font-weight: normal;
+          font-stretch: normal;
+          text-align: center;
+        }
         .detail {
           font-size: size(24);
-          & > span {
-            margin-left: size(10);
-            font-size: size(28);
-            font-weight: 800;
+          margin-top: size(41);
+          display: flex;
+          justify-content: space-between;
+          & div > span {
+            display: block;
+            font-size: size(24);
+            text-align: center;
+            height: size(33);
+            line-height: size(33);
+            &.money {
+              font-family: PingFangSC-Medium;
+              margin-top: size(6);
+              font-size: size(32);
+              height: size(45);
+              line-height: size(45);
+              & > span {
+                font-size: size(20);
+              }
+            }
           }
         }
-        .withdraw {
-          font-size: size(30);
-          position: absolute;
-          top: 0;
-          right: 0;
-          line-height: size(60);
-          height: size(64);
-          border: size(1) solid #fff;
-          border-radius: size(30);
-          padding: 0 size(16);
-          box-sizing: border-box;
-          min-width: size(120);
-          text-align: center;
+      }
+      .withdraw {
+        position: absolute;
+        bottom: 0;
+        right: 50%;
+        z-index: 50;
+        transform: translateX(50%) translateY(50%);
+        width: size(168);
+        height: size(168);
+        line-height: size(168);
+        border-radius: 50%;
+        // box-sizing: border-box;
+        background: #ff0000;
+        text-align: center;
+        font-family: PingFangSC-Semibold;
+        font-size: size(34);
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: size(1);
+        box-shadow: 0 size(2) size(16) 0 #df3032;
+        &:active {
+          box-shadow: 0 size(2) size(30) 0 #df3032;
         }
       }
     }
     .in-title {
       font-size: 0;
-      color: #999;
-      padding: size(50) 0 size(50);
+      color: #666;
+      padding: size(105) 0 size(34) size(9);
       line-height: 1;
+      position: relative;
       & > span {
-        font-size: size(32);
+        font-size: size(34);
         display: inline-block;
-        padding: 0 size(22);
+        padding-left: size(43);
+        height: size(48);
+        line-height: size(48);
+        font-family: PingFangSC-Regular;
         &.active {
           color: #333;
-          font-weight: 800;
           position: relative;
+          font-family: PingFangSC-Medium;
+          font-weight: 800;
           &:after {
             content: " ";
             display: block;
-            width: size(36);
-            height: size(5);
-            background: #e70002;
+            width: size(44);
+            height: size(8);
+            background: #ff1f3d;
             position: absolute;
-            bottom: size(-20);
-            left: 50%;
-            margin-left: size(-18);
+            border-radius: size(4);
+            left: 52%;
           }
         }
+      }
+      .showtitle {
+        position: absolute;
+        right: size(30);
+        top: size(142);
+        height: size(33);
+        line-height: size(33);
+        color: #ff0000;
+        font-size: size(24);
       }
     }
   }
@@ -240,13 +308,6 @@ export default {
     // .mint-tab-container-item{
     //   overflow: auto;
     // }
-    .tojump {
-      line-height: size(80);
-      text-align: center;
-      font-size: size(30);
-      color: #e80709;
-      background: #f9eded;
-    }
     .border-bottom {
       position: relative;
     }
@@ -256,75 +317,81 @@ export default {
       position: absolute;
       width: 100%;
       height: size(1);
-      background: #e4e4e4;
+      background: #edecec;
       transform: scaleY(0.5);
       left: 0;
       bottom: 0;
     }
     .pub_list {
-      padding: 0 size(24);
+      padding: 0 size(30);
       .item {
-        padding: 0 size(24);
-        background: #fff;
-        border-radius: size(4);
-        margin-top: size(10);
+        background: #f7f7f7;
+        min-height: size(322);
+        margin-top: size(14);
+        &:nth-child(1) {
+          margin-top: 0;
+        }
+        .queue {
+          color: #f92c2c;
+          font-size: size(24);
+          height: size(74);
+          line-height: size(74);
+          text-align: right;
+          padding-right: size(20);
+        }
         .detail {
-          padding-top: size(32);
-          height: size(108);
-          position: relative;
+          padding: size(30) size(37) size(43) size(20);
+          display: flex;
           .img_warp {
-            width: size(80);
-            height: size(80);
-            background: #ddd;
-            overflow: hidden;
-            position: absolute;
-            left: 0;
-            top: size(28);
             & > img {
-              display: block;
-              width: 100%;
-              height: auto;
+              width: size(120);
+              height: size(120);
             }
           }
           .desc {
-            padding-left: size(114);
+            flex: 1;
+            margin-left: size(20);
             .name {
+              height: size(39);
+              line-height: size(39);
               font-size: size(28);
-              font-weight: 800;
-              color: #333;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
+              color: #333333;
+              @include txt-overflow();
             }
             .ordernum {
-              font-size: size(24);
-              color: #999;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
               margin-top: size(12);
+              color: #999;
+              font-size: size(24);
             }
           }
         }
         .footer {
-          min-height: size(50);
-          display: flex;
-          align-items: center;
-          font-size: size(24);
-          color: #999;
-          // .txt-count{
-          //   &>span{}
-          // }
+          font-size: size(26);
+          color: #333;
+          padding-right: size(20);
+          text-align: right;
+          height: size(37);
+          line-height: size(37);
+          .txt-count {
+            & > span {
+              &:nth-child(2) {
+                padding: 0 size(4);
+              }
+            }
+          }
         }
       }
     }
     .in_record {
-      padding: 0 size(24) 0;
+      padding: 0 size(30) 0;
       .item {
         display: flex;
-        min-height: size(146);
+        min-height: size(150);
         align-items: center;
         padding-left: size(20);
+        padding-right: size(23);
+        background: #f7f7f7;
+        margin-top: size(14);
         .left {
           width: 70%;
           .name {
@@ -333,26 +400,32 @@ export default {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            letter-spacing: size(-1);
+            height: size(40);
+            line-height: size(40);
             & > span {
-              font-size: size(24);
-              color: #999;
+              color: #000;
             }
           }
           .reason {
             color: #666;
             font-size: size(24);
-            margin-top: size(16);
+            margin-top: size(17);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            height: size(33);
+            line-height: size(33);
           }
         }
         .right {
           width: 30%;
           text-align: right;
-          font-size: size(28);
-          color: #e70002;
-          font-weight: 800;
+          font-size: size(30);
+          color: #ff0000;
+        }
+        &:nth-child(1) {
+          margin-top: 0;
         }
       }
     }

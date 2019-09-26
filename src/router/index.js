@@ -57,13 +57,21 @@ export default new Router({
       meta: { haveTab: true }
     },
     {
+      path: '/record',
+      component: () => import(/* webpackChunkName: "record" */ 'com/income/record')
+    },
+    {
+      path: '/withdraw',
+      component: () => import(/* webpackChunkName: "withdraw" */ 'com/income/withdraw')
+    },
+    {
       path: '/me',
       component: () => import(/* webpackChunkName: "me" */ 'com/me'),
       meta: { haveTab: true }
     },
     {
       path: '/mymsg',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/myMsg'),
+      component: () => import(/* webpackChunkName: "mymsg" */ 'com/me/myMsg'),
     },
     {
       path: '/',
