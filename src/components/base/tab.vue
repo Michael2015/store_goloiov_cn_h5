@@ -1,8 +1,8 @@
 <template>
-  <div class="tab border-top">
+  <div class="tab">
     <router-link to="/index" tag="div" replace>
       <div class="icon home"></div>
-      <div class="name">首页</div>
+      <div class="name">商城</div>
     </router-link>
     <router-link to="/order" tag="div" replace>
       <div class="icon order"></div>
@@ -36,16 +36,16 @@ export default {
   display: flex;
   align-items: center;
   text-align: center;
-  background: #fff;
-  box-shadow: 0 0px 1px 2px rgba(0,0,0,.01);
+  background: rgba(255,255,255,0.78);
+  box-shadow: 0 0px 1px 1px rgba(0,0,0,.01);
   >div{
     flex: 1;
   }
   .icon{
     display: block;
     margin: 0 auto 0;
-    width: size(46);
-    height: size(46);
+    width: size(44);
+    height: size(44);
     margin-bottom: size(10);
     &.home{
       @include bg('~img/tab/home_mall_sel.png');
@@ -80,8 +80,30 @@ export default {
     }
   }
   .name{
-    font-size: size(24);
+    font-size: size(20);
     color: #666;
   }
+  // 毛玻璃
+  &:before{
+    content: ' ';
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    position: absolute;
+    background: inherit;
+    background-attachment: fixed;
+    filter: blur(4px);
+    z-index: -1;
+  }
+  // &:after{
+  //   content: ' ';
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 0;
+  //   top: 0;
+  //   position: absolute;
+  //   background: rgba(255,255,255,0.78);
+  // }
 }
 </style>

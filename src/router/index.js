@@ -5,6 +5,7 @@ import Goods from 'com/index/goods'
 import GoodsBuyRecords from 'com/index/goods-buy-records'
 import GoodsPrice from 'com/index/goods-price'
 import GoodsVisitor from 'com/index/goods-visitor'
+import GoodsComment from 'com/index/goods-comment'
 // import Order from 'com/order'
 import OrderDetail from 'com/order/order-detail'
 // import Income from 'com/income'
@@ -26,7 +27,7 @@ export default new Router({
       children: [
         {
           path: '',
-          redirect: 'price'
+          redirect: 'buy-records'
         },
         {
           path: 'price',
@@ -39,6 +40,10 @@ export default new Router({
         {
           path: 'visitor',
           component: GoodsVisitor
+        },
+        {
+          path: 'comment',
+          component: GoodsComment
         }
       ],
     },

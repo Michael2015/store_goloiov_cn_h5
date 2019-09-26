@@ -32,10 +32,10 @@ export default {
 }
 .item{
   background: #f9f9f9;
-  height: size(150);
-  border-radius: size(150/2);
+  height: size(108);
+  border-radius: size(108/2);
   margin-bottom: size(20);
-  padding-left: size(24);
+  padding-left: size(14);
   padding-right: size(48);
   >div{
     display: table-cell;
@@ -53,9 +53,9 @@ export default {
     }
   }
   .who{
-    font-size: size(28);
+    font-size: size(30);
     padding-left: size(26);
-    margin-bottom: size(22);
+    margin-bottom: size(18);
     @include txt-overflow;
   }
   .what{
@@ -71,11 +71,12 @@ export default {
   .time{
     font-size: size(20);
     color:#999;
-    margin-bottom: size(20);
+    margin-bottom: size(18);
   }
   .num{
     font-size: size(24);
-    color: #666;
+    // color: #666;
+    color: #ff0000;
   }
 }
 </style>

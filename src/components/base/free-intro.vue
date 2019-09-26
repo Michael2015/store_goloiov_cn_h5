@@ -4,12 +4,12 @@
       <div class="wrap">
         <div class="title">golo技师盒子</div>
         <div class="sub-title">免单规则</div>
-        <div class="con border-bottom">
+        <div class="con">
           <div>排队免单规则：6出1，即是在你下单后，如有新的6笔订单，商家即全额返还你支付的订单金额作为奖励。</div>
           <div>快速免单规则：3出1，即是在你下单后，如你推荐了新的3笔订单，商家即全额返还你支付的订单金额作为奖励。</div>
         </div>
         <div class="btns">免单奖励介绍</div>
-        <div class="close" @click="hide"></div>
+        <div class="close" @click="hide" v-if="false"></div>
       </div>
     </popup>
   </div>
@@ -22,7 +22,12 @@ export default {
   components: {
     popup
   },
-  mixins: [showHide]
+  mixins: [showHide],
+  data() {
+    return {
+      isShow: true
+    }
+  }
 }
 </script>
 
@@ -32,7 +37,7 @@ export default {
   background: #fff;
   width: p(604/750);
   min-height: 100px;
-  border-radius: size(34);
+  border-radius: size(16);
   overflow: hidden;
   text-align: center;
   line-height: 1.4;
@@ -48,9 +53,10 @@ export default {
     color: #5297e7;
     font-size: size(26);
     margin-top: size(8);
+    text-decoration: underline;
   }
   .con{
-    padding: size(60) size(24) size(30);
+    padding: size(24) size(24) size(30);
     color: #666;
     font-size: size(26);
     text-align: left;
@@ -73,9 +79,9 @@ export default {
     }
   }
   .btns{
-    line-height: size(114);
-    color: $color-main;
-    font-size: size(30);
+    line-height: size(97);
+    font-size: size(32);
+    background: #f2f2f2;
   }
   .close{
     width: size(28);
