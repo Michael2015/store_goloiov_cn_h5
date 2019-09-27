@@ -1,6 +1,7 @@
 import router from './router'
 import Vue from 'vue'
 import App from './App.vue'
+import store from './store'
 import { TabContainer, TabContainerItem, InfiniteScroll,Swipe, SwipeItem } from 'mint-ui';
 
 Vue.use(InfiniteScroll);
@@ -16,5 +17,6 @@ Vue.component(SwipeItem.name, SwipeItem)
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')

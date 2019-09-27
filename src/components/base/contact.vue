@@ -3,16 +3,16 @@
     <popup @mask-click="hide">
       <div class="wrap">
         <div class="head">
-          <img src="" alt="">
+          <img :src="data.avatar" alt="">
         </div>
         <div class="col border-bottom">
           <div class="name">昵称</div>
-          <div class="value">大王叫我来巡山</div>
+          <div class="value">{{data.nickname}}</div>
           <div class="btn-inline">复制</div>
         </div>
         <div class="col">
           <div class="name">手机</div>
-          <div class="value">13258696666</div>
+          <div class="value">{{data.phone}}</div>
           <a class="btn-inline" href="#">呼叫</a>
         </div>
       </div>
@@ -24,6 +24,12 @@
 import showHide from 'mixins/show-hide'
 import popup from 'ui/popup'
 export default {
+  props: {
+    data: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   components: {
     popup
   },
@@ -49,11 +55,11 @@ export default {
   .head{
     position: absolute;
     left: 50%;
-    top: size(-96);
+    top: size(-90);
     margin-left: size(-144/2);
     @include circle(144);
     border: 3px solid #fff;
-    background: #d5d5d5;
+    background: #fff;
     overflow: hidden;
     img{
       display: block;

@@ -3,7 +3,7 @@
     <div class="top-wrap">
       <div class="top">
         <!-- 合伙人端 -->
-        <div class="table" v-if="false">
+        <div class="table" v-if="isLogin && role === 1">
           <div class="table-cell">
             <search-input v-model="keyword" class="input"></search-input>
           </div>
@@ -11,36 +11,21 @@
             <span class="invite">邀请合伙人</span>
           </div>
         </div>
-        <!-- 非合伙人 --->
-        <div class="table">
-          <div class="table-cell">
-            <div class="clearfix">
-              <img src="~img/shop-logo.png" alt="" class="parent-avatar">
-              <span class="shop-name">万车品商城</span>
-            </div>
-          </div>
-          <div class="table-cell invite-wrap">
-            <span class="invite">成为合伙人</span>
-            <!-- <span class="invite">登录/注册</span> -->
-          </div>
-        </div>
+        <!-- 非合伙人 | 游客(未登录) --->
+        <index-top-customer v-else></index-top-customer>
         <div class="banner-wrap">
           <div class="banner">
-            <index-banner :imgs="banner"></index-banner>
+            <index-banner></index-banner>
           </div>
         </div>
       </div>
       <div class="blank"><img src="~img/index-top-bg.png" alt=""></div>
     </div>
     <msg-loop v-if="false"></msg-loop>
-    <index-focus></index-focus>
+    <index-focus :cid="cid" v-if="cid"></index-focus>
     <div class="filters table">
-      <div class="active"><span>全部</span></div>
-      <div><span>用品</span></div>
-      <div><span>美容</span></div>
-      <div><span>工具</span></div>
-      <div><span>课堂</span></div>
-      <div><span>其他</span></div>
+      <div :class="{active:activeCategoryIndex===index}" v-for="(item,index) in category" :key="index"
+        @click="setCategory(index)"><span>{{item.cate_name}}</span></div>
     </div>
     <div class="list clearfix">
       <index-goods-item class="item" v-for="item in 5" :key="item"></index-goods-item>
@@ -50,14 +35,19 @@
 
 <script>
 import SearchInput from 'base/ui/search-input'
+import IndexTopCustomer from './index-top-customer'
 import MsgLoop from 'base/msg-loop'
 import IndexBanner from './index-banner'
 import IndexFocus from './index-focus'
 import IndexGoodsItem from './index-goods-item'
+import {Loading} from 'lib'
+import {getCategory} from 'api'
+import {mapState} from 'vuex'
 
 export default {
   components: {
     SearchInput,
+    IndexTopCustomer,
     IndexBanner,
     MsgLoop,
     IndexFocus,
@@ -66,7 +56,36 @@ export default {
   data() {
     return {
       keyword: null,
-      banner: ['https://storemp.golodata.com/public/uploads/attach/2019/08/09/-1/5d4d4046af543.jpg', 'https://storemp.golodata.com/public/uploads/attach/2019/08/09/-1/5d4d4046af543.jpg']
+      categoryList: [],
+      activeCategoryIndex: -1
+    }
+  },
+  computed: {
+    ...mapState(['isLogin', 'role']),
+    category() {
+      return this.categoryList.slice(1)
+    },
+    cid() {
+      return this.categoryList[0] && this.categoryList[0].id
+    }
+  },
+  created() {
+    Loading.open()
+    Promise.all([
+      getCategory().then(data => {
+        if (data) {
+          this.categoryList = data
+        }
+      })
+    ]).then(() => {
+      Loading.close()
+    })
+  },
+  methods: {
+    setCategory(i){
+      if (i !== this.activeCategoryIndex) {
+        this.activeCategoryIndex = i
+      }
     }
   }
 }
@@ -105,7 +124,7 @@ export default {
       top:0;
       width: 100%;
       height: size(300);
-      background: gold;
+      background: #fff;
       border-radius: size(14);
       overflow: hidden;
       z-index: 1;

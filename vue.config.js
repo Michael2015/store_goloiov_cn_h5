@@ -4,13 +4,13 @@ module.exports = {
   productionSourceMap: true,
   filenameHashing: false,
   devServer: {
-    // proxy: {
-    //   '/api': {
-    //     target: '<url>',
-    //     ws: true,
-    //     changeOrigin: true
-    //   }
-    // }
+    proxy: {
+      '/api': {
+        target: 'https://storemp.golodata.com/',
+        ws: true,
+        changeOrigin: true
+      }
+    }
   },
   configureWebpack: {
     resolve: {

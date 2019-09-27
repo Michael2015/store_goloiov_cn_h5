@@ -3,8 +3,8 @@
     <!-- 首页专区 -->
     <div class="t-title"><img src="~img/golox3.png" alt="">车联网专区</div>
     <div class="swiper-wrap">
-      <swiper>
-        <swiper-item v-for="item in 2" :key="item">
+      <swiper v-if="list&&list.length>0">
+        <swiper-item v-for="(item,index) in list" :key="index">
           <div class="focus-item table">
             <div class="goods-img"><img src="" alt=""></div>
             <div class="desc">
@@ -26,10 +26,24 @@
 <script>
 import swiper from 'base/swiper/swiper'
 import swiperItem from 'base/swiper/swiper-item'
+import {getCategoryProducts} from 'api'
 export default {
+  props: ['cid'],
   components: {
     swiper,
     swiperItem
+  },
+  data() {
+    return {
+      list: []
+    }
+  },
+  created() {
+    getCategoryProducts(this.cid).then(data => {
+      if (data) {
+        this.list = data
+      }
+    })
   }
 }
 </script>

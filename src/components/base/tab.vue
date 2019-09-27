@@ -12,7 +12,7 @@
       <div class="icon income"></div>
       <div class="name">收益</div>
     </router-link>
-    <router-link to="/me" tag="div" replace>
+    <router-link to="/me" tag="div" replace v-if="role === 1">
       <div class="icon me"></div>
       <div class="name">我的</div>
     </router-link>
@@ -20,7 +20,11 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
+  computed: {
+    ...mapState(['role'])
+  }
 }
 </script>
 
