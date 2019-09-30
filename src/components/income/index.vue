@@ -99,7 +99,15 @@ export default {
       leftLoading: false,
       leftList: [1, 2, 3, 4, 5],
       rightLoading: false,
-      rightList: [1, 2, 3, 4, 5]
+      rightList: [1, 2, 3, 4, 5],
+      jumpObj:{
+        'public':'免单详情',             //免单详情
+        'commission':'合伙人津贴详情',     //合伙人津贴详情
+        'benifit':'返利详情',           //返利详情
+        'director':'董事分红详情',                 //董事分红详情
+        'supplier':'开发供应商',                   //开发供应商
+        'allowance':'管理津贴'                 //培养合伙人
+      }
     };
   },
   mounted() {},

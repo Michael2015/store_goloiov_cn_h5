@@ -3,7 +3,7 @@
     <div class="showItem">
       <div class="title">储蓄卡</div>
       <div class="no_card" v-if="haveCard === 0" @click="$refs.addcard.show()">请添加银行卡</div>
-      <div class="no_card" v-if="haveCard === 1">建设银行</div>
+      <div class="have_card" v-if="haveCard === 1">建设银行</div>
     </div>
     <div class="showItem">
       <div class="title">金额</div>
@@ -14,6 +14,7 @@
             :placeholder="showCanWithdraw"
             v-model="wantWithdraw"
             autocomplete="off"
+            pattern="[0-9]*"
           />
         </div>
         <div class="all_withdraw" @click="allWithdraw">全部提现</div>
@@ -34,7 +35,7 @@
         <span></span>目前仅支持体系到本人银行卡
       </div>
     </div>
-    <addCard ref="addcard"></addCard>
+    <addCard ref="addcard" @add-card='tojump("/relevanceCard");$refs.addcard.hide()'></addCard>
   </div>
 </template>
 
@@ -48,7 +49,7 @@ export default {
       canWithdraw: 200.12,
       wantWithdraw: "",
       toWithdraw: 0,
-      haveCard: 0
+      haveCard: 1
     };
   },
   components: {
@@ -112,6 +113,10 @@ export default {
     .no_card {
       width: size(562);
       color: #aaaaaa;
+    }
+    .have_card {
+      width: size(562);
+      color: #333;
     }
     .setMoney {
       width: size(562);

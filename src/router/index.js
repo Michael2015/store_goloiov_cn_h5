@@ -63,12 +63,42 @@ export default new Router({
     },
     {
       path: '/record',
-      component: () => import(/* webpackChunkName: "record" */ 'com/income/record')
+      component: () => import(/* webpackChunkName: "income" */ 'com/income/record')
     },
     {
       path: '/withdraw',
-      component: () => import(/* webpackChunkName: "withdraw" */ 'com/income/withdraw')
+      component: () => import(/* webpackChunkName: "income" */ 'com/income/withdraw')
     },
+    {
+      path: '/relevanceCard',
+      component: () => import(/* webpackChunkName: "income" */ 'com/income/relevanceCard')
+    },
+    {
+      path: '/allowance',
+      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/allowance')
+    },
+    {
+      path: '/benifit',
+      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/benifit')
+    },
+    {
+      path: '/commission',
+      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/commission')
+    },
+    {
+      path: '/director',
+      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/director')
+    },
+    {
+      path: '/public',
+      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/public')
+    },
+    {
+      path: '/supplier',
+      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/supplier')
+    },
+    
+    
     {
       path: '/me',
       component: () => import(/* webpackChunkName: "me" */ 'com/me'),
@@ -76,7 +106,15 @@ export default new Router({
     },
     {
       path: '/mymsg',
-      component: () => import(/* webpackChunkName: "mymsg" */ 'com/me/myMsg'),
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/myMsg'),
+    },
+    {
+      path: '/myPartner',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/myPartner'),
+    },
+    {
+      path: '/myVisitor',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/myVisitor'),
     },
     {
       path: '/',
