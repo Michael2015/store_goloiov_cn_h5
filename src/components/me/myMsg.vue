@@ -4,21 +4,21 @@
       <img :src="avater" alt class="avater" />
       <div class="item_content">
         修改头像
-        <img src="~img/icon/jion-right.png" alt />
+        <img src="~img/icon/join-right.png" alt />
       </div>
     </div>
     <div class="warp_item">
       <div class="item_title">名字</div>
       <div class="item_content">
         {{name}}
-        <img src="~img/icon/jion-right.png" alt />
+        <img src="~img/icon/join-right.png" alt />
       </div>
     </div>
     <div class="warp_item">
       <div class="item_title">手机绑定</div>
       <div class="item_content">
         {{phonehide(phone)}}
-        <img src="~img/icon/jion-right.png" alt />
+        <img src="~img/icon/join-right.png" alt />
       </div>
     </div>
     <div class="warp_item">
@@ -33,14 +33,14 @@
       <div class="item_title">我发展的伙伴</div>
       <div class="item_content">
         {{friendNum}}人
-        <img src="~img/icon/jion-right.png" alt />
+        <img src="~img/icon/join-right.png" alt />
       </div>
     </div>
     <div class="warp_item">
       <div class="item_title">版本信息</div>
       <div class="item_content">
         {{versionsMsg}}
-        <img src="~img/icon/jion-right.png" alt />
+        <img src="~img/icon/join-right.png" alt />
       </div>
     </div>
     <div class="quit" @click="$refs.logOut.show()">退出登录</div>

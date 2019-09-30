@@ -33,7 +33,7 @@
           <div class="title">{{item.tit}}</div>
         </div>
         <div class="right">
-          <img src="~img/icon/jion-right.png" alt />
+          <img src="~img/icon/join-right.png" alt />
         </div>
       </div>
     </div>
