@@ -21,7 +21,7 @@ export default {
         // autoplay: 3000,
         spaceBetween: 0,
         centeredSlides: true,
-        initialSlide: 2
+        initialSlide: 0
       }
     this.swiper = new Swiper(this.$refs.container, config)
   },

@@ -25,7 +25,7 @@
       <div class="goods-name">
         {{info.store_name}}
       </div>
-      <div class="free-intro table">
+      <div class="free-intro table" v-if="info.is_platoon === 1">
         <div class="icon-wrap">
           <img src="~img/icon/tips.png" alt="">
         </div>
@@ -33,7 +33,7 @@
           <div>下单即享免单</div>
           <div>合伙人推荐购买即享返利</div>
         </div>
-        <div class="go-free-intro">
+        <div class="go-free-intro" @click="showFreeIntro=true">
           <span>免单奖励介绍</span>
         </div>
       </div>
@@ -59,7 +59,7 @@
         <span>立即购买</span>
       </div>
     </div>
-    <free-intro v-if="false"></free-intro>
+    <free-intro v-if="showFreeIntro" :info="info"></free-intro>
   </div>
 </template>
 
@@ -82,7 +82,9 @@ export default {
   data() {
     return {
       // 商品的基本信息，价格，图片啊
-      info: {}
+      info: {},
+      // 控制免单奖励介绍弹窗
+      showFreeIntro: false
     }
   },
   created() {

@@ -8,24 +8,10 @@
         <span class="price-cut" v-if="false"> 合伙人价 ¥999</span>
         <span class="num">已售：{{info.sales}}</span>
       </div>
-      <div class="join-partner table">
-        <div class="icon">
-          <img src="~img/icon/join-partner.png" alt="">
-        </div>
-        <div class="text">
-          <div>加入合伙人，四重优惠等你拿</div>
-          <div>返利+津贴+带团队分润+部分商品合伙人价</div>
-        </div>
-        <div class="join-wrap">
-          <div class="join">
-            立即加入 <img src="~img/icon/right.png" alt="">
-          </div>
-        </div>
-      </div>
       <div class="goods-name">
         {{info.store_name}}
       </div>
-      <div class="free-intro table">
+      <div class="free-intro table" v-if="info.is_platoon === 1">
         <div class="icon-wrap">
           <img src="~img/icon/tips.png" alt="">
         </div>
@@ -33,7 +19,7 @@
           <div>下单即享免单</div>
           <div>合伙人推荐购买即享返利</div>
         </div>
-        <div class="go-free-intro">
+        <div class="go-free-intro" @click="showFreeIntro=true">
           <span>免单奖励介绍</span>
         </div>
       </div>
@@ -61,7 +47,7 @@
         <span>立即购买</span>
       </div>
     </div>
-    <free-intro v-if="false"></free-intro>
+    <free-intro v-if="showFreeIntro" :info="info"></free-intro>
   </div>
 </template>
 
@@ -84,7 +70,9 @@ export default {
   data() {
     return {
       // 商品的基本信息，价格，图片啊
-      info: {}
+      info: {},
+      // 控制免单奖励介绍弹窗
+      showFreeIntro: false
     }
   },
   created() {
@@ -140,48 +128,6 @@ export default {
     color: #555;
     position: relative;
     top: size(12);
-  }
-  .join-partner{
-    background-color: #453d3d;
-    border-radius: 5px;
-    height: size(78);
-    padding: 0 size(14);
-    color: #d6c7ae;
-    >div{
-      display: table-cell;
-      vertical-align: middle;
-    }
-    .icon{
-      width: size(24);
-      vertical-align: top;
-      img{
-        width: 100%;
-        display: block;
-        margin-top: size(18);
-      }
-    }
-    .text{
-      padding-left: size(8);
-      div{
-        &:first-child{
-          font-size: size(26);
-        }
-        &:last-child{
-          font-size: size(20);
-          margin-top: size(8);
-        }
-      }
-    }
-    .join-wrap{
-      text-align: right;
-    }
-    .join{
-      font-size: size(24);
-      img{
-        width: size(10);
-        margin-left: 2px;
-      }
-    }
   }
   .goods-name{
     font-size: size(30);

@@ -2,11 +2,11 @@
   <div v-show="isShow">
     <popup @mask-click="hide">
       <div class="wrap">
-        <div class="title">golo技师盒子</div>
+        <div class="title">{{info.store_name}}</div>
         <div class="sub-title">免单规则</div>
         <div class="con">
-          <div>排队免单规则：6出1，即是在你下单后，如有新的6笔订单，商家即全额返还你支付的订单金额作为奖励。</div>
-          <div>快速免单规则：3出1，即是在你下单后，如你推荐了新的3笔订单，商家即全额返还你支付的订单金额作为奖励。</div>
+          <div>排队免单规则：{{info.platoon_slow}}出1，即是在你下单后，如有新的{{info.platoon_slow}}笔订单，商家即全额返还你支付的订单金额作为奖励。</div>
+          <div>快速免单规则：{{info.platoon_fast}}出1，即是在你下单后，如你推荐了新的{{info.platoon_fast}}笔订单，商家即全额返还你支付的订单金额作为奖励。</div>
         </div>
         <div class="btns">免单奖励介绍</div>
         <div class="close" @click="hide" v-if="false"></div>
@@ -23,6 +23,12 @@ export default {
     popup
   },
   mixins: [showHide],
+  props: {
+    info: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       isShow: true

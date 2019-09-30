@@ -1,41 +1,47 @@
 <template>
-  <div class="list">
-    <div class="item" v-for="(item,index) in list" :key="index">
-      <div class="head table">
-        <div class="avatar"><img :src="item.avatar" alt=""></div>
-        <div class="name"><div>{{item.nickname}}</div></div>
-        <div class="star" v-if="item.star_num">
-          <div>
-            <span v-for="s in item.star_num" :key="s"></span>
+  <load-more v-slot="{list}" :getData="getGoodsComments">
+    <div class="list">
+      <div class="item" v-for="(item,index) in list" :key="index">
+        <div class="head table">
+          <div class="avatar"><img :src="item.avatar" alt=""></div>
+          <div class="name"><div>{{item.nickname}}</div></div>
+          <div class="star" v-if="item.star_num">
+            <div>
+              <span v-for="s in item.star_num" :key="s"></span>
+            </div>
           </div>
         </div>
+        <div class="text">
+          {{item.comment}}
+        </div>
+        <div class="imgs" v-if="item.pics">
+          <div v-for="i in item.pics" :key="i"><div><img :src="i" alt=""></div></div>
+        </div>
+        <div class="time">{{item.add_time}}</div>
       </div>
-      <div class="text">
-        {{item.comment}}
-      </div>
-      <div class="imgs" v-if="item.pics">
-        <div v-for="i in item.pics" :key="i"><div><img :src="i" alt=""></div></div>
-      </div>
-      <div class="time">{{item.add_time}}</div>
     </div>
-  </div>
+  </load-more>
 </template>
 
 <script>
+import LoadMore from 'base/load-more'
 import {GetGoodsComments} from 'api'
 export default {
+  components: {
+    LoadMore
+  },
   props: ['id'],
   data () {
     return {
       list: []
     }
   },
+  computed: {
+    getGoodsComments() {
+      return (page, size) => GetGoodsComments(this.id, page, size)
+    }
+  },
   created() {
-    GetGoodsComments(this.id).then(data => {
-      if (data) {
-        this.list = data
-      }
-    })
   }
 }
 </script>

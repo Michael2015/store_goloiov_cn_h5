@@ -1,11 +1,11 @@
 <template>
-  <div class="goods-item">
-    <div class="img-wrap"><img src="https://wcp.szyrwl.com/public/uploads/attach/2019/04/10/5cad6ccbdeea2.jpg" alt=""></div>
+  <div class="goods-item" :class="{free: item.is_platoon === 1}">
+    <router-link tag="div" class="img-wrap" :to="'/goods/'+item.id"><img :src="item.image" alt=""></router-link>
     <div class="con">
-      <div class="name">车联网车载OBD智能盒子GPS定位</div>
+      <router-link tag="div" class="name" :to="'/goods/'+item.id">{{item.store_name}}</router-link>
       <div class="price-num">
-        <span class="price">¥376.00</span>
-        <span class="num">销量127</span>
+        <span class="price">¥{{item.price}}</span>
+        <span class="num">销量{{item.sales}}</span>
       </div>
     </div>
   </div>
@@ -13,6 +13,12 @@
 
 <script>
 export default {
+  props: {
+    item: {
+      type: Object,
+      default: () => ({})
+    }
+  }
 }
 </script>
 

@@ -1,29 +1,35 @@
 <template>
-  <div class="list">
-    <div class="item table" v-for="(item,index) in list" :key="index">
-      <div class="head-wrap">
-        <div class="head">
-          <img :src="item.avatar" alt="">
+  <load-more v-slot="{list}" :getData="GetGoodsBuyRecords">
+    <div class="list">
+      <div class="item table" v-for="(item,index) in list" :key="index">
+        <div class="head-wrap">
+          <div class="head">
+            <img :src="item.avatar" alt="">
+          </div>
         </div>
-      </div>
-      <div>
-        <div class="who">{{item.nickname}}</div>
-        <div class="what">{{item.store_name||goodsName}}</div>
-      </div>
-      <div class="nn">
         <div>
-          <div class="time">{{item.pay_time}}</div>
-          <div class="num">+{{item.total_num}}</div>
+          <div class="who">{{item.nickname}}</div>
+          <div class="what">{{item.store_name||goodsName}}</div>
+        </div>
+        <div class="nn">
+          <div>
+            <div class="time">{{item.pay_time}}</div>
+            <div class="num">+{{item.total_num}}</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </load-more>
 </template>
 
 <script>
+import LoadMore from 'base/load-more'
 import {CustomerGetGoodsBuyRecords, PartnerGetGoodsBuyRecords} from 'api'
 import {mapState} from 'vuex'
 export default {
+  components: {
+    LoadMore
+  },
   props: ['id', 'goodsName'],
   data () {
     return {
@@ -31,15 +37,13 @@ export default {
     }
   },
   computed: {
-    ...mapState(['role'])
+    ...mapState(['role']),
+    GetGoodsBuyRecords() {
+      const func = this.role === 1 ? PartnerGetGoodsBuyRecords : CustomerGetGoodsBuyRecords
+      return (page, size) => func(this.id, page, size)
+    }
   },
   created() {
-    const func = this.role === 1 ? PartnerGetGoodsBuyRecords : CustomerGetGoodsBuyRecords
-    func(this.id).then(data => {
-      if (data) {
-        this.list = data
-      }
-    })
   }
 }
 </script>

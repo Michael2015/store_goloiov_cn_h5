@@ -35,6 +35,26 @@ export function getCategoryProducts(cate_id) {
   }).then(clean)
 }
 
+// 获取首页商品列表（非合伙人）
+export function CustomerGetProducts(page, size) {
+  return req.get('/api/customer/mall/getProductList', {
+    params: {
+      page,
+      limit: size
+    }
+  }).then(clean)
+}
+
+// 获取首页商品列表（合伙人）
+export function PartnerGetProducts(keyword ,page, size) {
+  return req.get('/api/partner/home/storelist', {
+    params: {
+      keyword,
+      page,
+      limit: size
+    }
+  }).then(clean)
+}
 
 // 商品详情相关接口(接口是分两组的)
 
