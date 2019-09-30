@@ -1,4 +1,5 @@
 <template>
+  <!-- 暂时废弃这个组件 -->
   <div class="price">
     <table>
       <tr>

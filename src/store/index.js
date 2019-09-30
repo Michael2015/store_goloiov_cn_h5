@@ -11,7 +11,7 @@ export default new Vuex.Store({
     // 是否登录
     isLogin: false,
     // 什么角色 0 一般用户 1 合伙人
-    role: null
+    role: 0
   },
   mutations: {
     loginTest(state) {

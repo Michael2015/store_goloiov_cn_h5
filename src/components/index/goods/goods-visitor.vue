@@ -1,14 +1,34 @@
 <template>
-  <div class="wrap clearfix">
-    <div class="item" v-for="(item,index) in 20" :key="index">
-      <div class="head-wrap"><img src="" alt=""></div>
-      <div class="name">用户昵称</div>
+  <load-more v-slot="{list}" :getData="getGoodsVisitor">
+    <div class="visitor clearfix">
+      <div class="item" v-for="(item,index) in list" :key="index">
+        <div class="head-wrap"><img :src="item.avatar" alt=""></div>
+        <div class="name">{{item.nickname}}</div>
+      </div>
     </div>
-  </div>
+  </load-more>
 </template>
 
 <script>
+import LoadMore from 'base/load-more'
+import {PartnerGetGoodsVisitor} from 'api'
 export default {
+  components: {
+    LoadMore
+  },
+  props: ['id'],
+  data () {
+    return {
+      list: []
+    }
+  },
+  computed: {
+    getGoodsVisitor() {
+      return (page, size) => PartnerGetGoodsVisitor(this.id, page, size)
+    }
+  },
+  created() {
+  }
 }
 </script>
 
@@ -16,7 +36,7 @@ export default {
 @import "~css/def";
 $w : 750 - 40*2;
 $l : p(($w - 100*5 - 3)/5/$w);
-.wrap{
+.visitor{
   padding: size(20) size(40);
   margin-left: -$l;
 }

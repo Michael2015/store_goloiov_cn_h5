@@ -13,6 +13,7 @@
         </div>
         <!-- 非合伙人 | 游客(未登录) --->
         <index-top-customer v-else></index-top-customer>
+        <!-- 轮播图 -->
         <div class="banner-wrap">
           <div class="banner">
             <index-banner></index-banner>
@@ -27,9 +28,16 @@
       <div :class="{active:activeCategoryIndex===index}" v-for="(item,index) in category" :key="index"
         @click="setCategory(index)"><span>{{item.cate_name}}</span></div>
     </div>
-    <div class="list clearfix">
-      <index-goods-item class="item" v-for="item in 5" :key="item"></index-goods-item>
-    </div>
+    <load-more v-slot="{list}" class="list-wrap" :getData="getCategoryProducts" v-if="activeCategoryIndex >= 0" :key="activeCategoryIndex">
+      <div class="list clearfix">
+        <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
+      </div>
+    </load-more>
+    <load-more v-slot="{list}" class="list-wrap" :getData="getDefaultProducts" v-else>
+      <div class="list clearfix">
+        <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
+      </div>
+    </load-more>
   </div>
 </template>
 
@@ -40,12 +48,14 @@ import MsgLoop from 'base/msg-loop'
 import IndexBanner from './index-banner'
 import IndexFocus from './index-focus'
 import IndexGoodsItem from './index-goods-item'
+import LoadMore from 'base/load-more'
 import {Loading} from 'lib'
-import {getCategory} from 'api'
+import {getCategory, getCategoryProducts, CustomerGetProducts, PartnerGetProducts} from 'api'
 import {mapState} from 'vuex'
 
 export default {
   components: {
+    LoadMore,
     SearchInput,
     IndexTopCustomer,
     IndexBanner,
@@ -55,7 +65,7 @@ export default {
   },
   data() {
     return {
-      keyword: null,
+      keyword: '',
       categoryList: [],
       activeCategoryIndex: -1
     }
@@ -67,6 +77,17 @@ export default {
     },
     cid() {
       return this.categoryList[0] && this.categoryList[0].id
+    },
+    getCategoryProducts() {
+      return (page, size) => {
+        return getCategoryProducts(this.category[this.activeCategoryIndex].id, page, size)
+      }
+    },
+    getDefaultProducts() {
+      // 没有选择标签时
+      return (page, size) => {
+        return this.role === 1 ? PartnerGetProducts(this.keyword, page, size) : CustomerGetProducts(page, size)
+      }
     }
   },
   created() {
@@ -83,6 +104,7 @@ export default {
   },
   methods: {
     setCategory(i){
+      console.log(i)
       if (i !== this.activeCategoryIndex) {
         this.activeCategoryIndex = i
       }
@@ -198,8 +220,11 @@ export default {
     }
   }
 }
+.list-wrap{
+  padding-bottom: size(120);
+}
 .list{
-  padding: 0 size(20) size(120);
+  padding: 0 size(20);
   margin-left: -3%;
   .item{
     float: left;
