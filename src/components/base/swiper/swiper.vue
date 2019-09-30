@@ -17,7 +17,7 @@ export default {
         slidesPerView: 'auto',
         autoplayDisableOnInteraction: false,
         // paginationClickable: true,
-        loop: true,
+        loop: false,
         // autoplay: 3000,
         spaceBetween: 0,
         centeredSlides: true,

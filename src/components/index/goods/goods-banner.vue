@@ -7,7 +7,7 @@
         </div>
       </mt-swipe-item>
     </mt-swipe>
-    <div class="num" v-if="imgs.length">{{i}}/{{imgs.length}}</div>
+    <!-- <div class="num" v-if="imgs.length">{{i}}/{{imgs.length}}</div> -->
   </div>
 </template>
 
@@ -16,7 +16,7 @@ export default {
   props: {
     imgs: {
       type: Array,
-      default: () => ['https://storemp.golodata.com/public/uploads/attach/2019/04/25/5cc10d7f80a66.png', 'https://storemp.golodata.com/public/uploads/attach/2019/04/25/5cc115121901d.png']
+      default: () => []
     }
   },
   data() {

@@ -1,19 +1,19 @@
 <template>
   <div class="list">
-    <div class="item table" v-for="(item,index) in 5" :key="index">
+    <div class="item table" v-for="(item,index) in list" :key="index">
       <div class="head-wrap">
         <div class="head">
-          <img src="" alt="">
+          <img :src="item.avatar" alt="">
         </div>
       </div>
       <div>
-        <div class="who">知名人士</div>
-        <div class="what">一个好用的盒子</div>
+        <div class="who">{{item.nickname}}</div>
+        <div class="what">{{item.store_name||goodsName}}</div>
       </div>
       <div class="nn">
         <div>
-          <div class="time">8天前</div>
-          <div class="num">+1</div>
+          <div class="time">{{item.pay_time}}</div>
+          <div class="num">+{{item.total_num}}</div>
         </div>
       </div>
     </div>
@@ -21,7 +21,26 @@
 </template>
 
 <script>
+import {CustomerGetGoodsBuyRecords, PartnerGetGoodsBuyRecords} from 'api'
+import {mapState} from 'vuex'
 export default {
+  props: ['id', 'goodsName'],
+  data () {
+    return {
+      list: []
+    }
+  },
+  computed: {
+    ...mapState(['role'])
+  },
+  created() {
+    const func = this.role === 1 ? PartnerGetGoodsBuyRecords : CustomerGetGoodsBuyRecords
+    func(this.id).then(data => {
+      if (data) {
+        this.list = data
+      }
+    })
+  }
 }
 </script>
 
@@ -29,6 +48,7 @@ export default {
 @import "~css/def";
 .list{
   padding: 0 size(24);
+  background: #fff;
 }
 .item{
   background: #f9f9f9;
@@ -46,6 +66,7 @@ export default {
     .head{
       @include circle(98);
       border: 2px solid #fff;
+      overflow: hidden;
       img{
         display: block;
         @include fill;

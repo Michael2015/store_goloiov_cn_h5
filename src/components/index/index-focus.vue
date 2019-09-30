@@ -5,18 +5,18 @@
     <div class="swiper-wrap">
       <swiper v-if="list&&list.length>0">
         <swiper-item v-for="(item,index) in list" :key="index">
-          <div class="focus-item table">
-            <div class="goods-img"><img src="" alt=""></div>
+          <router-link tag="div" class="focus-item table" :to="'/goods/'+item.id">
+            <div class="goods-img"><img :src="item.image" alt=""></div>
             <div class="desc">
-              <div class="title">元征golo X3 智能车联网车载智慧终端汽车诊断仪车载wifi智能盒子行能盒子行能盒子行</div>
-              <div class="free" v-if="1">免单</div>
+              <div class="title">{{item.store_name}}</div>
+              <div class="free" v-if="item.is_platoon">免单</div>
               <div class="free-blank" v-else></div>
               <div class="price-num">
-                <span class="num">销量127</span>
-                <span class="price">¥495.00</span>
+                <span class="num">销量{{item.sales}}</span>
+                <span class="price">¥{{item.price}}</span>
               </div>
             </div>
-          </div>
+          </router-link>
         </swiper-item>
       </swiper>
     </div>
@@ -84,7 +84,7 @@ export default {
       display: block;
       width: size(156);
       height: size(156);
-      background: #ddd;
+      background: #fff;
     }
   }
   .desc{

@@ -1,30 +1,42 @@
 <template>
   <div class="list">
-    <div class="item" v-for="item in 2" :key="item">
+    <div class="item" v-for="(item,index) in list" :key="index">
       <div class="head table">
-        <div class="avatar"><img src="" alt=""></div>
-        <div class="name"><div>我是昵称</div></div>
-        <div class="star">
+        <div class="avatar"><img :src="item.avatar" alt=""></div>
+        <div class="name"><div>{{item.nickname}}</div></div>
+        <div class="star" v-if="item.star_num">
           <div>
-            <span></span>
+            <span v-for="s in item.star_num" :key="s"></span>
           </div>
         </div>
       </div>
       <div class="text">
-        我是评论的内容我是评论的内容我是评论的内容我是评论的内
-容我是评论的内容，我是评论的内容。我是评论的内容我是评
-我是评论的内容我是评论的内容我是评论的内容论的内容
+        {{item.comment}}
       </div>
-      <div class="imgs">
-        <div><div><img src="" alt=""></div></div>
+      <div class="imgs" v-if="item.pics">
+        <div v-for="i in item.pics" :key="i"><div><img :src="i" alt=""></div></div>
       </div>
-      <div class="time">2019-06-30</div>
+      <div class="time">{{item.add_time}}</div>
     </div>
   </div>
 </template>
 
 <script>
+import {GetGoodsComments} from 'api'
 export default {
+  props: ['id'],
+  data () {
+    return {
+      list: []
+    }
+  },
+  created() {
+    GetGoodsComments(this.id).then(data => {
+      if (data) {
+        this.list = data
+      }
+    })
+  }
 }
 </script>
 
@@ -46,7 +58,6 @@ export default {
   }
   .avatar{
     width: size(80);
-    background: #ddd;
     img{
       display: block;
       width: 100%;
@@ -85,10 +96,10 @@ export default {
   flex-wrap: wrap;
   >div{
     width: 31%;
-    background: #ddd;
     >div{
       padding-bottom: 100%;
       position: relative;
+      background: #eee;
       margin-bottom: size(20);
     }
     img{

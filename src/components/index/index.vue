@@ -13,6 +13,7 @@
         </div>
         <!-- 非合伙人 | 游客(未登录) --->
         <index-top-customer v-else></index-top-customer>
+        <!-- 轮播图 -->
         <div class="banner-wrap">
           <div class="banner">
             <index-banner></index-banner>
