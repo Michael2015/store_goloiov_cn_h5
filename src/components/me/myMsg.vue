@@ -7,14 +7,14 @@
         <img src="~img/icon/join-right.png" alt />
       </div>
     </div>
-    <div class="warp_item">
+    <div class="warp_item" @click="tojump('/compileName')">
       <div class="item_title">名字</div>
       <div class="item_content">
         {{name}}
         <img src="~img/icon/join-right.png" alt />
       </div>
     </div>
-    <div class="warp_item">
+    <div class="warp_item" @click="tojump('/bingPhone')">
       <div class="item_title">手机绑定</div>
       <div class="item_content">
         {{phonehide(phone)}}
@@ -36,7 +36,7 @@
         <img src="~img/icon/join-right.png" alt />
       </div>
     </div>
-    <div class="warp_item">
+    <div class="warp_item" @click="tojump('/versionsMsg')">
       <div class="item_title">版本信息</div>
       <div class="item_content">
         {{versionsMsg}}
@@ -50,6 +50,7 @@
 
 <script>
 import confirm from "base/confirm";
+import tojump from 'mixins/tojump'
 export default {
   data() {
     return {
@@ -74,7 +75,8 @@ export default {
   },
   components: {
     confirm
-  }
+  },
+  mixins:[tojump]
 };
 </script>
 

@@ -135,6 +135,18 @@ export default new Router({
       component: () => import(/* webpackChunkName: "me" */ 'com/me/myVisitor'),
     },
     {
+      path: '/versionsMsg',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/versionsMsg'),
+    },
+    {
+      path: '/bingPhone',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/bingPhone'),
+    },
+    {
+      path: '/compileName',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/compileName'),
+    },
+    {
       path: '/',
       redirect:'/index'
     }
