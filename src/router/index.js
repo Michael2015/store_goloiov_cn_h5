@@ -75,6 +75,10 @@ export default new Router({
       component: OrderDetail
     },
     {
+      path: '/order-refund',
+      component: () => import(/* webpackChunkName: "order" */ 'com/order/order-refund'),
+    },
+    {
       path: '/income',
       component: () => import(/* webpackChunkName: "income" */ 'com/income'),
       meta: { haveTab: true }

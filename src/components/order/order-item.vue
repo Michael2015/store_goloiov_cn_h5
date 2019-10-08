@@ -1,23 +1,22 @@
 <template>
   <div class="item">
     <div class="head table border-bottom">
-      <div class="avatar-wrap"><div class="avatar"><img src="" alt=""></div></div>
-      <div class="nickname"><div>老司机开车</div></div>
-      <div class="time"><div class="free-info" v-if="false">已加入公排，目前排名：545</div><div>2019/3/8  17:08:20</div></div>
+      <div class="time"><div>2019/3/8  17:08:20</div></div>
+      <div class="status"><span>已发货</span></div>
     </div>
-    <div class="con table">
+    <div class="con table border-bottom">
       <div class="goods-pic"><div><img src="" alt=""></div></div>
       <div class="goods-desc">
         <div class="name">3M 燃油宝汽油添加剂加</div>
         <div class="spec">3只装 500ML/瓶</div>
       </div>
-      <div class="num">
-        <span>x1</span>
+      <div class="price-num">
+        <div class="price">¥1199.00</div>
+        <div class="num">x1</div>
       </div>
     </div>
     <div class="sum">
-      合计：<span>￥1200</span> 元
-      <div class="btn-inline" v-if="false">查看物流</div>
+      <span class="cut">已优惠金额：¥1.00 |</span> 合计：<span class="price">￥1200</span>
     </div>
   </div>
 </template>
@@ -31,48 +30,30 @@ export default {
 @import "~css/def";
 .item{
   min-height: 150px;
-  border-radius: 6px;
   background: #fff;
-  padding: 0 size(24);
+  padding-left: size(20);
 }
 .head{
-  height: size(88);
+  height: size(74);
+  padding-left: size(10);
   >div{
     display: table-cell;
     vertical-align: middle;
   }
-  .avatar-wrap{
-    width: size(60);
-  }
-  .avatar{
-    @include circle(60);
-    background: #ddd;
-    img{
-      display: block;
-      @include fill;
-    }
-  }
-  .nickname{
-    color: #666;
-    font-size: size(28);
-    padding-left: size(32);
-    width: 40%;
-    >div{
-      @include txt-overflow;
-    }
-  }
   .time{
-    font-size: size(24);
-    color: #999;
+    font-size: size(26);
+  }
+  .status{
     text-align: right;
-    .free-info{
-      color:$color-main;
-      padding-bottom: size(8);
+    font-size: size(26);
+    span{
+      padding-right: size(30);
     }
   }
 }
 .con{
-  padding: size(26) 0;
+  padding: size(30) 0;
+  padding-right: size(20);
   >div{
     vertical-align: top;
     display: table-cell;
@@ -90,39 +71,46 @@ export default {
     }
   }
   .goods-desc{
-    padding-left: size(26);
+    padding-left: size(20);
     .name{
-      font-size: size(28);
+      font-size: size(26);
       font-weight: 800;
-      margin-bottom: size(20);
-      @include txt-overflow;
+      margin-bottom: size(16);
+      line-height: size(40);
+      min-height: size(80);
+      @include txt-overflow(2);
     }
     .spec{
       font-size: size(24);
       color: #999;
-      line-height: 1.4;
-      @include txt-overflow(2);
+      @include txt-overflow;
     }
   }
-  .num{
+  .price-num{
     width: size(80);
     text-align: right;
-    color: $color-main;
+    font-size: size(24);
+    min-width: size(120);
+    line-height: size(40);
+    .price{
+      color: #000;
+    }
+    .num{
+      color: #666;
+    }
   }
 }
 .sum{
-  font-size: size(28);
+  font-size: size(24);
   color: #666;
-  padding:size(20) 0 size(40);
-  span{
-    color: $color-main;
+  line-height: size(66);
+  text-align: right;
+  padding: 0 size(20);
+  .price{
+    color: #e31436;
   }
-  position: relative;
-  .btn-inline{
-    position: absolute;
-    min-width: size(180);
-    right:0;
-    top: size(0);
+  .cut{
+    font-size: size(22);
   }
 }
 </style>

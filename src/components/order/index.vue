@@ -1,8 +1,7 @@
 <template>
   <div class="wrap">
-    <div class="top top-spec-bg">
+    <div class="top">
       <div>
-        <search-input v-model="keyword" class="input"></search-input>
         <div class="types">
           <div v-for="(item,index) in types" :key="index" 
             :class="{active: index===activeType }" @click="type(index)">{{item}}</div>
@@ -16,16 +15,14 @@
 </template>
 
 <script>
-import SearchInput from 'base/ui/search-input'
 import OrderItem from './order-item'
 export default {
   components: {
-    SearchInput,
     OrderItem
   },
   data() {
     return {
-      types: ['全部订单', '待发货', '已发货', '退款/售后'],
+      types: ['全部', '待付款', '待发货', '已发货', '退款'],
       activeType: 0,
       keyword: ''
     }
@@ -45,38 +42,38 @@ export default {
   background-color: $color-body-bg;
 }
 .top{
-  padding: 0 size(24);
+  padding: 0 size(20);
   overflow: hidden;
-  .input{
-    margin: size(36) 0 0;
-  }
+  background: #fff;
   .types{
     font-size: size(30);
-    color: #fff;
     display: flex;
-    justify-content: space-around;
+    // justify-content: space-around;
     >div{
+      flex: 1;
       padding: size(44) 0;
+      text-align: center;
+      color: #000;
       &.active{
-        font-weight: 800;
         position: relative;
+        color: #e4193a;
         &:after{
           content: ' ';
           position: absolute;
           left: 50%;
-          bottom: size(27);
+          bottom: 0;
           transform: translateX(-50%);
           height: 2px;
-          background: #fff;
+          background: #e31436;
           display: block;
-          width: 60%;
+          width: 72%;
         }
       }
     }
   }
 }
 .list{
-  padding: size(26);
+  padding: size(26) 0 ;
   .item{
     margin-bottom: size(24);
   }
