@@ -2,7 +2,7 @@
   <div class="warp">
     <div class="award">
       奖励金额：1500.00元
-      <div class="task">分红=团队月利润*5%</div>
+      <div class="task">分红 = 平台月利润*5%股东人数</div>
     </div>
     <div class="simpleness_show">
       <div class="left">奖励金额</div>
@@ -17,8 +17,12 @@
       <div class="right">董事股东</div>
     </div>
     <div class="simpleness_show">
-      <div class="left">本月团队总利润</div>
+      <div class="left">上月团队总利润</div>
       <div class="right">3783791万元</div>
+    </div>
+    <div class="simpleness_show">
+      <div class="left">股东人数</div>
+      <div class="right">10人</div>
     </div>
   </div>
 </template>
