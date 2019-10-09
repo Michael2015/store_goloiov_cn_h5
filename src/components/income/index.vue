@@ -5,25 +5,28 @@
         <div class="content">
           <div class="title">可提现金额:</div>
           <div class="all_money">
-            <span>¥</span>7694.28
+            <span>¥</span>
+            {{isLogin?cash:''}}
           </div>
-          <div class="record" @click="tojump('/record')">提现记录</div>
+          <div class="record" @click="record">提现记录</div>
           <div class="detail">
             <div class="left">
               <span>待结算</span>
               <span class="money">
-                <span>¥</span> 30614.07
+                <span>¥</span>
+                {{isLogin?uncash:''}}
               </span>
             </div>
             <div class="right">
               <span>总收入</span>
               <span class="money">
-                <span>¥</span> 40017.25
+                <span>¥</span>
+                {{isLogin?all:''}}
               </span>
             </div>
           </div>
         </div>
-        <div class="withdraw" @click="tojump('/withdraw')">提现</div>
+        <div class="withdraw" @click="withdraw">提现</div>
       </div>
       <div class="in-title">
         <span :class="active === 'charge'?'active':''" @click="checkShow('charge')">免单</span>
@@ -33,113 +36,126 @@
     </div>
     <keep-alive>
       <mt-tab-container v-model="active" swipeable>
-        <mt-tab-container-item
-          id="charge"
-          v-infinite-scroll="loadCharge"
-          infinite-scroll-disabled="leftLoading"
-          infinite-scroll-distance="10"
-          infinite-scroll-immediate-check="false"
-        >
-          <div class="pub_list">
-            <div class="item" v-for="(item,index) in leftList" :key="index">
-              <div class="queue border-bottom">已成功推荐2人，还剩余4单即可免单</div>
-              <div class="detail">
-                <div class="img_warp">
-                  <img
-                    src="https://storemp.golodata.com/public/uploads/attach/2019/04/03/5ca422d1310a3.png"
-                    alt
-                  />
+        <mt-tab-container-item id="charge">
+          <load-more v-slot="{list}" :getData="loadCharge" ref="charge">
+            <div class="pub_list">
+              <div class="item" v-for="(item,index) in list" :key="index">
+                <div class="queue border-bottom">{{item.left}}</div>
+                <div class="detail">
+                  <div class="img_warp">
+                    <img :src="item.image" alt />
+                  </div>
+                  <div class="desc border-bottom">
+                    <div class="name">{{item.store_name}}</div>
+                    <div class="ordernum">{{item.right}}</div>
+                  </div>
                 </div>
-                <div class="desc border-bottom">
-                  <div class="name">元征goloX3 智能车联网车载智慧终端汽车诊断仪车载wifi智能盒子行车电脑</div>
-                  <div class="ordernum">幸运码640，还有31人等待免单</div>
-                </div>
-              </div>
-              <div class="footer">
-                <div class="txt-count">
-                  <span>订单尾号810006</span>
-                  <span>|</span>
-                  <span>已优惠金额 ¥0.00</span>
+                <div class="footer">
+                  <div class="txt-count">
+                    <span>订单尾号{{tailSix(item.order_sn)}}</span>
+                    <span>|</span>
+                    <span v-if="item.coupon_price">已优惠金额 ¥{{item.coupon_price}}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </load-more>
         </mt-tab-container-item>
 
-        <mt-tab-container-item
-          id="earnings"
-          v-infinite-scroll="loadEarnings"
-          infinite-scroll-disabled="rightLoading"
-          infinite-scroll-distance="10"
-        >
-          <div class="in_record">
-            <div class="item" v-for="(item,index) in rightList" :key="index">
-              <div class="left">
-                <div class="name">
-                  销售返利
-                  <span>/待结算</span>
+        <mt-tab-container-item id="earnings">
+          <load-more v-slot="{list}" :getData="loadEarnings" ref="earnings">
+            <div class="in_record">
+              <div class="item" v-for="(item,index) in list" :key="index">
+                <div class="left">
+                  <div class="name">
+                    {{item.type_text}}
+                    <!-- <span>/待结算</span> -->
+                  </div>
+                  <div class="reason">{{item.title}}</div>
                 </div>
-                <div class="reason">订单尾号762534销售返利</div>
+                <div class="right">+{{item.number}}元</div>
               </div>
-              <div class="right">+10000.00元</div>
             </div>
-          </div>
+          </load-more>
         </mt-tab-container-item>
       </mt-tab-container>
     </keep-alive>
+    <notive ref="notive"></notive>
   </div>
 </template>
 
 <script>
-import tojump from 'mixins/tojump'
+import tojump from "mixins/tojump";
+import { mapState } from "vuex";
+import notive from "base/notive";
+import { incomeList, platoonList, getUserAmount } from "api/income";
+import LoadMore from "base/load-more";
 export default {
   data() {
     return {
       active: "earnings",
-      leftLoading: false,
-      leftList: [1, 2, 3, 4, 5],
-      rightLoading: false,
-      rightList: [1, 2, 3, 4, 5],
-      jumpObj:{
-        'public':'免单详情',             //免单详情
-        'commission':'合伙人津贴详情',     //合伙人津贴详情
-        'benifit':'返利详情',           //返利详情
-        'director':'董事分红详情',                 //董事分红详情
-        'supplier':'开发供应商',                   //开发供应商
-        'allowance':'管理津贴'                 //培养合伙人
+      cash:'',  //可提现金额
+      uncash:'',//待结算金额
+      all:'',   //总收入金额
+      jumpObj: {
+        public: "免单详情", //免单详情
+        commission: "合伙人津贴详情", //合伙人津贴详情
+        benifit: "返利详情", //返利详情
+        director: "董事分红详情", //董事分红详情
+        supplier: "开发供应商", //开发供应商
+        allowance: "管理津贴" //培养合伙人
       }
     };
   },
-  mounted() {},
+  async mounted() {
+    const reque = await getUserAmount()
+    this.cash = reque.cash_money;
+    this.uncash = reque.unsettled_money;
+    this.all = reque.total_money;
+  },
   methods: {
     checkShow(demo) {
       this.active = demo;
-    },
-    loadCharge() {
-      this.leftLoading = true;
       if (this.active === "charge") {
-        setTimeout(() => {
-          console.log("111");
-          let last = this.leftList[this.leftList.length - 1];
-          for (let i = 1; i <= 5; i++) {
-            this.leftList.push(last + i);
-          }
-          this.leftLoading = false;
-        }, 500);
+        this.$refs.charge.disabled === false;
+        this.$refs.earnings.disabled === true;
+      } else if (this.active === "earnings") {
+        this.$refs.earnings.disabled === false;
+        this.$refs.charge.disabled === true;
+      }
+      // 处理首次切换不加载
+      // if (this.isLogin && demo === "charge" && this.leftList.length === 0) {
+      //   this.loadCharge();
+      // }
+    },
+    loadCharge(page, size) {
+      return platoonList(page, size);
+    },
+    loadEarnings(page, size) {
+      return incomeList(page, size);
+    },
+    record() {
+      if (this.isLogin) {
+        this.tojump("/record");
+      } else {
+        this.$refs.notive.show("请先登录", () => {
+          console.log("点击了确认登录");
+        });
       }
     },
-    loadEarnings() {
-      this.rightLoading = true;
-      if (this.active === "earnings") {
-        setTimeout(() => {
-          console.log("222");
-          let last = this.rightList[this.rightList.length - 1];
-          for (let i = 1; i <= 5; i++) {
-            this.rightList.push(last + i);
-          }
-          this.rightLoading = false;
-        }, 500);
+    withdraw() {
+      if (this.isLogin) {
+        this.tojump("/withdraw");
+      } else {
+        this.$refs.notive.show("请先登录", () => {
+          console.log("点击了确认登录");
+        });
       }
+    },
+    // 获取订单号后六位
+    tailSix(str) {
+      let s = str;
+      return s.substr(s.length - 6, 6);
     }
   },
   watch: {
@@ -163,9 +179,14 @@ export default {
         title = "如何免单";
       }
       return title;
-    }
+    },
+    ...mapState(["isLogin"])
   },
-  mixins:[tojump]
+  mixins: [tojump],
+  components: {
+    notive,
+    LoadMore
+  }
 };
 </script>
 

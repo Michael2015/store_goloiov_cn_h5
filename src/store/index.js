@@ -9,9 +9,9 @@ const debug = process.env.NODE_ENV !== 'production'
 export default new Vuex.Store({
   state: {
     // 是否登录
-    isLogin: false,
+    isLogin: true,
     // 什么角色 0 一般用户 1 合伙人
-    role: 0
+    role: 1
   },
   mutations: {
     loginTest(state) {
