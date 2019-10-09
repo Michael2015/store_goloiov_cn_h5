@@ -2,18 +2,18 @@ import router from './router'
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
-import { TabContainer, TabContainerItem, InfiniteScroll,Swipe, SwipeItem } from 'mint-ui';
+import { TabContainer, TabContainerItem, InfiniteScroll,Swipe, SwipeItem, Picker } from 'mint-ui';
 
-Vue.use(InfiniteScroll);
-
-Vue.component(TabContainer.name, TabContainer);
-Vue.component(TabContainerItem.name, TabContainerItem);
+Vue.use(InfiniteScroll)
 
 Vue.config.productionTip = false
 
 // mint-ui
 Vue.component(Swipe.name, Swipe)
 Vue.component(SwipeItem.name, SwipeItem)
+Vue.component(TabContainer.name, TabContainer)
+Vue.component(TabContainerItem.name, TabContainerItem)
+Vue.component(Picker.name, Picker)
 
 new Vue({
   router,

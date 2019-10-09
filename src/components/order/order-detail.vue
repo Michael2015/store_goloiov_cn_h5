@@ -2,7 +2,13 @@
   <div class="wrap">
     <div class="big-status table">
       <div class="status">
-        <span>代付款</span>
+        <span v-if="orderInfo.status_of_order === 0">待支付</span>
+        <span v-if="orderInfo.status_of_order === 1">待发货</span>
+        <span v-if="orderInfo.status_of_order === 2">退款中</span>
+        <span v-if="orderInfo.status_of_order === 3">已发货</span>
+        <span v-if="orderInfo.status_of_order === 4">已退款</span>
+        <span v-if="orderInfo.status_of_order === 5 && (orderInfo.status == 2 || orderInfo.status == 4)">已收货</span>
+        <span v-if="orderInfo.status_of_order === 5 && orderInfo.status == 3">已评价</span>
       </div>
       <div class="icon">
         <div class="img-wrap"></div>
@@ -15,31 +21,31 @@
             <img src="~img/icon/location.png" alt="">
           </div>
           <div>
-            <div class="detail">广东省深圳市福田区车公庙泰然11122庙泰然11122庙泰然111122</div>
-            <div class="name">李白    13125089651</div>
+            <div class="detail">{{orderInfo.user_address}}</div>
+            <div class="name">{{orderInfo.real_name}}    {{orderInfo.user_phone}}</div>
           </div>
         </div>
       </div>
       <div class="goods">
         <div class="con table border-bottom">
-          <div class="goods-pic"><div><img src="" alt=""></div></div>
+          <div class="goods-pic"><div><img :src="orderInfo.image" alt=""></div></div>
           <div class="goods-desc">
-            <div class="name">3M 燃油宝汽油添加剂加</div>
-            <div class="spec">3只装 500ML/瓶</div>
+            <div class="name">{{orderInfo.store_name}}</div>
+            <div class="spec">{{orderInfo.suk}}</div>
           </div>
           <div class="price-num">
-            <div class="price">¥1199.00</div>
-            <div class="num">x1</div>
+            <div class="price">¥{{orderInfo.pay_price}}</div>
+            <div class="num">x{{orderInfo.total_num}}</div>
           </div>
         </div>
         <div class="sum">
-          <span class="cut">已优惠金额：¥1.00 |</span> 合计：<span class="price">￥1200</span>
+          <span class="cut">已优惠金额：¥{{orderInfo.coupon_price}} |</span> 合计：<span class="price">￥{{orderInfo.pay_price}}</span>
         </div>
       </div>
       <div class="order-detail">
-        <div class="line">订单来源：&nbsp;&nbsp;李世民</div>
-        <div class="line">订单编号：&nbsp;&nbsp;65sf4d56sd4f65d4f56df45f1</div>
-        <div class="line">下单时间：&nbsp;&nbsp;李世民</div>
+        <div class="line">订单来源：&nbsp;&nbsp;{{orderInfo.nickname}}</div>
+        <div class="line">订单编号：&nbsp;&nbsp;{{orderInfo.order_id}} <div class="btn-inline">复制</div></div>
+        <div class="line">下单时间：&nbsp;&nbsp;{{orderInfo.add_time}}</div>
         <div class="line">物流信息：&nbsp;&nbsp;顺丰速运 （545454545）<div class="btn-inline where">查看</div></div>
       </div>
     </div>
@@ -54,9 +60,32 @@
 
 <script>
 import JoinFree from 'base/join-free'
+import {getOrderDetail} from 'api/order'
+import {Loading} from 'lib'
 export default {
   components: {
     JoinFree
+  },
+  props: {
+    id: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      orderInfo: {}
+    }
+  },
+  created() {
+    Loading.open()
+    getOrderDetail(this.id).then(data => {
+      if (data) {
+        console.log(data)
+        this.orderInfo = data
+      }
+      Loading.close()
+    })
   },
   mounted() {
     // this.$refs.joinFree.show()

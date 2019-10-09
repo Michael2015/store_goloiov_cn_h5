@@ -1,28 +1,42 @@
 <template>
   <div class="item">
     <div class="head table border-bottom">
-      <div class="time"><div>2019/3/8  17:08:20</div></div>
-      <div class="status"><span>已发货</span></div>
+      <div class="time"><div>{{item.add_time}}</div></div>
+      <div class="status">
+        <span v-if="item.status_of_order === 0">待支付</span>
+        <span v-if="item.status_of_order === 1">待发货</span>
+        <span v-if="item.status_of_order === 2">退款中</span>
+        <span v-if="item.status_of_order === 3">已发货</span>
+        <span v-if="item.status_of_order === 4">已退款</span>
+        <span v-if="item.status_of_order === 5 && (item.status == 2 || item.status == 4)">已收货</span>
+        <span v-if="item.status_of_order === 5 && item.status == 3">已评价</span>
+      </div>
     </div>
-    <div class="con table border-bottom">
-      <div class="goods-pic"><div><img src="" alt=""></div></div>
+    <router-link class="con table border-bottom" :to="'/order-detail/'+item.order_id">
+      <div class="goods-pic"><div><img :src="item.image" alt=""></div></div>
       <div class="goods-desc">
-        <div class="name">3M 燃油宝汽油添加剂加</div>
-        <div class="spec">3只装 500ML/瓶</div>
+        <div class="name">{{item.store_name}}</div>
+        <div class="spec">{{item.suk}}</div>
       </div>
       <div class="price-num">
-        <div class="price">¥1199.00</div>
-        <div class="num">x1</div>
+        <div class="price">¥{{item.price}}</div>
+        <div class="num">x{{item.total_num}}</div>
       </div>
-    </div>
+    </router-link >
     <div class="sum">
-      <span class="cut">已优惠金额：¥1.00 |</span> 合计：<span class="price">￥1200</span>
+      <span class="cut">已优惠金额：¥{{item.coupon_price}} |</span> 合计：<span class="price">￥{{item.pay_price}}</span>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    item: {
+      type: Object,
+      default: () => ({})
+    }
+  }
 }
 </script>
 
@@ -72,6 +86,7 @@ export default {
   }
   .goods-desc{
     padding-left: size(20);
+    color: #333;
     .name{
       font-size: size(26);
       font-weight: 800;

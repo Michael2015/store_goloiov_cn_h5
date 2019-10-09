@@ -1,8 +1,8 @@
 <template>
   <div class="list clearfix">
-    <div class="item">
-      <img src="" alt="">
-      <div class="close"></div>
+    <div class="item" v-for="(item, index) in imgs" :key="item.name + ' ' + index">
+      <div class="img"><img :src="item.data" alt=""></div>
+      <div class="close" @click="del(index)"></div>
     </div>
     <div class="item add">
       <label for="image"></label>
@@ -12,8 +12,37 @@
 </template>
 
 <script>
+import {Loading} from 'lib'
 export default {
-
+  data() {
+    return {
+      imgs: []
+    }
+  },
+  methods: {
+    change: function() {
+      const file = this.$refs.img.files[0]
+      if (!file) {
+        // 没有文件
+        return
+      }
+      Loading.open()
+      fileToBase64(file).then(b => {
+        // 设置选择的图片
+        this.imgs.push({
+          name: file.name,
+          data: b
+        })
+        const form = new FormData()
+        form.append('file', base64ToBlob(b), file.name)
+        console.log(form)
+        Loading.close()
+      })
+    },
+    del(i) {
+      this.imgs.splice(i, 1)
+    }
+  }
 }
 function fileToBase64(file) {
   // 创建一个文件读取的工具类
@@ -78,13 +107,21 @@ function base64ToBlob(base64Data) {
     position: relative;
     padding-bottom: 30.3%;
     margin-bottom: size(24);
-    background: gold;
-    >img{
+    background: #fff;
+    .img{
+      overflow: hidden;
+      position: absolute;
       @include fill;
+      left: 0;
+      top: 0;
+    }
+    .img>img{
       display: block;
       position: absolute;
       left: 0;
-      top: 0;
+      width: 100%;
+      top: 50%;
+      transform: translateY(-50%);
       box-shadow: 0px 1px 9px 0px rgba(225, 225, 225, 0.5);
     }
     &.add{

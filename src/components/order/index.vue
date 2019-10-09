@@ -4,28 +4,40 @@
       <div>
         <div class="types">
           <div v-for="(item,index) in types" :key="index" 
-            :class="{active: index===activeType }" @click="type(index)">{{item}}</div>
+            :class="{active: index===activeType }" @click="type(index)">{{item.name}}</div>
         </div>
       </div>
     </div>
-    <div class="list">
-      <order-item class="item" v-for="i in 2" :key="i"></order-item>
-    </div>
+    <load-more v-slot="{list}" class="list-wrap" :getData="getList" :key="activeType">
+      <div class="list">
+        <order-item class="item" v-for="(item, index) in list" :key="index" :item="item"></order-item>
+      </div>
+    </load-more>
   </div>
 </template>
 
 <script>
 import OrderItem from './order-item'
+import {getOrderList} from 'api/order'
+import LoadMore from 'base/load-more'
 export default {
   components: {
-    OrderItem
+    OrderItem,
+    LoadMore
   },
   data() {
     return {
-      types: ['全部', '待付款', '待发货', '已发货', '退款'],
+      types: [{name: '全部', type: ''}, {name: '待付款', type: 0}, {name: '待发货', type: 1}, {name: '已发货', type: 2}, {name: '退款', type: -3}],
       activeType: 0,
       keyword: ''
     }
+  },
+  computed: {
+    getList() {
+      return (page, size) => getOrderList(this.types[this.activeType].type, page, size)
+    }
+  },
+  created() {
   },
   methods: {
     type(i) {
@@ -71,6 +83,9 @@ export default {
       }
     }
   }
+}
+.list-wrap{
+  padding-bottom: size(100);
 }
 .list{
   padding: size(26) 0 ;

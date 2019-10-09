@@ -68,15 +68,20 @@ export default new Router({
     {
       path: '/order',
       component: () => import(/* webpackChunkName: "order" */ 'com/order'),
-      meta: { haveTab: true }
+      meta: { haveTab: true , keepAlive: true}
     },
     {
-      path: '/order-detail',
-      component: OrderDetail
+      path: '/order-detail/:id',
+      component: OrderDetail,
+      props: true
     },
     {
       path: '/order-refund',
       component: () => import(/* webpackChunkName: "order" */ 'com/order/order-refund'),
+    },
+    {
+      path: '/order-remark',
+      component: () => import(/* webpackChunkName: "order" */ 'com/order/order-remark'),
     },
     {
       path: '/income',
