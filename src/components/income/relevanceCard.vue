@@ -3,51 +3,105 @@
     <div class="msg_item">
       <div class="title">持卡人</div>
       <div class="import">
-        <input type="text" placeholder="输入持卡人姓名" />
+        <input type="text" placeholder="输入持卡人姓名" v-model="real_name" />
       </div>
     </div>
     <div class="msg_item">
       <div class="title">卡号</div>
       <div class="import">
-        <input
-          type="number"
-          v-model="card"
-          placeholder="输入银行卡号"
-          οnkeyup="this.value=this.value.replace(/\D/g,'').replace(/....(?!$)/g,'$& ')"
-        />
+        <input type="text" placeholder="输入银行卡号" pattern="[0-9]*" maxlength="24" v-model="bank_code" />
       </div>
     </div>
     <div class="msg_item">
-      <div class="title">银行</div>
+      <div class="title">所在省</div>
       <div class="import">
-        <input type="text" placeholder="选择银行" />
+        <input type="text" placeholder="请输入银行卡所在省" v-model="province" />
       </div>
     </div>
     <div class="msg_item">
-      <div class="title">支行</div>
+      <div class="title">所在市</div>
       <div class="import">
-        <input type="text" placeholder="选择输入开户支行" />
+        <input type="text" placeholder="请输入银行卡所在市" v-model="city" />
       </div>
     </div>
-    <div class="withdraw_btn" @click="$router.back()">提现</div>
+    <div class="msg_item">
+      <div class="title">开户支行</div>
+      <div class="import">
+        <input type="text" placeholder="请输入银行卡开户支行" v-model="sub_branch" />
+      </div>
+    </div>
+    <div class="withdraw_btn" @click="updateCard">提现</div>
     <div class="hint">银行卡持卡人必须与当前微信账户同名</div>
   </div>
 </template>
 
 <script>
+import { Toast } from "lib";
+import { bindbank } from "api/income";
+import { OK } from "api/request";
 export default {
   data() {
     return {
-      card: ""
+      real_name: "",
+      bank_code: "",
+      province: "",
+      city: "",
+      sub_branch: ""
     };
+  },
+  methods: {
+    updateCard() {
+      const { real_name, bank_code, province, city, sub_branch } = this;
+      if (!real_name) {
+        Toast("请填写持卡人姓名");
+        return;
+      }
+      if (!bank_code) {
+        Toast("请填写银行卡号");
+        return;
+      }
+      if (!province) {
+        Toast("请填写银行卡所在省");
+        return;
+      }
+      if (!city) {
+        Toast("请填写银行卡所在市");
+        return;
+      }
+      if (!sub_branch) {
+        Toast("请填写银行卡开户支行");
+        return;
+      }
+      bindbank({
+        real_name,
+        bank_code,
+        extra: province + " " + city + " " + sub_branch
+      }).then(res => {
+        console.log(res);
+        if (res.code === OK) {
+          this.$router.back();
+          Toast('保存成功');
+        } else {
+          Toast(res.msg);
+          return;
+        }
+      });
+    }
+  },
+  mounted() {
+    const { real_name, bank_code } = this.$route.query;
+    this.real_name = real_name;
+    this.bank_code = bank_code;
+  },
+  watch: {
+    // card(val) {
+    //   if (!/^([\d]{4}[\s]+)*[\d]{0,3}$/.test(val)) {
+    //     this.card = val.replace(/[^\d]|\s/g, "").replace(/(\d{4})(?=\d)/g, "$1　")
+    //   } else {
+    //     this.card = val
+    //   }
+    // }
   }
-//   watch: {
-//     card(val) {
-//       this.$nextTick(() => {
-//         this.card = val.replace(/\s/g, "").replace(/....(?!$)/g, "$& ");
-//       });
-//     }
-//   }
 };
 </script>
 
@@ -70,7 +124,7 @@ export default {
       padding-left: size(30);
     }
     .import {
-      width: size(592);
+      width: size(570);
       // &>input{}
     }
   }

@@ -1,28 +1,35 @@
 <template>
   <div class="record_warp">
-    <div class="withdraw_record" v-for="(item,index) in recordList" :key="index">
-      <div class="left">
-        <div class="title">提现</div>
-        <div class="time">{{item.time}}</div>
+    <load-more v-slot="{list}" :getData="loadDate">
+      <div class="withdraw_record" v-for="(item,index) in list" :key="index">
+        <div class="left">
+          <div class="title">提现</div>
+          <div class="time">{{item.add_time}}</div>
+        </div>
+        <div class="right">
+          <div class="money">¥{{item.extract_price}}</div>
+          <div class="processeding" v-if="item.status === 0">处理中</div>
+          <div class="accomplish" v-else-if="item.status === 1">已完成</div>
+        </div>
       </div>
-      <div class="right">
-        <div class="money">¥{{item.money}}</div>
-        <div class="processeding" v-if="item.state === 0">处理中</div>
-        <div class="accomplish" v-else-if="item.state === 1">已完成</div>
-      </div>
-    </div>
+    </load-more>  
   </div>
 </template>
 
 <script>
+import { withdrawlist } from "api/income";
+import LoadMore from "base/load-more";
 export default {
   data() {
-    return {
-      recordList: [
-        { time: "2018-03-12 12:32:58", money: "1199.00", state: 0 },
-        { time: "2018-03-12 12:32:58", money: "21.00", state: 1 }
-      ]
-    };
+    return {};
+  },
+  methods: {
+    loadDate(page) {
+      return withdrawlist(page);
+    }
+  },
+  components: {
+    LoadMore
   }
 };
 </script>

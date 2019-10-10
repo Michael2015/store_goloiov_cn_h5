@@ -4,7 +4,7 @@
       <div class="wrap">
         <div class="header">
           请选择银行卡
-          <img src="~img/close.png" alt />
+          <img src="~img/close.png" alt @click="hide"/>
         </div>
         <div class="add_card" @click="$emit('add-card')">
           <div class="add">+</div>

@@ -6,7 +6,7 @@
           <div class="title">可提现金额:</div>
           <div class="all_money">
             <span>¥</span>
-            {{isLogin?cash:''}}
+            {{isLogin?cash:'0.00'}}
           </div>
           <div class="record" @click="record">提现记录</div>
           <div class="detail">
@@ -14,14 +14,14 @@
               <span>待结算</span>
               <span class="money">
                 <span>¥</span>
-                {{isLogin?uncash:''}}
+                {{isLogin?uncash:'0.00'}}
               </span>
             </div>
             <div class="right">
               <span>总收入</span>
               <span class="money">
                 <span>¥</span>
-                {{isLogin?all:''}}
+                {{isLogin?all:'0.00'}}
               </span>
             </div>
           </div>
@@ -37,7 +37,7 @@
     <keep-alive>
       <mt-tab-container v-model="active" swipeable>
         <mt-tab-container-item id="charge">
-          <load-more v-slot="{list}" :getData="loadCharge" ref="charge">
+          <load-more v-slot="{list}" v-if="isLogin" :getData="loadCharge" ref="charge">
             <div class="pub_list">
               <div class="item" v-for="(item,index) in list" :key="index">
                 <div class="queue border-bottom">{{item.left}}</div>
@@ -60,12 +60,18 @@
               </div>
             </div>
           </load-more>
+          <div class="no_login" v-if="!isLogin">暂无数据</div>
         </mt-tab-container-item>
 
         <mt-tab-container-item id="earnings">
-          <load-more v-slot="{list}" :getData="loadEarnings" ref="earnings">
+          <load-more v-slot="{list}" v-if="isLogin" :getData="loadEarnings" ref="earnings">
             <div class="in_record">
-              <div class="item" v-for="(item,index) in list" :key="index">
+              <div
+                class="item"
+                v-for="(item,index) in list"
+                :key="index"
+                @click="clickShouYi(item.type,item.order_id,item.order_sn)"
+              >
                 <div class="left">
                   <div class="name">
                     {{item.type_text}}
@@ -77,6 +83,7 @@
               </div>
             </div>
           </load-more>
+          <div class="no_login" v-if="!isLogin">暂无数据</div>
         </mt-tab-container-item>
       </mt-tab-container>
     </keep-alive>
@@ -94,39 +101,30 @@ export default {
   data() {
     return {
       active: "earnings",
-      cash:'',  //可提现金额
-      uncash:'',//待结算金额
-      all:'',   //总收入金额
+      cash: "0.00", //可提现金额
+      uncash: "0.00", //待结算金额
+      all: "0.00", //总收入金额
       jumpObj: {
-        public: "免单详情", //免单详情
-        commission: "合伙人津贴详情", //合伙人津贴详情
-        benifit: "返利详情", //返利详情
-        director: "董事分红详情", //董事分红详情
-        supplier: "开发供应商", //开发供应商
-        allowance: "管理津贴" //培养合伙人
+        public: "/public", //免单详情
+        commission: "/commission", //合伙人津贴详情
+        benifit: "/benifit", //返利详情
+        director: "/director", //董事分红详情
+        supplier: "/supplier", //开发供应商
+        allowance: "/allowance", //培养合伙人
+        pay_product_refund: "/order-detail" //订单退款
       }
     };
   },
   async mounted() {
-    const reque = await getUserAmount()
+    const reque = await getUserAmount();
     this.cash = reque.cash_money;
     this.uncash = reque.unsettled_money;
     this.all = reque.total_money;
+    this.$refs.charge.disabled = true;
   },
   methods: {
     checkShow(demo) {
       this.active = demo;
-      if (this.active === "charge") {
-        this.$refs.charge.disabled === false;
-        this.$refs.earnings.disabled === true;
-      } else if (this.active === "earnings") {
-        this.$refs.earnings.disabled === false;
-        this.$refs.charge.disabled === true;
-      }
-      // 处理首次切换不加载
-      // if (this.isLogin && demo === "charge" && this.leftList.length === 0) {
-      //   this.loadCharge();
-      // }
     },
     loadCharge(page, size) {
       return platoonList(page, size);
@@ -156,16 +154,26 @@ export default {
     tailSix(str) {
       let s = str;
       return s.substr(s.length - 6, 6);
+    },
+    // 收益列表点击
+    clickShouYi(type,id,sn) {
+      console.log(type);
+      let url;
+      url = this.jumpObj[type];
+      if(type === 'pay_product_refund'){
+        url += `/${sn}`
+      }
+      this.tojump(url);
     }
   },
   watch: {
     active(oldVal) {
       if (oldVal === "earnings") {
-        this.leftLoading = true;
-        this.rightLoading = false;
+        this.$refs.earnings.disabled = false;
+        this.$refs.charge.disabled = true;
       } else if (oldVal === "charge") {
-        this.leftLoading = false;
-        this.rightLoading = true;
+        this.$refs.charge.disabled = false;
+        this.$refs.earnings.disabled = true;
       }
     }
   },
@@ -459,5 +467,12 @@ export default {
       }
     }
   }
+}
+.no_login {
+  padding: size(20) 0;
+  line-height: 1.6;
+  font-size: size(24);
+  text-align: center;
+  color: #666;
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="showItem">
       <div class="title">储蓄卡</div>
       <div class="no_card" v-if="haveCard === 0" @click="$refs.addcard.show()">请添加银行卡</div>
-      <div class="have_card" v-if="haveCard === 1">建设银行</div>
+      <div class="have_card" v-if="haveCard === 1" @click="compileCard">{{bank_name}}</div>
     </div>
     <div class="showItem">
       <div class="title">金额</div>
@@ -15,6 +15,7 @@
             v-model="wantWithdraw"
             autocomplete="off"
             pattern="[0-9]*"
+            maxlength="24"
           />
         </div>
         <div class="all_withdraw" @click="allWithdraw">全部提现</div>
@@ -35,7 +36,7 @@
         <span></span>目前仅支持体系到本人银行卡
       </div>
     </div>
-    <addCard ref="addcard" @add-card='tojump("/relevanceCard");$refs.addcard.hide()'></addCard>
+    <addCard ref="addcard" @add-card="jumpAddCard"></addCard>
   </div>
 </template>
 
@@ -43,13 +44,19 @@
 import tojump from "mixins/tojump";
 import { Toast } from "lib";
 import addCard from "base/addCard";
+import { OK } from "api/request";
+import { withdraw, extract } from "api/income";
 export default {
   data() {
     return {
-      canWithdraw: 200.12,
-      wantWithdraw: "",
-      toWithdraw: 0,
-      haveCard: 1
+      canWithdraw: 0, // 可提取金额
+      wantWithdraw: "", // 想提取金额
+      toWithdraw: 0, // 去提取金额
+      haveCard: 0, // 标识是否有银行卡
+      bank_code: "", // 银行卡号
+      bank_name: "", // 银行所属
+      extra: "", // 地方
+      real_name:''//持卡人
     };
   },
   components: {
@@ -71,13 +78,28 @@ export default {
         Toast("请先添加银行卡");
         return;
       }
-      if (this.toWithdraw === 0) {
+      if (this.toWithdraw < 10 || this.toWithdraw > 10000) {
         Toast("请先输入正确金额");
         this.wantWithdraw = "";
         return;
       }
-      Toast("申请提现成功，预计1-3个工作日内到账");
-      this.tojump("/record");
+      extract(this.toWithdraw, ["bank", "wx"][0]).then(res => {
+        Toast(res.msg);
+        if (res.code === OK) {
+          this.tojump("/record");
+        } else if (res.code === 400) {
+          return;
+        }
+      });
+    },
+    jumpAddCard() {
+      const {real_name,bank_code} = this
+      this.tojump(`/relevanceCard?real_name=${real_name}&bank_code=${bank_code}`);
+      this.$refs.addcard.hide();
+    },
+    compileCard(){
+      const {real_name,bank_code} = this
+      this.tojump(`/relevanceCard?real_name=${real_name}&bank_code=${bank_code}`);
     }
   },
   watch: {
@@ -86,6 +108,16 @@ export default {
         this.wantWithdraw = this.canWithdraw;
       }
       this.toWithdraw = +this.wantWithdraw;
+    }
+  },
+  async mounted() {
+    const reque = await withdraw();
+    this.canWithdraw = +reque.withdraw_amount;
+    if (reque.bank_code) {
+      this.haveCard = 1;
+      this.bank_code = reque.bank_code;
+      this.bank_name = reque.bank_name;
+      this.real_name = reque.real_name;
     }
   }
 };
