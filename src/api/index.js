@@ -139,3 +139,12 @@ export function PartnerGetGoodsVisitor(id, page = 1, size = SIZE) {
     }
   }).then(clean)
 }
+
+// 获取省市区 ==================================
+export function getAreaInfo(id = 0){
+  return req.get('/api/address/getArea', {
+    params: {
+      pid: id
+    }
+  }).then(clean)
+}

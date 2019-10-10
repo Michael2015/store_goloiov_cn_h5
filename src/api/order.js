@@ -21,3 +21,33 @@ export function getOrderDetail(id, uid) {
     }
   }).then(clean)
 }
+
+// 确认收货
+export function confirmOrder(type, id, order) {
+  return req.get('/api/order/confirmOrder', {
+    params: {
+      type,
+      id,
+      order_id: order
+    }
+  }).then(clean)
+}
+
+// 删除订单
+export function delOrder(id) {
+  return req.get('/api/order/delOrder', {
+    params: {
+      order_id: id
+    }
+  }).then(clean)
+}
+
+// 退款，还没发货
+export function fastOrderRefund(id) {
+  return req.get('/api/order/refund', {
+    params: {
+      order_id: id,
+      model_id: 1
+    }
+  }).then(clean)
+}

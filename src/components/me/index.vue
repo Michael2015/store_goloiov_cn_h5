@@ -28,10 +28,10 @@
     </div>
     <div class="vertical_tab">
       <div class="vertical_item" v-for="(item,index) in tabList" :key="index">
-        <div class="left">
+        <router-link tag="div" class="left" :to="item.path?item.path:''">
           <img :src="item.img" alt />
           <div class="title">{{item.tit}}</div>
-        </div>
+        </router-link>
         <div class="right">
           <img src="~img/icon/join-right.png" alt />
         </div>
@@ -48,7 +48,7 @@ export default {
     return {
       tabList: [
         { img: require("img/me/icon1.png"), tit: "我的优惠券" },
-        { img: require("img/me/icon2.png"), tit: "收货地址" },
+        { img: require("img/me/icon2.png"), tit: "收货地址", path: '/myAddress' },
         { img: require("img/me/icon3.png"), tit: "我的评论" },
         { img: require("img/me/icon4.png"), tit: "升级攻略" },
         { img: require("img/me/icon5.png"), tit: "商城使用说明" },

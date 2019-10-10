@@ -1,7 +1,7 @@
 <template>
   <div class="text-area">
     <textarea @input="onInput" :placeholder="placeholder" v-model="v"></textarea>
-    <span class="length">{{this.length}}/{{this.max}}</span>
+    <span class="length" v-if="this.max > 0">{{this.length}}/{{this.max}}</span>
   </div>
 </template>
 
@@ -15,6 +15,9 @@ export default {
     max: {
       type: Number,
       default: 100
+    },
+    value: {
+      type: String
     }
   },
   data() {
@@ -23,10 +26,15 @@ export default {
       length: 0
     }
   },
+  created() {
+    if (this.value) {
+      this.v = this.value
+    }
+  },
   methods: {
     onInput() {
       const length = this.v.length
-      if (length > this.max) {
+      if (this.max > 0 && length > this.max) {
         this.v = this.v.substring(0, this.max)
         this.length = this.max
       } else {
@@ -42,16 +50,20 @@ export default {
 @import "~css/def";
 .text-area{
   background: #fbfbfb;
-  min-height: size(174);
+  height: size(174);
   textarea{
-    min-height: size(174);
-    padding: size(16) size(20);
-    background: #fbfbfb;
+    display: block;
+    height: 100%;
+    padding: 0;
+    background-color: transparent;
     font-size: size(26);
+    line-height: 1.4;
     &::-webkit-input-placeholder{
       font-size: size(24);
       color: #999;
     }
+    word-wrap: break-word;
+    word-break: break-all;
   }
   position: relative;
   .length{

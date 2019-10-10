@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="addr-wrap">
+    <div class="addr-wrap" @click="goSelectAddr">
       <div class="base">
         <img src="~img/icon/location.png" alt="">
         <span>广东省 深圳市 龙岗区 五和大道</span>
@@ -10,6 +10,7 @@
       </div>
       <div class="contact">王先生</div>
       <img src="~img/icon/join-right.png" alt="" class="right">
+      <div class="line"><!-- 地址线 --></div>
     </div>
     <div class="goods table">
       <div class="img">
@@ -42,10 +43,10 @@
         <span>实付金额：￥1220.00</span>
       </div>
       <div class="buy">
-        <span>立即购买</span>
+        <span @click="$refs.selAddr.show()">立即购买</span>
       </div>
     </div>
-    <city></city>
+    <city v-model="addr" ref="selAddr"></city>
   </div>
 </template>
 
@@ -59,7 +60,18 @@ export default {
   },
   data() {
     return {
-      remark: ''
+      remark: '',
+      addr: []
+    }
+  },
+  methods: {
+    goSelectAddr() {
+      this.$router.push({
+        path: '/myAddress',
+        query: {
+          select: 1
+        }
+      })
     }
   }
 }
@@ -74,7 +86,7 @@ export default {
 }
 .addr-wrap{
   background: #fff;
-  padding: size(20) size(30);
+  padding: size(20) size(30) size(20 + 8);
   .base{
     line-height: size(46);
     img{
@@ -105,6 +117,14 @@ export default {
     top: 50%;
     width: 12px;
     margin-top: -8px;
+  }
+  .line{
+    position: absolute;
+    width: 100%;
+    height: size(8);
+    left:0;
+    bottom: 0;
+    @include bg('~img/icon/addr.png');
   }
 }
 .goods{
@@ -172,6 +192,9 @@ export default {
   background: #fff;
   margin-top: size(18);
   padding: size(30);
+  >.input{
+    padding: size(16) size(20);
+  }
 }
 .opts{
   height: size(100);

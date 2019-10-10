@@ -10,7 +10,12 @@
         <span v-if="orderInfo.status_of_order === 5 && (orderInfo.status == 2 || orderInfo.status == 4)">已收货</span>
         <span v-if="orderInfo.status_of_order === 5 && orderInfo.status == 3">已评价</span>
       </div>
-      <div class="icon">
+      <div class="icon" :class="{
+          daizhifu: orderInfo.status_of_order === 0,
+          daifahuo: orderInfo.status_of_order === 1,
+          yifahuo: orderInfo.status_of_order === 3,
+          yishouhuo: orderInfo.status_of_order === 5 && (orderInfo.status == 2 || orderInfo.status == 4)
+        }">
         <div class="img-wrap"></div>
       </div>
     </div>
@@ -46,25 +51,41 @@
         <div class="line">订单来源：&nbsp;&nbsp;{{orderInfo.nickname}}</div>
         <div class="line">订单编号：&nbsp;&nbsp;{{orderInfo.order_id}} <div class="btn-inline">复制</div></div>
         <div class="line">下单时间：&nbsp;&nbsp;{{orderInfo.add_time}}</div>
-        <div class="line">物流信息：&nbsp;&nbsp;顺丰速运 （545454545）<div class="btn-inline where">查看</div></div>
+        <div class="line">物流信息：&nbsp;&nbsp;<!--
+          -->{{orderInfo.delivery_id ? orderInfo.delivery_name + ' ('+ orderInfo.delivery_id +')' : '暂无物流信息' }}
+          <div class="btn-inline where" v-if="orderInfo.delivery_id">查看</div>
+        </div>
+        <div class="line" v-if="orderInfo.status_of_order === 4">退款时间：&nbsp;&nbsp;{{orderInfo.refund_reason_time}}</div>
       </div>
     </div>
-    <div class="panel">
-      <div class="btn-inline">联系卖家</div>
-      <div class="btn-inline warn">确认收货</div>
+    <div class="panel" v-if="orderInfo.is_allow_operation==1">
+      <div class="btn-inline" @click="$refs.contact.show()">联系卖家</div>
+      <div class="btn-inline" v-if="orderInfo.status_of_order === 0" @click="delOrder">删除订单</div>
+      <div class="btn-inline warn" v-if="orderInfo.status_of_order === 0" @click="goPay">重新支付</div>
+      <div class="btn-inline warn" v-if="orderInfo.status_of_order === 1" @click="fastRefund">申请退款</div>
+      <div class="btn-inline warn" v-if="orderInfo.status_of_order === 3" @click="confirmOrder">确认收货</div> 
+      <div class="btn-inline" v-if="orderInfo.status_of_order === 5 && orderInfo.is_allow_refund !== 0">申请退货</div> 
+      <div class="btn-inline" v-if="orderInfo.status_of_order === 5 && orderInfo.status !== 3">去评价</div> 
     </div>
+    <!-- 卖家信息 -->
+    <contact ref="contact" :data="partnerInfo"></contact>
     <!-- 确认收货弹窗 -->
     <join-free ref="joinFree"></join-free>
+    <confirm ref="confirm"></confirm>
   </div>
 </template>
 
 <script>
 import JoinFree from 'base/join-free'
-import {getOrderDetail} from 'api/order'
+import Confirm from "base/confirm"
+import Contact from 'base/contact'
+import {getOrderDetail, confirmOrder, delOrder, fastOrderRefund} from 'api/order'
 import {Loading} from 'lib'
 export default {
   components: {
-    JoinFree
+    JoinFree,
+    Confirm,
+    Contact
   },
   props: {
     id: {
@@ -74,7 +95,9 @@ export default {
   },
   data() {
     return {
-      orderInfo: {}
+      orderInfo: {},
+      // 卖家信息
+      partnerInfo: {}
     }
   },
   created() {
@@ -83,12 +106,64 @@ export default {
       if (data) {
         console.log(data)
         this.orderInfo = data
+        try{
+          this.partnerInfo = JSON.parse(data.partner_info)
+        } catch(e) { console.log(e) }
       }
       Loading.close()
     })
   },
   mounted() {
     // this.$refs.joinFree.show()
+  },
+  methods: {
+    confirmOrder() {
+      // 确认收货逻辑
+      const cb = (type) => {
+        // type 1 一般收货
+        // type 2 排队免单
+        confirmOrder(type, this.orderInfo.id, this.id).then(data => {
+          console.log(data)
+        })
+      }
+      if (this.orderInfo.is_platoon == 1) {
+        // 参加公排
+        this.$refs.joinFree.show(() => {
+          // 排队免单
+          cb(2)
+        }, () => {
+          // 一般收货
+          cb(1)
+        })
+      } else {
+        this.$refs.confirm.show('您确定已收到货吗?', () => {
+          cb(1)
+        })
+      }
+    },
+    delOrder() {
+      this.$refs.confirm.show('确定删除此订单吗?', () => {
+        delOrder(this.id).then(data => {
+          if (data) {
+            alert('删除成功')
+          }
+        })
+      })
+    },
+    goPay() {
+      // 去支付
+      this.$router.push('/buy-goods')
+    },
+    fastRefund() {
+      // 快速退款
+      this.$refs.confirm.show('确定退款吗?', () => {
+        fastOrderRefund(this.id).then(data => {
+          if (data) {
+            alert('退款成功')
+          }
+        })
+      })
+    }
   }
 }
 </script>
@@ -127,10 +202,10 @@ export default {
         }
       }
     }
-    @include sbg(x, 'daizhifu');
-    @include sbg(x, 'daifahuo');
-    @include sbg(x, 'yifahuo');
-    @include sbg(x, 'yishouhuo');
+    @include sbg('daizhifu', 'daizhifu');
+    @include sbg('daifahuo', 'daifahuo');
+    @include sbg('yifahuo', 'yifahuo');
+    @include sbg('yishouhuo', 'yishouhuo');
   }
   
 }
@@ -293,10 +368,11 @@ export default {
   width: 100%;
   padding: size(28) size(20);
   min-height: size(110);
+  text-align: right;
   .btn-inline{
     padding: size(12) size(20);
     border-color: #bbb;
-    float: right;
+    // float: right;
     margin-left: size(22);
     font-size: size(26);
     &.warn{

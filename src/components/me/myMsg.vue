@@ -43,8 +43,8 @@
         <img src="~img/icon/join-right.png" alt />
       </div>
     </div>
-    <div class="quit" @click="$refs.logOut.show()">退出登录</div>
-    <confirm ref="logOut" @ok="ok">确定退出吗？</confirm>
+    <div class="quit" @click="logout">退出登录</div>
+    <confirm ref="logOut">确定退出吗？</confirm>
   </div>
 </template>
 
@@ -71,6 +71,11 @@ export default {
     ok() {
       console.log("退出登录");
       this.$refs.logOut.hide();
+    },
+    logout() {
+      this.$refs.logOut.show('', () => {
+        this.ok()
+      })
     }
   },
   components: {

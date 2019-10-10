@@ -4,15 +4,19 @@
     <div class="city-wrap">
       <div class="title border-bottom">所在地区<img src="~img/close.png" alt="" class="close" @click="hide"></div>
       <div class="col border-bottom result">
-        <div class="one blank">请选择</div>
-        <div class="two">3</div>
-        <div class="three">3</div>
+        <div class="one" :class="{blank: step < 1}">{{step>=1 ? selProvince.areaname : '请选择'}}</div>
+        <div class="two" v-if="step>=1" :class="{blank: step < 2}">{{step>=2 ? selCity.areaname : '请选择'}}</div>
+        <div class="three" v-if="step>=2" :class="{blank: step < 3}">{{step>=3 ? selArea.areaname : '请选择'}}</div>
       </div>
       <div class="list">
-        <div class="col border-bottom" v-for="item in 100" :key="item">
-          <div class="one">北京</div>
-          <div class="two">北京</div>
-          <div class="three">北京</div>
+        <!-- eslint-disable-next-line -->
+        <div class="col border-bottom" v-for="item in maxLength" :i="item">
+          <div class="one" v-if="province[item - 1]" @click="selP(province[item - 1])">{{province[item - 1].areaname}}</div>
+          <div class="one" v-else></div>
+          <div class="two" v-if="step>=1 && city[item - 1]" @click="selC(city[item - 1])">{{city[item - 1].areaname}}</div>
+          <div class="tow" v-else></div>
+          <div class="three" v-if="step>=2 && area[item - 1]" @click="selA(area[item - 1])">{{area[item - 1].areaname}}</div>
+          <div class="three" v-else></div>
         </div>
       </div>
     </div>
@@ -21,8 +25,67 @@
 
 <script>
 import showHide from 'mixins/show-hide'
+import {getAreaInfo} from 'api'
 export default {
   mixins: [showHide],
+  data() {
+    return {
+      step: 0,
+      province: [],
+      selProvince: null,
+      city: [],
+      selCity: null,
+      area: [],
+      selArea: null
+    }
+  },
+  computed: {
+    maxLength() {
+      const l = Math.max(this.province.length, this.city.length)
+      return Math.max(l, this.area.length)
+    }
+  },
+  created() {
+    
+  },
+  methods: {
+    show() {
+      this.isShow = true
+      this.step = 0
+      if (this.province.length <= 0) {
+        // 加载省的数据
+        getAreaInfo().then(data => {
+          if (data) {
+            this.province = data
+          }
+        })
+      }
+    },
+    selP(p) {
+      getAreaInfo(p.id).then(data => {
+        if (data) {
+          this.selProvince = p
+          this.city = data
+          this.step = 1
+        }
+      })
+    },
+    selC(c) {
+      getAreaInfo(c.id).then(data => {
+        if (data) {
+          this.selCity = c
+          this.area = data
+          this.step = 2
+        }
+      })
+    },
+    selA(a) {
+      this.selArea = a
+      this.step = 3
+      this.$emit('input', [this.selProvince.areaname, this.selCity.areaname, this.selArea.areaname])
+      this.hide()
+    }
+  }
 }
 </script>
 
@@ -60,6 +123,7 @@ export default {
     >div{
       float: left;
       width: 33.3%;
+      height: 100%;
       text-align: center;
       padding: 0 size(10);
       @include txt-overflow;

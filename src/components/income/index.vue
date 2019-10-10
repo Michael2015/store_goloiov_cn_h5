@@ -125,6 +125,17 @@ export default {
   methods: {
     checkShow(demo) {
       this.active = demo;
+      if (this.active === "charge") {
+        this.$refs.charge.disabled = false;
+        this.$refs.earnings.disabled = true;
+      } else if (this.active === "earnings") {
+        this.$refs.earnings.disabled = false;
+        this.$refs.charge.disabled = true;
+      }
+      // 处理首次切换不加载
+      // if (this.isLogin && demo === "charge" && this.leftList.length === 0) {
+      //   this.loadCharge();
+      // }
     },
     loadCharge(page, size) {
       return platoonList(page, size);

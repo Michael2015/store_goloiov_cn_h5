@@ -2,10 +2,10 @@
   <div v-show="isShow">
     <popup @mask-click="hide">
       <div class="wrap">
-        <div class="title"><slot></slot></div>
+        <div class="title"><slot></slot>{{msg}}</div>
         <div class="btns">
-          <div class="confirm" @click="$emit('ok')">确定</div>
-          <div class="cancel" @click="hide">取消</div>
+          <div class="confirm" @click="lcb&&lcb();hide()">确定</div>
+          <div class="cancel" @click="rcb&&rcb();hide()">取消</div>
         </div>
       </div>
     </popup>
@@ -25,7 +25,22 @@ export default {
   components: {
     popup
   },
-  mixins: [showHide]
+  mixins: [showHide],
+  data() {
+    return {
+      lcb: null,
+      rcb: null,
+      msg: ''
+    }
+  },
+  methods: {
+    show(msg, lcb, rcb) {
+      this.isShow = true
+      this.msg = msg || ''
+      this.lcb = lcb || null
+      this.rcb = rcb || null
+    }
+  }
 };
 </script>
 

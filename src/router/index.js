@@ -156,6 +156,15 @@ export default new Router({
       component: () => import(/* webpackChunkName: "me" */ 'com/me/compileName'),
     },
     {
+      path: '/myAddress',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/myAddress'),
+    },
+    {
+      path: '/addAddress',
+      name: 'addAddress',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/addAddress'),
+    },
+    {
       path: '/',
       redirect:'/index'
     }
