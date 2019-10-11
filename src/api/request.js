@@ -11,9 +11,6 @@ const params = {}
 
 if (process.env.NODE_ENV !== 'production') {
   // dev 需要的逻辑
-  // params.token = '7a0a462f0385fff534b32c2b7bc5e6be'
-  // params.token = '543cfdc5e317718442c88d519f1c1f75'
-  params.token = '3c5b689db8a69790643e903ab70eca24'
 }
 
 export const req = axios.create({

@@ -3,6 +3,8 @@ const path = require('path')
 module.exports = {
   productionSourceMap: true,
   filenameHashing: false,
+  publicPath: './',
+  assetsDir: 'public/h5',
   devServer: {
     proxy: {
       '/api': {
@@ -36,7 +38,7 @@ module.exports = {
           options.fallback = {
             loader: 'file-loader',
             options: {
-              name: 'img/[name].[hash:8].[ext]'
+              name: 'public/h5/img/[name].[hash:8].[ext]'
             }
           }
           return options

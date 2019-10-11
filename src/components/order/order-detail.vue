@@ -49,11 +49,11 @@
       </div>
       <div class="order-detail">
         <div class="line">订单来源：&nbsp;&nbsp;{{orderInfo.nickname}}</div>
-        <div class="line">订单编号：&nbsp;&nbsp;{{orderInfo.order_id}} <div class="btn-inline">复制</div></div>
+        <div class="line">订单编号：&nbsp;&nbsp;{{orderInfo.order_id}} <div class="btn-inline" @click="copy">复制</div></div>
         <div class="line">下单时间：&nbsp;&nbsp;{{orderInfo.add_time}}</div>
         <div class="line">物流信息：&nbsp;&nbsp;<!--
           -->{{orderInfo.delivery_id ? orderInfo.delivery_name + ' ('+ orderInfo.delivery_id +')' : '暂无物流信息' }}
-          <div class="btn-inline where" v-if="orderInfo.delivery_id">查看</div>
+          <div class="btn-inline where" v-if="orderInfo.delivery_id" @click="goTrack">查看</div>
         </div>
         <div class="line" v-if="orderInfo.status_of_order === 4">退款时间：&nbsp;&nbsp;{{orderInfo.refund_reason_time}}</div>
       </div>
@@ -64,14 +64,15 @@
       <div class="btn-inline warn" v-if="orderInfo.status_of_order === 0" @click="goPay">重新支付</div>
       <div class="btn-inline warn" v-if="orderInfo.status_of_order === 1" @click="fastRefund">申请退款</div>
       <div class="btn-inline warn" v-if="orderInfo.status_of_order === 3" @click="confirmOrder">确认收货</div> 
-      <div class="btn-inline" v-if="orderInfo.status_of_order === 5 && orderInfo.is_allow_refund !== 0">申请退货</div> 
-      <div class="btn-inline" v-if="orderInfo.status_of_order === 5 && orderInfo.status !== 3">去评价</div> 
+      <div class="btn-inline" v-if="orderInfo.status_of_order === 5 && orderInfo.is_allow_refund !== 0" @click="goRefund">申请退货</div> 
+      <div class="btn-inline" v-if="orderInfo.status_of_order === 5 && orderInfo.status !== 3" @click="goRemark">去评价</div> 
     </div>
     <!-- 卖家信息 -->
     <contact ref="contact" :data="partnerInfo"></contact>
     <!-- 确认收货弹窗 -->
     <join-free ref="joinFree"></join-free>
     <confirm ref="confirm"></confirm>
+    <notice ref="notice"></notice>
   </div>
 </template>
 
@@ -79,13 +80,15 @@
 import JoinFree from 'base/join-free'
 import Confirm from "base/confirm"
 import Contact from 'base/contact'
+import Notice from 'base/notice'
 import {getOrderDetail, confirmOrder, delOrder, fastOrderRefund} from 'api/order'
-import {Loading} from 'lib'
+import {Loading, setClipboard, Toast} from 'lib'
 export default {
   components: {
     JoinFree,
     Confirm,
-    Contact
+    Contact,
+    Notice
   },
   props: {
     id: {
@@ -101,29 +104,43 @@ export default {
     }
   },
   created() {
-    Loading.open()
-    getOrderDetail(this.id).then(data => {
-      if (data) {
-        console.log(data)
-        this.orderInfo = data
-        try{
-          this.partnerInfo = JSON.parse(data.partner_info)
-        } catch(e) { console.log(e) }
-      }
-      Loading.close()
-    })
+    this.loaddata()
   },
   mounted() {
     // this.$refs.joinFree.show()
   },
   methods: {
+    loaddata() {
+      // 加载订单数据
+      Loading.open()
+      getOrderDetail(this.id).then(data => {
+        if (data) {
+          console.log(data)
+          this.orderInfo = data
+          try{
+            this.partnerInfo = JSON.parse(data.partner_info)
+          } catch(e) { console.log(e) }
+        } else {
+          this.$refs.notice.show('未查询到订单信息', () => {
+            this.$router.back()
+          })
+        }
+        Loading.close()
+      })
+    },
     confirmOrder() {
       // 确认收货逻辑
       const cb = (type) => {
         // type 1 一般收货
         // type 2 排队免单
+        Loading.open()
         confirmOrder(type, this.orderInfo.id, this.id).then(data => {
-          console.log(data)
+          Loading.close()
+          if (data) {
+            this.$refs.notice.show('收货成功', () => {
+              this.loaddata()
+            })
+          }
         })
       }
       if (this.orderInfo.is_platoon == 1) {
@@ -143,9 +160,13 @@ export default {
     },
     delOrder() {
       this.$refs.confirm.show('确定删除此订单吗?', () => {
+        Loading.open()
         delOrder(this.id).then(data => {
+          Loading.close()
           if (data) {
-            alert('删除成功')
+            this.$refs.notice.show('删除成功', () => {
+              this.$router.back()
+            })
           }
         })
       })
@@ -157,11 +178,46 @@ export default {
     fastRefund() {
       // 快速退款
       this.$refs.confirm.show('确定退款吗?', () => {
+        Loading.open()
         fastOrderRefund(this.id).then(data => {
+          Loading.close()
           if (data) {
-            alert('退款成功')
+            this.$refs.notice.show('退款成功', () => {
+              this.loaddata()
+            })
           }
         })
+      })
+    },
+    goRemark() {
+      // 去评价
+      this.$router.push('/order-remark/' + this.id)
+    },
+    goRefund() {
+      // 去退货
+      this.$router.push('/order-refund/' + this.id)
+    },
+    goTrack() {
+      // 查看订单物流信息
+      this.$router.push({
+        path: '/order-track',
+        query: {
+          id: this.orderInfo.delivery_id,
+          name: this.orderInfo.delivery_name
+        }
+      })
+    },
+    copy() {
+      const NEXT = '\r\n'
+      const orderInfo = this.orderInfo
+      let info = orderInfo.store_name + NEXT +
+          '订单号：' + orderInfo.order_id + NEXT +
+          '物流单号：' + (orderInfo.delivery_id ? orderInfo.delivery_name + '('+orderInfo.delivery_id+')' : '空') + NEXT +
+          '-----------' + NEXT +
+          orderInfo.real_name + ' ' + orderInfo.user_phone + NEXT + orderInfo.user_address + NEXT +
+          '-----------' + NEXT
+      setClipboard(info).then(() => {
+        Toast('复制成功')
       })
     }
   }

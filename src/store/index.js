@@ -9,9 +9,13 @@ const debug = process.env.NODE_ENV !== 'production'
 export default new Vuex.Store({
   state: {
     // 是否登录
-    isLogin: true,
+    isLogin: false,
+    // 登录凭证
+    token: '',
     // 什么角色 0 一般用户 1 合伙人
-    role: 1,
+    role: 0,
+    // 用户信息
+    userInfo: {},
     // 买商品时，选择收货地址
     selectAddress: {}
   },
@@ -19,6 +23,14 @@ export default new Vuex.Store({
     loginTest(state) {
       state.isLogin = true
       state.role = 1
+    },
+    setToken(state, token) {
+      state.token = token
+    },
+    setUserInfo(state, info) {
+      state.userInfo = info
+      state.isLogin = true
+      state.role = info.is_promoter === 1 ? 1 : 0
     },
     setAddress(state, addr) {
       state.selectAddress = addr

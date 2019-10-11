@@ -72,8 +72,8 @@ export default {
       line-height: size(66);
       text-align: center;
       border-radius: size(33);
-      border: solid size(2) #6b6b6b;
-      color: #333333;
+      background: linear-gradient(135deg, #ff0000 0%, #ff3061 100%);
+      color: #ffffff;
     }
     .cancel {
       width: size(220);
@@ -81,8 +81,8 @@ export default {
       line-height: size(66);
       text-align: center;
       border-radius: size(33);
-      background: linear-gradient(135deg, #ff0000 0%, #ff3061 100%);
-      color: #ffffff;
+      border: solid size(2) #6b6b6b;
+      color: #333333;
     }
   }
 }

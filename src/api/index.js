@@ -4,6 +4,24 @@ export const clean = ({data}) => {
   return data && data.code === OK ? (data.data ? data.data : true) : null
 }
 
+// 获取当前环境的host
+export function getHost() {
+  if (process.env.NODE_ENV !== 'production') {
+    return 'https://storemp.golodata.com'
+  } else {
+    return window.location.protocol + '//' + window.location.host
+  }
+}
+
+// 获取用户信息
+export function getUserInfo(token) {
+  return req.get('/api/app.user/getuserinfo', {
+    params: {
+      token
+    }
+  }).then(clean)
+}
+
 // 首页接口
 
 // 顾客（非合伙人）获取商城信息
@@ -147,4 +165,9 @@ export function getAreaInfo(id = 0){
       pid: id
     }
   }).then(clean)
+}
+
+// 上传图片
+export function uploadImg(formData) {
+  return req.post('/api/customer/index/upload', formData).then(clean)
 }

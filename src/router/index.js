@@ -76,12 +76,19 @@ export default new Router({
       props: true
     },
     {
-      path: '/order-refund',
+      path: '/order-refund/:id',
       component: () => import(/* webpackChunkName: "order" */ 'com/order/order-refund'),
+      props: true
     },
     {
-      path: '/order-remark',
+      path: '/order-remark/:id',
       component: () => import(/* webpackChunkName: "order" */ 'com/order/order-remark'),
+      props: true
+    },
+    {
+      path: '/order-track',
+      component: () => import(/* webpackChunkName: "order" */ 'com/order/order-track'),
+      props: true
     },
     {
       path: '/income',

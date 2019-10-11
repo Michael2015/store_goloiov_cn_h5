@@ -8,12 +8,12 @@
         <div class="col border-bottom">
           <div class="name">昵称</div>
           <div class="value">{{data.nickname}}</div>
-          <div class="btn-inline">复制</div>
+          <div class="btn-inline" @click="copy">复制</div>
         </div>
         <div class="col">
           <div class="name">手机</div>
           <div class="value">{{data.phone}}</div>
-          <a class="btn-inline" href="#">呼叫</a>
+          <a class="btn-inline" :href="'tel:'+data.phone">呼叫</a>
         </div>
       </div>
     </popup>
@@ -23,6 +23,7 @@
 <script>
 import showHide from 'mixins/show-hide'
 import popup from 'ui/popup'
+import {setClipboard, Toast} from 'lib'
 export default {
   props: {
     data: {
@@ -33,7 +34,14 @@ export default {
   components: {
     popup
   },
-  mixins: [showHide]
+  mixins: [showHide],
+  methods: {
+    copy() {
+      setClipboard(this.data.nickname).then(() => {
+        Toast('复制成功')
+      })
+    }
+  }
 }
 </script>
 

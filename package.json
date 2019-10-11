@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "0.18.1",
+    "clipboard-polyfill": "^2.8.6",
     "core-js": "^2.6.5",
     "mint-ui": "^2.2.13",
     "qs": "^6.8.0",

@@ -51,3 +51,26 @@ export function fastOrderRefund(id) {
     }
   }).then(clean)
 }
+
+// 退货，已经一般收货
+export function orderRefund(params) {
+  return req.post('/api/order/refund', {
+    model_id: 2,
+    ...params
+  }).then(clean)
+}
+
+// 评论订单
+export function postOrderRemark(data) {
+  return req.post('/api/order/orderReplay', data).then(clean)
+}
+
+// 查看物流信息
+export function getOrderTrack(id, name) {
+  return req.get('/api/Address/getnowexpress', {
+    params: {
+      delivery_name: name,
+      delivery_id: id
+    }
+  }).then(clean)
+}

@@ -1,52 +1,107 @@
 <template>
   <div class="wrap">
     <div class="goods table">
-      <div class="goods-pic"><div><img src="" alt=""></div></div>
+      <div class="goods-pic"><div><img :src="orderInfo.image" alt=""></div></div>
       <div class="goods-desc">
-        <div class="name">3M 燃油宝汽油添加剂加燃油宝汽油添加剂加燃油宝汽油添加剂加燃油宝汽油添加剂加</div>
-        <div class="spec">3只装 500ML/瓶 <span class="num">x1</span></div>
+        <div class="name">{{orderInfo.store_name}}</div>
+        <div class="spec">{{orderInfo.suk}}<span class="num">x{{orderInfo.total_num}}</span></div>
       </div>
     </div>
     <div class="reasons">
       <div class="col main border-bottom" @click="selReason">
         <div class="left">退款原因</div>
         <div class="icon"><img src="~img/icon/join-right.png" alt=""></div>
-        <div class="right">xx</div>
+        <div class="right">{{mainReason?mainReason:'请选择'}}</div>
       </div>
       <div class="col all-price border-bottom">
         <div class="left">退款金额</div>
-        <div class="right">不超过 <span> ¥1199.00</span></div>
+        <div class="right">不超过 <span> ¥{{orderInfo.pay_price}}</span></div>
       </div>
       <div class="col">
         <div class="left">退款详情</div>
       </div>
       <div class="more">
         <img src="~img/icon/typo.png" alt="">
-        <textarea type="text" placeholder="分享你的使用体验吧～"></textarea>
+        <textarea type="text" placeholder="分享你的使用体验吧～" v-model="text"></textarea>
       </div>
     </div>
     <div class="extra-img">
       <div class="title">上传凭证</div>
-      <select-img></select-img>
+      <select-img :max="3" v-model="imgs"></select-img>
     </div>
-    <div class="submit">提交</div>
+    <div class="submit" @click="submit">提交</div>
     <!-- 选择主要退货原因 -->
     <bottom-pick ref="mainReason"></bottom-pick>
+    <notice ref="notice"></notice>
   </div>
 </template>
 
 <script>
 import SelectImg from 'com/common/select-img'
+import Notice from 'base/notice'
 import BottomPick from 'base/bottom-pick'
+import {getOrderDetail, orderRefund} from 'api/order'
+import {Loading, Toast} from 'lib'
+
 export default {
   components: {
     SelectImg,
-    BottomPick
+    BottomPick,
+    Notice
+  },
+  props: {
+    id: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      orderInfo: {},
+      mainReason: '',
+      text: '',
+      imgs: []
+    }
+  },
+  created() {
+    this.loaddata()
   },
   methods: {
+    loaddata() {
+      Loading.open()
+      getOrderDetail(this.id).then(data => {
+        if (data) {
+          this.orderInfo = data
+        }
+        Loading.close()
+      })
+    },
     selReason() {
       this.$refs.mainReason.show(['未收到', '损坏', '其他'], result => {
-        console.log(result)
+        this.mainReason = result[0]
+      })
+    },
+    submit() {
+      // 提交申请
+      if (!this.mainReason) {
+        Toast('请选择退款原因')
+        return
+      }
+      const params = {
+        order_id: this.id,
+        refund_price: this.orderInfo.pay_price,
+        refund_reason_wap: this.mainReason,
+        refund_reason_wap_explain: this.text,
+        refund_reason_wap_img: this.imgs
+      }
+      Loading.open()
+      orderRefund(params).then(data => {
+        Loading.close()
+        if (data) {
+          this.$refs.notice.show('您的申请已提交', () => {
+            this.$router.back()
+          })
+        }
       })
     }
   }
@@ -73,7 +128,6 @@ export default {
       width: size(120);
       height: size(120);
       overflow: hidden;
-      background: #ddd;
       img{
         display: block;
         width: 100%;
@@ -93,7 +147,6 @@ export default {
     .spec{
       font-size: size(24);
       color: #999;
-      @include txt-overflow;
       .num{
         float: right;
         color: #666;

@@ -15,7 +15,7 @@
           {{item.comment}}
         </div>
         <div class="imgs" v-if="item.pics">
-          <div v-for="i in item.pics" :key="i"><div><img :src="i" alt=""></div></div>
+          <div v-for="(i,ii) in item.pics" :key="ii"><div><img :src="i" alt=""></div></div>
         </div>
         <div class="time">{{item.add_time}}</div>
       </div>

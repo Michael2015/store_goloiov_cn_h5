@@ -1,18 +1,18 @@
 <template>
   <div class="wrap">
     <div class="goods table">
-      <div class="goods-pic"><div><img src="" alt=""></div></div>
+      <div class="goods-pic"><div><img :src="orderInfo.image" alt=""></div></div>
       <div class="goods-desc">
-        <div class="name">3M 燃油宝汽油添加剂加燃油宝汽油添加剂加燃油宝汽油添加剂加燃油宝汽油添加剂加</div>
+        <div class="name">{{orderInfo.store_name}}</div>
       </div>
     </div>
     <div class="reasons">
       <div class="more">
         <img src="~img/icon/typo.png" alt="">
-        <textarea type="text" placeholder="分享你的使用体验吧～"></textarea>
+        <textarea type="text" placeholder="分享你的使用体验吧～" v-model="text"></textarea>
       </div>
       <div class="imgs">
-        <select-img></select-img>
+        <select-img v-model="imgs"></select-img>
       </div>
     </div>
     <div class="stars">
@@ -35,21 +35,71 @@
         </div>
       </div>
     </div>
-    <div class="submit">提交</div>
+    <div class="submit" @click="submit">提交</div>
   </div>
 </template>
 
 <script>
 import SelectImg from 'com/common/select-img'
+import {getOrderDetail, postOrderRemark} from 'api/order'
+import {Loading, Toast} from 'lib'
 export default {
   components: {
     SelectImg
   },
+  props: {
+    id: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
-      goodsScore: 0, // 商品描述
-      shopScore: 0, // 商家服务
-      deliverScore: 0 // 物流服务
+      orderInfo: {}, // 订单信息
+      text: '',
+      imgs: [], // 上传的文件
+      goodsScore: 5, // 商品描述
+      shopScore: 5, // 商家服务
+      deliverScore: 5 // 物流服务
+    }
+  },
+  created() {
+    Loading.open()
+    getOrderDetail(this.id).then(data => {
+      if (data) {
+        this.orderInfo = data
+      }
+      Loading.close()
+    })
+  },
+  methods: {
+    submit() {
+      if (!this.text) {
+        Toast('请填写评论内容')
+        return
+      }
+      const params = {
+        order_id: this.id,
+        product_id: this.orderInfo.product_id,
+        imglist: this.imgs,
+        express_star: this.deliverScore,
+        desc_star: this.goodsScore,
+        service_star: this.shopScore,
+        comment:this.text
+      }
+      Loading.open()
+      postOrderRemark(params).then(data => {
+        if (data) {
+          Toast({
+            message: '评价成功',
+            duration: 1000
+          })
+          setTimeout(() => {
+            this.$router.back()
+          }, 1000)
+        }
+        Loading.close()
+      })
     }
   }
 }
@@ -131,6 +181,7 @@ export default {
   padding: size(32) size(42) size(32) size(72);
   background: #fff;
   margin-top: size(20);
+  margin-bottom: size(120);
   .col{
     line-height: size(38);
     height: size(38);

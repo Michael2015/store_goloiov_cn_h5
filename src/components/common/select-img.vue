@@ -4,7 +4,7 @@
       <div class="img"><img :src="item.data" alt=""></div>
       <div class="close" @click="del(index)"></div>
     </div>
-    <div class="item add">
+    <div class="item add" v-if="imgs.length < max">
       <label for="image"></label>
       <input type="file" id="image" accept="image/*" @change="change" ref="img" />
     </div>
@@ -13,7 +13,14 @@
 
 <script>
 import {Loading} from 'lib'
+import {uploadImg, getHost} from 'api'
 export default {
+  props: {
+    max: {
+      type: Number,
+      default: 4
+    }
+  },
   data() {
     return {
       imgs: []
@@ -29,18 +36,31 @@ export default {
       Loading.open()
       fileToBase64(file).then(b => {
         // 设置选择的图片
-        this.imgs.push({
+        const result = {
           name: file.name,
-          data: b
-        })
+          data: b,
+          path: null
+        }
+        this.imgs.push(result)
         const form = new FormData()
-        form.append('file', base64ToBlob(b), file.name)
-        console.log(form)
-        Loading.close()
+        // 这个key是后台写死成这样的
+        form.append('b068931cc450442b63f5b3d276ea4297', base64ToBlob(b), file.name)
+        uploadImg(form).then(data => {
+          if (data) {
+            result.path = getHost() + '/' + data.url
+            this.trigger()
+          }
+        }).finally(() => {
+          Loading.close()
+        })
       })
     },
     del(i) {
       this.imgs.splice(i, 1)
+      this.trigger()
+    },
+    trigger() {
+      this.$emit('input', this.imgs.filter(i => i.path).map(i => i.path))
     }
   }
 }

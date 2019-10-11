@@ -19,6 +19,7 @@
 import Contact from 'base/contact'
 import {mapState} from 'vuex'
 import {getIndexTopInfo, getPartnerInfo} from 'api'
+import {login} from 'api/login'
 export default {
   components: {
     Contact
@@ -58,7 +59,8 @@ export default {
       this.$refs.contact.show()
     },
     doLogin() {
-      this.$store.commit('loginTest')
+      // this.$store.commit('loginTest')
+      login()
     }
   }
 }
