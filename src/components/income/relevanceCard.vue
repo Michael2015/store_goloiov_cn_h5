@@ -80,7 +80,7 @@ export default {
         console.log(res);
         if (res.code === OK) {
           this.$router.back();
-          Toast('保存成功');
+          Toast("保存成功");
         } else {
           Toast(res.msg);
           return;
@@ -96,7 +96,7 @@ export default {
   watch: {
     // card(val) {
     //   if (!/^([\d]{4}[\s]+)*[\d]{0,3}$/.test(val)) {
-    //     this.card = val.replace(/[^\d]|\s/g, "").replace(/(\d{4})(?=\d)/g, "$1　")
+    //     this.card = val.replace(/[^\d]|\s/g, "").replace(/(\d{4})(?=\d)/g, "$1")
     //   } else {
     //     this.card = val
     //   }

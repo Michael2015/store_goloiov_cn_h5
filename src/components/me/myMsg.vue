@@ -29,7 +29,7 @@
       <div class="item_title">我加入的团队</div>
       <div class="item_content">{{phonehide(myteamphone)}}</div>
     </div>
-    <div class="warp_item">
+    <div class="warp_item" @click="tojump('/myPartner')" >
       <div class="item_title">我发展的伙伴</div>
       <div class="item_content">
         {{friendNum}}人

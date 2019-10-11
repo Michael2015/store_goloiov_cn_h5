@@ -1,28 +1,21 @@
 <template>
   <div class="warp">
-    <div class="award">
-      奖励金额：{{showObj.income_number}}元
-      <div class="task">分红 = 平台月利润*5%股东人数</div>
-    </div>
-    <div class="simpleness_show">
-      <div class="left">奖励金额</div>
-      <div class="right">{{showObj.income_number}}</div>
-    </div>
+    <div class="award">奖励金额：{{showObj.income_number}}元</div>
     <div class="simpleness_show">
       <div class="left">结算状态</div>
       <div class="right">{{showObj.refund_reason_time}}</div>
     </div>
     <div class="simpleness_show">
+      <div class="left">被培养人</div>
+      <div class="right">少年闰土</div>
+    </div>
+    <div class="simpleness_show">
+      <div class="left">达成级别</div>
+      <div class="right">区县合伙人</div>
+    </div>
+    <div class="simpleness_show">
       <div class="left">您的等级</div>
-      <div class="right">董事股东</div>
-    </div>
-    <div class="simpleness_show">
-      <div class="left">上月团队总利润</div>
-      <div class="right">3783791万元</div>
-    </div>
-    <div class="simpleness_show">
-      <div class="left">股东人数</div>
-      <div class="right">10人</div>
+      <div class="right">市级合伙人</div>
     </div>
   </div>
 </template>
@@ -51,15 +44,6 @@ export default {
     padding: 0 size(40);
     font-family: PingFangSC-Medium;
     position: relative;
-    .task {
-      position: absolute;
-      left: size(40);
-      top: size(110);
-      font-size: size(26);
-      color: rgba(255, 255, 255, 0.7);
-      height: size(37);
-      line-height: size(37);
-    }
   }
   .simpleness_show {
     margin-top: size(2);

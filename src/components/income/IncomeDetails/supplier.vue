@@ -1,8 +1,8 @@
 <template>
   <div class="warp">
-    <div class="award">分润奖金：20.06元</div>
+    <div class="award">分润奖金：{{showObj.income_number}}元</div>
     <div class="simpleness_show">
-      <div class="left">订单号：1357263</div>
+      <div class="left">订单号：{{showObj.order_id}}</div>
       <div class="right"></div>
     </div>
     <div class="simpleness_show">
@@ -15,13 +15,16 @@
     </div>
     <div class="simpleness_show">
       <div class="left">结算状态</div>
-      <div class="right">2018年10月21日 12:07:59</div>
+      <div class="right">{{showObj.refund_reason_time}}</div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import loadShowobj from 'mixins/loadShowobj'
+export default {
+  mixins:[loadShowobj]
+};
 </script>
 
 <style lang="scss" scoped>

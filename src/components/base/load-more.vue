@@ -13,6 +13,10 @@ export default {
     getData: {
       Type: Function,
       default: null
+    },
+    setSize:{
+      Type:Number,
+      default: SIZE
     }
   },
   data() {
@@ -22,7 +26,7 @@ export default {
       loaded: false,
       list: [],
       page: 1,
-      size: SIZE // 默认一页数量
+      size: this.setSize // 默认一页数量
     }
   },
   created(){

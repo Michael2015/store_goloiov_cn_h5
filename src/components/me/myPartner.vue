@@ -8,42 +8,21 @@
         />
         我的合伙人
       </div>
-      <div class="right">{{num}}人</div>
+      <div class="right">{{reque.member_nums}}人</div>
     </div>
     <div class="content">
       <div class="search">
         <img src="~img/sousuo.png" alt />
-        <input type="text" placeholder="搜索" />
+        <input type="text" placeholder="搜索" v-model="value" @input="getdata"/>
       </div>
       <div class="partner_list">
-        <div class="item">
-          <img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=721b46b36e2762d0803ea3b998d76fc7/a71ea8d3fd1f41344cfdfcee281f95cad0c85e5c.jpg" alt />
-          <div class="name">浙江NV</div>
-        </div>
-        <div class="item">
-          <img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=721b46b36e2762d0803ea3b998d76fc7/a71ea8d3fd1f41344cfdfcee281f95cad0c85e5c.jpg" alt />
-          <div class="name">浙江NV</div>
-        </div>
-        <div class="item">
-          <img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=721b46b36e2762d0803ea3b998d76fc7/a71ea8d3fd1f41344cfdfcee281f95cad0c85e5c.jpg" alt />
-          <div class="name">浙江NV</div>
-        </div>
-        <div class="item">
-          <img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=721b46b36e2762d0803ea3b998d76fc7/a71ea8d3fd1f41344cfdfcee281f95cad0c85e5c.jpg" alt />
-          <div class="name">浙江NV</div>
-        </div>
-        <div class="item">
-          <img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=721b46b36e2762d0803ea3b998d76fc7/a71ea8d3fd1f41344cfdfcee281f95cad0c85e5c.jpg" alt />
-          <div class="name">浙江NV</div>
-        </div>
-        <div class="item">
-          <img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=721b46b36e2762d0803ea3b998d76fc7/a71ea8d3fd1f41344cfdfcee281f95cad0c85e5c.jpg" alt />
-          <div class="name">浙江NV</div>
-        </div>
-        <div class="item">
-          <img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=721b46b36e2762d0803ea3b998d76fc7/a71ea8d3fd1f41344cfdfcee281f95cad0c85e5c.jpg" alt />
-          <div class="name">浙江NV</div>
-          <div class="show_count">5</div>
+        <div class="item" v-for="(item) in reque.list" :key="item.uid">
+          <img
+            :src='item.avatar'
+            alt
+          />
+          <div class="name">{{item.nickname}}</div>
+          <div class="show_count" v-if="item.lower_nums !== 0">{{item.lower_nums}}</div>
         </div>
       </div>
     </div>
@@ -52,12 +31,22 @@
 </template>
 
 <script>
+import { member } from "api/me";
 export default {
   data() {
     return {
-      num: 0
+      reque: {},
+      value:''
     };
-  }
+  },
+  mounted() {
+    this.getdata()
+  },
+  methods: {
+    async getdata(){
+      this.reque = await member(this.value);
+    }
+  },
 };
 </script>
 
@@ -67,7 +56,7 @@ export default {
 .my_partner_warp {
   width: 100%;
   height: 100%;
-  background: #f5f5f5;
+  // background: #f5f5f5;
   .header {
     height: size(106);
     line-height: size(106);
@@ -95,6 +84,7 @@ export default {
     margin-top: size(2);
     background: #fff;
     padding: size(32) size(30) size(100) size(30);
+    overflow: auto;
     .search {
       height: size(64);
       background-color: #f5f5f5;
@@ -124,39 +114,39 @@ export default {
         margin-right: size(40);
         margin-top: size(25);
         position: relative;
-        &:nth-child(5n){
-            margin-right: 0;
+        &:nth-child(5n) {
+          margin-right: 0;
         }
-        &>img{
-            width: 100%;
-            height: size(100);
-            border-radius: size(8);
+        & > img {
+          width: 100%;
+          height: size(100);
+          border-radius: size(8);
         }
-        .name{
-            font-size: size(24);
-            color: #4e4e4e;
-            width: size(96);
-            margin-left: size(2);
-            text-align: center;
-            margin-top: size(8);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .name {
+          font-size: size(24);
+          color: #4e4e4e;
+          width: size(96);
+          margin-left: size(2);
+          text-align: center;
+          margin-top: size(8);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
-        .show_count{
-            position: absolute;
-            right: size(-17);
-            top:size(-13);
-            box-sizing: border-box;
-            width: size(48);
-            height: size(48);
-            line-height: size(48);
-            border-radius: 50%;
-            border: size(4) solid #fff;
-            background: #fc4747;
-            color: #fff;
-            font-size: size(26);
-            text-align: center;
+        .show_count {
+          position: absolute;
+          right: size(-17);
+          top: size(-13);
+          box-sizing: border-box;
+          width: size(48);
+          height: size(48);
+          line-height: size(48);
+          border-radius: 50%;
+          border: size(4) solid #fff;
+          background: #fc4747;
+          color: #fff;
+          font-size: size(26);
+          text-align: center;
         }
       }
     }

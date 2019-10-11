@@ -1,37 +1,45 @@
 <template>
   <div class="warp">
-    <div class="award">返利金额160元</div>
+    <div class="award">返利金额{{showObj.income_number}}元</div>
     <div class="simpleness_show">
-      <div class="left">订单号：146389275538362</div>
-      <div class="right">已完成</div>
+      <div class="left">订单号：{{showObj.order_id}}</div>
+      <div class="right">
+        <span v-if="showObj.status_of_order === 0">待支付</span>
+        <span v-if="showObj.status_of_order === 1">待发货</span>
+        <span v-if="showObj.status_of_order === 2">退款中</span>
+        <span v-if="showObj.status_of_order === 3">已发货</span>
+        <span v-if="showObj.status_of_order === 4">已退款</span>
+        <span v-if="showObj.status_of_order === 5 && (showObj.status == 2 || showObj.status == 4)">已收货</span>
+        <span v-if="showObj.status_of_order === 5 && showObj.status == 3">已评价</span>
+      </div>
     </div>
     <div class="simpleness_show">
-      <div class="left">结算状态: 2019年05月21日 03:32:46</div>
-      <div class="right">已结算</div>
+      <div class="left">结算状态: {{showObj.refund_reason_time}}</div>
+      <div class="right">{{showObj.income_status}}</div>
     </div>
     <div class="simpleness_show">
       <div class="left">返利原因： 您是购买人的上级合伙人</div>
       <div class="right"></div>
     </div>
     <div class="good_show">
-      <img src="~img/contactIcon.png" alt />
+      <img :src="showObj.image" alt />
       <div class="good_msg">
         <div class="main_show">
           <div class="desc">
-            <div class="good_name">元征goloX3 智能车联网车载智慧终端汽车诊断仪车载wifi智能盒子行车电脑</div>
-            <div class="color">黑色</div>
+            <div class="good_name">{{showObj.store_name}}</div>
+            <div class="color">{{showObj.suk}}</div>
           </div>
           <div class="about_money">
-            <div class="money">¥1199.00</div>
-            <div class="count">×1</div>
+            <div class="money">¥{{showObj.pay_price}}</div>
+            <div class="count">×{{showObj.total_num}}</div>
           </div>
         </div>
         <div class="allmoney">
-          <span>已优惠金额：￥799.00</span>
+          <span>已优惠金额：￥{{showObj.coupon_price}}</span>
           <span></span>
           <span>
             合计：
-            <span>￥100.00</span>
+            <span>￥{{showObj.pay_price}}</span>
           </span>
         </div>
       </div>
@@ -39,18 +47,21 @@
     <div class="exey_show_list">
       <div class="exey_show">
         <div class="left">购买人</div>
-        <div class="right">少年闰土</div>
+        <div class="right">{{showObj.nickname}}</div>
       </div>
       <div class="exey_show">
         <div class="left">下单时间</div>
-        <div class="right">2018年10月21日 12:07:59</div>
+        <div class="right">{{showObj.add_time}}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import loadShowobj from 'mixins/loadShowobj'
+export default {
+  mixins:[loadShowobj]
+};
 </script>
 
 <style lang="scss" scoped>

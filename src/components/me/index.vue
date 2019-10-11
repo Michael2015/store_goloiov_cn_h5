@@ -13,7 +13,7 @@
       </div>
       <div class="user_name">404</div>
       <div class="grade">一般合伙人</div>
-      <div class="team_no">伙伴14人</div>
+      <div class="team_no">伙伴{{Num}}人</div>
     </div>
     <div class="crosswise_tab">
       <div class="crosswise_item" @click="tojump('/myVisitor')">
@@ -41,22 +41,31 @@
 </template>
 
 <script>
-import tojump from 'mixins/tojump'
-
+import tojump from "mixins/tojump";
+import { partnerNum } from "api/me";
 export default {
   data() {
     return {
       tabList: [
         { img: require("img/me/icon1.png"), tit: "我的优惠券" },
-        { img: require("img/me/icon2.png"), tit: "收货地址", path: '/myAddress' },
+        {
+          img: require("img/me/icon2.png"),
+          tit: "收货地址",
+          path: "/myAddress"
+        },
         { img: require("img/me/icon3.png"), tit: "我的评论" },
         { img: require("img/me/icon4.png"), tit: "升级攻略" },
         { img: require("img/me/icon5.png"), tit: "商城使用说明" },
         { img: require("img/me/icon6.png"), tit: "反馈意见" }
-      ]
+      ],
+      Num: ""
     };
   },
-  mixins:[tojump]
+  mixins: [tojump],
+  async mounted() {
+    const reque = await partnerNum();
+    this.Num = reque.member_nums;
+  }
 };
 </script>
 

@@ -39,7 +39,7 @@
         <mt-tab-container-item id="charge">
           <load-more v-slot="{list}" v-if="isLogin" :getData="loadCharge" ref="charge">
             <div class="pub_list">
-              <div class="item" v-for="(item,index) in list" :key="index">
+              <div class="item" v-for="(item,index) in list" :key="index" @click="clickMianDan(item.order_sn)">
                 <div class="queue border-bottom">{{item.left}}</div>
                 <div class="detail">
                   <div class="img_warp">
@@ -105,13 +105,15 @@ export default {
       uncash: "0.00", //待结算金额
       all: "0.00", //总收入金额
       jumpObj: {
-        public: "/public", //免单详情
-        commission: "/commission", //合伙人津贴详情
         benifit: "/benifit", //返利详情
-        director: "/director", //董事分红详情
+        commission: "/commission", //合伙人津贴详情
+        public: "/public", //免单详情
+        refund:'/order-detail',  //  商品奖励退款
+        pay_product_refund: "/order-detail", //订单退款
+        allowance: "/allowance", //管理律贴
         supplier: "/supplier", //开发供应商
-        allowance: "/allowance", //培养合伙人
-        pay_product_refund: "/order-detail" //订单退款
+        share_bonus: "/director", //董事分红详情
+        develop_bonus:'/cultivate' //培养合伙人
       }
     };
   },
@@ -171,10 +173,16 @@ export default {
       console.log(type);
       let url;
       url = this.jumpObj[type];
-      if(type === 'pay_product_refund'){
+      if(type === 'pay_product_refund' || type === 'refund'){
+        //  跳转订单详情那order_sn去查询
         url += `/${sn}`
+      }else {
+        url += `?order_id=${id}`
       }
       this.tojump(url);
+    },
+    clickMianDan(sn){
+      this.tojump('/order-detail/'+sn);
     }
   },
   watch: {

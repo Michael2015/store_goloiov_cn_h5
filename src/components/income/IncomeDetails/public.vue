@@ -1,94 +1,67 @@
 <template>
   <div class="warp">
-    <div class="award">免单奖励100000000元</div>
+    <div class="award">免单奖励{{showObj.income_number}}元</div>
     <div class="user_msg">
       <img src="~img/location-red.png" alt />
       <div class="msg">
-        <div class="address">广东省 深圳市 龙岗区 坂田五和大道远征工业园 远征研发大厦</div>
+        <div class="address">{{showObj.user_address}}</div>
         <div class="name_phone">
-          <div class="name">少年闰土</div>
-          <div class="phone">182****0000</div>
+          <div class="name">{{showObj.real_name}}</div>
+          <div class="phone" v-if="showObj.user_phone">{{phonehide(showObj.user_phone)}}</div>
         </div>
       </div>
     </div>
     <div class="simpleness_show">
-      <div class="left">订单号: 1357263</div>
-      <div class="right">待发货</div>
+      <div class="left">订单号: {{showObj.order_id}}</div>
+      <div class="right">
+        <span v-if="showObj.status_of_order === 0">待支付</span>
+        <span v-if="showObj.status_of_order === 1">待发货</span>
+        <span v-if="showObj.status_of_order === 2">退款中</span>
+        <span v-if="showObj.status_of_order === 3">已发货</span>
+        <span v-if="showObj.status_of_order === 4">已退款</span>
+        <span v-if="showObj.status_of_order === 5 && (showObj.status == 2 || showObj.status == 4)">已收货</span>
+        <span v-if="showObj.status_of_order === 5 && showObj.status == 3">已评价</span>
+      </div>
     </div>
     <div class="simpleness_show">
-      <div class="left">结算状态: 2019年05月21日 03:32:46</div>
-      <div class="right">待结算</div>
+      <div class="left">结算状态: {{showObj.refund_reason_time}}</div>
+      <div class="right">{{showObj.income_status}}</div>
     </div>
     <div class="simpleness_show">
-      <div class="left">免单方式: 排队免单</div>
+      <div class="left">免单方式: {{showObj.miandan_type}}</div>
       <div class="right"></div>
     </div>
     <div class="about_order">
       <div class="title">关联订单:</div>
       <div class="order_list">
-        <div class="item">
-          <img src="~img/contactIcon.png" alt />
+        <div class="item" v-for="(item) in showObj.related_user" :key="item.uid">
+          <img :src="item.avatar" alt />
           <div class="order_msg">
-            <div class="about_name">用户名666666666</div>
-            <div class="order_no">1256624</div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="~img/contactIcon.png" alt />
-          <div class="order_msg">
-            <div class="about_name">用户名</div>
-            <div class="order_no">1256624</div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="~img/contactIcon.png" alt />
-          <div class="order_msg">
-            <div class="about_name">用户名</div>
-            <div class="order_no">1256624</div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="~img/contactIcon.png" alt />
-          <div class="order_msg">
-            <div class="about_name">用户名</div>
-            <div class="order_no">1256624</div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="~img/contactIcon.png" alt />
-          <div class="order_msg">
-            <div class="about_name">用户名</div>
-            <div class="order_no">1256624</div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="~img/contactIcon.png" alt />
-          <div class="order_msg">
-            <div class="about_name">用户名</div>
-            <div class="order_no">1256624</div>
+            <div class="about_name">{{item.nickname}}</div>
+            <!-- <div class="order_no">1256624</div> -->
           </div>
         </div>
       </div>
     </div>
     <div class="good_show">
-      <img src="~img/contactIcon.png" alt />
+      <img :src="showObj.image" alt />
       <div class="good_msg">
         <div class="main_show">
           <div class="desc">
-            <div class="good_name">元征goloX3 智能车联网车载智慧终端汽车诊断仪车载wifi智能盒子行车电脑</div>
-            <div class="color">黑色</div>
+            <div class="good_name">{{showObj.store_name}}</div>
+            <div class="color">{{showObj.suk}}</div>
           </div>
           <div class="about_money">
-            <div class="money">¥1199.00</div>
-            <div class="count">×1</div>
+            <div class="money">¥{{showObj.pay_price}}</div>
+            <div class="count">×{{showObj.total_num}}</div>
           </div>
         </div>
         <div class="allmoney">
-          <span>已优惠金额：￥799.00</span>
+          <span>已优惠金额：￥{{showObj.coupon_price}}</span>
           <span></span>
           <span>
             合计：
-            <span>￥100.00</span>
+            <span>￥{{showObj.pay_price}}</span>
           </span>
         </div>
       </div>
@@ -96,30 +69,38 @@
     <div class="exey_show_list">
       <div class="exey_show">
         <div class="left">订单来源</div>
-        <div class="right">少年闰土</div>
+        <div class="right">{{showObj.nickname}}</div>
       </div>
       <div class="exey_show">
         <div class="left">购买人</div>
-        <div class="right">少年闰土</div>
+        <div class="right">{{showObj.nickname}}</div>
       </div>
       <div class="exey_show">
         <div class="left">下单时间</div>
-        <div class="right">2018年10月21日 12:07:59</div>
+        <div class="right">{{showObj.add_time}}</div>
       </div>
       <div class="exey_show">
         <div class="left">物流信息</div>
-        <div class="right">3726374892733</div>
+        <div class="right">{{showObj.delivery_id ? showObj.delivery_name + ' ('+ showObj.delivery_id +')' : '暂无物流信息' }}</div>
       </div>
-      <div class="exey_show">
+      <!-- <div class="exey_show">
         <div class="left">赠送产品</div>
         <div class="right">XXXXXXXXXXX</div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import loadShowobj from 'mixins/loadShowobj'
+export default {
+  mixins:[loadShowobj],
+  methods: {
+    phonehide(phone) {
+      return phone.substring(0, 3) + "****" + phone.substring(7);
+    }
+  },
+};
 </script>
 
 <style lang="scss" scoped>

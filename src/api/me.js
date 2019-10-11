@@ -1,10 +1,10 @@
-import {req} from './request'
-import {clean} from './index'
+import { req } from './request'
+import { clean } from './index'
 
 // 我的收获地址管理 =====================
 // 我的收获地址列表
 export function getAddressList() {
-  return req.get('/api/Address/getAddressList').then(clean)  
+  return req.get('/api/Address/getAddressList').then(clean)
 }
 
 // 删除一个地址
@@ -13,7 +13,7 @@ export function delAddress(id) {
     params: {
       address_id: id
     }
-  }).then(clean)  
+  }).then(clean)
 }
 
 // 编辑一个地址
@@ -22,7 +22,7 @@ export function editAddress(params) {
     params: {
       ...params
     }
-  }).then(clean)  
+  }).then(clean)
 }
 
 // 新增一个地址
@@ -31,5 +31,29 @@ export function addAddress(params) {
     params: {
       ...params
     }
-  }).then(clean)  
+  }).then(clean)
+}
+
+//  我的访客记录管理 =====================
+//  获取我的访客记录数据
+export function lowerBrowsing(page, limit) {
+  return req.get('/api/partner.partner/lowerBrowsing', {
+    params: {
+      page, limit
+    }
+  }).then(clean)
+}
+
+//  获取我的伙伴数据
+export function member(keyword) {
+  return req.get('/api/partner/index/member',{
+    params:{
+      keyword
+    }
+  }).then(clean)
+}
+
+// 获取我的伙伴个数
+export function partnerNum() {
+  return req.get('/api/partner/index',).then(clean)
 }

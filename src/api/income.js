@@ -1,8 +1,6 @@
 import {req, OK, SIZE} from './request'
+import {clean} from './index'
 
-const clean = ({data}) => {
-  return data && data.code === OK ? (data.data ? data.data : true) : null
-}
 const special = ({data}) => {
   return data
 }
@@ -15,6 +13,15 @@ export function incomeList(page, size=SIZE) {
     params: {
       page,
       limit: size
+    }
+  }).then(clean)
+}
+
+// 获取收益详细信息
+export function incomeListDetail(order_id) {
+  return req.get('/api/partner.partner/incomeListDetail', {
+    params: {
+      order_id
     }
   }).then(clean)
 }
