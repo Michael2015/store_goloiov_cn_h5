@@ -7,7 +7,7 @@
         </div>
       </mt-swipe-item>
     </mt-swipe>
-    <!-- <div class="num" v-if="imgs.length">{{i}}/{{imgs.length}}</div> -->
+    <div class="num" v-if="imgs.length">{{i}}/{{imgs.length}}</div>
   </div>
 </template>
 

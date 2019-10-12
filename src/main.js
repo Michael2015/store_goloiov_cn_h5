@@ -2,9 +2,10 @@ import router from './router'
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
-import { TabContainer, TabContainerItem, InfiniteScroll,Swipe, SwipeItem, Picker } from 'mint-ui';
+import { TabContainer, TabContainerItem, InfiniteScroll,Swipe, SwipeItem, Picker, Lazyload } from 'mint-ui';
 
 Vue.use(InfiniteScroll)
+Vue.use(Lazyload)
 
 Vue.config.productionTip = false
 

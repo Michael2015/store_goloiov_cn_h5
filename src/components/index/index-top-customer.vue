@@ -2,8 +2,8 @@
   <div class="table">
     <div class="table-cell">
       <div class="clearfix">
-        <img v-if="partner.avatar" :src="partner.avatar" alt="" class="parent-avatar" @click="showPartner">
-        <img v-else src="~img/shop-logo.png" alt="" class="parent-avatar">
+        <img v-if="partner.avatar" :src="partner.avatar" alt="" class="parent-avatar" @click="showPartner" style="background:#fff;">
+        <!-- <img v-else src="~img/shop-logo.png" alt="" class="parent-avatar"> -->
         <span class="shop-name">{{info.site_name||'万车品商城'}}</span>
       </div>
     </div>
@@ -31,7 +31,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLogin']),
+    ...mapState(['isLogin', 'userInfo']),
   },
   created() {
     getIndexTopInfo().then(data => {
@@ -48,7 +48,10 @@ export default {
   },
   methods: {
     getPartner() {
-      const sharedId = this.isLogin ? 2 : 0
+      let sharedId = 0
+      if (this.isLogin && this.userInfo.partner_id) {
+        sharedId = this.userInfo.partner_id
+      }
       getPartnerInfo(sharedId).then(data => {
         if (data) {
           this.partner = data
@@ -91,7 +94,7 @@ export default {
   height: size(72);
   border-radius: 5px;
   float: left;
-  background: #fff;
+  background: transparent;
 }
 .shop-name{
   vertical-align: middle;

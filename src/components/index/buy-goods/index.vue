@@ -1,26 +1,35 @@
 <template>
   <div class="wrap">
     <div class="addr-wrap" @click="goSelectAddr">
-      <div class="base">
-        <img src="~img/icon/location.png" alt="">
-        <span>广东省 深圳市 龙岗区 五和大道</span>
-      </div>
-      <div class="detail">
-        详细地址详细地址详细地址详细地址详细地址
-      </div>
-      <div class="contact">王先生</div>
-      <img src="~img/icon/join-right.png" alt="" class="right">
-      <div class="line"><!-- 地址线 --></div>
+      <template v-if="addr">  
+        <div class="base">
+          <img src="~img/icon/location.png" alt="">
+          <span>{{addr.province}} {{addr.city}} {{addr.district}}</span>
+        </div>
+        <div class="detail">
+          {{addr.detail}}
+        </div>
+        <div class="contact">{{addr.real_name}} {{addr.phone}}</div>
+        <img src="~img/icon/join-right.png" alt="" class="right">
+        <div class="line"><!-- 地址线 --></div>
+      </template>
+      <template v-else>
+        <div class="base">
+          <img src="~img/icon/location.png" alt="">
+          <span>请选择收货地址</span>
+        </div>
+        <img src="~img/icon/join-right.png" alt="" class="right">
+      </template>
     </div>
     <div class="goods table">
       <div class="img">
-        <img src="" alt="">
+        <img :src="info.image?info.image:info.slider_image&&info.slider_image[0]" alt="">
       </div>
       <div class="con">
-        <div class="name">车联网车载OBD智能盒子GPS…</div>
-        <div class="type">黑色</div>
+        <div class="name">{{info.store_name}}</div>
+        <div class="type">{{preInfo.attr}}</div>
         <div class="price-num">
-          <span class="price">￥1000.00</span>
+          <span class="price">￥{{preInfo.price}}</span>
           <span class="num">x1</span>
         </div>
       </div>
@@ -28,7 +37,7 @@
     <div class="spec">
       <div class="col clearfix">
         <div class="left">商品单价</div>
-        <div class="right">¥1199.00</div>
+        <div class="right">¥{{preInfo.price}}</div>
       </div>
       <div class="col clearfix">
         <div class="left">优惠金额</div>
@@ -40,37 +49,98 @@
     </div>
     <div class="opts table">
       <div class="price">
-        <span>实付金额：￥1220.00</span>
+        <span>实付金额：¥{{preInfo.price}}</span>
       </div>
       <div class="buy">
-        <span @click="$refs.selAddr.show()">立即购买</span>
+        <span @click="doPay">立即购买</span>
       </div>
     </div>
-    <city v-model="addr" ref="selAddr"></city>
+    <pay-method ref="payMethod">{{preInfo.price}}</pay-method>
   </div>
 </template>
 
 <script>
 import TextArea from 'base/ui/text-area'
-import City from 'com/common/city'
+import PayMethod from 'base/pay-method'
+import {getPreOrderProductInfo} from 'api/buy'
+import {getAddressList} from 'api/me'
+import {mapState} from 'vuex'
 export default {
   components: {
     TextArea,
-    City
+    PayMethod
+  },
+  props: {
+    id: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
       remark: '',
-      addr: []
+      addr: null,
+      // 接口获取的信息
+      preInfo: {},
+      // 路由传过来的信息
+      info: {}
+    }
+  },
+  computed: {
+    ...mapState(['selectAddress']),
+  },
+  created() {
+    // this.loaddata()
+  },
+  activated() {
+    // 这里用了上一个页面传进来的数据
+    // 判断是否需要刷新页面
+    if (this.$route.params.info) {
+      this.remark = ''
+      this.addr = null
+      this.preInfo = {}
+      this.info = this.$route.params.info
+      this.loaddata()
     }
   },
   methods: {
+    loaddata() {
+      getPreOrderProductInfo(this.id).then(data => {
+        if (data) {
+          this.preInfo = data
+        }
+      })
+      getAddressList().then(data => {
+        if (data) {
+          const defaultAddr = data.filter(i => i.is_default)
+          if (defaultAddr.length > 0) {
+            this.addr = defaultAddr[0]
+          } else if (data.length > 0) {
+            this.addr = data[0]
+          } else {
+            // 没有地址
+          }
+        }
+      })
+    },
     goSelectAddr() {
+      // 清空上次保存的地址
+      this.$store.commit('setAddress', null)
+      // 选择地址，就刷新地址
+      const clear = this.$watch('selectAddress', () => {
+        this.addr = this.selectAddress
+        clear()
+      })
       this.$router.push({
         path: '/myAddress',
         query: {
           select: 1
         }
+      })
+    },
+    doPay() {
+      this.$refs.payMethod.show(type => {
+        console.log(type)
       })
     }
   }
@@ -87,6 +157,7 @@ export default {
 .addr-wrap{
   background: #fff;
   padding: size(20) size(30) size(20 + 8);
+  // min-height: size(208);
   .base{
     line-height: size(46);
     img{
@@ -166,6 +237,7 @@ export default {
       font-size: size(24);
       float: right;
       margin-right: size(60);
+      margin-top: size(10);
     }
   }
 }

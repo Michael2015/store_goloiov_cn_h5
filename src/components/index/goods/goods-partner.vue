@@ -34,7 +34,7 @@
       <router-view :id="id" :goodsName="info.store_name"></router-view>
     </div>
     <div class="action-bar table border-top">
-      <div class="shop border-right">
+      <div class="shop border-right" @click="goIndex">
         <div class="icon"><img src="~img/icon/shop.png" alt=""></div>
         <div class="text">店铺</div>
       </div>
@@ -43,10 +43,12 @@
         <div class="icon"><img src="~img/icon/contact.png" alt=""></div>
         <div class="text">联系</div>
       </div> -->
-      <div class="buy">
+      <div class="buy" @click="buy">
         <span>立即购买</span>
       </div>
     </div>
+    <notice ref="notice" :autoClose="true"></notice>
+    <!-- 免单奖励介绍 -->
     <free-intro v-if="showFreeIntro" :info="info"></free-intro>
   </div>
 </template>
@@ -54,8 +56,11 @@
 <script>
 import GoodsBanner from './goods-banner'
 import FreeIntro from 'base/free-intro'
+import Notice from 'base/notice'
 import {Loading} from 'lib'
 import {PartnerGetGoodsInfo} from 'api'
+import {mapState} from 'vuex'
+import {login} from 'api/login'
 export default {
   props: {
     id: {
@@ -65,7 +70,8 @@ export default {
   },
   components: {
     GoodsBanner,
-    FreeIntro
+    FreeIntro,
+    Notice
   },
   data() {
     return {
@@ -74,6 +80,9 @@ export default {
       // 控制免单奖励介绍弹窗
       showFreeIntro: false
     }
+  },
+  computed: {
+    ...mapState(['isLogin']),
   },
   created() {
     Loading.open()
@@ -86,6 +95,34 @@ export default {
     ]).then(() => {
       Loading.close()
     })
+  },
+  methods: {
+    goIndex() {
+      this.$router.push('/index')
+    },
+    buy() {
+      // 购买商品
+      if (!this.isLogin) {
+        // 没有登录
+        this.$refs.notice.show('请先登录', () => {
+          Loading.open()
+          login().then(() => {
+            // 登录成功了
+          }).finally(() => {
+            Loading.close()
+          })
+        })
+        return
+      }
+      // 跳入购买页面 传入商品id
+      this.$router.push({
+        name: 'buy-goods',
+        params: {
+          id: this.id,
+          info: this.info
+        }
+      })
+    }
   }
 }
 </script>

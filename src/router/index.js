@@ -62,8 +62,11 @@ export default new Router({
       ],
     },
     {
-      path: '/buy-goods',
+      path: '/buy-goods/:id',
       component: BuyGoods,
+      props: true,
+      name: 'buy-goods',
+      meta: { keepAlive: true }
     },
     {
       path: '/order',

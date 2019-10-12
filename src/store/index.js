@@ -17,7 +17,7 @@ export default new Vuex.Store({
     // 用户信息
     userInfo: {},
     // 买商品时，选择收货地址
-    selectAddress: {}
+    selectAddress: null
   },
   mutations: {
     loginTest(state) {

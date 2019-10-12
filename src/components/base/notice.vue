@@ -1,6 +1,6 @@
 <template>
   <div v-show="isShow">
-    <popup>
+    <popup @mask-click="clickMask">
       <div class="wrap">
         <div class="title">提示</div>
         <div class="notive_tit">{{title}}</div>
@@ -16,6 +16,12 @@
 import showHide from "mixins/show-hide";
 import popup from "ui/popup";
 export default {
+  props: {
+    autoClose: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       title: "",
@@ -34,6 +40,12 @@ export default {
         this.hide();
         callback();
       };
+    },
+    clickMask() {
+      // 点击遮罩层
+      if (this.autoClose) {
+        this.hide()
+      }
     }
   }
 };

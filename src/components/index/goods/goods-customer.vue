@@ -47,27 +47,33 @@
       <router-view :id="id"></router-view>
     </div>
     <div class="action-bar table border-top">
-      <div class="shop border-right">
+      <div class="shop border-right" @click="goIndex">
         <div class="icon"><img src="~img/icon/shop.png" alt=""></div>
         <div class="text">店铺</div>
       </div>
-      <div class="contact border-right">
+      <div class="contact border-right" @click="$refs.contact.show()">
         <div class="icon"><img src="~img/icon/contact.png" alt=""></div>
         <div class="text">联系</div>
       </div>
-      <div class="buy">
+      <div class="buy" @click="buy">
         <span>立即购买</span>
       </div>
     </div>
+    <notice ref="notice" :autoClose="true"></notice>
+    <contact ref="contact" :data="partner"></contact>
     <free-intro v-if="showFreeIntro" :info="info"></free-intro>
   </div>
 </template>
 
 <script>
+import Contact from 'base/contact'
 import GoodsBanner from './goods-banner'
 import FreeIntro from 'base/free-intro'
 import {Loading} from 'lib'
-import {CustomerGetGoodsInfo} from 'api'
+import Notice from 'base/notice'
+import {CustomerGetGoodsInfo, getPartnerInfo} from 'api'
+import {login} from 'api/login'
+import {mapState} from 'vuex'
 export default {
   props: {
     id: {
@@ -76,6 +82,8 @@ export default {
     }
   },
   components: {
+    Contact,
+    Notice,
     GoodsBanner,
     FreeIntro
   },
@@ -84,8 +92,13 @@ export default {
       // 商品的基本信息，价格，图片啊
       info: {},
       // 控制免单奖励介绍弹窗
-      showFreeIntro: false
+      showFreeIntro: false,
+      // 店铺信息
+      partner: {}
     }
+  },
+  computed: {
+    ...mapState(['isLogin', 'userInfo']),
   },
   created() {
     Loading.open()
@@ -98,6 +111,51 @@ export default {
     ]).then(() => {
       Loading.close()
     })
+    this.getPartner()
+  },
+  watch: {
+    isLogin() {
+      this.getPartner()
+    }
+  },
+  methods: {
+    getPartner() {
+      let sharedId = 0
+      if (this.isLogin && this.userInfo.partner_id) {
+        sharedId = this.userInfo.partner_id
+      }
+      getPartnerInfo(sharedId).then(data => {
+        if (data) {
+          this.partner = data
+        }
+      })
+    },
+    goIndex() {
+      this.$router.push('/index')
+    },
+    buy() {
+      // 购买商品
+      if (!this.isLogin) {
+        // 没有登录
+        this.$refs.notice.show('请先登录', () => {
+          Loading.open()
+          login().then(() => {
+            // 登录成功了
+          }).finally(() => {
+            Loading.close()
+          })
+        })
+        return
+      }
+      // 跳入购买页面 传入商品id
+      this.$router.push({
+        name: 'buy-goods',
+        params: {
+          id: this.id,
+          info: this.info
+        }
+      })
+    }
   }
 }
 </script>

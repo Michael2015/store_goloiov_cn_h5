@@ -13,7 +13,7 @@
       </div>
     </div>
     <router-link class="con table border-bottom" :to="'/order-detail/'+item.order_id">
-      <div class="goods-pic"><div><img :src="item.image" alt=""></div></div>
+      <div class="goods-pic"><div><img v-lazy="item.image" alt=""></div></div>
       <div class="goods-desc">
         <div class="name">{{item.store_name}}</div>
         <div class="spec">{{item.suk}}</div>

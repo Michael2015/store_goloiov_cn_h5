@@ -1,3 +1,5 @@
+// APP 提供的原生接口，主要是登录，获取token，发起分享，支付
+
 function callNative(obj = {}) {
 
   if (process.env.NODE_ENV !== 'production') {
@@ -27,6 +29,7 @@ function api(action, data = {}) {
           r = JSON.parse(json)
         } catch (e) {
           console.log(e)
+          // 解析json不成功就返回原始数据
           r = json
         }
       }
@@ -43,12 +46,16 @@ function api(action, data = {}) {
   })
 }
 
+// 从APP获取token
 export function getToken() {
   if (process.env.NODE_ENV !== 'production') {
     return Promise.resolve('577de11cb52426332fc15c56529325b1')
+    // return Promise.resolve('f553c3923efb0fe51ef4b5ea60f09e9f')
+    // return Promise.resolve('1e4c15c790804c9a7d98831e5833ac7b')
   }
+  return api('loginToken')
 }
 
 export function nativeLogin() {
-  return api('login')
+  return api('appLogin')
 }

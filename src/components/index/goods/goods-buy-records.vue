@@ -1,10 +1,10 @@
 <template>
-  <load-more v-slot="{list}" :getData="GetGoodsBuyRecords">
+  <load-more v-slot="{list}" :getData="GetGoodsBuyRecords" :setSize="5">
     <div class="list">
       <div class="item table" v-for="(item,index) in list" :key="index">
         <div class="head-wrap">
           <div class="head">
-            <img :src="item.avatar" alt="">
+            <img v-lazy="item.avatar" alt="">
           </div>
         </div>
         <div>
