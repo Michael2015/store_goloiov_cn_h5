@@ -1,12 +1,30 @@
 <template>
   <div class="name_warp">
-    <input type="text" placeholder="输入用户名字" />
-    <div class="clone">x</div>
+    <input type="text" v-model="name" placeholder="输入用户名字" />
+    <div class="clone" @click="clear">x</div>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+export default {
+  data() {
+    return {
+      name:''
+    }
+  },
+  created() {
+    this.name = this.userInfo.nickname
+  },
+  methods: {
+    clear(){
+      this.name = ''
+    }
+  },
+  computed: {
+    ...mapState(['userInfo'])
+  },
+};
 </script>
 
 <style lang="scss" scoped>

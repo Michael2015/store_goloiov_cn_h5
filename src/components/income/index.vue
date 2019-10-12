@@ -31,13 +31,13 @@
       <div class="in-title">
         <span :class="active === 'charge'?'active':''" @click="checkShow('charge')">免单</span>
         <span :class="active === 'earnings'?'active':''" @click="checkShow('earnings')">收益</span>
-        <div class="showtitle">{{showtitle}}</div>
+        <div class="showtitle" @click="tojieshao">{{showtitle}}</div>
       </div>
     </div>
     <keep-alive>
       <mt-tab-container v-model="active" swipeable>
         <mt-tab-container-item id="charge">
-          <load-more v-slot="{list}" v-if="isLogin" :getData="loadCharge" ref="charge">
+          <load-more v-slot="{list}" :getData="isLogin?loadCharge:null" ref="charge">
             <div class="pub_list">
               <div class="item" v-for="(item,index) in list" :key="index" @click="clickMianDan(item.order_sn)">
                 <div class="queue border-bottom">{{item.left}}</div>
@@ -64,7 +64,7 @@
         </mt-tab-container-item>
 
         <mt-tab-container-item id="earnings">
-          <load-more v-slot="{list}" v-if="isLogin" :getData="loadEarnings" ref="earnings">
+          <load-more v-slot="{list}" v-if="isLogin" :getData="isLogin?loadEarnings:null" ref="earnings">
             <div class="in_record">
               <div
                 class="item"
@@ -183,6 +183,14 @@ export default {
     },
     clickMianDan(sn){
       this.tojump('/order-detail/'+sn);
+    },
+    tojieshao(){
+      if(this.active === 'charge'){
+        this.tojump('/gongpaijieshao')
+      }else if(this.active === 'earnings'){
+        this.tojump('/incomejieshao')
+      }
+      // this.tojump()
     }
   },
   watch: {

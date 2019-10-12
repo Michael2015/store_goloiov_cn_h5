@@ -1,7 +1,7 @@
 <template>
   <div class="myMsg_warp">
     <div class="warp_item">
-      <img :src="avater" alt class="avater" />
+      <img :src="userInfo.avatar" alt class="avater" />
       <div class="item_content">
         修改头像
         <img src="~img/icon/join-right.png" alt />
@@ -10,26 +10,29 @@
     <div class="warp_item" @click="tojump('/compileName')">
       <div class="item_title">名字</div>
       <div class="item_content">
-        {{name}}
-        <img src="~img/icon/join-right.png" alt />
+        {{this.userInfo.nickname?this.userInfo.nickname:'输入'}}
+        <img
+          src="~img/icon/join-right.png"
+          alt
+        />
       </div>
     </div>
     <div class="warp_item" @click="tojump('/bingPhone')">
       <div class="item_title">手机绑定</div>
       <div class="item_content">
-        {{phonehide(phone)}}
+        {{phonehide(this.userInfo.phone)}}
         <img src="~img/icon/join-right.png" alt />
       </div>
     </div>
     <div class="warp_item">
       <div class="item_title">合伙人等级</div>
-      <div class="item_content">{{lever}}</div>
+      <div class="item_content">{{partnerLevelObj[userInfo.partner_level]}}</div>
     </div>
     <div class="warp_item">
       <div class="item_title">我加入的团队</div>
       <div class="item_content">{{phonehide(myteamphone)}}</div>
     </div>
-    <div class="warp_item" @click="tojump('/myPartner')" >
+    <div class="warp_item" @click="tojump('/myPartner')">
       <div class="item_title">我发展的伙伴</div>
       <div class="item_content">
         {{friendNum}}人
@@ -50,19 +53,21 @@
 
 <script>
 import confirm from "base/confirm";
-import tojump from 'mixins/tojump'
+import tojump from "mixins/tojump";
+import partnerLevelObj from "mixins/partner-level-obj";
+import { mapState } from "vuex";
+import { partnerNum } from "api/me";
 export default {
   data() {
     return {
-      avater:
-        "https://wx.qlogo.cn/mmopen/vi_32/bYDM1OWAZ92xNWTAiadjrrIBLIwalWdvYx6t7PN36gkSMP3UDsa0LD8dibwfdEudKHQmnj41BJksnIqmYRmj5yoA/132",
-      name: "输入   ",
-      lever: "一般合伙人",
       myteamphone: "17596548795",
       friendNum: 0,
-      phone: "15347407062",
       versionsMsg: "v2.00"
     };
+  },
+  async mounted() {
+    const reque = await partnerNum();
+    this.friendNum = reque.member_nums;
   },
   methods: {
     phonehide(phone) {
@@ -73,15 +78,18 @@ export default {
       this.$refs.logOut.hide();
     },
     logout() {
-      this.$refs.logOut.show('', () => {
-        this.ok()
-      })
+      this.$refs.logOut.show("", () => {
+        this.ok();
+      });
     }
   },
   components: {
     confirm
   },
-  mixins:[tojump]
+  mixins: [tojump, partnerLevelObj],
+  computed: {
+    ...mapState(["userInfo"])
+  }
 };
 </script>
 

@@ -1,28 +1,30 @@
 <template>
   <div class="phone_warp">
-    <div class="show_warp" v-if="phone !== ''">
+    <div class="show_warp" v-if="inputPhone !== ''">
       已绑定：
-      <span>{{phonehide(phone)}}</span>
+      <span>{{phonehide(inputPhone)}}</span>
     </div>
-    <div class="show_bind" v-else-if="phone === ''">
+    <div class="show_bind" v-else-if="inputPhone === ''">
       <div class="bind_item">
-        <input type="number" placeholder="输入手机号" />
+        <input type="number" v-model="enterPhone" placeholder="输入手机号" />
         <div class="clone">x</div>
       </div>
       <div class="bind_item">
         <input type="text" />
-        <div class="getcode">获取验证码</div>
+        <div class="getcode" @click="getcode">获取验证码</div>
       </div>
     </div>
-    <div class="check_phone" @click="checkphone">{{phone===''?'绑定手机':'更换绑定手机'}}</div>
+    <div class="check_phone" @click="checkphone">{{inputPhone===''?'绑定手机':'更换绑定手机'}}</div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-      phone: "15347407062"
+      inputPhone: "",
+      enterPhone: ""
     };
   },
   methods: {
@@ -30,12 +32,25 @@ export default {
       return phone.substring(0, 3) + "****" + phone.substring(7);
     },
     checkphone() {
-      if (this.phone === "") {
-        this.phone = "15347407062";
-      } else if (this.phone !== "") {
-        this.phone = "";
+      if (this.inputPhone === "") {
+        //  绑定手机
+      } else if (this.inputPhone !== "") {
+        //  改绑手机
+        this.inputPhone = ''
       }
+    },
+    clear() {
+      this.inputPhone = "";
+    },
+    getcode(){
+      
     }
+  },
+  computed: {
+    ...mapState(["userInfo"])
+  },
+  mounted() {
+    this.inputPhone = this.userInfo.phone;
   }
 };
 </script>
@@ -67,8 +82,8 @@ export default {
         padding-left: size(30);
         font-size: size(30);
         &::-webkit-input-placeholder {
-            color: #999;
-          }
+          color: #999;
+        }
       }
       .clone {
         width: size(36);
@@ -88,7 +103,7 @@ export default {
         text-align: center;
         background-color: #eeeeee;
         border-radius: size(28);
-        font-size:size(26);
+        font-size: size(26);
         color: #999999;
         margin-right: size(34);
         margin-top: size(31);

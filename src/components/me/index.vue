@@ -2,17 +2,15 @@
   <div class="me_warp">
     <div class="header">
       <div class="avater_warp">
-        <img
-          class="averer"
-          src="https://wx.qlogo.cn/mmopen/vi_32/bYDM1OWAZ92xNWTAiadjrrIBLIwalWdvYx6t7PN36gkSMP3UDsa0LD8dibwfdEudKHQmnj41BJksnIqmYRmj5yoA/132"
-          alt
-        />
+        <img class="averer" :src="userInfo.avatar" alt />
         <div class="amend" @click="tojump('/myMsg')">
           <img src="~img/me/bianji.png" alt />
         </div>
       </div>
-      <div class="user_name">404</div>
-      <div class="grade">一般合伙人</div>
+      <div class="user_name">{{userInfo.nickname}}</div>
+      <div class="grade">
+        {{partnerLevelObj[userInfo.partner_level]}}
+      </div>
       <div class="team_no">伙伴{{Num}}人</div>
     </div>
     <div class="crosswise_tab">
@@ -43,28 +41,53 @@
 <script>
 import tojump from "mixins/tojump";
 import { partnerNum } from "api/me";
+import { mapState } from "vuex";
+import partnerLevelObj from 'mixins/partner-level-obj'
 export default {
   data() {
     return {
       tabList: [
-        { img: require("img/me/icon1.png"), tit: "我的优惠券" },
+        {
+          img: require("img/me/icon1.png"),
+          tit: "我的优惠券",
+          path: "/myDiscount"
+        },
         {
           img: require("img/me/icon2.png"),
           tit: "收货地址",
           path: "/myAddress"
         },
-        { img: require("img/me/icon3.png"), tit: "我的评论" },
-        { img: require("img/me/icon4.png"), tit: "升级攻略" },
-        { img: require("img/me/icon5.png"), tit: "商城使用说明" },
-        { img: require("img/me/icon6.png"), tit: "反馈意见" }
+        {
+          img: require("img/me/icon3.png"),
+          tit: "我的评论",
+          path: "/myComment"
+        },
+        {
+          img: require("img/me/icon4.png"),
+          tit: "升级攻略",
+          path: "/myStrategy"
+        },
+        {
+          img: require("img/me/icon5.png"),
+          tit: "商城使用说明",
+          path: "/useDesc"
+        },
+        {
+          img: require("img/me/icon6.png"),
+          tit: "反馈意见",
+          path: "/myOpinion"
+        }
       ],
       Num: ""
     };
   },
-  mixins: [tojump],
+  mixins: [tojump,partnerLevelObj],
   async mounted() {
     const reque = await partnerNum();
     this.Num = reque.member_nums;
+  },
+  computed: {
+    ...mapState(["userInfo"])
   }
 };
 </script>

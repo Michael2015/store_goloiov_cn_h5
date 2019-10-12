@@ -176,6 +176,46 @@ export default new Router({
       component: () => import(/* webpackChunkName: "me" */ 'com/me/addAddress'),
     },
     {
+      path: '/myDiscount',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/myDiscount'),
+    },
+    {
+      path: '/myComment',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/myComment'),
+    },
+    {
+      path: '/myStrategy',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/myStrategy'),
+    },
+    {
+      path: '/myOpinion',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/myOpinion'),
+    },
+    {
+      path: '/useDesc',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/useDesc'),
+    },
+    {
+      path: '/gongpaijieshao',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/jieshao/gongpai'),
+    },
+    {
+      path: '/caozuojieshao',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/jieshao/caozuo'),
+    },
+    {
+      path: '/partnerjieshao',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/jieshao/partner'),
+    },
+    {
+      path: '/incomejieshao',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/jieshao/income'),
+    },
+    {
+      path: '/xieyi',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/xieyi'),
+    },
+    {
       path: '/',
       redirect:'/index'
     }

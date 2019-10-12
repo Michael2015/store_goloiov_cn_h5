@@ -1,6 +1,10 @@
 import { req } from './request'
 import { clean } from './index'
 
+const special = ({data}) => {
+  return data
+}
+
 // 我的收获地址管理 =====================
 // 我的收获地址列表
 export function getAddressList() {
@@ -55,5 +59,31 @@ export function member(keyword) {
 
 // 获取我的伙伴个数
 export function partnerNum() {
-  return req.get('/api/partner/index',).then(clean)
+  return req.get('/api/partner/index').then(clean)
+}
+
+// 获取我的优惠券
+export function getcouponlist() {
+  return req.get('/api/coupon/getcouponlist').then(clean)
+}
+
+// 获取我的评论
+export function commentRecord() {
+  return req.get('/api/order/commentRecord',{
+    params:{
+      model_id: 2,
+    }
+  }).then(clean)
+}
+
+// 反馈意见
+export function feedback(feedbackData) {
+  return req.post('/api/partner/home/feedback',{
+    ...feedbackData
+  }).then(special)
+}
+
+// 获取介绍信息
+export function getresource() {
+  return req.get('/api/partner/home/getresource').then(clean)
 }

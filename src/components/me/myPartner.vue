@@ -3,7 +3,7 @@
     <div class="header">
       <div class="left">
         <img
-          src="https://wx.qlogo.cn/mmopen/vi_32/bYDM1OWAZ92xNWTAiadjrrIBLIwalWdvYx6t7PN36gkSMP3UDsa0LD8dibwfdEudKHQmnj41BJksnIqmYRmj5yoA/132"
+          :src='userInfo.avatar'
           alt
         />
         我的合伙人
@@ -32,6 +32,7 @@
 
 <script>
 import { member } from "api/me";
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -46,6 +47,9 @@ export default {
     async getdata(){
       this.reque = await member(this.value);
     }
+  },
+  computed: {
+    ...mapState(['userInfo'])
   },
 };
 </script>
