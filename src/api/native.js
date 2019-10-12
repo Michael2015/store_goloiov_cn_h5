@@ -45,7 +45,7 @@ function api(action, data = {}) {
 
 export function getToken() {
   if (process.env.NODE_ENV !== 'production') {
-    return Promise.resolve('bb265bdff4b4d6a790eb7d35cfaa3e2c')
+    return Promise.resolve('577de11cb52426332fc15c56529325b1')
   }
 }
 

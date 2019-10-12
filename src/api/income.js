@@ -1,4 +1,4 @@
-import {req, OK, SIZE} from './request'
+import {req, SIZE} from './request'
 import {clean} from './index'
 
 const special = ({data}) => {
