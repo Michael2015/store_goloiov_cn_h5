@@ -2,6 +2,7 @@
   <div class="name_warp">
     <input type="text" v-model="name" placeholder="输入用户名字" />
     <div class="clone" @click="clear">x</div>
+    <div class="save-btn">保存</div>
   </div>
 </template>
 
@@ -10,25 +11,25 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      name:''
-    }
+      name: ""
+    };
   },
   created() {
-    this.name = this.userInfo.nickname
+    this.name = this.userInfo.nickname;
   },
   methods: {
-    clear(){
-      this.name = ''
+    clear() {
+      this.name = "";
     }
   },
   computed: {
-    ...mapState(['userInfo'])
-  },
+    ...mapState(["userInfo"])
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~css/def';
+@import "~css/def";
 .name_warp {
   display: flex;
   height: size(122);
@@ -50,6 +51,18 @@ export default {
     border-radius: 50%;
     margin-right: size(30);
     margin-top: size(42);
+  }
+  .save-btn {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: size(100);
+    line-height: size(100);
+    font-size: size(30);
+    color: #fff;
+    text-align: center;
+    background-color: #e31336;
   }
 }
 </style>

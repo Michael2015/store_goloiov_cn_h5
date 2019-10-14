@@ -20,8 +20,11 @@
     <div class="warp_item" @click="tojump('/bingPhone')">
       <div class="item_title">手机绑定</div>
       <div class="item_content">
-        {{phonehide(this.userInfo.phone)}}
-        <img src="~img/icon/join-right.png" alt />
+        {{this.userInfo.phone?phonehide(this.userInfo.phone):''}}
+        <img
+          src="~img/icon/join-right.png"
+          alt
+        />
       </div>
     </div>
     <div class="warp_item">
@@ -30,7 +33,17 @@
     </div>
     <div class="warp_item">
       <div class="item_title">我加入的团队</div>
-      <div class="item_content">{{phonehide(myteamphone)}}</div>
+      <div class="item_content" @click="toAddTeam">
+        {{is_band_partner === 1?spread_user:'可添加'}}
+        <img
+          v-if="is_band_partner === 1"
+          @click="openPhone"
+          class="openPhone"
+          src="~img/me/contact.png"
+          alt
+        />
+        <img src="~img/icon/join-right.png" alt />
+      </div>
     </div>
     <div class="warp_item" @click="tojump('/myPartner')">
       <div class="item_title">我发展的伙伴</div>
@@ -48,6 +61,7 @@
     </div>
     <div class="quit" @click="logout">退出登录</div>
     <confirm ref="logOut">确定退出吗？</confirm>
+    <addteam ref="addteam"></addteam>
   </div>
 </template>
 
@@ -57,17 +71,20 @@ import tojump from "mixins/tojump";
 import partnerLevelObj from "mixins/partner-level-obj";
 import { mapState } from "vuex";
 import { partnerNum } from "api/me";
+import addteam from "base/addteam";
 export default {
   data() {
     return {
-      myteamphone: "17596548795",
       friendNum: 0,
-      versionsMsg: "v2.00"
+      versionsMsg: "v2.00",
+      is_band_partner: 0, //标识是否有上级合伙人
+      spread_user_nickname: "", //上级合伙人名称
+      spread_user_phone: "" // 上级合伙人电话
     };
   },
-  async mounted() {
-    const reque = await partnerNum();
-    this.friendNum = reque.member_nums;
+  mounted() {
+    this.loadDate();
+    // this.$refs.addteam.show(this.loadDate);
   },
   methods: {
     phonehide(phone) {
@@ -81,14 +98,37 @@ export default {
       this.$refs.logOut.show("", () => {
         this.ok();
       });
+    },
+    openPhone() {
+      console.log("打开电话：" + this.spread_user_phone);
+    },
+    toAddTeam() {
+      if (this.is_band_partner === 1) {
+        return;
+      }
+      this.$refs.addteam.show(this.loadDate);
+    },
+    async loadDate() {
+      const reque = await partnerNum();
+      console.log(reque);
+      this.friendNum = reque.member_nums;
+      this.is_band_partner = reque.is_band_partner;
+      this.spread_user_nickname = reque.spread_user_nickname;
+      this.spread_user_phone = reque.spread_user_phone;
     }
   },
   components: {
-    confirm
+    confirm,
+    addteam
   },
   mixins: [tojump, partnerLevelObj],
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(["userInfo"]),
+    spread_user() {
+      return (
+        this.spread_user_nickname + " " + this.phonehide(this.spread_user_phone)
+      );
+    }
   }
 };
 </script>
@@ -135,6 +175,12 @@ export default {
         width: size(10);
         height: size(22);
         margin-left: size(28);
+      }
+      .openPhone {
+        width: size(44);
+        height: size(44);
+        margin-left: size(0);
+        vertical-align: text-bottom;
       }
     }
   }

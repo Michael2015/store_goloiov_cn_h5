@@ -39,7 +39,12 @@
         <mt-tab-container-item id="charge">
           <load-more v-slot="{list}" :getData="isLogin?loadCharge:null" ref="charge">
             <div class="pub_list">
-              <div class="item" v-for="(item,index) in list" :key="index" @click="clickMianDan(item.order_sn)">
+              <div
+                class="item"
+                v-for="(item,index) in list"
+                :key="index"
+                @click="clickMianDan(item.order_sn)"
+              >
                 <div class="queue border-bottom">{{item.left}}</div>
                 <div class="detail">
                   <div class="img_warp">
@@ -64,7 +69,11 @@
         </mt-tab-container-item>
 
         <mt-tab-container-item id="earnings">
-          <load-more v-slot="{list}" v-if="isLogin" :getData="isLogin?loadEarnings:null" ref="earnings">
+          <load-more
+            v-slot="{list}"
+            :getData="isLogin?loadEarnings:null"
+            ref="earnings"
+          >
             <div class="in_record">
               <div
                 class="item"
@@ -108,21 +117,22 @@ export default {
         benifit: "/benifit", //返利详情
         commission: "/commission", //合伙人津贴详情
         public: "/public", //免单详情
-        refund:'/order-detail',  //  商品奖励退款
+        refund: "/order-detail", //  商品奖励退款
         pay_product_refund: "/order-detail", //订单退款
         allowance: "/allowance", //管理律贴
         supplier: "/supplier", //开发供应商
         share_bonus: "/director", //董事分红详情
-        develop_bonus:'/cultivate' //培养合伙人
+        develop_bonus: "/cultivate" //培养合伙人
       }
     };
   },
-  async mounted() {
-    const reque = await getUserAmount();
-    this.cash = reque.cash_money;
-    this.uncash = reque.unsettled_money;
-    this.all = reque.total_money;
-    this.$refs.charge.disabled = true;
+  mounted() {
+    getUserAmount().then(reque => {
+      this.cash = reque.cash_money;
+      this.uncash = reque.unsettled_money;
+      this.all = reque.total_money;
+      this.$refs.charge.disabled = true;
+    });
   },
   methods: {
     checkShow(demo) {
@@ -169,26 +179,26 @@ export default {
       return s.substr(s.length - 6, 6);
     },
     // 收益列表点击
-    clickShouYi(type,id,sn) {
+    clickShouYi(type, id, sn) {
       console.log(type);
       let url;
       url = this.jumpObj[type];
-      if(type === 'pay_product_refund' || type === 'refund'){
+      if (type === "pay_product_refund" || type === "refund") {
         //  跳转订单详情那order_sn去查询
-        url += `/${sn}`
-      }else {
-        url += `?order_id=${id}`
+        url += `/${sn}`;
+      } else {
+        url += `?order_id=${id}`;
       }
       this.tojump(url);
     },
-    clickMianDan(sn){
-      this.tojump('/order-detail/'+sn);
+    clickMianDan(sn) {
+      this.tojump("/order-detail/" + sn);
     },
-    tojieshao(){
-      if(this.active === 'charge'){
-        this.tojump('/gongpaijieshao')
-      }else if(this.active === 'earnings'){
-        this.tojump('/incomejieshao')
+    tojieshao() {
+      if (this.active === "charge") {
+        this.tojump("/gongpaijieshao");
+      } else if (this.active === "earnings") {
+        this.tojump("/incomejieshao");
       }
       // this.tojump()
     }

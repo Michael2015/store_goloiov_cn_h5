@@ -1,10 +1,27 @@
 import { req } from './request'
 import { clean } from './index'
+import { getUserInfo } from 'api'
+import store from '@/store'
 
-const special = ({data}) => {
+const special = ({ data }) => {
   return data
 }
 
+// 更新全局用户信息
+export function updateUserInfo() {
+  return new Promise(function (resolve) {
+    getUserInfo(store.state.token).then(data => {
+      if (data) {
+        store.commit('setUserInfo', data)
+        resolve(data)
+      } else {
+        alert('更新失败')
+      }
+    }, () => {
+      alert('更新失败')
+    })
+  })
+}
 // 我的收获地址管理 =====================
 // 我的收获地址列表
 export function getAddressList() {
@@ -50,8 +67,8 @@ export function lowerBrowsing(page, limit) {
 
 //  获取我的伙伴数据
 export function member(keyword) {
-  return req.get('/api/partner/index/member',{
-    params:{
+  return req.get('/api/partner/index/member', {
+    params: {
       keyword
     }
   }).then(clean)
@@ -69,8 +86,8 @@ export function getcouponlist() {
 
 // 获取我的评论
 export function commentRecord() {
-  return req.get('/api/order/commentRecord',{
-    params:{
+  return req.get('/api/order/commentRecord', {
+    params: {
       model_id: 2,
     }
   }).then(clean)
@@ -78,7 +95,7 @@ export function commentRecord() {
 
 // 反馈意见
 export function feedback(feedbackData) {
-  return req.post('/api/partner/home/feedback',{
+  return req.post('/api/partner/home/feedback', {
     ...feedbackData
   }).then(special)
 }
@@ -86,4 +103,48 @@ export function feedback(feedbackData) {
 // 获取介绍信息
 export function getresource() {
   return req.get('/api/partner/home/getresource').then(clean)
+}
+
+
+// 修改绑定手机相关 =================
+
+
+// 验证手机号
+export function legitimatephone(data) {
+  return req.post('/api/app.user/checkphone', {
+    ...data
+  }).then(special)
+}
+
+// 发送验证码
+export function sendsms(data) {
+  return req.get('/api/app.user/sendsms', {
+    params: {
+      mobile: data.mobile,
+      event: data.event
+    }
+  }).then(special)
+}
+
+// 修改手机号
+export function editphone(data) {
+  return req.post('/api/app.user/editphone', {
+    ...data
+  }).then(special)
+}
+
+// 绑定上级相关 ============
+
+// 通过电话号码获取用户信息
+export function searchPartner(data) {
+  return req.post('/api/partner/partner/searchPartner', {
+    ...data
+  }).then(special)
+}
+
+// 添加上级合伙人
+export function joinTeam(data) {
+  return req.post('/api/partner.index/joinTeam', {
+    ...data
+  }).then(special)
 }
