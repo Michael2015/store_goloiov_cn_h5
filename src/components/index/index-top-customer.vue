@@ -12,17 +12,20 @@
       <span class="invite" v-else @click="doLogin">登录/注册</span>
     </div>
     <contact ref="contact" :data="partner"></contact>
+    <notice ref="notice" :autoClose="true"></notice>
   </div>
 </template>
 
 <script>
 import Contact from 'base/contact'
+import Notice from 'base/notice'
 import {mapState} from 'vuex'
 import {getIndexTopInfo, getPartnerInfo} from 'api'
 import {login} from 'api/login'
 export default {
   components: {
-    Contact
+    Contact,
+    Notice
   },
   data() {
     return {
@@ -63,7 +66,13 @@ export default {
     },
     doLogin() {
       // this.$store.commit('loginTest')
-      login()
+      login().then(() => {
+        // 登录成功了
+      }, () => {
+        this.$refs.notice.show('登录失败，请稍后再试')
+      }).finally(() => {
+        // 最后
+      })
     }
   }
 }

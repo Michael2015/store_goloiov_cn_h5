@@ -9,3 +9,12 @@ export const Loading = {
 export const Toast = toast
 
 export const setClipboard = (s) => clipboard.writeText(s)
+
+// 滚动条在Y轴上的滚动距离
+export function getScrollTop() {
+  let scrollTop, bodyScrollTop, documentScrollTop
+  document.body && (bodyScrollTop = document.body.scrollTop)
+  document.documentElement && (documentScrollTop = document.documentElement.scrollTop)
+  scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop
+  return scrollTop
+}

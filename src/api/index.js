@@ -171,3 +171,13 @@ export function getAreaInfo(id = 0){
 export function uploadImg(formData) {
   return req.post('/api/customer/index/upload', formData).then(clean)
 }
+
+// 获取小程序二维码
+export function getQrcode(scene) {
+  return req.get('/api/partner.partner/getQrCode', {
+    params: {
+      page: 'pages/index/index',
+      scene
+    }
+  }).then(clean)
+}

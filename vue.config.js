@@ -3,11 +3,16 @@ const path = require('path')
 module.exports = {
   productionSourceMap: true,
   filenameHashing: false,
-  publicPath: './',
+  // publicPath: './',
   assetsDir: 'public/h5',
   devServer: {
     proxy: {
       '/api': {
+        target: 'https://storemp.golodata.com/',
+        ws: true,
+        changeOrigin: true
+      },
+      '/public/uploads/': {
         target: 'https://storemp.golodata.com/',
         ws: true,
         changeOrigin: true

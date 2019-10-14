@@ -173,7 +173,15 @@ export default {
     },
     goPay() {
       // 去支付
-      this.$router.push('/buy-goods')
+      // 跳入购买页面 传入商品id
+      this.$router.push({
+        name: 'buy-goods',
+        params: {
+          id: this.orderInfo.product_id + '',
+          orderId: this.id,
+          info: this.orderInfo
+        }
+      })
     },
     fastRefund() {
       // 快速退款

@@ -8,7 +8,7 @@
             <search-input v-model="keyword" class="input"></search-input>
           </div>
           <div class="table-cell invite-wrap">
-            <span class="invite">邀请合伙人</span>
+            <span class="invite" @click="invite">邀请合伙人</span>
           </div>
         </div>
         <!-- 非合伙人 | 游客(未登录) --->
@@ -51,6 +51,7 @@ import IndexGoodsItem from './index-goods-item'
 import LoadMore from 'base/load-more'
 import {Loading} from 'lib'
 import {getCategory, getCategoryProducts, CustomerGetProducts, PartnerGetProducts} from 'api'
+import {invitePartner} from 'api/native'
 import {mapState} from 'vuex'
 
 export default {
@@ -71,7 +72,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLogin', 'role']),
+    ...mapState(['isLogin', 'role', 'userInfo']),
     category() {
       return this.categoryList.slice(1)
     },
@@ -108,6 +109,9 @@ export default {
       if (i !== this.activeCategoryIndex) {
         this.activeCategoryIndex = i
       }
+    },
+    invite() {
+      invitePartner('/pages/index/index?share_id=' + this.userInfo.uid + '&type=invite', '邀请你成为业务合伙人！')
     }
   }
 }

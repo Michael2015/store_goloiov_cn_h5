@@ -26,7 +26,7 @@
           <img src="~img/wxpay.png" alt="">
         </div>
         <div class="name">
-          <div class="">支付宝</div>
+          <div class="">微信支付</div>
         </div>
         <div class="check-icon" :class="{active: active===1}">
           <span></span>
@@ -43,7 +43,7 @@ export default {
   mixins: [showHide],
   data() {
     return {
-      methods: ['alipay', 'wxpay'],
+      methods: ['alipay', 'wechat'],
       active: 1,
     }
   },

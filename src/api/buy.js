@@ -13,3 +13,25 @@ export function getPreOrderProductInfo(id, lastOrderId) {
     }
   }).then(clean)
 }
+
+// 下单接口
+export function createOrder(params) {
+  return req.post('/api/order/createOrder', params).then(clean)
+}
+
+// 支付，获取支付参数触发微信或支付宝支付
+export function pay(id, type) {
+  return req.get('/api/customer/pay/pay', {
+    params: {
+      order_id: id,
+      pay_type: type
+    }
+  }).then(clean)
+}
+
+// 查询订单
+export function queryOrder(id) {
+  return req.post('/api/customer/pay/queryOrder', {
+    order_id: id
+  }).then(clean)
+}

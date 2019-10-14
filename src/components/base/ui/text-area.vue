@@ -27,8 +27,14 @@ export default {
     }
   },
   created() {
-    if (this.value) {
-      this.v = this.value
+    this.v = this.value
+  },
+  activated() {
+    this.v = this.value
+  },
+  watch: {
+    value(v) {
+      this.v = v
     }
   },
   methods: {

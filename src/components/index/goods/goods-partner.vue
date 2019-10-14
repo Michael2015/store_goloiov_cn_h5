@@ -1,5 +1,10 @@
 <template>
   <div class="wrap">
+    <top-head :transparent="true">
+      <div class="share" slot="right" @click="createPoster" v-if="isLogin">
+        <img src="~img/icon/share.png" alt="">
+      </div>
+    </top-head>
     <goods-banner :imgs="info.slider_image"></goods-banner>
     <div class="tips-for-free">适用免单奖励的商品不适用7天无理由退货</div>
     <div class="intro-wrap">
@@ -58,9 +63,15 @@ import GoodsBanner from './goods-banner'
 import FreeIntro from 'base/free-intro'
 import Notice from 'base/notice'
 import {Loading} from 'lib'
-import {PartnerGetGoodsInfo} from 'api'
+import {PartnerGetGoodsInfo, getQrcode} from 'api'
 import {mapState} from 'vuex'
 import {login} from 'api/login'
+import {sharePoster} from 'api/native'
+import Poster from 'lib/poster'
+
+// 海报上的图片
+const tips = require('img/blessing.png')
+
 export default {
   props: {
     id: {
@@ -82,7 +93,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLogin']),
+    ...mapState(['isLogin', 'userInfo']),
   },
   created() {
     Loading.open()
@@ -100,16 +111,34 @@ export default {
     goIndex() {
       this.$router.push('/index')
     },
+    createPoster() {
+      this.poster = new Poster(this.info.store_name)
+      Promise.all([
+        this.poster.drawGoods(this.info.slider_image[0]),
+        this.poster.drawTips(tips),
+        getQrcode([this.userInfo.uid, this.userInfo.uid, this.id].join(',')).then(data => {
+          if (data) {
+            return this.poster.drawQrcode(data)
+          } else {
+            return Promise.reject('获取二维码失败')
+          }
+        })
+      ]).then(() => {
+        console.log(this.poster.getBase64())
+        sharePoster(this.poster.getBase64().replace('data:image/png;base64,', ''))
+      })
+    },
     buy() {
       // 购买商品
       if (!this.isLogin) {
         // 没有登录
         this.$refs.notice.show('请先登录', () => {
-          Loading.open()
           login().then(() => {
             // 登录成功了
+          }, () => {
+            this.$refs.notice.show('登录失败，请稍后再试')
           }).finally(() => {
-            Loading.close()
+            // 最后
           })
         })
         return
@@ -132,6 +161,15 @@ export default {
 .wrap{
   min-height: 100vh;
   background-color: $color-body-bg;
+}
+.share{
+  text-align: right;
+  img{
+    width: size(34);
+    display: inline-block;
+  }
+  padding: size(6) 0;
+  padding-right: size(12);
 }
 .tips-for-free{
   line-height: size(54);

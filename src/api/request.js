@@ -33,7 +33,7 @@ export const req = axios.create({
 
 req.interceptors.request.use(
   function (config) {
-    const token = store.state.token || '577de11cb52426332fc15c56529325b1'
+    const token = store.state.token
     if (token) {
       // 从store注入token
       config.params.token = token

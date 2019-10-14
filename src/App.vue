@@ -10,10 +10,14 @@
 
 <script>
 import tab from 'com/base/tab.vue'
+import {tryLogin} from 'api/login'
 export default {
   name: 'app',
   components: {
     tab
+  },
+  beforeCreate() {
+    tryLogin()
   }
 }
 </script>

@@ -52,23 +52,28 @@
         <span>实付金额：¥{{preInfo.price}}</span>
       </div>
       <div class="buy">
-        <span @click="doPay">立即购买</span>
+        <span @click="doPay">{{this.paying ? '支付中...' : '立即购买'}}</span>
       </div>
     </div>
     <pay-method ref="payMethod">{{preInfo.price}}</pay-method>
+    <notice ref="notice" :autoClose="false"></notice>
   </div>
 </template>
 
 <script>
 import TextArea from 'base/ui/text-area'
 import PayMethod from 'base/pay-method'
-import {getPreOrderProductInfo} from 'api/buy'
+import Notice from 'base/notice'
+import {getPreOrderProductInfo, createOrder, pay, queryOrder} from 'api/buy'
 import {getAddressList} from 'api/me'
+import {wxPay} from 'api/native'
 import {mapState} from 'vuex'
+import {Toast,Loading} from 'lib'
 export default {
   components: {
     TextArea,
-    PayMethod
+    PayMethod,
+    Notice
   },
   props: {
     id: {
@@ -83,7 +88,12 @@ export default {
       // 接口获取的信息
       preInfo: {},
       // 路由传过来的信息
-      info: {}
+      // 不同地方跳入，带的信息不同
+      info: {},
+      // 订单号, 重新支付
+      orderId: '',
+      // 支付中
+      paying: false
     }
   },
   computed: {
@@ -96,32 +106,48 @@ export default {
     // 这里用了上一个页面传进来的数据
     // 判断是否需要刷新页面
     if (this.$route.params.info) {
+      this.paying = false
       this.remark = ''
       this.addr = null
       this.preInfo = {}
       this.info = this.$route.params.info
+      this.orderId = this.$route.params.orderId || ''
       this.loaddata()
     }
   },
   methods: {
     loaddata() {
-      getPreOrderProductInfo(this.id).then(data => {
+      getPreOrderProductInfo(this.id, this.orderId).then(data => {
         if (data) {
           this.preInfo = data
         }
       })
-      getAddressList().then(data => {
-        if (data) {
-          const defaultAddr = data.filter(i => i.is_default)
-          if (defaultAddr.length > 0) {
-            this.addr = defaultAddr[0]
-          } else if (data.length > 0) {
-            this.addr = data[0]
-          } else {
-            // 没有地址
+      if (!this.orderId) {
+        getAddressList().then(data => {
+          if (data) {
+            const defaultAddr = data.filter(i => i.is_default)
+            if (defaultAddr.length > 0) {
+              this.addr = defaultAddr[0]
+            } else if (data.length > 0) {
+              this.addr = data[0]
+            } else {
+              // 没有地址
+            }
           }
+        })
+      } else {
+        // 有订单了，重做地址
+        const a = this.info.user_address.split(' ')
+        const addr = {
+          province: a[0],
+          city: a[1],
+          district: a[2],
+          detail: a.slice(3).join(' ')
         }
-      })
+        this.addr = addr
+        // 重写备注
+        this.remark = this.info.mark
+      }
     },
     goSelectAddr() {
       // 清空上次保存的地址
@@ -139,9 +165,68 @@ export default {
       })
     },
     doPay() {
+      if (this.paying) {
+        return
+      }
+      if (!this.addr) {
+        Toast('请选择地址')
+        return
+      }
       this.$refs.payMethod.show(type => {
         console.log(type)
+        // 去支付
+        Loading.open()
+        this.paying = true
+        if (this.orderId) {
+          // 已经有订单了
+          getNativePayParams(this.orderId, type)
+        } else {
+          let miandan_type
+          if (this.info.is_platoon == 1 && this.info.is_self_buy_platoon == 1) {
+            miandan_type = 1
+          }
+          createOrder({
+            product_id: this.id,
+            address_id: this.addr.id,
+            mark: this.remark,
+            miandan_type
+          }).then(data => {
+            if (data && data.order_id) {
+              // 下单成功，触发支付
+              getNativePayParams(data.order_id, type)
+            } else {
+              Loading.close()
+              this.paying = false
+              Toast('下单失败')
+            }
+          }, () => {
+            // 下单失败
+            Loading.close()
+            this.paying = false
+            Toast('下单失败,请稍后再试')
+          })
+        }
       })
+      // 获取支付参数
+      const getNativePayParams = (id, type) => {
+        pay(id, type).then(data => {
+          if (data) {
+            wxPay(data).then(() => {
+              this.$refs.notice.show('支付成功', () => {
+                this.$router.replace('/order')
+              })
+            })
+          } else {
+            Toast('获取支付参数失败,请稍后再试')
+            this.paying = false
+          }
+        }, () => {
+          Toast('获取支付参数失败,请稍后再试')
+          this.paying = false
+        }).finally(() => {
+          Loading.close()
+        })
+      }
     }
   }
 }
