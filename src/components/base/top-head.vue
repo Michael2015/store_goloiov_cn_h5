@@ -1,6 +1,6 @@
 <template>
   <div class="top-head-wrap">
-    <div class="top-head table border-bottom" :class="{transparent: transparent&&!noTransparent}" :style="bg">
+    <div class="top-head border-bottom" :class="{transparent: transparent&&!noTransparent}" :style="bg">
       <div class="left" @click="$router.back()">
         <img src="~img/icon/back.png" alt="" class="back">
       </div>
@@ -8,9 +8,7 @@
         <div class="text"><slot></slot>&nbsp;</div>
       </div>
       <div class="right">
-        <div class="v">
-          <div class="w"><slot name="right"></slot></div>
-        </div>
+          <slot name="right"></slot>
       </div>
     </div>
     <div class="blank" v-if="!transparent"></div>
@@ -70,12 +68,8 @@ export default {
     height: size(88);
     background: #fff;
     z-index: 9;
-    padding: 0 size(32);
-    padding-left: 0;
-    >div{
-      display: table-cell;
-      vertical-align: middle;
-    }
+    padding: 0 size(100);
+    width: 100%;
     &.transparent{
       background: transparent;
       &:after{
@@ -86,11 +80,16 @@ export default {
   .left{
     width: size(100);
     text-align: left;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
   }
   .mid{
     text-align: center;
     font-size: size(30);
     color: #000;
+    line-height: size(88);
     .text{
       @include txt-overflow;
     }
@@ -101,20 +100,10 @@ export default {
     margin-left: size(20);
   }
   .right{
-    width: size(100 - 32);
-    .v{
-      width: 100%;
-      height: 100%;
-      position: relative;
-      .w{
-        position: absolute;
-        right: 0;
-        top: 50%;
-        width: size(150);
-        text-align: right;
-        transform: translateY(-50%);
-      }
-    }
+    position: absolute;
+    right: size(32);
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 </style>

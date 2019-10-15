@@ -3,12 +3,12 @@
     <popup @mask-click="hide">
       <div class="wrap">
         <div class="title">{{info.store_name}}</div>
-        <div class="sub-title">免单规则</div>
+        <router-link tag="div" class="sub-title" to="/gongpaijieshao">免单规则</router-link>
         <div class="con">
           <div>排队免单规则：{{info.platoon_slow}}出1，即是在你下单后，如有新的{{info.platoon_slow}}笔订单，商家即全额返还你支付的订单金额作为奖励。</div>
           <div>快速免单规则：{{info.platoon_fast}}出1，即是在你下单后，如你推荐了新的{{info.platoon_fast}}笔订单，商家即全额返还你支付的订单金额作为奖励。</div>
         </div>
-        <div class="btns">免单奖励介绍</div>
+        <router-link tag="div" class="btns" to="/gongpaijieshao">免单奖励介绍</router-link>
         <div class="close" @click="hide" v-if="false"></div>
       </div>
     </popup>
@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      isShow: true
+      isShow: false
     }
   }
 }

@@ -54,7 +54,7 @@ export default {
   background-color: $color-body-bg;
 }
 .top{
-  padding: 0 size(20);
+  padding: 0 size(16);
   overflow: hidden;
   background: #fff;
   .types{
@@ -63,7 +63,8 @@ export default {
     // justify-content: space-around;
     >div{
       flex: 1;
-      padding: size(44) 0;
+      padding: size(28) 0;
+      line-height: size(40);
       text-align: center;
       color: #000;
       &.active{

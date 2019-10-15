@@ -1,5 +1,6 @@
 <template>
   <div class="wrap">
+    <top-head>收货地址</top-head>
     <div class="addr-wrap" v-for="item in addrList" :key="item.id" @click="select(item)">
       <div class="base">
         <img src="~img/icon/location.png" alt="">
@@ -91,7 +92,7 @@ export default {
 .addr-wrap{
   background: #fff;
   padding: size(20) size(30);
-  margin-bottom: size(20);
+  margin-top: size(20);
   .base{
     line-height: size(46);
     img{

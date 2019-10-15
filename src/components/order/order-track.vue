@@ -1,6 +1,7 @@
 <template>
   <!-- 订单的物流信息 -->
   <div class="wrap">
+    <top-head>物流信息</top-head>
     <div class="head">
       <span>{{name}}：</span>
       <span>{{id}}</span>

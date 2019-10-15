@@ -88,26 +88,19 @@ export default {
     color: #666;
   }
   // 毛玻璃
-  &:before{
-    content: ' ';
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    position: absolute;
-    background: inherit;
-    background-attachment: fixed;
-    filter: blur(4px);
-    z-index: -1;
-  }
-  // &:after{
+  // &:before{
   //   content: ' ';
   //   left: 0;
   //   right: 0;
   //   bottom: 0;
   //   top: 0;
   //   position: absolute;
-  //   background: rgba(255,255,255,0.78);
+  //   background: inherit;
+  //   background-attachment: fixed;
+  //   filter: blur(4px);
+  //   z-index: -1;
   // }
+  // ui 说用这个背景图做毛玻璃效果
+  @include bg('~img/tab-bg.png');
 }
 </style>

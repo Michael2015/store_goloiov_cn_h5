@@ -1,5 +1,6 @@
 <template>
   <div class="wrap">
+    <top-head>申请退货</top-head>
     <div class="goods table">
       <div class="goods-pic"><div><img :src="orderInfo.image" alt=""></div></div>
       <div class="goods-desc">

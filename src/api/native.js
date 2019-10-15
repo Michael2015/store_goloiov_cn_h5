@@ -23,14 +23,12 @@ function api(action, data = {}) {
   return new Promise(function(resolve) {
     const cbName = '_native_cb_' + n++
     const wrap = function(json) {
-      let r = null
-      if (json) {
+      let r = json
+      if (json !== undefined) {
         try {
           r = JSON.parse(json)
         } catch (e) {
           console.log(e)
-          // 解析json不成功就返回原始数据
-          r = json
         }
       }
       resolve(r)
@@ -77,7 +75,24 @@ export function sharePoster(posterImg) {
   })
 }
 
+
 // 微信支付
 export function wxPay(params) {
   return api('WeChatPay', params)
+}
+
+// 支付宝
+export function aliPay(params) {
+  return api('aliPay', params)
+}
+
+//'alipay', 'wechat'
+export function nativePay(type, params) {
+  if (type === 'alipay') {
+    return aliPay(params)
+  } else if (type === 'wechat') {
+    return wxPay(params)
+  } else {
+    alert('未知支付类型')
+  }
 }

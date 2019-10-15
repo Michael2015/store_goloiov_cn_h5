@@ -1,5 +1,6 @@
 <template>
   <div class="wrap">
+    <top-head>{{edit ? '编辑收货地址':'新增收货地址'}}</top-head>
     <div class="col border-bottom table">
       <div><input type="text" placeholder="收货人姓名" v-model="real_name"></div>
     </div>

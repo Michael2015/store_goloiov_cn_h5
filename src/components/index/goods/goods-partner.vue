@@ -24,7 +24,7 @@
           <div>下单即享免单</div>
           <div>合伙人推荐购买即享返利</div>
         </div>
-        <div class="go-free-intro" @click="showFreeIntro=true">
+        <div class="go-free-intro" @click="$refs.showFreeIntro.show()">
           <span>免单奖励介绍</span>
         </div>
       </div>
@@ -54,7 +54,7 @@
     </div>
     <notice ref="notice" :autoClose="true"></notice>
     <!-- 免单奖励介绍 -->
-    <free-intro v-if="showFreeIntro" :info="info"></free-intro>
+    <free-intro ref="showFreeIntro" :info="info"></free-intro>
   </div>
 </template>
 
@@ -87,9 +87,7 @@ export default {
   data() {
     return {
       // 商品的基本信息，价格，图片啊
-      info: {},
-      // 控制免单奖励介绍弹窗
-      showFreeIntro: false
+      info: {}
     }
   },
   computed: {
@@ -170,6 +168,7 @@ export default {
   }
   padding: size(6) 0;
   padding-right: size(12);
+  padding-left: size(18);
 }
 .tips-for-free{
   line-height: size(54);

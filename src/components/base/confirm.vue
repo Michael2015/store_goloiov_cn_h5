@@ -1,11 +1,11 @@
 <template>
   <div v-show="isShow">
-    <popup @mask-click="hide">
+    <popup @mask-click="clickMask">
       <div class="wrap">
         <div class="title"><slot></slot>{{msg}}</div>
         <div class="btns">
-          <div class="confirm" @click="lcb&&lcb();hide()">确定</div>
-          <div class="cancel" @click="rcb&&rcb();hide()">取消</div>
+          <div class="confirm" @click="lcb&&lcb();hide()"><slot name="btn-left">确定</slot></div>
+          <div class="cancel" @click="rcb&&rcb();hide()"><slot name="btn-right">取消</slot></div>
         </div>
       </div>
     </popup>
@@ -20,6 +20,10 @@ export default {
     data: {
       type: Object,
       default: () => ({})
+    },
+    autoClose: {
+      type: Boolean,
+      default: true
     }
   },
   components: {
@@ -39,6 +43,12 @@ export default {
       this.msg = msg || ''
       this.lcb = lcb || null
       this.rcb = rcb || null
+    },
+    clickMask() {
+      // 点击遮罩层
+      if (this.autoClose) {
+        this.hide()
+      }
     }
   }
 };
@@ -59,6 +69,7 @@ export default {
     color: #353535;
     letter-spacing: size(-1);
     text-align: center;
+    line-height: 1.5;
   }
   .btns {
     flex: 1;

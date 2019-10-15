@@ -1,5 +1,6 @@
 <template>
   <div class="wrap">
+    <top-head>订单详情</top-head>
     <div class="big-status table">
       <div class="status">
         <span v-if="orderInfo.status_of_order === 0">待支付</span>

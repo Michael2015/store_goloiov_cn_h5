@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <top-head :transparent="true">
-      <div class="share" slot="right" @click="createPoster" v-if="isLogin">
+      <div class="share" @click="createPoster" v-if="isLogin">
         <img src="~img/icon/share.png" alt="">
       </div>
     </top-head>
@@ -38,7 +38,7 @@
           <div>下单即享免单</div>
           <div>合伙人推荐购买即享返利</div>
         </div>
-        <div class="go-free-intro" @click="showFreeIntro=true">
+        <div class="go-free-intro" @click="$refs.showFreeIntro.show()">
           <span>免单奖励介绍</span>
         </div>
       </div>
@@ -66,7 +66,7 @@
     </div>
     <notice ref="notice" :autoClose="true"></notice>
     <contact ref="contact" :data="partner"></contact>
-    <free-intro v-if="showFreeIntro" :info="info"></free-intro>
+    <free-intro ref="showFreeIntro" :info="info"></free-intro>
   </div>
 </template>
 
@@ -102,8 +102,6 @@ export default {
     return {
       // 商品的基本信息，价格，图片啊
       info: {},
-      // 控制免单奖励介绍弹窗
-      showFreeIntro: false,
       // 店铺信息
       partner: {}
     }
@@ -203,6 +201,7 @@ export default {
   }
   padding: size(6) 0;
   padding-right: size(12);
+  padding-left: size(12);
 }
 .tips-for-free{
   line-height: size(54);

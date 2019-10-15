@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import Index from 'com/index'
+import Index from 'com/index'
 import Goods from 'com/index/goods'
 import GoodsBuyRecords from 'com/index/goods/goods-buy-records'
 import GoodsPrice from 'com/index/goods/goods-price'
@@ -8,6 +8,7 @@ import GoodsDetail from 'com/index/goods/goods-detail'
 import GoodsVisitor from 'com/index/goods/goods-visitor'
 import GoodsComment from 'com/index/goods/goods-comment'
 import BuyGoods from 'com/index/buy-goods'
+import BuySuccess from 'com/index/buy-goods/buy-success'
 // import Order from 'com/order'
 import OrderDetail from 'com/order/order-detail'
 // import Income from 'com/income'
@@ -27,7 +28,8 @@ export default new Router({
   routes: [
     {
       path: '/index',
-      component : () => import(/* webpackChunkName: "index" */ 'com/index'),
+      // component : () => import(/* webpackChunkName: "index" */ 'com/index'),
+      component : Index,
       meta: { haveTab: true, keepAlive: true }
     },
     {
@@ -67,6 +69,11 @@ export default new Router({
       props: true,
       name: 'buy-goods',
       meta: { keepAlive: true }
+    },
+    {
+      path: '/buy-success',
+      component: BuySuccess,
+      name: 'buy-success'
     },
     {
       path: '/order',

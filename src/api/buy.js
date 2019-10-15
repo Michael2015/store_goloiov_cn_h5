@@ -31,7 +31,9 @@ export function pay(id, type) {
 
 // 查询订单
 export function queryOrder(id) {
-  return req.post('/api/customer/pay/queryOrder', {
-    order_id: id
+  return req.get('/api/customer/pay/queryOrder', {
+    params: {
+      order_id: id
+    }
   }).then(clean)
 }

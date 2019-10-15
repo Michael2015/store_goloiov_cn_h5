@@ -1,5 +1,6 @@
 <template>
   <div class="wrap">
+    <top-head>结算</top-head>
     <div class="addr-wrap" @click="goSelectAddr">
       <template v-if="addr">  
         <div class="base">
@@ -57,6 +58,9 @@
     </div>
     <pay-method ref="payMethod">{{preInfo.price}}</pay-method>
     <notice ref="notice" :autoClose="false"></notice>
+    <confirm ref="leaveConfirm" :autoClose="false">
+      <span slot="btn-left">我已支付</span><span slot="btn-right">离开</span>
+    </confirm>
   </div>
 </template>
 
@@ -64,16 +68,18 @@
 import TextArea from 'base/ui/text-area'
 import PayMethod from 'base/pay-method'
 import Notice from 'base/notice'
+import Confirm from 'base/confirm'
 import {getPreOrderProductInfo, createOrder, pay, queryOrder} from 'api/buy'
 import {getAddressList} from 'api/me'
-import {wxPay} from 'api/native'
+import {nativePay} from 'api/native'
 import {mapState} from 'vuex'
 import {Toast,Loading} from 'lib'
 export default {
   components: {
     TextArea,
     PayMethod,
-    Notice
+    Notice,
+    Confirm
   },
   props: {
     id: {
@@ -90,10 +96,14 @@ export default {
       // 路由传过来的信息
       // 不同地方跳入，带的信息不同
       info: {},
-      // 订单号, 重新支付
+      // 订单号, 重新支付才会有
       orderId: '',
+      // 订单号，不是重新支付，是新创建的订单
+      createdOrderId: '',
       // 支付中
-      paying: false
+      paying: false,
+      // 询问用户是否离开
+      inConfirmLeave: false
     }
   },
   computed: {
@@ -101,6 +111,29 @@ export default {
   },
   created() {
     // this.loaddata()
+  },
+  mounted() {
+    
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.paying) {
+      // 支付中
+      if (this.inConfirmLeave) return
+      this.inConfirmLeave = true
+      this.$refs.leaveConfirm.show('订单还在支付中，确定放弃支付吗？', () => {
+        // 用户点了我已经支付按钮
+        this.queryOrder()
+        this.inConfirmLeave = false
+        // 取消路由
+        next(false)
+      }, () => {
+        // 跳原来的路由
+        next()
+        this.inConfirmLeave = false
+      })
+    } else {
+      next()
+    }
   },
   activated() {
     // 这里用了上一个页面传进来的数据
@@ -112,6 +145,7 @@ export default {
       this.preInfo = {}
       this.info = this.$route.params.info
       this.orderId = this.$route.params.orderId || ''
+      this.createdOrderId = ''
       this.loaddata()
     }
   },
@@ -193,6 +227,7 @@ export default {
           }).then(data => {
             if (data && data.order_id) {
               // 下单成功，触发支付
+              this.createdOrderId = data.order_id
               getNativePayParams(data.order_id, type)
             } else {
               Loading.close()
@@ -211,10 +246,15 @@ export default {
       const getNativePayParams = (id, type) => {
         pay(id, type).then(data => {
           if (data) {
-            wxPay(data).then(() => {
-              this.$refs.notice.show('支付成功', () => {
-                this.$router.replace('/order')
-              })
+            nativePay(type, data).then((result) => {
+              if (result == 0) {
+                // app 捕获到支付成功
+                this.queryOrder()
+              } else {
+                this.$refs.notice.show('支付失败', () => {
+                  // this.paying = false
+                })
+              }
             })
           } else {
             Toast('获取支付参数失败,请稍后再试')
@@ -227,6 +267,24 @@ export default {
           Loading.close()
         })
       }
+    },
+    queryOrder() {
+      const id = this.orderId || this.createdOrderId
+      queryOrder(id).then(data => {
+        if (data) {
+          // 支付成功
+          this.$router.replace({
+            name: 'buy-success',
+            params: {
+              info: data
+            }
+          })
+        } else {
+          this.$refs.notice.show('查询支付失败，请联系客服处理')
+        }
+      }, () => {
+        this.$refs.notice.show('查询订单失败')
+      })
     }
   }
 }

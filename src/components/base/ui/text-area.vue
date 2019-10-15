@@ -22,8 +22,7 @@ export default {
   },
   data() {
     return {
-      v: '',
-      length: 0
+      v: ''
     }
   },
   created() {
@@ -31,6 +30,11 @@ export default {
   },
   activated() {
     this.v = this.value
+  },
+  computed: {
+    length() {
+      return this.v.length
+    }
   },
   watch: {
     value(v) {
