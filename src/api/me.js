@@ -148,3 +148,22 @@ export function joinTeam(data) {
     ...data
   }).then(special)
 }
+
+// 升级攻略相关 ===============
+export function getmyteamincome(user_id){
+  return req.get('/api/partner.partner/getmyteamincome',{
+    params:{
+      user_id
+    }
+  }).then(special)
+}
+
+// 修改用户名字
+export function editname(nickName){
+  return req.get('/api/app.user/editname',{
+    params:{
+      nickName
+    }
+  }).then(special)
+}
+

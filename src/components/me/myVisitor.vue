@@ -1,6 +1,6 @@
 <template>
   <div class="myVisitor_warp">
-    <load-more v-slot="{list}" :setSize='13' :getData="loadDate">
+    <load-more v-slot="{list}" :setSize='11' :getData="loadDate">
       <div class="item" v-for="(item,index) in list" :key="index">
         <img :src="item.avatar" alt />
         <div class="desc">
@@ -37,6 +37,7 @@ export default {
     background-color: #f8f8f8;
     border-radius: size(80);
     display: flex;
+    margin-top: size(20);
     & > img {
       width: size(80);
       height: size(80);

@@ -23,7 +23,7 @@ export function incomeListDetail(order_id) {
     params: {
       order_id
     }
-  }).then(clean)
+  }).then(special)
 }
 
 // 获取收益页公排列表

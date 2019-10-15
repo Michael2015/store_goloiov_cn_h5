@@ -2,10 +2,7 @@
   <div class="my_partner_warp">
     <div class="header">
       <div class="left">
-        <img
-          :src='userInfo.avatar'
-          alt
-        />
+        <img :src="userInfo.avatar" alt />
         我的合伙人
       </div>
       <div class="right">{{reque.member_nums}}人</div>
@@ -13,14 +10,11 @@
     <div class="content">
       <div class="search">
         <img src="~img/sousuo.png" alt />
-        <input type="text" placeholder="搜索" v-model="value" @input="getdata"/>
+        <input type="text" placeholder="搜索" v-model="value" @input="getdata" />
       </div>
       <div class="partner_list">
         <div class="item" v-for="(item) in reque.list" :key="item.uid">
-          <img
-            :src='item.avatar'
-            alt
-          />
+          <img :src="item.avatar" alt />
           <div class="name">{{item.nickname}}</div>
           <div class="show_count" v-if="item.lower_nums !== 0">{{item.lower_nums}}</div>
         </div>
@@ -32,25 +26,25 @@
 
 <script>
 import { member } from "api/me";
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
   data() {
     return {
       reque: {},
-      value:''
+      value: ""
     };
   },
   mounted() {
-    this.getdata()
+    this.getdata();
   },
   methods: {
-    async getdata(){
+    async getdata() {
       this.reque = await member(this.value);
     }
   },
   computed: {
-    ...mapState(['userInfo'])
-  },
+    ...mapState(["userInfo"])
+  }
 };
 </script>
 
@@ -103,6 +97,8 @@ export default {
       }
       & > input {
         font-size: size(28);
+        border-radius: size(32);
+        background: #f5f5f5;
         &::-webkit-input-placeholder {
           color: #9ea2a0;
         }

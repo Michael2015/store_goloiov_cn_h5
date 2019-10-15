@@ -2,28 +2,50 @@
   <div class="name_warp">
     <input type="text" v-model="name" placeholder="输入用户名字" />
     <div class="clone" @click="clear">x</div>
-    <div class="save-btn">保存</div>
+    <div :class="updateflag?'save-btn':'save-btn cannot'" @click="save">保存</div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import {editname} from 'api/me'
+import { Toast } from 'lib'
+import tojump from 'mixins/tojump'
 export default {
   data() {
     return {
+      VerificationName:'',
       name: ""
     };
   },
+  mixins:[tojump],
   created() {
+    this.VerificationName = this.userInfo.nickname
     this.name = this.userInfo.nickname;
   },
   methods: {
     clear() {
       this.name = "";
+    },
+    save(){
+      if(!this.updateflag){
+        return
+      }
+      editname(this.name).then(res=>{
+        if(res.code === 200){
+          Toast(res.msg)
+          this.tojump('/me')
+        }else {
+          Toast(res.msg);
+        }
+      })
     }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(["userInfo"]),
+    updateflag(){
+      return this.VerificationName !== this.name && this.name.trim().length !== 0;
+    }
   }
 };
 </script>
@@ -63,6 +85,9 @@ export default {
     color: #fff;
     text-align: center;
     background-color: #e31336;
+  }
+  .cannot{
+    background: #dddddd;
   }
 }
 </style>

@@ -1,4 +1,5 @@
 import {incomeListDetail} from 'api/income'
+import { Toast } from 'lib'
 export default {
   data() {
     return {
@@ -8,6 +9,10 @@ export default {
   async mounted(){
     // console.log(this.$route.query.order_id)
     const reque = await incomeListDetail(this.$route.query.order_id)
-    this.showObj = reque
+    if(reque.code === 200){
+      this.showObj = reque.data
+    }else {
+      Toast(reque.msg)
+    }
   }
 }

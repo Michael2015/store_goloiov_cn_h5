@@ -40,7 +40,7 @@
 
 <script>
 import tojump from "mixins/tojump";
-import { partnerNum } from "api/me";
+import { partnerNum,updateUserInfo } from "api/me";
 import { mapState } from "vuex";
 import partnerLevelObj from 'mixins/partner-level-obj'
 export default {
@@ -84,7 +84,8 @@ export default {
   mixins: [tojump,partnerLevelObj],
   async mounted() {
     const reque = await partnerNum();
-    this.Num = reque.member_nums;
+    this.Num = reque && reque.member_nums;
+    updateUserInfo()
   },
   computed: {
     ...mapState(["userInfo"])
