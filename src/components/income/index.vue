@@ -5,8 +5,8 @@
         <div class="content">
           <div class="title">可提现金额:</div>
           <div class="all_money">
-            <span>¥</span>
-            {{isLogin?cash:'0.00'}}
+            <span>¥</span><!--
+            -->{{isLogin?cash:'0.00'}}
           </div>
           <div class="record" @click="record">提现记录</div>
           <div class="detail">
@@ -26,7 +26,9 @@
             </div>
           </div>
         </div>
-        <div class="withdraw" @click="withdraw">提现</div>
+        <div class="withdraw-wrap">
+          <div class="withdraw" @click="withdraw">提现</div>
+        </div>
       </div>
       <div class="in-title">
         <span :class="active === 'charge'?'active':''" @click="checkShow('charge')">免单</span>
@@ -248,17 +250,31 @@ export default {
     // padding: size(24) size(24) 0;
     .banner {
       width: 100%;
-      height: size(336);
-      padding: size(21) size(58) size(46);
-      @include bg("~img/shouyi-bg.png");
+      height: size(380);
+      padding: size(21) size(58) size(8);
+      // @include bg("~img/shouyi-bg.png");
+      background-image: linear-gradient(236deg, #EF5456 0%, #E70002 100%);
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
       color: #fff;
       line-height: 1;
       position: relative;
+      &:after{
+        content: ' ';
+        display: block;
+        position: absolute;
+        @include circle(486);
+        background-image: linear-gradient(49deg, #EF5456 0%, #EA1B1D 66%);
+        top: size(-(486 - 240));
+        right: size(-(486 - 214));
+      }
       .content {
         position: relative;
         z-index: 3;
+        height: 100%;
         .title {
           font-size: size(28);
+          padding-top: size(45);
         }
         .all_money {
           font-size: size(59);
@@ -266,12 +282,14 @@ export default {
           font-family: Helvetica;
           font-stretch: normal;
           letter-spacing: size(1);
-          padding-top: size(30);
+          padding-top: size(36);
           text-align: center;
+          line-height: 1;
           & > span {
             margin-right: size(10);
             font-size: size(35);
             font-weight: 500;
+            vertical-align: middle;
           }
         }
         .record {
@@ -281,10 +299,14 @@ export default {
           font-weight: normal;
           font-stretch: normal;
           text-align: center;
+          margin-top: size(12);
         }
         .detail {
           font-size: size(24);
-          margin-top: size(41);
+          position: absolute;
+          width: 100%;
+          bottom: size(12);
+          left: 0;
           display: flex;
           justify-content: space-between;
           & div > span {
@@ -306,18 +328,25 @@ export default {
           }
         }
       }
-      .withdraw {
+      .withdraw-wrap{
         position: absolute;
         bottom: 0;
         right: 50%;
-        z-index: 50;
+        z-index: 2;
         transform: translateX(50%) translateY(50%);
-        width: size(168);
-        height: size(168);
+        width: size(168 + 14*2);
+        height: size(168 + 14*2);
+        padding: size(14);
         line-height: size(168);
         border-radius: 50%;
+        background: #fff;
+      }
+      .withdraw {
+        @include fill;
+        border-radius: 50%;
         // box-sizing: border-box;
-        background: #ff0000;
+        // background: #ff0000;
+        background-image: linear-gradient(135deg, #ff0000 0%, #ff3061 100%);
         text-align: center;
         font-family: PingFangSC-Semibold;
         font-size: size(34);

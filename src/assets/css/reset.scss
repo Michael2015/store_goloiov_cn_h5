@@ -107,14 +107,17 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 input[type="search"] {
-  font-size: size(32);
-  height: size(68);
-  text-align: center;
-  background-color: rgba(0,0,0,.1);
-  border: 0;
-  border-radius: size(12);
+  // font-size: size(32);
+  // height: size(68);
+  // text-align: center;
+  // background-color: rgba(0,0,0,.1);
+  // border: 0;
+  // border-radius: size(12);
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+input[type=search]::-webkit-search-cancel-button{
+  -webkit-appearance: none;
 }
 
 input[type="search"]:focus {

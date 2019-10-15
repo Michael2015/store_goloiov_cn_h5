@@ -5,7 +5,7 @@
         <!-- 合伙人端 -->
         <div class="table" v-if="isLogin && role === 1">
           <div class="table-cell">
-            <search-input v-model="keyword" class="input"></search-input>
+            <search-input v-model="keyword" class="input" @search="search"></search-input>
           </div>
           <div class="table-cell invite-wrap">
             <span class="invite" @click="invite">邀请合伙人</span>
@@ -33,7 +33,7 @@
         <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
       </div>
     </load-more>
-    <load-more v-slot="{list}" class="list-wrap" :getData="getDefaultProducts" v-else>
+    <load-more v-slot="{list}" class="list-wrap" :getData="getDefaultProducts" v-else :key="key">
       <div class="list clearfix">
         <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
       </div>
@@ -66,6 +66,7 @@ export default {
   },
   data() {
     return {
+      key: 'empty',
       keyword: '',
       categoryList: [],
       activeCategoryIndex: -1
@@ -91,6 +92,14 @@ export default {
       }
     }
   },
+  watch: {
+    keyword() {
+      // 关键字改变，当为空的时候触发搜索全部
+      if (this.keyword === '') {
+        this.search()
+      }
+    }
+  },
   created() {
     Loading.open()
     Promise.all([
@@ -108,6 +117,14 @@ export default {
       console.log(i)
       if (i !== this.activeCategoryIndex) {
         this.activeCategoryIndex = i
+      }
+    },
+    search() {
+      console.log(this.keyword)
+      if (this.keyword) {
+        this.key = this.keyword
+      } else {
+        this.key = 'empty'
       }
     },
     invite() {

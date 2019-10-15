@@ -1,10 +1,10 @@
 <template>
   <div class="input-wrap table">
     <div>
-      <img src="~img/p-search.png" alt="">
+      <img src="~img/sousuo.png" alt="">
     </div>
     <div>
-      <input type="text" @input="onInput" :placeholder="placeholder">
+      <input type="search" @input="onInput" :placeholder="placeholder" v-on:keyup.enter="$emit('search')">
     </div>
   </div>
 </template>
@@ -18,8 +18,8 @@ export default {
     }
   },
   methods: {
-    onInput({target}) {
-      this.$emit('input', target.value)
+    onInput(e) {
+      this.$emit('input', e.target.value)
     }
   }
 }
@@ -31,6 +31,7 @@ export default {
   width: 100%;
   background: #fff;
   padding: 0 size(34);
+  padding-left: size(20);
   height: size(70);
   border-radius: size(35);
   >div{
@@ -44,7 +45,7 @@ export default {
     padding:0 4px;
     font-size: size(28);
     &::-webkit-input-placeholder{
-      color: #d5d5d5;
+      color: #9ea2a0;
     }
   }
 }
