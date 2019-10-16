@@ -53,7 +53,7 @@
         <span>实付金额：¥{{preInfo.price}}</span>
       </div>
       <div class="buy">
-        <span @click="doPay">{{this.paying ? '支付中...' : '立即购买'}}</span>
+        <span @click="doPay">{{this.paying ? '支付中...('+status+')' : '立即购买'}}</span>
       </div>
     </div>
     <pay-method ref="payMethod">{{preInfo.price}}</pay-method>
@@ -102,6 +102,12 @@ export default {
       createdOrderId: '',
       // 支付中
       paying: false,
+      // status 管理当前页面目前支付进行到哪里了
+      // 1 创建订单成功
+      // 2 获取支付参数成功
+      // 3 app回调支付成功
+      // 4 app回调支付失败
+      status: 0,
       // 询问用户是否离开
       inConfirmLeave: false
     }
@@ -116,8 +122,8 @@ export default {
     
   },
   beforeRouteLeave(to, from, next) {
-    if (this.paying) {
-      // 支付中
+    if (this.paying && this.status === 2) {
+      // 支付中 并且已经调用app原生支付，但是还没收到app的回调
       if (this.inConfirmLeave) return
       this.inConfirmLeave = true
       this.$refs.leaveConfirm.show('订单还在支付中，确定放弃支付吗？', () => {
@@ -140,6 +146,7 @@ export default {
     // 判断是否需要刷新页面
     if (this.$route.params.info) {
       this.paying = false
+      this.status = 0
       this.remark = ''
       this.addr = null
       this.preInfo = {}
@@ -213,6 +220,7 @@ export default {
         this.paying = true
         if (this.orderId) {
           // 已经有订单了
+          this.status = 1
           getNativePayParams(this.orderId, type)
         } else {
           let miandan_type
@@ -228,6 +236,7 @@ export default {
             if (data && data.order_id) {
               // 下单成功，触发支付
               this.createdOrderId = data.order_id
+              this.status = 1
               getNativePayParams(data.order_id, type)
             } else {
               Loading.close()
@@ -246,11 +255,15 @@ export default {
       const getNativePayParams = (id, type) => {
         pay(id, type).then(data => {
           if (data) {
+            // 支付参数获取成功
+            this.status = 2
             nativePay(type, data).then((result) => {
               if (result == 0) {
                 // app 捕获到支付成功
+                this.status = 3
                 this.queryOrder()
               } else {
+                this.status = 4
                 this.$refs.notice.show('支付失败', () => {
                   // this.paying = false
                 })
