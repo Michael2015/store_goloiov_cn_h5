@@ -1,5 +1,6 @@
 <template>
   <div class="warp">
+    <top-head>董事股东分红奖励详情</top-head>
     <div class="award">
       奖励金额：{{showObj.income_number}}元
       <div class="task">分红 = 平台月利润*5%股东人数</div>

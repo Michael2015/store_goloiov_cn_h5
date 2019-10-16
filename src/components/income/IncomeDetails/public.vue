@@ -1,5 +1,6 @@
 <template>
   <div class="warp">
+    <top-head>免单奖励详情</top-head>
     <div class="award">免单奖励{{showObj.income_number}}元</div>
     <div class="user_msg">
       <img src="~img/location-red.png" alt />

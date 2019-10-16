@@ -1,5 +1,6 @@
 <template>
   <div class="list">
+    <top-head>我的评论</top-head>
     <div class="item" v-for="(item,index) in list" :key="index">
       <div class="head table">
         <div class="avatar">

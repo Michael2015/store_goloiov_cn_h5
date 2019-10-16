@@ -8,7 +8,7 @@
         <div class="item_content" v-if="levelId !== 0">
           <span class="shi"></span>
           团队车联网专区产品销售总额≥{{moneyobj[levelId]}}万元
-          <div class="now">已完成团队车联网专区产品销售总额：{{}}</div>
+          <div class="now">已完成团队车联网专区产品销售总额：{{subordinate_sales_amount}}</div>
         </div>
       </div>
       <div class="work_item" v-if="levelId !== 0">
@@ -16,13 +16,13 @@
         <div class="item_content">
           <span class="kon"></span>
           下级团队没有{{partnerLevelObj[levelId+1]}}及以上合伙人，团队业绩≥{{moneyobj[levelId]}}万
-          <div class="now">已经完成销售总额{{}}</div>
+          <div class="now" v-if="type === 0">已经完成销售总额{{subordinate_sales_amount}}</div>
         </div>
         <div class="item_content">
           <span class="kon"></span>
           当下级有{{partnerLevelObj[levelId+1]}}及以上合伙人，符合条件的下线中，除业绩最低的一条下线以外其他团队业绩≥{{moneyobj[levelId]}}万
           <div class="now"></div>
-          <div class="now">已经完成销售总额{{}}</div>
+          <div class="now" v-if="type === 1" >已经完成销售总额{{subordinate_sales_amount}}</div>
         </div>
       </div>
     </div>
@@ -35,6 +35,7 @@ import partnerLevelObj from "mixins/partner-level-obj";
 import tojump from 'mixins/tojump'
 import { getmyteamincome } from "api/me";
 import { mapState } from "vuex";
+import { Toast } from 'lib'
 export default {
   props: ["levelId"],
   data() {
@@ -44,13 +45,21 @@ export default {
         "2": 6,
         "3": 12,
         "4": 36
-      }
+      },
+      subordinate_sales_amount:0,
+      type:null
     };
   },
   mixins: [partnerLevelObj,tojump],
   mounted() {
     getmyteamincome(this.userInfo.uid).then(res => {
       console.log(res);
+      if(res.code === 200){
+        this.subordinate_sales_amount = res.data.subordinate_sales_amount;
+        this.type = res.data.type
+      }else {
+        Toast(res.msg)
+      }
     });
   },
   computed: {

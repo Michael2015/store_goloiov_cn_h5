@@ -1,5 +1,6 @@
 <template>
   <div class="record_warp">
+    <top-head>提现记录</top-head>
     <load-more v-slot="{list}" :getData="loadDate">
       <div class="withdraw_record" v-for="(item,index) in list" :key="index">
         <div class="left">

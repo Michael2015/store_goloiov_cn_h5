@@ -1,5 +1,6 @@
 <template>
   <div class="myVisitor_warp">
+    <top-head>访客记录</top-head>
     <load-more v-slot="{list}" :setSize='11' :getData="loadDate">
       <div class="item" v-for="(item,index) in list" :key="index">
         <img :src="item.avatar" alt />

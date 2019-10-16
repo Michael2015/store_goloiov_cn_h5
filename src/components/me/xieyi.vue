@@ -1,5 +1,6 @@
 <template>
   <div class="wrap">
+    <top-head>用户协议</top-head>
     <div class="title">《万车品小程序平台用户服务协议及平台隐私政策》</div>
     <div
       class="p"

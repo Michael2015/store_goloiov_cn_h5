@@ -1,5 +1,6 @@
 <template>
   <div class="withdraw_warp">
+    <top-head>提现</top-head>
     <div class="showItem">
       <div class="title">储蓄卡</div>
       <div class="no_card" v-if="haveCard === 0" @click="$refs.addcard.show()">请添加银行卡</div>
@@ -94,7 +95,7 @@ export default {
     },
     jumpAddCard() {
       const {real_name,bank_code} = this
-      this.tojump(`/relevanceCard?real_name=${real_name}&bank_code=${bank_code}`);
+      this.tojump('/relevanceCard');
       this.$refs.addcard.hide();
     },
     compileCard(){

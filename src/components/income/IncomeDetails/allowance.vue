@@ -1,5 +1,6 @@
 <template>
   <div class="warp">
+    <top-head>管理律贴</top-head>
     <div class="award">管理津贴：5元</div>
     <div class="simpleness_show">
       <div class="left">订单号: 1357263</div>

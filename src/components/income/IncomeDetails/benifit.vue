@@ -1,5 +1,6 @@
 <template>
   <div class="warp">
+    <top-head>返利详情</top-head>
     <div class="award">返利金额{{showObj.income_number}}元</div>
     <div class="simpleness_show">
       <div class="left">订单号：{{showObj.order_id}}</div>

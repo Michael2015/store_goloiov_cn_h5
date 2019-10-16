@@ -1,5 +1,6 @@
 <template>
   <div class="phone_warp">
+    <top-head>手机绑定</top-head>
     <div class="show_warp" v-if="inputPhone !== ''">
       已绑定：
       <span>{{phonehide(inputPhone)}}</span>

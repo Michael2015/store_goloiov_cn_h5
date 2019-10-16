@@ -1,5 +1,6 @@
 <template>
   <div class="versionsMsg_warp">
+    <top-head>版本信息</top-head>
     <img src="~img/shop-logo.png" alt />
     <div class="msg">版本 v2.00</div>
   </div>

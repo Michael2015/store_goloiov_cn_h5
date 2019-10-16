@@ -7,7 +7,7 @@ module.exports = {
   assetsDir: 'public/h5',
   devServer: {
     proxy: {
-      '/api': {
+      '/api|/app': {
         target: 'https://storemp.golodata.com/',
         ws: true,
         changeOrigin: true

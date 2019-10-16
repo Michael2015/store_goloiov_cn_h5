@@ -1,5 +1,6 @@
 <template>
   <div class="add_card_warp">
+    <top-head>{{headerTitle}}</top-head>
     <div class="msg_item">
       <div class="title">持卡人</div>
       <div class="import">
@@ -46,7 +47,8 @@ export default {
       bank_code: "",
       province: "",
       city: "",
-      sub_branch: ""
+      sub_branch: "",
+      headerTitle:'添加银行卡'
     };
   },
   methods: {
@@ -90,6 +92,9 @@ export default {
   },
   mounted() {
     const { real_name, bank_code } = this.$route.query;
+    if(bank_code!==undefined && real_name!==undefined ){
+      this.headerTitle = '更改银行卡'
+    }
     this.real_name = real_name;
     this.bank_code = bank_code;
   },

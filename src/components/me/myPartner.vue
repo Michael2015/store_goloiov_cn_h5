@@ -1,5 +1,6 @@
 <template>
   <div class="my_partner_warp">
+    <top-head>我的伙伴</top-head>
     <div class="header">
       <div class="left">
         <img :src="userInfo.avatar" alt />

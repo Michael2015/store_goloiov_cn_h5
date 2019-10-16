@@ -1,6 +1,6 @@
 <template>
-  <!-- catchtap="{{item.status === 0 || item.status === -1? 'goDetails' : ''}}" -->
   <div class="discount_warp">
+    <top-head>优惠券</top-head>
     <div class="main">
       <div class="item" v-for="(item,index) in couponList" :key="index">
         <!-- 左侧 -->

@@ -1,10 +1,14 @@
 <template>
   <div class="myMsg_warp">
+    <top-head>个人信息</top-head>
     <div class="warp_item">
       <img :src="userInfo.avatar" alt class="avater" />
       <div class="item_content">
-        修改头像
-        <img src="~img/icon/join-right.png" alt />
+        <label for="image">
+          修改头像
+          <img src="~img/icon/join-right.png" alt />
+          <update-avatar :max="max" v-model="newAvatar" style="width:0;height:0;overflow:hidden" ref="img"></update-avatar>
+        </label>
       </div>
     </div>
     <div class="warp_item" @click="tojump('/compileName')">
@@ -70,8 +74,10 @@ import confirm from "base/confirm";
 import tojump from "mixins/tojump";
 import partnerLevelObj from "mixins/partner-level-obj";
 import { mapState } from "vuex";
-import { partnerNum } from "api/me";
+import { partnerNum, edituserinfo } from "api/me";
 import addteam from "base/addteam";
+import updateAvatar from "com/common/updateAvatar";
+import { Toast } from 'lib'
 export default {
   data() {
     return {
@@ -79,7 +85,9 @@ export default {
       versionsMsg: "v2.00",
       is_band_partner: 0, //标识是否有上级合伙人
       spread_user_nickname: "", //上级合伙人名称
-      spread_user_phone: "" // 上级合伙人电话
+      spread_user_phone: "", // 上级合伙人电话
+      max: 1,
+      newAvatar: [] //选择的新头像
     };
   },
   mounted() {
@@ -100,6 +108,7 @@ export default {
       });
     },
     openPhone() {
+      window.location.href = 'tel://' + this.spread_user_phone
       console.log("打开电话：" + this.spread_user_phone);
     },
     toAddTeam() {
@@ -119,7 +128,8 @@ export default {
   },
   components: {
     confirm,
-    addteam
+    addteam,
+    updateAvatar
   },
   mixins: [tojump, partnerLevelObj],
   computed: {
@@ -128,6 +138,23 @@ export default {
       return (
         this.spread_user_nickname + " " + this.phonehide(this.spread_user_phone)
       );
+    }
+  },
+  watch: {
+    newAvatar(val) {
+      if(val.length === 0){
+        return;
+      }
+      edituserinfo({ headImg: val[0] }).then(res => {
+        if (res.code === 200) {
+          Toast(res.msg);
+          this.tojump("/me");
+        } else {
+          Toast(res.msg);
+          this.$refs.img.imgs = []
+          this.newAvatar = []
+        }
+      });
     }
   }
 };
@@ -175,6 +202,14 @@ export default {
         width: size(10);
         height: size(22);
         margin-left: size(28);
+      }
+      label {
+        & > img {
+          vertical-align: unset;
+          width: size(10);
+          height: size(22);
+          margin-left: size(28);
+        }
       }
       .openPhone {
         width: size(44);

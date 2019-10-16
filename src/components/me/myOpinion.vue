@@ -1,5 +1,6 @@
 <template>
   <div class="opinion_warp">
+    <top-head>反馈意见</top-head>
     <input type="text" v-model="phone" placeholder="输入联系手机号" />
     <div class="reasons">
       <div class="more">

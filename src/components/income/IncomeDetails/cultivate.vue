@@ -1,5 +1,6 @@
 <template>
   <div class="warp">
+    <top-head>培养合伙人奖励详情</top-head>
     <div class="award">奖励金额：{{showObj.income_number}}元</div>
     <div class="simpleness_show">
       <div class="left">结算状态</div>

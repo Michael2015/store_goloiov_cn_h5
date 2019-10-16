@@ -111,14 +111,14 @@ export function getresource() {
 
 // 验证手机号
 export function legitimatephone(data) {
-  return req.post('/api/app.user/checkphone', {
+  return req.post('/app/user/checkphone', {
     ...data
   }).then(special)
 }
 
 // 发送验证码
 export function sendsms(data) {
-  return req.get('/api/app.user/sendsms', {
+  return req.get('/app/user/sendsms', {
     params: {
       mobile: data.mobile,
       event: data.event
@@ -128,7 +128,7 @@ export function sendsms(data) {
 
 // 修改手机号
 export function editphone(data) {
-  return req.post('/api/app.user/editphone', {
+  return req.post('/app/user/editphone', {
     ...data
   }).then(special)
 }
@@ -158,12 +158,10 @@ export function getmyteamincome(user_id){
   }).then(special)
 }
 
-// 修改用户名字
-export function editname(nickName){
-  return req.get('/api/app.user/editname',{
-    params:{
-      nickName
-    }
+// 修改用户名字,头像通用
+export function edituserinfo(userinfo){
+  return req.post('/app/user/edituserinfo',{
+    ...userinfo
   }).then(special)
 }
 

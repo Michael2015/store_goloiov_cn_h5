@@ -1,5 +1,6 @@
 <template>
   <div class="bao">
+    <top-head>升级攻略</top-head>
     <div class="warp">
       <strategy-header :levelId="myLevelId" v-if="myLevelId <5"></strategy-header>
       <strategy-item type="my" :levelId="myLevelId"></strategy-item>

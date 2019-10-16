@@ -1,5 +1,6 @@
 <template>
   <div class="div">
+    <top-head>商城使用说明</top-head>
     <div class="item" @click="tojump('/partnerjieshao')">
       合伙人及访客介绍
       <img src="~img/icon/right.png" />
