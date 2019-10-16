@@ -1,6 +1,5 @@
 <template>
   <div class="income_warp">
-    <top-head>收益</top-head>
     <div class="topbox">
       <div class="banner">
         <div class="content">

@@ -1,6 +1,5 @@
 <template>
   <div class="me_warp">
-    <top-head>个人信息</top-head>
     <div class="header">
       <div class="avater_warp">
         <img class="averer" :src="userInfo.avatar" alt />
