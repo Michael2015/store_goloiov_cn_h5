@@ -15,7 +15,7 @@ export function getHost() {
 
 // 获取用户信息
 export function getUserInfo(token) {
-  return req.get('/api/app.user/getuserinfo', {
+  return req.get('/app/user/getuserinfo', {
     params: {
       token
     }
@@ -154,6 +154,16 @@ export function PartnerGetGoodsVisitor(id, page = 1, size = SIZE) {
       product_id: id,
       page,
       limit: size
+    }
+  }).then(clean)
+}
+
+// 加入合伙人
+export function joinPartner(uid){
+  console.log(uid)
+  return req.get('/api/partner/index/join', {
+    params: {
+      spid: uid
     }
   }).then(clean)
 }

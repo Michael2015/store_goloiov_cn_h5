@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <top-head :transparent="true">
-      <div class="share" @click="createPoster" v-if="isLogin">
+      <div class="share" @click="createPoster" slot="right">
         <img src="~img/icon/share.png" alt="">
       </div>
     </top-head>
@@ -21,7 +21,7 @@
           <div>加入合伙人，四重优惠等你拿</div>
           <div>返利+津贴+带团队分润+部分商品合伙人价</div>
         </div>
-        <div class="join-wrap">
+        <div class="join-wrap" @click="join">
           <div class="join">
             立即加入 <img src="~img/icon/right.png" alt="">
           </div>
@@ -66,6 +66,7 @@
     </div>
     <notice ref="notice" :autoClose="true"></notice>
     <contact ref="contact" :data="partner"></contact>
+    <join-partner ref="joinPartner"></join-partner>
     <free-intro ref="showFreeIntro" :info="info"></free-intro>
   </div>
 </template>
@@ -76,6 +77,7 @@ import GoodsBanner from './goods-banner'
 import FreeIntro from 'base/free-intro'
 import {Loading} from 'lib'
 import Notice from 'base/notice'
+import JoinPartner from 'com/common/join-partner'
 import {CustomerGetGoodsInfo, getPartnerInfo, getQrcode} from 'api'
 import {login} from 'api/login'
 import {mapState} from 'vuex'
@@ -95,6 +97,7 @@ export default {
   components: {
     Contact,
     Notice,
+    JoinPartner,
     GoodsBanner,
     FreeIntro
   },
@@ -139,10 +142,28 @@ export default {
         }
       })
     },
+    join() {
+      // 加入合伙人
+      if (!this.isLogin) {
+        // 没有登录
+        this.triggerLogin()
+      } else {
+        this.$refs.joinPartner.show(this.partner)
+      }
+    },
     goIndex() {
       this.$router.push('/index')
     },
     createPoster() {
+      if (!this.isLogin) {
+        this.triggerLogin()
+        return
+      }
+      if (this.poster) {
+        sharePoster(this.poster.base64)
+        return
+      }
+      Loading.open()
       this.poster = new Poster(this.info.store_name)
       Promise.all([
         this.poster.drawGoods(this.info.slider_image[0]),
@@ -156,22 +177,30 @@ export default {
         })
       ]).then(() => {
         console.log(this.poster.getBase64())
-        sharePoster(this.poster.getBase64().replace('data:image/png;base64,', ''))
+        this.poster.base64 = this.poster.getBase64().replace('data:image/png;base64,', '')
+        sharePoster(this.poster.base64)
+      },() => {
+        this.poster = null
+      }).finally(() => {
+        Loading.close()
+      })
+    },
+    triggerLogin() {
+      this.$refs.notice.show('请先登录', () => {
+        login().then(() => {
+          // 登录成功了
+        }, () => {
+          this.$refs.notice.show('登录失败，请稍后再试')
+        }).finally(() => {
+          // 最后
+        })
       })
     },
     buy() {
       // 购买商品
       if (!this.isLogin) {
         // 没有登录
-        this.$refs.notice.show('请先登录', () => {
-          login().then(() => {
-            // 登录成功了
-          }, () => {
-            this.$refs.notice.show('登录失败，请稍后再试')
-          }).finally(() => {
-            // 最后
-          })
-        })
+        this.triggerLogin()
         return
       }
       // 跳入购买页面 传入商品id

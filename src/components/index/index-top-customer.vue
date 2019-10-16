@@ -8,24 +8,27 @@
       </div>
     </div>
     <div class="table-cell invite-wrap">
-      <span class="invite" v-if="isLogin">成为合伙人</span>
+      <span class="invite" v-if="isLogin" @click="join">成为合伙人</span>
       <span class="invite" v-else @click="doLogin">登录/注册</span>
     </div>
     <contact ref="contact" :data="partner"></contact>
     <notice ref="notice" :autoClose="true"></notice>
+    <join-partner ref="joinPartner"></join-partner>
   </div>
 </template>
 
 <script>
 import Contact from 'base/contact'
 import Notice from 'base/notice'
+import JoinPartner from 'com/common/join-partner'
 import {mapState} from 'vuex'
 import {getIndexTopInfo, getPartnerInfo} from 'api'
 import {login} from 'api/login'
 export default {
   components: {
     Contact,
-    Notice
+    Notice,
+    JoinPartner
   },
   data() {
     return {
@@ -63,6 +66,9 @@ export default {
     },
     showPartner() {
       this.$refs.contact.show()
+    },
+    join() {
+      this.$refs.joinPartner.show(this.partner)
     },
     doLogin() {
       // this.$store.commit('loginTest')

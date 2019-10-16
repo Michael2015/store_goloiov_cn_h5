@@ -68,7 +68,6 @@ export default {
     height: size(88);
     background: #fff;
     z-index: 9;
-    padding: 0 size(100);
     width: 100%;
     &.transparent{
       background: transparent;
@@ -90,6 +89,7 @@ export default {
     font-size: size(30);
     color: #000;
     line-height: size(88);
+    padding: 0 size(100);
     .text{
       @include txt-overflow;
     }

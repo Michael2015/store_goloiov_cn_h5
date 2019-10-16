@@ -110,6 +110,11 @@ export default {
       this.$router.push('/index')
     },
     createPoster() {
+      if (this.poster) {
+        sharePoster(this.poster.base64)
+        return
+      }
+      Loading.open()
       this.poster = new Poster(this.info.store_name)
       Promise.all([
         this.poster.drawGoods(this.info.slider_image[0]),
@@ -123,7 +128,12 @@ export default {
         })
       ]).then(() => {
         console.log(this.poster.getBase64())
-        sharePoster(this.poster.getBase64().replace('data:image/png;base64,', ''))
+        this.poster.base64 = this.poster.getBase64().replace('data:image/png;base64,', '')
+        sharePoster(this.poster.base64)
+      },() => {
+        this.poster = null
+      }).finally(() => {
+        Loading.close()
       })
     },
     buy() {

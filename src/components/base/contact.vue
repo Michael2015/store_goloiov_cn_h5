@@ -7,7 +7,7 @@
         </div>
         <div class="col border-bottom">
           <div class="name">昵称</div>
-          <div class="value">{{data.nickname}}</div>
+          <div class="value">{{nickname}}</div>
           <div class="btn-inline" @click="copy">复制</div>
         </div>
         <div class="col">
@@ -24,6 +24,7 @@
 import showHide from 'mixins/show-hide'
 import popup from 'ui/popup'
 import {setClipboard, Toast} from 'lib'
+import {mapState} from 'vuex'
 export default {
   props: {
     data: {
@@ -35,9 +36,21 @@ export default {
     popup
   },
   mixins: [showHide],
+  computed: {
+    ...mapState(['isLogin']),
+    nickname() {
+      if (this.isLogin && this.data.uid === 0) {
+        // 这里主要是当用户登录了，发现他是顶级合伙人，上级是uid为0的用户，他的昵称是未登录
+        // 此时用户已经登录，显示未登录不行
+        return '万车品'
+      } else {
+        return this.data.nickname
+      }
+    }
+  },
   methods: {
     copy() {
-      setClipboard(this.data.nickname).then(() => {
+      setClipboard(this.nickname).then(() => {
         Toast('复制成功')
       })
     }

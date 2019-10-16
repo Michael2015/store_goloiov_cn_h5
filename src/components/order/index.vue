@@ -8,9 +8,9 @@
         </div>
       </div>
     </div>
-    <load-more v-slot="{list}" class="list-wrap" :getData="getList" :key="activeType">
+    <load-more v-slot="{list}" class="list-wrap" :getData="getList" :key="activeType + '-' + triggerRefresh">
       <div class="list">
-        <order-item class="item" v-for="(item, index) in list" :key="index" :item="item"></order-item>
+        <order-item class="item" v-for="(item) in list" :key="item.id" :item="item"></order-item>
       </div>
     </load-more>
   </div>
@@ -29,7 +29,8 @@ export default {
     return {
       types: [{name: '全部', type: ''}, {name: '待付款', type: 0}, {name: '待发货', type: 1}, {name: '已发货', type: 2}, {name: '退款', type: -3}],
       activeType: 0,
-      keyword: ''
+      keyword: '',
+      triggerRefresh: 0,
     }
   },
   computed: {
@@ -38,6 +39,16 @@ export default {
     }
   },
   created() {
+  },
+  activated() {
+    const query = this.$route.query
+    if (query.refresh) {
+      this.triggerRefresh++
+      query.refresh = undefined
+      this.$router.push({
+        query
+      })
+    }
   },
   methods: {
     type(i) {
@@ -57,6 +68,10 @@ export default {
   padding: 0 size(16);
   overflow: hidden;
   background: #fff;
+  position: fixed;
+  width: 100%;
+  z-index: 9;
+  box-shadow: 1px 0 2px 1px rgba(0, 0, 0, .06);
   .types{
     font-size: size(30);
     display: flex;
@@ -86,6 +101,7 @@ export default {
   }
 }
 .list-wrap{
+  padding-top: size(96);
   padding-bottom: size(100);
 }
 .list{
