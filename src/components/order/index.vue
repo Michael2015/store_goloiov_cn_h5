@@ -8,7 +8,8 @@
         </div>
       </div>
     </div>
-    <load-more v-slot="{list}" class="list-wrap" :getData="getList" :key="activeType + '-' + triggerRefresh">
+    <div class="no-data" v-if="!isLogin">暂无数据</div>
+    <load-more v-else v-slot="{list}" class="list-wrap" :getData="getList" :key="activeType + '-' + triggerRefresh">
       <div class="list">
         <order-item class="item" v-for="(item) in list" :key="item.id" :item="item"></order-item>
       </div>
@@ -20,6 +21,7 @@
 import OrderItem from './order-item'
 import {getOrderList} from 'api/order'
 import LoadMore from 'base/load-more'
+import {mapState} from 'vuex'
 export default {
   components: {
     OrderItem,
@@ -34,19 +36,28 @@ export default {
     }
   },
   computed: {
+    ...mapState(['isLogin']),
     getList() {
       return (page, size) => getOrderList(this.types[this.activeType].type, page, size)
+    }
+  },
+  watch: {
+    isLogin() {
+      this.triggerRefresh++
     }
   },
   created() {
   },
   activated() {
-    const query = this.$route.query
-    if (query.refresh) {
+    const params = this.$route.params
+    if (params.refresh) {
+      // 触发组件重新创建 从而刷新数据
+      this.activeType = 0
       this.triggerRefresh++
-      query.refresh = undefined
+      // 清除刷新标志，为了从订单详情回到列表，列表不刷新
+      delete params.refresh
       this.$router.push({
-        query
+        params
       })
     }
   },
@@ -109,5 +120,13 @@ export default {
   .item{
     margin-bottom: size(24);
   }
+}
+.no-data{
+  padding: size(20) 0;
+  padding-top: size(96 + 50);
+  line-height: 1.6;
+  font-size: size(24);
+  text-align: center;
+  color: #666;
 }
 </style>

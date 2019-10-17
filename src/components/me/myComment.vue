@@ -50,6 +50,7 @@ export default {
 <style lang="scss" scoped>
 @import "~css/def";
 .list {
+  min-height: 100vh;
   background-color: $color-body-bg;
 }
 .item {

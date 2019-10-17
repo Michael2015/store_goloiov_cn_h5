@@ -65,19 +65,22 @@
     </div>
     <div class="quit" @click="logout">退出登录</div>
     <confirm ref="logOut">确定退出吗？</confirm>
+    <notice ref="notice"></notice>
     <addteam ref="addteam"></addteam>
   </div>
 </template>
 
 <script>
-import confirm from "base/confirm";
-import tojump from "mixins/tojump";
-import partnerLevelObj from "mixins/partner-level-obj";
-import { mapState } from "vuex";
-import { partnerNum, edituserinfo } from "api/me";
-import addteam from "base/addteam";
-import updateAvatar from "com/common/updateAvatar";
+import confirm from "base/confirm"
+import notice from 'base/notice'
+import tojump from "mixins/tojump"
+import partnerLevelObj from "mixins/partner-level-obj"
+import { mapState } from "vuex"
+import { partnerNum, edituserinfo } from "api/me"
+import addteam from "base/addteam"
+import updateAvatar from "com/common/updateAvatar"
 import { Toast } from 'lib'
+import {logout} from 'api/login'
 export default {
   data() {
     return {
@@ -98,13 +101,13 @@ export default {
     phonehide(phone) {
       return phone.substring(0, 3) + "****" + phone.substring(7);
     },
-    ok() {
-      console.log("退出登录");
-      this.$refs.logOut.hide();
-    },
     logout() {
       this.$refs.logOut.show("", () => {
-        this.ok();
+        logout().then(() => {
+          this.$refs.notice.show('退出成功', () => {
+            this.$router.replace('/')
+          })
+        })
       });
     },
     openPhone() {
@@ -129,7 +132,8 @@ export default {
   components: {
     confirm,
     addteam,
-    updateAvatar
+    updateAvatar,
+    notice
   },
   mixins: [tojump, partnerLevelObj],
   computed: {

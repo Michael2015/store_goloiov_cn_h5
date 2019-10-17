@@ -18,10 +18,11 @@ export function incomeList(page, size=SIZE) {
 }
 
 // 获取收益详细信息
-export function incomeListDetail(order_id) {
+export function incomeListDetail(order_id, user_id) {
   return req.get('/api/partner.partner/incomeListDetail', {
     params: {
-      order_id
+      order_id,
+      user_id
     }
   }).then(special)
 }

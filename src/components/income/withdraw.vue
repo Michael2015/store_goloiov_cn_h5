@@ -4,7 +4,7 @@
     <div class="showItem">
       <div class="title">储蓄卡</div>
       <div class="no_card" v-if="haveCard === 0" @click="$refs.addcard.show()">请添加银行卡</div>
-      <div class="have_card" v-if="haveCard === 1" @click="compileCard">{{bank_name}}</div>
+      <div class="have_card" v-if="haveCard === 1" @click="compileCard">{{bank_code}}</div>
     </div>
     <div class="showItem">
       <div class="title">金额</div>
@@ -178,11 +178,8 @@ export default {
     text-align: center;
     background-image: linear-gradient(90deg, #ff2d23 0%, #ff4169 100%);
     color: #ffffff;
-    position: absolute;
-    top: size(307);
-    left: 0;
-    right: 0;
     margin: auto;
+    margin-top: size(66);
   }
   .hint_list {
     position: absolute;
