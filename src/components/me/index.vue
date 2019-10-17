@@ -213,8 +213,7 @@ export default {
       }
       .right {
         & > img {
-          width: size(12);
-          height: size(22);
+          width: size(16);
         }
       }
     }
