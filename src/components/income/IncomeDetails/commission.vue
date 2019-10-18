@@ -1,6 +1,6 @@
 <template>
   <div class="warp">
-    <top-head>律贴详情</top-head>
+    <top-head>津贴详情</top-head>
     <div class="award">津贴金额：{{showObj.income_number}}元</div>
     <div class="simpleness_show">
       <div class="left">订单号: {{showObj.order_id}}</div>
