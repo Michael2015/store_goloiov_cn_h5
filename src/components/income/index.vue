@@ -31,8 +31,8 @@
         </div>
       </div>
       <div class="in-title">
-        <span :class="active === 'charge'?'active':''" @click="checkShow('charge')">免单</span>
-        <span :class="active === 'earnings'?'active':''" @click="checkShow('earnings')">收益</span>
+        <span :class="{active: active === 'charge'}" @click="checkShow('charge')">免单</span>
+        <span :class="{active: active === 'earnings'}" @click="checkShow('earnings')">收益</span>
         <div class="showtitle" @click="tojieshao">{{showtitle}}</div>
       </div>
     </div>
@@ -98,16 +98,17 @@
         </mt-tab-container-item>
       </mt-tab-container>
     </keep-alive>
-    <notive ref="notive"></notive>
+    <notice ref="notive" :autoClose="true"></notice>
   </div>
 </template>
 
 <script>
-import tojump from "mixins/tojump";
-import { mapState } from "vuex";
-import notive from "base/notive";
-import { incomeList, platoonList, getUserAmount } from "api/income";
-import LoadMore from "base/load-more";
+import tojump from "mixins/tojump"
+import { mapState } from "vuex"
+import notice from "base/notice"
+import { incomeList, platoonList, getUserAmount } from "api/income"
+import LoadMore from "base/load-more"
+import {login} from 'api/login'
 export default {
   data() {
     return {
@@ -162,7 +163,7 @@ export default {
         this.tojump("/record");
       } else {
         this.$refs.notive.show("请先登录", () => {
-          console.log("点击了确认登录");
+          login()
         });
       }
     },
@@ -171,7 +172,7 @@ export default {
         this.tojump("/withdraw");
       } else {
         this.$refs.notive.show("请先登录", () => {
-          console.log("点击了确认登录");
+          login()
         });
       }
     },
@@ -231,7 +232,7 @@ export default {
   },
   mixins: [tojump],
   components: {
-    notive,
+    notice,
     LoadMore
   }
 };

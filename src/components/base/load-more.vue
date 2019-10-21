@@ -11,12 +11,16 @@ import {SIZE} from 'api/request'
 export default {
   props: {
     getData: {
-      Type: Function,
+      type: Function,
       default: null
     },
     setSize:{
-      Type:Number,
+      type: Number,
       default: SIZE
+    },
+    paused: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -27,6 +31,11 @@ export default {
       list: [],
       page: 1,
       size: this.setSize // 默认一页数量
+    }
+  },
+  watch: {
+    paused() {
+      this.loadMore()
     }
   },
   created(){
@@ -52,7 +61,7 @@ export default {
   },
   methods: {
     loadMore() {
-      if (this.disabled || this.loading || this.loaded) {
+      if (this.disabled || this.loading || this.loaded || this.paused) {
         return
       }
       this.loading = true

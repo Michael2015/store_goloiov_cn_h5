@@ -31,7 +31,7 @@
         <input type="text" placeholder="请输入银行卡开户支行" v-model="sub_branch" />
       </div>
     </div>
-    <div class="withdraw_btn" @click="updateCard">提现</div>
+    <div class="withdraw_btn" @click="updateCard">确定</div>
     <div class="hint">银行卡持卡人必须与当前微信账户同名</div>
   </div>
 </template>
