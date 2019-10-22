@@ -69,11 +69,11 @@ export function nativeLogout() {
 }
 
 // 邀请合伙人
-export function invitePartner(path, title) {
+export function invitePartner(uid, name) {
   return api('MiniProgram', {
     webpageUrl: 'https://wcp.szyrwl.com',
-    path,
-    title
+    path: '/pages/index/index?share_id=' + uid + '&type=invite',
+    title: name + '邀请你成为业务合伙人！'
   })
 }
 

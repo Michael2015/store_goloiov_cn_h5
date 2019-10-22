@@ -21,13 +21,14 @@
         </div>
       </div>
     </div>
-    <div class="invite_btn">邀请合伙人</div>
+    <div class="invite_btn" @click="invite">邀请合伙人</div>
   </div>
 </template>
 
 <script>
 import { member } from "api/me";
 import { mapState } from "vuex";
+import {invitePartner} from 'api/native'
 export default {
   data() {
     return {
@@ -41,6 +42,9 @@ export default {
   methods: {
     async getdata() {
       this.reque = await member(this.value);
+    },
+    invite() {
+      invitePartner(this.userInfo.uid, this.userInfo.nickname)
     }
   },
   computed: {

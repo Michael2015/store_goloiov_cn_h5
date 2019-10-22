@@ -128,7 +128,7 @@ export default {
       }
     },
     invite() {
-      invitePartner('/pages/index/index?share_id=' + this.userInfo.uid + '&type=invite', '邀请你成为业务合伙人！')
+      invitePartner(this.userInfo.uid, this.userInfo.nickname)
     }
   }
 }
