@@ -13,7 +13,7 @@
         <div class="col">
           <div class="name">手机</div>
           <div class="value">{{data.phone}}</div>
-          <a class="btn-inline" :href="'tel:'+data.phone">呼叫</a>
+          <a class="btn-inline" href="javascript:;" @click="handleCall(data.phone)">呼叫</a>
         </div>
       </div>
     </popup>
@@ -25,6 +25,7 @@ import showHide from 'mixins/show-hide'
 import popup from 'ui/popup'
 import {setClipboard, Toast} from 'lib'
 import {mapState} from 'vuex'
+import {telephone} from 'api/native'
 export default {
   props: {
     data: {
@@ -53,6 +54,9 @@ export default {
       setClipboard(this.nickname).then(() => {
         Toast('复制成功')
       })
+    },
+    handleCall(p) {
+      telephone(p)
     }
   }
 }
@@ -72,6 +76,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     padding: size(40) 0;
+    line-height: 1.1;
   }
   .head{
     position: absolute;

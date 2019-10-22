@@ -83,6 +83,7 @@ import addteam from "base/addteam"
 import updateAvatar from "com/common/updateAvatar"
 import { Toast } from 'lib'
 import {logout} from 'api/login'
+import {telephone} from 'api/native'
 export default {
   data() {
     return {
@@ -113,8 +114,8 @@ export default {
       });
     },
     openPhone() {
-      window.location.href = 'tel://' + this.spread_user_phone
-      console.log("打开电话：" + this.spread_user_phone);
+      // 原生打电话
+      telephone(this.spread_user_phone)
     },
     toAddTeam() {
       if (this.is_band_partner === 1) {
