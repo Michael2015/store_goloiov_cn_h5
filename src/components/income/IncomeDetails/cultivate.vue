@@ -8,23 +8,28 @@
     </div>
     <div class="simpleness_show">
       <div class="left">被培养人</div>
-      <div class="right">少年闰土</div>
+      <div class="right">{{showObj.develop_user_name}}</div>
     </div>
     <div class="simpleness_show">
       <div class="left">达成级别</div>
-      <div class="right">区县合伙人</div>
+      <div class="right">{{partnerLevelObj[showObj.develop_user_level]}}</div>
     </div>
     <div class="simpleness_show">
       <div class="left">您的等级</div>
-      <div class="right">市级合伙人</div>
+      <div class="right">{{partnerLevelObj[userInfo.partner_level]}}</div>
     </div>
   </div>
 </template>
 
 <script>
-import loadShowobj from 'mixins/loadShowobj'
+import loadShowobj from "mixins/loadShowobj";
+import partnerLevelObj from "mixins/partner-level-obj";
+import { mapState } from "vuex";
 export default {
-  mixins:[loadShowobj]
+  mixins: [loadShowobj, partnerLevelObj],
+  computed: {
+    ...mapState(["userInfo"])
+  }
 };
 </script>
 

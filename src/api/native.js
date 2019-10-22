@@ -48,6 +48,7 @@ function api(action, data = {}) {
 export function getToken() {
   if (process.env.NODE_ENV !== 'production') {
     return Promise.resolve('577de11cb52426332fc15c56529325b1')
+    // return Promise.resolve('7c8abee43cb4bf232318bc21eec03a30')
     // return Promise.resolve('7c8abee43cb4bf232318bc21eec03a31')
     // return Promise.resolve('1e4c15c790804c9a7d98831e5833ac7b')
     // return Promise.resolve('f553c3923efb0fe51ef4b5ea60f09e9f')
@@ -58,6 +59,13 @@ export function getToken() {
 
 export function nativeLogin() {
   return api('appLogin')
+}
+
+export function nativeLogout() {
+  if (process.env.NODE_ENV !== 'production') {
+    return Promise.resolve()
+  }
+  return api('appLogout')
 }
 
 // 邀请合伙人

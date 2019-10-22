@@ -1,83 +1,88 @@
 <template>
   <div class="myMsg_warp">
-    <top-head>个人信息</top-head>
-    <div class="warp_item">
-      <img :src="userInfo.avatar" alt class="avater" />
-      <div class="item_content">
-        <label for="image">
-          修改头像
+  <top-head>个人信息</top-head>
+    <div>
+      <div class="warp_item border-bottom">
+        <img :src="userInfo.avatar" alt class="avater" />
+        <div class="item_content">
+          <label for="image">
+            修改头像
+            <img src="~img/icon/join-right.png" alt />
+            <update-avatar :max="max" v-model="newAvatar" style="width:0;height:0;overflow:hidden" ref="img"></update-avatar>
+          </label>
+        </div>
+      </div>
+      <div class="warp_item border-bottom" @click="tojump('/compileName')">
+        <div class="item_title">名字</div>
+        <div class="item_content">
+          {{this.userInfo.nickname?this.userInfo.nickname:'输入'}}
+          <img
+            src="~img/icon/join-right.png"
+            alt
+          />
+        </div>
+      </div>
+      <div class="warp_item border-bottom" @click="tojump('/bingPhone')">
+        <div class="item_title">手机绑定</div>
+        <div class="item_content">
+          {{this.userInfo.phone?phonehide(this.userInfo.phone):''}}
+          <img
+            src="~img/icon/join-right.png"
+            alt
+          />
+        </div>
+      </div>
+      <div class="warp_item border-bottom">
+        <div class="item_title">合伙人等级</div>
+        <div class="item_content">{{partnerLevelObj[userInfo.partner_level]}}</div>
+      </div>
+      <div class="warp_item border-bottom">
+        <div class="item_title">我加入的团队</div>
+        <div class="item_content" @click="toAddTeam">
+          {{is_band_partner === 1?spread_user:'可添加'}}
+          <img
+            v-if="is_band_partner === 1"
+            @click="openPhone"
+            class="openPhone"
+            src="~img/me/contact.png"
+            alt
+          />
           <img src="~img/icon/join-right.png" alt />
-          <update-avatar :max="max" v-model="newAvatar" style="width:0;height:0;overflow:hidden" ref="img"></update-avatar>
-        </label>
+        </div>
       </div>
-    </div>
-    <div class="warp_item" @click="tojump('/compileName')">
-      <div class="item_title">名字</div>
-      <div class="item_content">
-        {{this.userInfo.nickname?this.userInfo.nickname:'输入'}}
-        <img
-          src="~img/icon/join-right.png"
-          alt
-        />
+      <div class="warp_item border-bottom" @click="tojump('/myPartner')">
+        <div class="item_title">我发展的伙伴</div>
+        <div class="item_content">
+          {{friendNum}}人
+          <img src="~img/icon/join-right.png" alt />
+        </div>
       </div>
-    </div>
-    <div class="warp_item" @click="tojump('/bingPhone')">
-      <div class="item_title">手机绑定</div>
-      <div class="item_content">
-        {{this.userInfo.phone?phonehide(this.userInfo.phone):''}}
-        <img
-          src="~img/icon/join-right.png"
-          alt
-        />
-      </div>
-    </div>
-    <div class="warp_item">
-      <div class="item_title">合伙人等级</div>
-      <div class="item_content">{{partnerLevelObj[userInfo.partner_level]}}</div>
-    </div>
-    <div class="warp_item">
-      <div class="item_title">我加入的团队</div>
-      <div class="item_content" @click="toAddTeam">
-        {{is_band_partner === 1?spread_user:'可添加'}}
-        <img
-          v-if="is_band_partner === 1"
-          @click="openPhone"
-          class="openPhone"
-          src="~img/me/contact.png"
-          alt
-        />
-        <img src="~img/icon/join-right.png" alt />
-      </div>
-    </div>
-    <div class="warp_item" @click="tojump('/myPartner')">
-      <div class="item_title">我发展的伙伴</div>
-      <div class="item_content">
-        {{friendNum}}人
-        <img src="~img/icon/join-right.png" alt />
-      </div>
-    </div>
-    <div class="warp_item" @click="tojump('/versionsMsg')">
-      <div class="item_title">版本信息</div>
-      <div class="item_content">
-        {{versionsMsg}}
-        <img src="~img/icon/join-right.png" alt />
+      <div class="warp_item border-bottom" @click="tojump('/versionsMsg')">
+        <div class="item_title">版本信息</div>
+        <div class="item_content">
+          {{versionsMsg}}
+          <img src="~img/icon/join-right.png" alt />
+        </div>
       </div>
     </div>
     <div class="quit" @click="logout">退出登录</div>
     <confirm ref="logOut">确定退出吗？</confirm>
+    <notice ref="notice"></notice>
     <addteam ref="addteam"></addteam>
   </div>
 </template>
 
 <script>
-import confirm from "base/confirm";
-import tojump from "mixins/tojump";
-import partnerLevelObj from "mixins/partner-level-obj";
-import { mapState } from "vuex";
-import { partnerNum, edituserinfo } from "api/me";
-import addteam from "base/addteam";
-import updateAvatar from "com/common/updateAvatar";
+import confirm from "base/confirm"
+import notice from 'base/notice'
+import tojump from "mixins/tojump"
+import partnerLevelObj from "mixins/partner-level-obj"
+import { mapState } from "vuex"
+import { partnerNum, edituserinfo } from "api/me"
+import addteam from "base/addteam"
+import updateAvatar from "com/common/updateAvatar"
 import { Toast } from 'lib'
+import {logout} from 'api/login'
 export default {
   data() {
     return {
@@ -98,13 +103,13 @@ export default {
     phonehide(phone) {
       return phone.substring(0, 3) + "****" + phone.substring(7);
     },
-    ok() {
-      console.log("退出登录");
-      this.$refs.logOut.hide();
-    },
     logout() {
       this.$refs.logOut.show("", () => {
-        this.ok();
+        logout().then(() => {
+          this.$refs.notice.show('退出成功', () => {
+            this.$router.replace('/')
+          })
+        })
       });
     },
     openPhone() {
@@ -129,7 +134,8 @@ export default {
   components: {
     confirm,
     addteam,
-    updateAvatar
+    updateAvatar,
+    notice
   },
   mixins: [tojump, partnerLevelObj],
   computed: {
@@ -169,16 +175,14 @@ export default {
   font-size: size(30);
   .warp_item {
     height: size(100);
-    line-height: size(100);
     background: #fff;
     padding-right: size(30);
     padding-left: size(36);
     display: flex;
     justify-content: space-between;
+    align-items: center;
     &:nth-child(1) {
       height: size(138);
-      line-height: size(138);
-      padding-left: size(20);
     }
     &:nth-child(4) {
       margin-top: size(20);
@@ -190,7 +194,6 @@ export default {
       width: size(100);
       height: size(100);
       border-radius: 50%;
-      margin: auto 0 auto 0;
     }
     .item_title {
       color: #333333;
@@ -199,16 +202,14 @@ export default {
       color: #999999;
       & > img {
         vertical-align: unset;
-        width: size(10);
-        height: size(22);
-        margin-left: size(28);
+        width: size(16);
+        margin-left: size(12);
       }
       label {
         & > img {
           vertical-align: unset;
-          width: size(10);
-          height: size(22);
-          margin-left: size(28);
+          width: size(16);
+          margin-left: size(12);
         }
       }
       .openPhone {

@@ -1,5 +1,5 @@
 import store from '@/store'
-import {getToken, nativeLogin} from './native'
+import {getToken, nativeLogin, nativeLogout} from './native'
 import {getUserInfo} from 'api'
 
 export function login() {
@@ -62,5 +62,13 @@ export function tryLogin() {
       store.commit('setToken', saveToken)
       store.commit('setUserInfo', data)
     }
+  })
+}
+
+// 退出登录
+export function logout() {
+  return nativeLogout().then(() => {
+    store.commit('setToken', '')
+    store.commit('clearUserInfo')
   })
 }

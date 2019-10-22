@@ -81,7 +81,7 @@
                 class="item"
                 v-for="(item,index) in list"
                 :key="index"
-                @click="clickShouYi(item.type,item.order_id,item.order_sn)"
+                @click="clickShouYi(item.type,item.order_id,item.order_sn, item.user_id)"
               >
                 <div class="left">
                   <div class="name">
@@ -181,7 +181,7 @@ export default {
       return s.substr(s.length - 6, 6);
     },
     // 收益列表点击
-    clickShouYi(type, id, sn) {
+    clickShouYi(type, id, sn, uid) {
       console.log(type);
       let url;
       url = this.jumpObj[type];
@@ -189,7 +189,7 @@ export default {
         //  跳转订单详情那order_sn去查询
         url += `/${sn}`;
       } else {
-        url += `?order_id=${id}`;
+        url += `?order_id=${id}&user_id=${uid}`;
       }
       this.tojump(url);
     },
@@ -248,6 +248,17 @@ export default {
   flex-direction: column;
   .topbox {
     // padding: size(24) size(24) 0;
+    position: relative;
+    overflow: hidden;
+    &:after{
+      content: ' ';
+      display: block;
+      position: absolute;
+      @include circle(486);
+      background-image: linear-gradient(49deg, #EF5456 0%, #EA1B1D 66%);
+      top: size(-(486 - 240));
+      right: size(-(486 - 214));
+    }
     .banner {
       width: 100%;
       height: size(380);

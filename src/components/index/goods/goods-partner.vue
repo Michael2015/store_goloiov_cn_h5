@@ -36,7 +36,9 @@
       <router-link tag="span" to="comment" replace>评论</router-link>
     </div>
     <div style="padding-bottom:60px;">
-      <router-view :id="id" :goodsName="info.store_name"></router-view>
+      <keep-alive>
+        <router-view :id="id" :goodsName="info.store_name"></router-view>
+      </keep-alive>
     </div>
     <div class="action-bar table border-top">
       <div class="shop border-right" @click="goIndex">

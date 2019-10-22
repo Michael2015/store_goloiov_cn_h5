@@ -19,11 +19,11 @@
     </div>
     <div class="simpleness_show">
       <div class="left">上月团队总利润</div>
-      <div class="right">3783791万元</div>
+      <div class="right">{{showObj.shareholder_income}}元</div>
     </div>
     <div class="simpleness_show">
       <div class="left">股东人数</div>
-      <div class="right">10人</div>
+      <div class="right">{{showObj.shareholder_num}}}人</div>
     </div>
   </div>
 </template>

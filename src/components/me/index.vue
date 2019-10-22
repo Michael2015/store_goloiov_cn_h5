@@ -1,9 +1,9 @@
 <template>
   <div class="me_warp">
     <div class="header">
-      <div class="avater_warp">
+      <div class="avater_warp" @click="tojump('/myMsg')">
         <img class="averer" :src="userInfo.avatar" alt />
-        <div class="amend" @click="tojump('/myMsg')">
+        <div class="amend">
           <img src="~img/me/bianji.png" alt />
         </div>
       </div>
@@ -213,8 +213,7 @@ export default {
       }
       .right {
         & > img {
-          width: size(12);
-          height: size(22);
+          width: size(16);
         }
       }
     }

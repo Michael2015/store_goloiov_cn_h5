@@ -1,6 +1,6 @@
 <template>
   <div class="header_warp">
-    <img src="~img/me/time.png" alt />
+    <div><img src="~img/me/time.png" alt class="icon" /></div>
     <div class="work_content">
       <div class="work_item">
         <div class="item_title">必完成任务</div>
@@ -81,9 +81,8 @@ export default {
   display: flex;
   color: #fff;
   position: relative;
-  & > img {
+  .icon {
     width: size(96);
-    height: size(96);
     margin-right: size(40);
   }
   .work_content {

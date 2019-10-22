@@ -33,10 +33,11 @@ export const req = axios.create({
 
 req.interceptors.request.use(
   function (config) {
-    const token = store.state.token
-    if (token) {
-      // 从store注入token
-      config.params.token = token
+    if (config.url === '/app/user/getuserinfo') {
+      // 获取用户信息的时候不能写token
+    } else {
+      // 注入token
+      config.params.token = store.state.token
     }
     return config
   }

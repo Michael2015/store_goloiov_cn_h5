@@ -3,7 +3,7 @@
     <top-head>个人信息</top-head>
     <div class="main">
       <input type="text" v-model="name" placeholder="输入用户名字" />
-      <div class="clone" @click="clear">x</div>
+      <div class="clone" @click="clear"></div>
     </div>
     <div :class="updateflag?'save-btn':'save-btn cannot'" @click="save">保存</div>
   </div>
@@ -58,27 +58,30 @@ export default {
 <style lang="scss" scoped>
 @import "~css/def";
 .name_warp {
+  min-height: 100vh;
+  background-color: $color-body-bg;
   .main {
-    display: flex;
-    height: size(122);
-    line-height: size(122);
+    background: #fff;
+    position: relative;
+    padding: size(36) 0;
+    padding-left: size(30);
+    padding-right: size(80);
     & > input {
-      padding-left: size(30);
       font-size: size(30);
+      line-height: size(50);
+      height: size(50);
       &::-webkit-input-placeholder {
         color: #999;
       }
     }
     .clone {
+      position: absolute;
       width: size(36);
       height: size(36);
-      background-color: #cccccc;
-      line-height: size(36);
-      text-align: center;
-      color: #fff;
-      border-radius: 50%;
-      margin-right: size(30);
-      margin-top: size(42);
+      right: size(30);
+      top: 50%;
+      margin-top: size(-18);
+      @include bg('~img/icon/clear.png');
     }
   }
   .save-btn {

@@ -76,7 +76,7 @@ export default new Router({
       name: 'buy-success'
     },
     {
-      path: '/order',
+      path: '/order/:refresh?',
       component: () => import(/* webpackChunkName: "order" */ 'com/order'),
       meta: { haveTab: true , keepAlive: true}
     },

@@ -32,6 +32,12 @@ export default new Vuex.Store({
       state.isLogin = true
       state.role = info.is_promoter === 1 ? 1 : 0
     },
+    clearUserInfo(state) {
+      // 退出登录用
+      state.userInfo = {}
+      state.isLogin = false
+      state.role = 0
+    },
     setAddress(state, addr) {
       state.selectAddress = addr
     }

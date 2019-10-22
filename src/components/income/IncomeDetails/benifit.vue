@@ -19,7 +19,7 @@
       <div class="right">{{showObj.income_status}}</div>
     </div>
     <div class="simpleness_show">
-      <div class="left">返利原因： 您是购买人的上级合伙人</div>
+      <div class="left">返利原因： {{showObj.identity}}</div>
       <div class="right"></div>
     </div>
     <div class="good_show">

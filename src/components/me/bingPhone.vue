@@ -8,7 +8,7 @@
     <div class="show_bind" v-else-if="inputPhone === ''">
       <div class="bind_item">
         <input type="text" maxlength="11" v-model="enterPhone" placeholder="输入手机号" />
-        <div class="clone">x</div>
+        <div class="clone"></div>
       </div>
       <div class="bind_item">
         <input type="text" maxlength="4" v-model="code" />
@@ -146,14 +146,15 @@ export default {
     .bind_item {
       display: flex;
       height: size(122);
-      line-height: size(122);
+      align-items: center;
+      padding: 0 size(30);
       border-bottom: size(2) solid #f5f5f5;
       &:nth-child(1) {
         border-top: size(2) solid #f5f5f5;
       }
       & > input {
-        padding-left: size(30);
         font-size: size(30);
+        padding-right: size(30);
         &::-webkit-input-placeholder {
           color: #999;
         }
@@ -161,13 +162,7 @@ export default {
       .clone {
         width: size(36);
         height: size(36);
-        background-color: #cccccc;
-        line-height: size(36);
-        text-align: center;
-        color: #fff;
-        border-radius: 50%;
-        margin-right: size(30);
-        margin-top: size(42);
+        @include bg('~img/icon/clear.png');
       }
       .getcode {
         width: size(330);
@@ -178,8 +173,6 @@ export default {
         border-radius: size(28);
         font-size: size(26);
         color: #999999;
-        margin-right: size(34);
-        margin-top: size(31);
       }
     }
   }
@@ -192,11 +185,7 @@ export default {
     text-align: center;
     font-size: size(36);
     color: #fff;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: size(314);
-    margin: auto;
+    margin: size(70) auto;
   }
 }
 </style>

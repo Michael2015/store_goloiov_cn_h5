@@ -8,11 +8,11 @@
     </div>
     <div class="simpleness_show">
       <div class="left">类别</div>
-      <div class="right">下级开发</div>
+      <div class="right">{{showObj.identity}}</div>
     </div>
     <div class="simpleness_show">
       <div class="left">所属商家</div>
-      <div class="right">XXXXXXXX</div>
+      <div class="right">{{showObj.supplier_name}}</div>
     </div>
     <div class="simpleness_show">
       <div class="left">结算状态</div>

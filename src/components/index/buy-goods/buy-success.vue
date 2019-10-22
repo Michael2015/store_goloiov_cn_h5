@@ -9,7 +9,7 @@
         <span>实付 ¥{{info.total_price}}</span>
       </div>
       <div class="opts">
-        <router-link tag="span" class="btn-inline" replace to="/order">查看订单</router-link>
+        <router-link tag="span" class="btn-inline" replace to="/order/refresh">查看订单</router-link>
         <router-link tag="span" class="btn-inline" replace to="/index">返回首页</router-link>
       </div>
       <div class="bottom-info" v-if="info.is_platoon == 1">
