@@ -38,13 +38,17 @@
         <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
       </div>
     </load-more>
+    <!-- 退出登录 -->
+    <div class="logout" v-if="isLogin" @click="logout">退出</div>
     <!-- 提示弹窗 -->
     <notice ref="notice" :autoClose="true"></notice>
+    <confirm ref="confirm"></confirm>
   </div>
 </template>
 
 <script>
 import Notice from 'base/notice'
+import Confirm from "base/confirm"
 import SearchInput from 'base/ui/search-input'
 import IndexTopCustomer from './index-top-customer'
 import MsgLoop from 'base/msg-loop'
@@ -56,10 +60,11 @@ import {Loading} from 'lib'
 import {getCategory, getCategoryProducts, CustomerGetProducts, PartnerGetProducts} from 'api'
 import {invitePartner} from 'api/native'
 import {mapState} from 'vuex'
-import {login} from 'api/login'
+import {login, logout} from 'api/login'
 
 export default {
   components: {
+    Confirm,
     Notice,
     LoadMore,
     SearchInput,
@@ -134,10 +139,15 @@ export default {
     },
     invite() {
       invitePartner(this.userInfo.uid, this.userInfo.nickname)
+    },
+    logout() {
+      this.$refs.confirm.show('确定退出吗？', () => {
+        logout()
+      })
     }
   },
   beforeRouteLeave(to, from , next) {
-    if (!this.isLogin) {
+    if (!this.isLogin && (to.path === '/order' || to.path === '/income')) {
       this.$refs.notice.show('请先登录', () => {
         login()
       })
@@ -255,6 +265,21 @@ export default {
       }
     }
   }
+}
+.logout{
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  bottom: size(156);
+  background-color: #d8d8d8;
+	box-shadow: 0px 1px 2px 0px rgba(207, 206, 206, 0.5);
+	border-bottom-right-radius: 6px;
+  border-top-right-radius: 6px;
+  font-size: size(24);
+  color: #4d4d4d;
+  padding: size(15) size(17);
+  padding-left: size(10);
+  // opacity: 0.71;
 }
 .list-wrap{
   padding-bottom: size(120);

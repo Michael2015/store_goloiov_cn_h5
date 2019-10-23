@@ -1,13 +1,13 @@
 <template>
   <div class="input-wrap table">
     <div>
-      <img src="~img/sousuo.png" alt="">
-    </div>
-    <div>
       <form action="x" @submit.prevent.stop="submit">
         <!-- <input type="search" @input="onInput" :placeholder="placeholder" v-on:keyup.enter="$emit('search')"> -->
         <input type="search" @input="onInput" :placeholder="placeholder">
       </form>
+    </div>
+    <div class="search" @click="submit">
+      <img src="~img/sousuo.png" alt="">
     </div>
   </div>
 </template>
@@ -36,8 +36,8 @@ export default {
 .input-wrap{
   width: 100%;
   background: #fff;
-  padding: 0 size(34);
-  padding-left: size(20);
+  padding: 0 size(20);
+  padding-right: 0;
   height: size(70);
   border-radius: size(35);
   >div{
@@ -46,6 +46,10 @@ export default {
   }
   img{
     width: size(24);
+  }
+  .search{
+    padding-left: size(20);
+    padding-right: size(20);
   }
   input{
     padding:0 4px;

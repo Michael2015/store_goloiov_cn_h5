@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import confirm from "base/confirm"
+// import confirm from "base/confirm"
 import notice from 'base/notice'
 import tojump from "mixins/tojump"
 import partnerLevelObj from "mixins/partner-level-obj"
@@ -139,7 +139,7 @@ export default {
     }
   },
   components: {
-    confirm,
+    // confirm,
     addteam,
     updateAvatar,
     notice
