@@ -13,6 +13,7 @@ import BuySuccess from 'com/index/buy-goods/buy-success'
 import OrderDetail from 'com/order/order-detail'
 // import Income from 'com/income'
 // import Me from 'com/me'
+import JoinPartner from 'com/common/join-partner'
 
 Vue.use(Router)
 
@@ -62,6 +63,10 @@ export default new Router({
           component: GoodsComment
         }
       ],
+    },
+    {
+      path: '/join-partner',
+      component: JoinPartner
     },
     {
       path: '/buy-goods/:id',

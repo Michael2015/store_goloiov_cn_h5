@@ -127,7 +127,8 @@ export default {
       if (this.is_band_partner === 1) {
         return;
       }
-      this.$refs.addteam.show(this.loadDate);
+      // this.$refs.addteam.show(this.loadDate);
+      this.$router.push('/join-partner')
     },
     async loadDate() {
       const reque = await partnerNum();

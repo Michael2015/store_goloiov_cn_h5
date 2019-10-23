@@ -73,7 +73,7 @@ export function invitePartner(uid, name) {
   return api('MiniProgram', {
     webpageUrl: 'https://wcp.szyrwl.com',
     path: '/pages/index/index?share_id=' + uid + '&type=invite',
-    title: name + '邀请你成为业务合伙人！'
+    title: name + '邀请您免费注册万车品商城会员'
   })
 }
 

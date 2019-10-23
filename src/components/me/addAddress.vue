@@ -5,7 +5,7 @@
       <div><input type="text" placeholder="收货人姓名" v-model="real_name"></div>
     </div>
     <div class="col border-bottom table">
-      <div><input type="text" placeholder="收货人电话" v-model="phone"></div>
+      <div><input type="number" placeholder="收货人手机" v-model="phone" pattern="[0-9]*"></div>
     </div>
     <div class="col border-bottom table" @click="$refs.selAddr.show()">
       <div>
@@ -66,11 +66,11 @@ export default {
         return
       }
       if (!this.phone) {
-        Toast('请输入收货人电话')
+        Toast('请输入收货人手机')
         return
       }
       if (!/^1[\d]{10}$/.test(this.phone)) {
-        Toast('收货人电话不正确')
+        Toast('收货人手机不正确')
         return
       }
       if (this.addr.length <= 0) {

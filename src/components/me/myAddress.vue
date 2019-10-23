@@ -39,7 +39,7 @@ export default {
   },
   created() {
     if (this.$route.query.select) {
-      // 选择地址模式，禁用编辑和删除按钮
+      // 选择地址模式，禁用编辑和删除按钮（这个暂时不做）
       this.canEdit = false
     }
     this.loaddata()
@@ -70,10 +70,8 @@ export default {
       })
     },
     select(item) {
-      if (this.$route.query.select) {
-        this.$store.commit('setAddress', item)
-        this.$router.back()
-      }
+      this.$store.commit('setAddress', item)
+      this.$router.back()
     }
   }
 }

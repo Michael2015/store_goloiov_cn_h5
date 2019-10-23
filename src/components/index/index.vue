@@ -25,8 +25,12 @@
     <msg-loop v-if="false"></msg-loop>
     <index-focus :cid="cid" v-if="cid"></index-focus>
     <div class="filters table">
-      <div :class="{active:activeCategoryIndex===index}" v-for="(item,index) in category" :key="index"
-        @click="setCategory(index)"><span>{{item.cate_name}}</span></div>
+      <div>
+        <div class="">
+          <div class="item" :class="{active:activeCategoryIndex===index}" v-for="(item,index) in category" :key="index"
+          @click="setCategory(index)"><span>{{item.cate_name}}</span></div>
+        </div>
+      </div>
     </div>
     <load-more v-slot="{list}" class="list-wrap" :getData="getCategoryProducts" v-if="activeCategoryIndex >= 0" :key="activeCategoryIndex">
       <div class="list clearfix">
@@ -241,13 +245,30 @@ export default {
 .filters{
   text-align: center;
   height: size(72);
-  padding: 0 size(16);
   margin: size(12) 0;
   font-size: size(30);
   color: #595959;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
   >div{
-    display: table-cell;
-    vertical-align: middle;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    padding: 0 size(16);
+  }
+  >div>div{
+    white-space: nowrap;
+    overflow: scroll;
+  }
+  .item{
+    display: inline-block;
+    // min-width: 25%;
+    text-align: center;
+    line-height: size(72);
+    padding: 0 size(20);
     &.active{
       font-size: size(32);
       color: #252525;

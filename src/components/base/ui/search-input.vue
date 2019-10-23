@@ -3,7 +3,7 @@
     <div>
       <form action="x" @submit.prevent.stop="submit">
         <!-- <input type="search" @input="onInput" :placeholder="placeholder" v-on:keyup.enter="$emit('search')"> -->
-        <input type="search" @input="onInput" :placeholder="placeholder">
+        <input type="search" @input="onInput" :placeholder="placeholder" ref="input">
       </form>
     </div>
     <div class="search" @click="submit">
@@ -26,6 +26,7 @@ export default {
     },
     submit() {
       this.$emit('search')
+      this.$refs.input.blur()
     }
   }
 }

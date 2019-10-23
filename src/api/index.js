@@ -1,7 +1,7 @@
 import {req, OK, SIZE} from './request'
 
 export const clean = ({data}) => {
-  return data && data.code === OK ? (data.data ? data.data : true) : null
+  return data && data.code === OK ? (data.data ? data.data : true) : Promise.reject(data.msg || '')
 }
 
 // 获取当前环境的host
@@ -159,11 +159,19 @@ export function PartnerGetGoodsVisitor(id, page = 1, size = SIZE) {
 }
 
 // 加入合伙人
-export function joinPartner(uid){
+export function joinPartner_old(uid){
   console.log(uid)
   return req.get('/api/partner/index/join', {
     params: {
       spid: uid
+    }
+  }).then(clean)
+}
+
+export function joinPartner(phone){
+  return req.get('/app/user/addInviter', {
+    params: {
+      invitMobile: phone
     }
   }).then(clean)
 }

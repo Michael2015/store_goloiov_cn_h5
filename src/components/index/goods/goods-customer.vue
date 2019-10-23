@@ -68,7 +68,6 @@
     </div>
     <notice ref="notice" :autoClose="true"></notice>
     <contact ref="contact" :data="partner"></contact>
-    <join-partner ref="joinPartner"></join-partner>
     <free-intro ref="showFreeIntro" :info="info"></free-intro>
   </div>
 </template>
@@ -79,7 +78,6 @@ import GoodsBanner from './goods-banner'
 import FreeIntro from 'base/free-intro'
 import {Loading} from 'lib'
 import Notice from 'base/notice'
-import JoinPartner from 'com/common/join-partner'
 import {CustomerGetGoodsInfo, getPartnerInfo, getQrcode} from 'api'
 import {login} from 'api/login'
 import {mapState} from 'vuex'
@@ -99,7 +97,6 @@ export default {
   components: {
     Contact,
     Notice,
-    JoinPartner,
     GoodsBanner,
     FreeIntro
   },
@@ -150,7 +147,7 @@ export default {
         // 没有登录
         this.triggerLogin()
       } else {
-        this.$refs.joinPartner.show(this.partner)
+        this.$router.push('/join-partner')
       }
     },
     goIndex() {

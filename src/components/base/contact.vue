@@ -103,6 +103,7 @@ export default {
     width: 50%;
     @include txt-overflow;
     text-align: center;
+    line-height: 1.4;
   }
 }
 </style>
