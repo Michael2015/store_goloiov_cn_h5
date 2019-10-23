@@ -4,7 +4,10 @@
       <img src="~img/sousuo.png" alt="">
     </div>
     <div>
-      <input type="search" @input="onInput" :placeholder="placeholder" v-on:keyup.enter="$emit('search')">
+      <form action="x" @submit.prevent.stop="submit">
+        <!-- <input type="search" @input="onInput" :placeholder="placeholder" v-on:keyup.enter="$emit('search')"> -->
+        <input type="search" @input="onInput" :placeholder="placeholder">
+      </form>
     </div>
   </div>
 </template>
@@ -20,6 +23,9 @@ export default {
   methods: {
     onInput(e) {
       this.$emit('input', e.target.value)
+    },
+    submit() {
+      this.$emit('search')
     }
   }
 }
@@ -44,8 +50,11 @@ export default {
   input{
     padding:0 4px;
     font-size: size(28);
+    height: size(50);
+    line-height: size(50);
     &::-webkit-input-placeholder{
       color: #9ea2a0;
+      line-height: size(50);
     }
   }
 }

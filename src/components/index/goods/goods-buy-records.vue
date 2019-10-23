@@ -53,12 +53,13 @@ export default {
 .list{
   padding: 0 size(24);
   background: #fff;
+  overflow: hidden;
 }
 .item{
   background: #f9f9f9;
   height: size(108);
   border-radius: size(108/2);
-  margin-bottom: size(20);
+  margin-top: size(20);
   padding-left: size(14);
   padding-right: size(48);
   >div{
@@ -80,13 +81,14 @@ export default {
   .who{
     font-size: size(30);
     padding-left: size(26);
-    margin-bottom: size(18);
+    margin-bottom: size(12);
     @include txt-overflow;
   }
   .what{
     font-size: size(24);
     color: #999;
     padding-left: size(26);
+    line-height: 1.4;
     @include txt-overflow;
   }
   .nn{

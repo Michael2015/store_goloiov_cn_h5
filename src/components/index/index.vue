@@ -38,10 +38,13 @@
         <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
       </div>
     </load-more>
+    <!-- 提示弹窗 -->
+    <notice ref="notice" :autoClose="true"></notice>
   </div>
 </template>
 
 <script>
+import Notice from 'base/notice'
 import SearchInput from 'base/ui/search-input'
 import IndexTopCustomer from './index-top-customer'
 import MsgLoop from 'base/msg-loop'
@@ -53,9 +56,11 @@ import {Loading} from 'lib'
 import {getCategory, getCategoryProducts, CustomerGetProducts, PartnerGetProducts} from 'api'
 import {invitePartner} from 'api/native'
 import {mapState} from 'vuex'
+import {login} from 'api/login'
 
 export default {
   components: {
+    Notice,
     LoadMore,
     SearchInput,
     IndexTopCustomer,
@@ -129,6 +134,16 @@ export default {
     },
     invite() {
       invitePartner(this.userInfo.uid, this.userInfo.nickname)
+    }
+  },
+  beforeRouteLeave(to, from , next) {
+    if (!this.isLogin) {
+      this.$refs.notice.show('请先登录', () => {
+        login()
+      })
+      next(false)
+    } else {
+      next()
     }
   }
 }

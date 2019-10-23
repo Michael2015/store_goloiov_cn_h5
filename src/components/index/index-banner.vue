@@ -2,9 +2,9 @@
   <div class="banner">
     <mt-swipe :show-indicators="true">
       <mt-swipe-item v-for="(item,index) in banner" :key="index">
-        <div class="img">
+        <router-link class="img" :to="item.app_url">
           <img :src="item.pic" alt="">
-        </div>
+        </router-link>
       </mt-swipe-item>
     </mt-swipe>
   </div>

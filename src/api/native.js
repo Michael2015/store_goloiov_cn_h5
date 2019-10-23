@@ -105,3 +105,10 @@ export function nativePay(type, params) {
     alert('未知支付类型')
   }
 }
+
+// 打电话
+export function telephone(phone) {
+  return api('Telephone', {
+    phone
+  })
+}
