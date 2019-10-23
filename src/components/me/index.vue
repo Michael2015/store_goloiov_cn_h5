@@ -8,9 +8,7 @@
         </div>
       </div>
       <div class="user_name">{{userInfo.nickname}}</div>
-      <div class="grade">
-        {{partnerLevelObj[userInfo.partner_level]}}
-      </div>
+      <div class="grade">{{partnerLevelObj[userInfo.partner_level]}}</div>
       <div class="team_no">伙伴{{Num}}人</div>
     </div>
     <div class="crosswise_tab">
@@ -35,14 +33,20 @@
         </div>
       </div>
     </div>
+    <div class="quit" @click="logout">退出登录</div>
+    <confirm ref="logOut">确定退出吗？</confirm>
+    <notice ref="notice"></notice>
   </div>
 </template>
 
 <script>
 import tojump from "mixins/tojump";
-import { partnerNum,updateUserInfo } from "api/me";
+import { partnerNum, updateUserInfo } from "api/me";
 import { mapState } from "vuex";
-import partnerLevelObj from 'mixins/partner-level-obj'
+import partnerLevelObj from "mixins/partner-level-obj";
+import { logout } from "api/login";
+import confirm from "base/confirm";
+import notice from "base/notice";
 export default {
   data() {
     return {
@@ -81,14 +85,29 @@ export default {
       Num: ""
     };
   },
-  mixins: [tojump,partnerLevelObj],
+  mixins: [tojump, partnerLevelObj],
   async mounted() {
     const reque = await partnerNum();
     this.Num = reque && reque.member_nums;
-    updateUserInfo()
+    updateUserInfo();
+  },
+  methods: {
+    logout() {
+      this.$refs.logOut.show("", () => {
+        logout().then(() => {
+          this.$refs.notice.show("退出成功", () => {
+            this.$router.replace("/");
+          });
+        });
+      });
+    }
   },
   computed: {
     ...mapState(["userInfo"])
+  },
+  components: {
+    confirm,
+    notice
   }
 };
 </script>
@@ -217,6 +236,16 @@ export default {
         }
       }
     }
+  }
+  .quit {
+    width: 100%;
+    height: size(100);
+    line-height: size(100);
+    text-align: center;
+    background: #fff;
+    color: #333333;
+    font-size: size(28);
+    color: #0c0422;
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="myMsg_warp">
-  <top-head>个人信息</top-head>
+    <top-head>个人信息</top-head>
     <div>
       <div class="warp_item border-bottom">
         <img :src="userInfo.avatar" alt class="avater" />
@@ -8,7 +8,12 @@
           <label for="image">
             修改头像
             <img src="~img/icon/join-right.png" alt />
-            <update-avatar :max="max" v-model="newAvatar" style="width:0;height:0;overflow:hidden" ref="img"></update-avatar>
+            <update-avatar
+              :max="max"
+              v-model="newAvatar"
+              style="width:0;height:0;overflow:hidden"
+              ref="img"
+            ></update-avatar>
           </label>
         </div>
       </div>
@@ -65,24 +70,24 @@
         </div>
       </div>
     </div>
-    <div class="quit" @click="logout">退出登录</div>
-    <confirm ref="logOut">确定退出吗？</confirm>
+    <!-- <div class="quit" @click="logout">退出登录</div>
+    <confirm ref="logOut">确定退出吗？</confirm> -->
     <notice ref="notice"></notice>
     <addteam ref="addteam"></addteam>
   </div>
 </template>
 
 <script>
-import confirm from "base/confirm"
-import notice from 'base/notice'
-import tojump from "mixins/tojump"
-import partnerLevelObj from "mixins/partner-level-obj"
-import { mapState } from "vuex"
-import { partnerNum, edituserinfo } from "api/me"
-import addteam from "base/addteam"
-import updateAvatar from "com/common/updateAvatar"
-import { Toast } from 'lib'
-import {logout} from 'api/login'
+import confirm from "base/confirm";
+import notice from "base/notice";
+import tojump from "mixins/tojump";
+import partnerLevelObj from "mixins/partner-level-obj";
+import { mapState } from "vuex";
+import { partnerNum, edituserinfo, updateUserInfo } from "api/me";
+import addteam from "base/addteam";
+import updateAvatar from "com/common/updateAvatar";
+import { Toast } from "lib";
+import { logout } from "api/login";
 export default {
   data() {
     return {
@@ -97,6 +102,7 @@ export default {
   },
   mounted() {
     this.loadDate();
+    updateUserInfo();
     // this.$refs.addteam.show(this.loadDate);
   },
   methods: {
@@ -106,14 +112,14 @@ export default {
     logout() {
       this.$refs.logOut.show("", () => {
         logout().then(() => {
-          this.$refs.notice.show('退出成功', () => {
-            this.$router.replace('/')
-          })
-        })
+          this.$refs.notice.show("退出成功", () => {
+            this.$router.replace("/");
+          });
+        });
       });
     },
     openPhone() {
-      window.location.href = 'tel://' + this.spread_user_phone
+      window.location.href = "tel://" + this.spread_user_phone;
       console.log("打开电话：" + this.spread_user_phone);
     },
     toAddTeam() {
@@ -148,17 +154,17 @@ export default {
   },
   watch: {
     newAvatar(val) {
-      if(val.length === 0){
+      if (val.length === 0) {
         return;
       }
       edituserinfo({ headImg: val[0] }).then(res => {
         if (res.code === 200) {
           Toast(res.msg);
-          this.tojump("/me");
+          updateUserInfo();
         } else {
           Toast(res.msg);
-          this.$refs.img.imgs = []
-          this.newAvatar = []
+          this.$refs.img.imgs = [];
+          this.newAvatar = [];
         }
       });
     }

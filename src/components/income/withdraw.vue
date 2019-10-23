@@ -57,7 +57,7 @@ export default {
       bank_code: "", // 银行卡号
       bank_name: "", // 银行所属
       extra: "", // 地方
-      real_name:''//持卡人
+      real_name: "" //持卡人
     };
   },
   components: {
@@ -72,7 +72,11 @@ export default {
   mixins: [tojump],
   methods: {
     allWithdraw() {
-      this.wantWithdraw = this.canWithdraw + "";
+      if (this.canWithdraw >= 10000) {
+        this.wantWithdraw = 10000 + "";
+      } else {
+        this.wantWithdraw = this.canWithdraw + "";
+      }
     },
     jumpWithdraw() {
       if (this.haveCard === 0) {
@@ -94,13 +98,15 @@ export default {
       });
     },
     jumpAddCard() {
-      const {real_name,bank_code} = this
-      this.tojump('/relevanceCard');
+      const { real_name, bank_code } = this;
+      this.tojump("/relevanceCard");
       this.$refs.addcard.hide();
     },
-    compileCard(){
-      const {real_name,bank_code} = this
-      this.tojump(`/relevanceCard?real_name=${real_name}&bank_code=${bank_code}`);
+    compileCard() {
+      const { real_name, bank_code } = this;
+      this.tojump(
+        `/relevanceCard?real_name=${real_name}&bank_code=${bank_code}`
+      );
     }
   },
   watch: {
@@ -157,7 +163,9 @@ export default {
       justify-content: space-between;
       color: #aaaaaa;
       .money {
+        flex: 1;
         & > input {
+          height: 100%;
           &::-webkit-input-placeholder {
             color: #aaaaaa;
             font-size: size(28);
@@ -166,6 +174,7 @@ export default {
       }
       .all_withdraw {
         color: #ff0000;
+        padding-left: size(30);
       }
     }
   }

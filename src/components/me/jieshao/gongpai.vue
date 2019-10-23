@@ -1,6 +1,6 @@
 <template>
   <div>
-    <top-head>公排奖励介绍</top-head>
+    <top-head>免单奖励介绍</top-head>
     <img :src="src" alt />
   </div>
 </template>
