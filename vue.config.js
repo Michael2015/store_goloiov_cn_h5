@@ -1,10 +1,38 @@
 const path = require('path')
 
+const assetsDir = 'public/h5'
+
+class GenHeadAndBody {
+  apply(compiler) {
+    compiler.hooks.compilation.tap('GenHeadAndBody', function(compilation){
+      // html-webpack-plugin 3.x
+      if (compilation.hooks.htmlWebpackPluginAlterAssetTags) {
+        compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync('GenHeadAndBody', function(data, cb) {
+          const htmlWebpackPlugin = data.plugin
+          if (htmlWebpackPlugin.createHtmlTag) {
+            const head = data.head.map(tag => htmlWebpackPlugin.createHtmlTag(tag)).join('\r\n')
+            const body = data.body.map(tag => htmlWebpackPlugin.createHtmlTag(tag)).join('\r\n')
+            compilation.assets[assetsDir + '/head.html'] = {
+              source: () => head,
+              size: () => head.length
+            }
+            compilation.assets[assetsDir + '/body.html'] = {
+              source: () => body,
+              size: () => body.length
+            }
+          }
+          cb(null, data)
+        })
+      }
+    })
+  }
+}
+
 module.exports = {
   productionSourceMap: true,
-  filenameHashing: false,
+  filenameHashing: true,
   // publicPath: './',
-  assetsDir: 'public/h5',
+  assetsDir: assetsDir,
   devServer: {
     proxy: {
       '/api|/app': {
@@ -31,22 +59,23 @@ module.exports = {
         'mixins': path.resolve(__dirname, './src/mixins'),
         'base': path.resolve(__dirname, './src/components/base')
       }
-    }
+    },
+    plugins: [new GenHeadAndBody()]
   },
   chainWebpack: config => {
-    config.module
-      .rule('images')
-      .use('url-loader')
-        .loader('url-loader')
-        .tap(options => {
-          // 修改它的选项...
-          options.fallback = {
-            loader: 'file-loader',
-            options: {
-              name: 'public/h5/img/[name].[hash:8].[ext]'
-            }
-          }
-          return options
-        })
+    // config.module
+    //   .rule('images')
+    //   .use('url-loader')
+    //     .loader('url-loader')
+    //     .tap(options => {
+    //       // 修改它的选项...
+    //       options.fallback = {
+    //         loader: 'file-loader',
+    //         options: {
+    //           name: 'public/h5/img/[name].[hash:8].[ext]'
+    //         }
+    //       }
+    //       return options
+    //     })
   }
 }
