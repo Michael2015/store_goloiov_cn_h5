@@ -179,7 +179,7 @@ export function getAreaInfo(id = 0){
 
 // 上传图片
 export function uploadImg(formData) {
-  return req.post('/api/customer/index/upload', formData).then(clean)
+  return req.post('/api/customer/index/commonUpload', formData).then(clean)
 }
 
 // 获取小程序二维码

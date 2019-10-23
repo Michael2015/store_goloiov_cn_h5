@@ -43,8 +43,8 @@ export default {
         }
         this.imgs.push(result)
         const form = new FormData()
-        // 这个key是后台写死成这样的
-        form.append('b068931cc450442b63f5b3d276ea4297', base64ToBlob(b), file.name)
+        // 这个key是后台写死成这样的 b068931cc450442b63f5b3d276ea4297 app使用file
+        form.append('file', base64ToBlob(b), file.name)
         uploadImg(form).then(data => {
           if (data) {
             result.path = data.url
