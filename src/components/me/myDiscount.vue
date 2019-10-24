@@ -23,6 +23,7 @@
         </div>
         <i></i>
       </div>
+      <div class="no-data">{{couponList.length === 0?'暂无数据':''}}</div>
     </div>
   </div>
 </template>
@@ -119,6 +120,12 @@ export default {
           }
         }
       }
+    }
+    .no-data {
+      margin-top: size(30);
+      font-size: size(26);
+      color: #444444;
+      text-align: center;
     }
   }
 }

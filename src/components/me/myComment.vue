@@ -25,6 +25,7 @@
       </div>
       <div class="time">{{item.add_time}}</div>
     </div>
+    <div class="no-data">{{list.length === 0?'暂无数据':''}}</div>
   </div>
 </template>
 
@@ -57,6 +58,12 @@ export default {
   margin-bottom: size(20);
   padding: size(30) size(30) size(36);
   background: #fff;
+}
+.no-data {
+  margin-top: size(30);
+  font-size: size(26);
+  color: #444444;
+  text-align: center;
 }
 .head {
   height: size(80);
