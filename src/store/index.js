@@ -17,7 +17,9 @@ export default new Vuex.Store({
     // 用户信息
     userInfo: {},
     // 买商品时，选择收货地址
-    selectAddress: null
+    selectAddress: null,
+    // 发生订单操作,触发刷新，比如删除订单，支付成功订单，重新下单
+    refreshOrder: 0
   },
   mutations: {
     loginTest(state) {
@@ -40,6 +42,9 @@ export default new Vuex.Store({
     },
     setAddress(state, addr) {
       state.selectAddress = addr
+    },
+    refreshOrder(state) {
+      state.refreshOrder++
     }
   },
   strict: debug,

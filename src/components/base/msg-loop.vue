@@ -7,10 +7,15 @@
 
 <script>
 export default {
+  props: {
+    msg: {
+      type: Array,
+      default: () => ([])
+    }
+  },
   data() {
     return {
-      n: 0,
-      msg: [1,2,3],
+      n: 0
     }
   },
   computed: {
@@ -46,19 +51,19 @@ export default {
   overflow: hidden;
 }
 .notice{
-  line-height: size(50);
-  height: size(50);
-  text-align: left;
+  line-height: size(44);
+  height: size(44);
+  text-align: center;
   padding: 0 size(20);
   font-size: size(22);
   position: relative;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   // background-color: #4a2f08;
   // opacity: 0.87;
-  color: #f7b500;
-  background-color: rgba(#4a2f08, .87);
-  border-top-right-radius: size(25);
-  border-bottom-right-radius: size(25);
+  // border-top-right-radius: size(25);
+  // border-bottom-right-radius: size(25);
 }
 .frame{
   position: absolute;

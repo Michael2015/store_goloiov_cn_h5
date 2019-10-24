@@ -36,13 +36,17 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLogin']),
+    ...mapState(['isLogin', 'refreshOrder']),
     getList() {
       return (page, size) => getOrderList(this.types[this.activeType].type, page, size)
     }
   },
   watch: {
     isLogin() {
+      this.triggerRefresh++
+    },
+    refreshOrder() {
+      // 检测到删除订单，需要刷新
       this.triggerRefresh++
     }
   },

@@ -56,9 +56,10 @@ export default {
   input{
     padding:0 4px;
     font-size: size(28);
-    line-height: 1.5em;
+    line-height: normal;
     &::-webkit-input-placeholder{
       color: #9ea2a0;
+      line-height: normal;
     }
   }
 }

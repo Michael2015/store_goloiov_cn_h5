@@ -218,10 +218,10 @@ export default {
         // 去支付
         Loading.open()
         this.paying = true
-        if (this.orderId) {
-          // 已经有订单了
+        if (this.orderId || this.createdOrderId) {
+          // 已经有订单了,或者已经创建过订单了
           this.status = 1
-          getNativePayParams(this.orderId, type)
+          getNativePayParams(this.orderId || this.createdOrderId, type)
         } else {
           let miandan_type
           if (this.info.is_platoon == 1 && this.info.is_self_buy_platoon == 1) {
@@ -238,6 +238,8 @@ export default {
               this.createdOrderId = data.order_id
               this.status = 1
               getNativePayParams(data.order_id, type)
+              // 成功下单，这里出发刷新订单列表
+              this.$store.commit('refreshOrder')
             } else {
               Loading.close()
               this.paying = false
@@ -266,6 +268,15 @@ export default {
                 this.status = 4
                 this.$refs.notice.show('支付失败', () => {
                   this.paying = false
+                  if (this.orderId) {
+                    // 从订单详情进来的，也就是发起的重新支付
+                    // 这里直接跳回原来的的页面
+                    this.$router.back()
+                  } else {
+                    // 是从商品详情页来的，发起的是一笔新的订单
+                    // 那就调整订单详情页面
+                    this.$router.replace('/order-detail/' + id)
+                  }
                 })
               }
             })
@@ -430,7 +441,7 @@ export default {
 .opts{
   height: size(100);
   background: #fff;
-  position: absolute;
+  position: fixed;
   width: 100%;
   left: 0;
   bottom: 0;

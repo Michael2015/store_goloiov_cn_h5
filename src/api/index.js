@@ -52,6 +52,10 @@ export function getCategoryProducts(cate_id) {
     cate_id
   }).then(clean)
 }
+// 获取首页滚动消息列表
+export function getIndexNotice() {
+  return req.get('/api/partner/home/getinfo').then(clean)
+}
 
 // 获取首页商品列表（非合伙人）
 export function CustomerGetProducts(page, size) {

@@ -22,11 +22,12 @@
       </div>
       <div class="blank"><img src="~img/index-top-bg.png" alt=""></div>
     </div>
-    <msg-loop v-if="false"></msg-loop>
+    <index-msg-loop v-if="isLogin && role === 1"></index-msg-loop>
     <index-focus :cid="cid" v-if="cid"></index-focus>
     <div class="filters table">
       <div>
         <div class="">
+          <div class="item" key="-1" @click="setCategory(-1)" :class="{active:activeCategoryIndex===-1}">全部</div>
           <div class="item" :class="{active:activeCategoryIndex===index}" v-for="(item,index) in category" :key="index"
           @click="setCategory(index)"><span>{{item.cate_name}}</span></div>
         </div>
@@ -42,8 +43,13 @@
         <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
       </div>
     </load-more>
-    <!-- 退出登录 -->
-    <div class="logout" v-if="isLogin" @click="logout">退出</div>
+    <!-- 退出登录 非合伙才有 -->
+    <div class="logout" v-if="isLogin && role !== 1" @click="logout">退出</div>
+    <!-- 查看教程 -->
+    <router-link class="how-to" to="/useDesc" tag="div">
+      <div>使用</div>
+      <div>说明</div>
+    </router-link>
     <!-- 提示弹窗 -->
     <notice ref="notice" :autoClose="true"></notice>
     <confirm ref="confirm"></confirm>
@@ -55,7 +61,7 @@ import Notice from 'base/notice'
 import Confirm from "base/confirm"
 import SearchInput from 'base/ui/search-input'
 import IndexTopCustomer from './index-top-customer'
-import MsgLoop from 'base/msg-loop'
+import IndexMsgLoop from './index-msg-loop'
 import IndexBanner from './index-banner'
 import IndexFocus from './index-focus'
 import IndexGoodsItem from './index-goods-item'
@@ -74,7 +80,7 @@ export default {
     SearchInput,
     IndexTopCustomer,
     IndexBanner,
-    MsgLoop,
+    IndexMsgLoop,
     IndexFocus,
     IndexGoodsItem
   },
@@ -301,6 +307,19 @@ export default {
   padding: size(15) size(17);
   padding-left: size(10);
   // opacity: 0.71;
+}
+.how-to{
+  position: fixed;
+  right: size(20);
+  bottom: size(164);
+  @include circle(90);
+  background-color: #eb0a0a;
+	box-shadow: 0px 1px 5px 0px rgba(135, 135, 135, 0.5);
+  color: #fff;
+  text-align: center;
+  font-size: size(24);
+  line-height: 1.4;
+  padding-top: size(12);
 }
 .list-wrap{
   padding-bottom: size(120);

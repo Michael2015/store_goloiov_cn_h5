@@ -60,7 +60,7 @@
       </div>
     </div>
     <div class="panel" v-if="orderInfo.is_allow_operation==1">
-      <div class="btn-inline" @click="$refs.contact.show()">联系卖家</div>
+      <div class="btn-inline" @click="contact">联系卖家</div>
       <div class="btn-inline" v-if="orderInfo.status_of_order === 0" @click="delOrder">删除订单</div>
       <div class="btn-inline warn" v-if="orderInfo.status_of_order === 0" @click="goPay">重新支付</div>
       <div class="btn-inline warn" v-if="orderInfo.status_of_order === 1" @click="fastRefund">申请退款</div>
@@ -166,6 +166,7 @@ export default {
           Loading.close()
           if (data) {
             this.$refs.notice.show('删除成功', () => {
+              this.$store.commit('refreshOrder')
               this.$router.back()
             })
           }
@@ -197,6 +198,10 @@ export default {
           }
         })
       })
+    },
+    contact() {
+      alert('触发联系商家')
+      this.$refs.contact.show()
     },
     goRemark() {
       // 去评价
