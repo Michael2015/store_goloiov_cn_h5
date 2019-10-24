@@ -38,7 +38,7 @@
         <div class="main_item">1.获得推广津贴权益，当您的下级发展的团队有人购买商品，您将获得商品相应的津贴</div>
         <div class="main_item">
           2.开发供货商，您将获得该供货商利润的
-          <span>55%</span>
+          <span>60%</span>
         </div>
         <div class="main_item">
           3.获得管理津贴，当您自己购买商品时您将获得
@@ -53,11 +53,11 @@
         <div class="main_item">1.获得推广津贴权益，当您的下级发展的团队有人购买商品，您将获得商品相应的津贴</div>
         <div class="main_item">
           2.开发供货商，您将获得该供货商利润的
-          <span>55%</span>
+          <span>60%</span>
         </div>
         <div class="main_item">
           3.当您当下线开发供货商，您将获得：
-          <span>55%</span> - 开发供货商上级应得利润 - 开发供货商上上级应得利润
+          <span>60%</span> - 开发供货商上级应得利润 - 开发供货商上上级应得利润
         </div>
         <div class="main_item">
           4.获得管理津贴，当您自己购买商品时您将获得

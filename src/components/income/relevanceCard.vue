@@ -130,7 +130,9 @@ export default {
     }
     .import {
       width: size(570);
-      // &>input{}
+      &>input{
+        height: 100%;
+      }
     }
   }
   .withdraw_btn {

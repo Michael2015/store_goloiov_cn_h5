@@ -93,17 +93,18 @@ export default {
       background-color: #f5f5f5;
       border-radius: size(32);
       display: flex;
+      align-items: center;
       & > img {
         width: size(32);
         height: size(32);
         margin-left: size(20);
-        margin-top: size(17);
         margin-right: size(14);
       }
       & > input {
         font-size: size(28);
         border-radius: size(32);
         background: #f5f5f5;
+        line-height: normal;
         &::-webkit-input-placeholder {
           color: #9ea2a0;
         }

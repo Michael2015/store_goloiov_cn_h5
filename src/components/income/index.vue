@@ -5,8 +5,10 @@
         <div class="content">
           <div class="title">可提现金额:</div>
           <div class="all_money">
-            <span>¥</span><!--
-            -->{{isLogin?cash:'0.00'}}
+            <span>¥</span>
+            <!--
+            -->
+            {{isLogin?cash:'0.00'}}
           </div>
           <div class="record" @click="record">提现记录</div>
           <div class="detail">
@@ -47,7 +49,7 @@
                 :key="index"
                 @click="clickMianDan(item.order_sn)"
               >
-                <div class="queue border-bottom">{{item.left}}</div>
+                <div class="queue border-bottom" v-if="item.left&&item.left !== ''">{{item.left}}</div>
                 <div class="detail">
                   <div class="img_warp">
                     <img :src="item.image" alt />
@@ -71,11 +73,7 @@
         </mt-tab-container-item>
 
         <mt-tab-container-item id="earnings">
-          <load-more
-            v-slot="{list}"
-            :getData="isLogin?loadEarnings:null"
-            ref="earnings"
-          >
+          <load-more v-slot="{list}" :getData="isLogin?loadEarnings:null" ref="earnings">
             <div class="in_record">
               <div
                 class="item"
@@ -103,12 +101,12 @@
 </template>
 
 <script>
-import tojump from "mixins/tojump"
-import { mapState } from "vuex"
-import notice from "base/notice"
-import { incomeList, platoonList, getUserAmount } from "api/income"
-import LoadMore from "base/load-more"
-import {login} from 'api/login'
+import tojump from "mixins/tojump";
+import { mapState } from "vuex";
+import notice from "base/notice";
+import { incomeList, platoonList, getUserAmount } from "api/income";
+import LoadMore from "base/load-more";
+import { login } from "api/login";
 export default {
   data() {
     return {
@@ -163,7 +161,7 @@ export default {
         this.tojump("/record");
       } else {
         this.$refs.notive.show("请先登录", () => {
-          login()
+          login();
         });
       }
     },
@@ -172,7 +170,7 @@ export default {
         this.tojump("/withdraw");
       } else {
         this.$refs.notive.show("请先登录", () => {
-          login()
+          login();
         });
       }
     },
@@ -251,12 +249,12 @@ export default {
     // padding: size(24) size(24) 0;
     position: relative;
     overflow: hidden;
-    &:after{
-      content: ' ';
+    &:after {
+      content: " ";
       display: block;
       position: absolute;
       @include circle(486);
-      background-image: linear-gradient(49deg, #EF5456 0%, #EA1B1D 66%);
+      background-image: linear-gradient(49deg, #ef5456 0%, #ea1b1d 66%);
       top: size(-(486 - 240));
       right: size(-(486 - 214));
     }
@@ -265,18 +263,18 @@ export default {
       height: size(380);
       padding: size(21) size(58) size(8);
       // @include bg("~img/shouyi-bg.png");
-      background-image: linear-gradient(236deg, #EF5456 0%, #E70002 100%);
+      background-image: linear-gradient(236deg, #ef5456 0%, #e70002 100%);
       border-bottom-left-radius: 28px;
       border-bottom-right-radius: 28px;
       color: #fff;
       line-height: 1;
       position: relative;
-      &:after{
-        content: ' ';
+      &:after {
+        content: " ";
         display: block;
         position: absolute;
         @include circle(486);
-        background-image: linear-gradient(49deg, #EF5456 0%, #EA1B1D 66%);
+        background-image: linear-gradient(49deg, #ef5456 0%, #ea1b1d 66%);
         top: size(-(486 - 240));
         right: size(-(486 - 214));
       }
@@ -340,14 +338,14 @@ export default {
           }
         }
       }
-      .withdraw-wrap{
+      .withdraw-wrap {
         position: absolute;
         bottom: 0;
         right: 50%;
         z-index: 2;
         transform: translateX(50%) translateY(50%);
-        width: size(168 + 14*2);
-        height: size(168 + 14*2);
+        width: size(168 + 14 * 2);
+        height: size(168 + 14 * 2);
         padding: size(14);
         line-height: size(168);
         border-radius: 50%;
@@ -441,7 +439,7 @@ export default {
       padding: 0 size(30);
       .item {
         background: #f7f7f7;
-        min-height: size(322);
+        // min-height: size(322);
         margin-top: size(14);
         &:nth-child(1) {
           margin-top: 0;
@@ -455,7 +453,7 @@ export default {
           padding-right: size(20);
         }
         .detail {
-          padding: size(30) size(37) size(43) size(20);
+          padding: size(30) size(20) size(0) size(20);
           display: flex;
           .img_warp {
             & > img {
@@ -483,10 +481,8 @@ export default {
         .footer {
           font-size: size(26);
           color: #333;
-          padding-right: size(20);
+          padding: size(13) size(20) size(17);
           text-align: right;
-          height: size(37);
-          line-height: size(37);
           .txt-count {
             & > span {
               &:nth-child(2) {

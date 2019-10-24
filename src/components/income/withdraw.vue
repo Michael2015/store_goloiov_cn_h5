@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="withdraw_button" @click="jumpWithdraw">提现</div>
-    <div class="hint_list">
+    <div class="hint_list" v-if="isShowBottom">
       <div class="item">
         <span></span>每次提现不少于10元
       </div>
@@ -57,7 +57,9 @@ export default {
       bank_code: "", // 银行卡号
       bank_name: "", // 银行所属
       extra: "", // 地方
-      real_name: "" //持卡人
+      real_name: "", //持卡人
+      documentHeight: document.documentElement.clientHeight, //记录屏幕一开始高度
+      showHeight: document.documentElement.clientHeight //记录屏幕一开始高度(对比)
     };
   },
   components: {
@@ -67,6 +69,10 @@ export default {
     showCanWithdraw: function() {
       const { canWithdraw } = this;
       return `可提现金额${canWithdraw}元`;
+    },
+    // 针对部分手机唤起键盘导致底部被顶影响，当页面缩小底部隐藏
+    isShowBottom(){
+      return this.documentHeight <= this.showHeight
     }
   },
   mixins: [tojump],
@@ -111,13 +117,25 @@ export default {
   },
   watch: {
     wantWithdraw(val) {
-      if (+val > this.canWithdraw) {
+      if (+val >= 10000) {
+        if (this.canWithdraw < 10000) {
+          this.wantWithdraw = this.canWithdraw;
+        } else {
+          this.wantWithdraw = 10000;
+        }
+      } else if (+val >= this.canWithdraw) {
         this.wantWithdraw = this.canWithdraw;
       }
       this.toWithdraw = +this.wantWithdraw;
     }
   },
   async mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.showHeight = document.documentElement.clientHeight;
+      })();
+    };
+    
     const reque = await withdraw();
     this.canWithdraw = +reque.withdraw_amount;
     if (reque.bank_code) {
