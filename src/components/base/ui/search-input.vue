@@ -49,17 +49,16 @@ export default {
     width: size(24);
   }
   .search{
-    padding-left: size(20);
-    padding-right: size(20);
+    padding-right: size(28);
+    width: size(80);
+    text-align: right;
   }
   input{
     padding:0 4px;
     font-size: size(28);
-    height: size(50);
-    line-height: size(50);
+    line-height: 1.5em;
     &::-webkit-input-placeholder{
       color: #9ea2a0;
-      line-height: size(50);
     }
   }
 }

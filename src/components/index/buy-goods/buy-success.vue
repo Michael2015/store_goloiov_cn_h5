@@ -30,11 +30,7 @@ export default {
     }
   },
   created() {
-    if (this.$route.params.info) {
-      this.info = this.$route.params.info
-    } else {
-      alert('缺少订单信息')
-    }
+    this.info = {...this.$route.query}
   }
 }
 </script>

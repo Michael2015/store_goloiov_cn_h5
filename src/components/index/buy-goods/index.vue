@@ -265,7 +265,7 @@ export default {
               } else {
                 this.status = 4
                 this.$refs.notice.show('支付失败', () => {
-                  // this.paying = false
+                  this.paying = false
                 })
               }
             })
@@ -287,16 +287,19 @@ export default {
         if (data) {
           // 支付成功
           this.$router.replace({
-            name: 'buy-success',
-            params: {
-              info: data
+            path: '/buy-success',
+            query: {
+              total_price: data.total_price,
+              is_platoon: data.is_platoon,
+              platoon_number: data.platoon_number,
+              position: data.position
             }
           })
         } else {
           this.$refs.notice.show('查询支付失败，请联系客服处理')
         }
-      }, () => {
-        this.$refs.notice.show('查询订单失败')
+      }, (msg) => {
+        this.$refs.notice.show(msg || '查询支付失败，请联系客服处理')
       })
     }
   }
