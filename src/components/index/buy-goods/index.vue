@@ -155,6 +155,23 @@ export default {
       this.createdOrderId = ''
       this.loaddata()
     }
+    if (this.addr && this.addr.id) {
+      // 有地址
+      // 用户可能先有个地址，让后进入我的地址列表去删除这个地址，这是又返回来
+      // 所以重新调用接口校验这个地址是否已经删除
+      getAddressList().then(data => {
+        if (data) {
+          const addr = data.filter(i => i.id === this.addr.id)
+          if (addr && addr.length > 0) {
+            // 还是有效地址
+          } else {
+            // 地址不存在了，删除地址
+            this.addr = null
+          }
+          
+        }
+      })
+    }
   },
   methods: {
     loaddata() {

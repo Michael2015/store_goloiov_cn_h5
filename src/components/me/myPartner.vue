@@ -29,6 +29,7 @@
 import { member } from "api/me";
 import { mapState } from "vuex";
 import {invitePartner} from 'api/native'
+import {Loading} from 'lib'
 export default {
   data() {
     return {
@@ -44,7 +45,10 @@ export default {
       this.reque = await member(this.value);
     },
     invite() {
-      invitePartner(this.userInfo.uid, this.userInfo.nickname)
+      Loading.open()
+      invitePartner(this.userInfo.uid, this.userInfo.nickname).finally(() => {
+        Loading.close()
+      })
     }
   },
   computed: {

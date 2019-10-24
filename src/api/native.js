@@ -70,10 +70,16 @@ export function nativeLogout() {
 
 // 邀请合伙人
 export function invitePartner(uid, name) {
-  return api('MiniProgram', {
-    webpageUrl: 'https://wcp.szyrwl.com',
-    path: '/pages/index/index?share_id=' + uid + '&type=invite',
-    title: name + '邀请您免费注册万车品商城会员'
+  return import(/* webpackChunkName: "mini-img" */ 'img/mini.png').then((res) => {
+    return res.default
+  }).then(img => {
+    const len = 'data:image/png;base64,'.length
+    return api('MiniProgram', {
+      webpageUrl: 'https://wcp.szyrwl.com',
+      path: '/pages/index/index?share_id=' + uid + '&type=invite',
+      title: name + '邀请您免费注册万车品商城会员',
+      img: img.substring(len)
+    })
   })
 }
 

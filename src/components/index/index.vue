@@ -148,7 +148,10 @@ export default {
       }
     },
     invite() {
-      invitePartner(this.userInfo.uid, this.userInfo.nickname)
+      Loading.open()
+      invitePartner(this.userInfo.uid, this.userInfo.nickname).finally(() => {
+        Loading.close()
+      })
     },
     logout() {
       this.$refs.confirm.show('确定退出吗？', () => {

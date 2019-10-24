@@ -60,22 +60,31 @@ module.exports = {
         'base': path.resolve(__dirname, './src/components/base')
       }
     },
+    module: {
+      rules: [
+        {
+          test: /mini\.png$/, // 分享小程序封面图
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 1024 * 1024 * 4,
+                fallback: {
+                  loader: 'file-loader',
+                  options: {
+                    name: 'public/h5/img/[name].[hash:8].[ext]'
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
     plugins: [new GenHeadAndBody()]
   },
   chainWebpack: config => {
-    // config.module
-    //   .rule('images')
-    //   .use('url-loader')
-    //     .loader('url-loader')
-    //     .tap(options => {
-    //       // 修改它的选项...
-    //       options.fallback = {
-    //         loader: 'file-loader',
-    //         options: {
-    //           name: 'public/h5/img/[name].[hash:8].[ext]'
-    //         }
-    //       }
-    //       return options
-    //     })
+    // 排除小程序封面图，让它被上面的loader捕获
+    config.module.rule('images').exclude.add(/mini\.png$/)
   }
 }
