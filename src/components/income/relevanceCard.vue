@@ -124,6 +124,7 @@ export default {
     background: #fff;
     display: flex;
     font-size: size(28);
+    align-items: center;
     .title {
       flex: 1;
       padding-left: size(30);
@@ -131,7 +132,7 @@ export default {
     .import {
       width: size(570);
       &>input{
-        height: 100%;
+        line-height: normal;
       }
     }
   }

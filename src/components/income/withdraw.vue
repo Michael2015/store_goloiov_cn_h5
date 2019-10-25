@@ -71,8 +71,8 @@ export default {
       return `可提现金额${canWithdraw}元`;
     },
     // 针对部分手机唤起键盘导致底部被顶影响，当页面缩小底部隐藏
-    isShowBottom(){
-      return this.documentHeight <= this.showHeight
+    isShowBottom() {
+      return this.documentHeight <= this.showHeight;
     }
   },
   mixins: [tojump],
@@ -135,7 +135,7 @@ export default {
         this.showHeight = document.documentElement.clientHeight;
       })();
     };
-    
+
     const reque = await withdraw();
     this.canWithdraw = +reque.withdraw_amount;
     if (reque.bank_code) {
@@ -165,15 +165,17 @@ export default {
     font-size: size(28);
     .title {
       color: #333;
-      flex: 1;
+      width: size(150);
     }
     .no_card {
       width: size(562);
       color: #aaaaaa;
+      flex: 1;
     }
     .have_card {
       width: size(562);
       color: #333;
+      flex: 1;
     }
     .setMoney {
       width: size(562);
@@ -181,6 +183,7 @@ export default {
       justify-content: space-between;
       align-items: center;
       color: #aaaaaa;
+      flex: 1;
       .money {
         flex: 1;
         & > input {
