@@ -106,7 +106,6 @@ export default {
       }
       & > input {
         font-size: size(28);
-        border-radius: size(32);
         background: #f5f5f5;
         line-height: normal;
         &::-webkit-input-placeholder {

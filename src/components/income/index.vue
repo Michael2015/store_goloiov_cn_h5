@@ -107,6 +107,7 @@ import notice from "base/notice";
 import { incomeList, platoonList, getUserAmount } from "api/income";
 import LoadMore from "base/load-more";
 import { login } from "api/login";
+import { Toast } from "lib";
 export default {
   data() {
     return {
@@ -167,6 +168,10 @@ export default {
     },
     withdraw() {
       if (this.isLogin) {
+        if (this.cash === "0.00") {
+          Toast('无可提现金额');
+          return;
+        }
         this.tojump("/withdraw");
       } else {
         this.$refs.notive.show("请先登录", () => {

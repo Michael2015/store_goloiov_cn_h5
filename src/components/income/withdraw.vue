@@ -179,11 +179,12 @@ export default {
       width: size(562);
       display: flex;
       justify-content: space-between;
+      align-items: center;
       color: #aaaaaa;
       .money {
         flex: 1;
         & > input {
-          height: 100%;
+          line-height: normal;
           &::-webkit-input-placeholder {
             color: #aaaaaa;
             font-size: size(28);

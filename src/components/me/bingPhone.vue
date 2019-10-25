@@ -7,11 +7,17 @@
     </div>
     <div class="show_bind" v-else-if="inputPhone === ''">
       <div class="bind_item">
-        <input type="text" maxlength="11" v-model="enterPhone" placeholder="输入手机号" />
+        <input
+          type="number"
+          autocomplete="off"
+          pattern="[0-9]*"
+          v-model="enterPhone"
+          placeholder="输入手机号"
+        />
         <div class="clone"></div>
       </div>
       <div class="bind_item">
-        <input type="text" maxlength="4" v-model="code" />
+        <input type="number" autocomplete="off" pattern="[0-9]*" maxlength="4" v-model="code" />
         <div class="getcode" @click="getcode">{{timeing?`${Time}s`:showTitle}}</div>
       </div>
     </div>
@@ -124,7 +130,19 @@ export default {
   },
   mounted() {
     this.inputPhone = this.userInfo.phone || "";
-  }
+  },
+  watch: {
+    enterPhone(val){
+      if(val.length>11){
+        this.enterPhone = val.substring(0,11)
+      }
+    },
+    code(val){
+      if(val.length > 4){
+        this.code = val.substring(0,4)
+      }
+    }
+  },
 };
 </script>
 
@@ -162,7 +180,7 @@ export default {
       .clone {
         width: size(36);
         height: size(36);
-        @include bg('~img/icon/clear.png');
+        @include bg("~img/icon/clear.png");
       }
       .getcode {
         width: size(330);
