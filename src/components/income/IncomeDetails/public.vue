@@ -35,11 +35,11 @@
     <div class="about_order">
       <div class="title">关联订单:</div>
       <div class="order_list">
-        <div class="item" v-for="(item) in showObj.related_user" :key="item.uid">
+        <div class="item" v-for="(item,index) in showObj.related_user" :key="index">
           <img :src="item.avatar" alt />
           <div class="order_msg">
             <div class="about_name">{{item.nickname}}</div>
-            <!-- <div class="order_no">1256624</div> -->
+            <div class="order_no">{{item.uid}}</div>
           </div>
         </div>
       </div>
@@ -203,6 +203,8 @@ export default {
         .order_msg {
           flex: 1;
           .about_name {
+            height: size(37);
+            line-height: size(37);
             color: #333;
             font-size: size(26);
             width: size(144);
@@ -211,6 +213,8 @@ export default {
             white-space: nowrap;
           }
           .order_no {
+            height:size(30);
+            line-height: size(30);
             font-size: size(22);
             color: #999;
             width: size(144);
