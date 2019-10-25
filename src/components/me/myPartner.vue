@@ -110,6 +110,8 @@ export default {
         line-height: normal;
         &::-webkit-input-placeholder {
           color: #9ea2a0;
+          font-size: size(28);
+          line-height: normal;
         }
       }
     }

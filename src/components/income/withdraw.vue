@@ -185,9 +185,11 @@ export default {
         flex: 1;
         & > input {
           line-height: normal;
+          font-size: size(28);
           &::-webkit-input-placeholder {
             color: #aaaaaa;
             font-size: size(28);
+            line-height: normal;
           }
         }
       }
