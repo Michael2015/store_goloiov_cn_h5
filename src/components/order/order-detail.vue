@@ -205,7 +205,6 @@ export default {
       })
     },
     contact() {
-      alert('触发联系商家')
       this.$refs.contact.show()
     },
     goRemark() {
