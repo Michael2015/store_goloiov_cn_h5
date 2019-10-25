@@ -14,7 +14,7 @@
           v-model="enterPhone"
           placeholder="输入手机号"
         />
-        <div class="clone"></div>
+        <div class="clone" @click="clearPhone"></div>
       </div>
       <div class="bind_item">
         <input type="number" autocomplete="off" pattern="[0-9]*" maxlength="4" v-model="code" />
@@ -80,11 +80,14 @@ export default {
         }
       } else if (this.inputPhone !== "") {
         //  改绑手机
-        this.inputPhone = "";
+        this.clear()
       }
     },
     clear() {
       this.inputPhone = "";
+    },
+    clearPhone(){
+      this.enterPhone = "";
     },
     async getcode() {
       if (this.timeing) {
