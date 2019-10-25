@@ -40,6 +40,7 @@
     </div>
     <keep-alive>
       <mt-tab-container v-model="active" swipeable>
+        <!-- 免单列 -->
         <mt-tab-container-item id="charge">
           <load-more v-slot="{list}" :getData="isLogin?loadCharge:null" ref="charge">
             <div class="pub_list">
@@ -72,6 +73,7 @@
           <div class="no_login" v-if="!isLogin">暂无数据</div>
         </mt-tab-container-item>
 
+        <!-- 收益列 -->
         <mt-tab-container-item id="earnings">
           <load-more v-slot="{list}" :getData="isLogin?loadEarnings:null" ref="earnings">
             <div class="in_record">
@@ -79,7 +81,7 @@
                 class="item"
                 v-for="(item,index) in list"
                 :key="index"
-                @click="clickShouYi(item.type,item.order_id,item.order_sn, item.user_id)"
+                @click="clickShouYi(item.type,item.order_id,item.order_sn, item.user_id,item.type_num)"
               >
                 <div class="left">
                   <div class="name">
@@ -88,7 +90,7 @@
                   </div>
                   <div class="reason">{{item.title}}</div>
                 </div>
-                <div class="right">+{{item.number}}元</div>
+                <div class="right">{{item.number}}元</div>
               </div>
             </div>
           </load-more>
@@ -185,7 +187,7 @@ export default {
       return s.substr(s.length - 6, 6);
     },
     // 收益列表点击
-    clickShouYi(type, id, sn, uid) {
+    clickShouYi(type, id, sn, uid,type_num) {
       console.log(type);
       let url;
       url = this.jumpObj[type];
@@ -193,7 +195,7 @@ export default {
         //  跳转订单详情那order_sn去查询
         url += `/${sn}`;
       } else {
-        url += `?order_id=${id}&user_id=${uid}`;
+        url += `?order_id=${id}&user_id=${uid}&type_num=${type_num}`;
       }
       this.tojump(url);
     },

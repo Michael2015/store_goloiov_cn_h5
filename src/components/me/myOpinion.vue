@@ -1,7 +1,7 @@
 <template>
   <div class="opinion_warp">
     <top-head>反馈意见</top-head>
-    <input type="text" v-model="phone" placeholder="输入联系手机号" />
+    <input type="number" v-model="phone" placeholder="输入联系手机号" />
     <div class="reasons">
       <div class="more">
         <img src="~img/icon/typo.png" alt />
@@ -58,7 +58,14 @@ export default {
           }
       })
     }
-  }
+  },
+  watch: {
+    phone(val){
+      if(val.length > 11){
+        this.phone = val.substring(0,11);
+      }
+    }
+  },
 };
 </script>
 

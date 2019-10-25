@@ -34,7 +34,7 @@
         <span></span>平台会根据税法扣除相应个人所得税
       </div>
       <div class="item">
-        <span></span>目前仅支持体系到本人银行卡
+        <span></span>目前仅支持提现到本人银行卡
       </div>
     </div>
     <addCard ref="addcard" @add-card="jumpAddCard"></addCard>
@@ -187,6 +187,7 @@ export default {
       .money {
         flex: 1;
         & > input {
+          height: size(60);
           line-height: normal;
           font-size: size(28);
           &::-webkit-input-placeholder {

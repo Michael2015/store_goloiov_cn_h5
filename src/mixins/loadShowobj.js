@@ -7,10 +7,11 @@ export default {
     }
   },
   async mounted(){
-    // console.log(this.$route.query.order_id)
-    const reque = await incomeListDetail(this.$route.query.order_id, this.$route.query.user_id)
+    const { order_id,user_id,type_num } = this.$route.query
+    // console.log(type_num)
+    const reque = await incomeListDetail(order_id,user_id,type_num)
     if(reque.code === 200){
-      this.showObj = reque.data
+      this.showObj = reque.data 
     }else {
       Toast(reque.msg)
     }
