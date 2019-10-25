@@ -10,7 +10,7 @@
     <div class="msg_item">
       <div class="title">卡号</div>
       <div class="import">
-        <input type="text" placeholder="输入银行卡号" pattern="[0-9]*" maxlength="24" v-model="bank_code" />
+        <input type="number" placeholder="输入银行卡号" pattern="[0-9]*" v-model="bank_code" />
       </div>
     </div>
     <div class="msg_item">
@@ -99,13 +99,11 @@ export default {
     this.bank_code = bank_code;
   },
   watch: {
-    // card(val) {
-    //   if (!/^([\d]{4}[\s]+)*[\d]{0,3}$/.test(val)) {
-    //     this.card = val.replace(/[^\d]|\s/g, "").replace(/(\d{4})(?=\d)/g, "$1")
-    //   } else {
-    //     this.card = val
-    //   }
-    // }
+    bank_code(val){
+      if(val.length > 19){
+        this.bank_code = val.substring(0,19)
+      }
+    }
   }
 };
 </script>
