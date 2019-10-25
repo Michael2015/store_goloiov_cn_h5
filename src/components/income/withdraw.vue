@@ -28,7 +28,7 @@
         <span></span>每次提现不少于10元
       </div>
       <div class="item">
-        <span></span>每天可申请提现3次，每天提现不超过10.000元
+        <span></span>每天可申请提现3次，每天提现不超过50.000元
       </div>
       <div class="item">
         <span></span>平台会根据税法扣除相应个人所得税
@@ -78,18 +78,18 @@ export default {
   mixins: [tojump],
   methods: {
     allWithdraw() {
-      if (this.canWithdraw >= 10000) {
-        this.wantWithdraw = 10000 + "";
-      } else {
-        this.wantWithdraw = this.canWithdraw + "";
-      }
+      // if (this.canWithdraw >= 10000) {
+      //   this.wantWithdraw = 10000 + "";
+      // } else {
+      this.wantWithdraw = this.canWithdraw + "";
+      // }
     },
     jumpWithdraw() {
       if (this.haveCard === 0) {
         Toast("请先添加银行卡");
         return;
       }
-      if (this.toWithdraw < 10 || this.toWithdraw > 10000) {
+      if (this.toWithdraw < 10 || this.toWithdraw > 50000) {
         Toast("请先输入正确金额");
         this.wantWithdraw = "";
         return;
@@ -117,13 +117,14 @@ export default {
   },
   watch: {
     wantWithdraw(val) {
-      if (+val >= 10000) {
-        if (this.canWithdraw < 10000) {
-          this.wantWithdraw = this.canWithdraw;
-        } else {
-          this.wantWithdraw = 10000;
-        }
-      } else if (+val >= this.canWithdraw) {
+      // if (+val >= 10000) {
+      //   if (this.canWithdraw < 10000) {
+      //     this.wantWithdraw = this.canWithdraw;
+      //   } else {
+      //     this.wantWithdraw = 10000;
+      //   }
+      // } else
+      if (+val >= this.canWithdraw) {
         this.wantWithdraw = this.canWithdraw;
       }
       this.toWithdraw = +this.wantWithdraw;
