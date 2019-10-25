@@ -119,7 +119,12 @@ export default {
           console.log(data)
           this.orderInfo = data
           try{
-            this.partnerInfo = JSON.parse(data.partner_info)
+            if (data.partner_info) {
+              const partnerInfo = JSON.parse(data.partner_info)
+              if (partnerInfo) {
+                this.partnerInfo = partnerInfo
+              }
+            }
           } catch(e) { console.log(e) }
         } else {
           this.$refs.notice.show('未查询到订单信息', () => {
