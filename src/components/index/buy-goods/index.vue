@@ -157,13 +157,15 @@ export default {
     }
     if (this.addr && this.addr.id) {
       // 有地址
-      // 用户可能先有个地址，让后进入我的地址列表去删除这个地址，这是又返回来
+      // 用户可能先有个地址，让后进入我的地址列表去删除这个地址，这时又返回来
       // 所以重新调用接口校验这个地址是否已经删除
       getAddressList().then(data => {
         if (data) {
           const addr = data.filter(i => i.id === this.addr.id)
           if (addr && addr.length > 0) {
             // 还是有效地址
+            // 用最新的数据，用户可能修改过这个地址的内容
+            this.addr = addr[0]
           } else {
             // 地址不存在了，删除地址
             this.addr = null
