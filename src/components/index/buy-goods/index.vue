@@ -216,10 +216,10 @@ export default {
         clear()
       })
       this.$router.push({
-        path: '/myAddress'
-        // query: {
-        //   select: 1
-        // }
+        path: '/myAddress',
+        query: {
+          select: 1
+        }
       })
     },
     doPay() {
