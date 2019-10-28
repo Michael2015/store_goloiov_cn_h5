@@ -58,6 +58,13 @@ export default {
       this.addr.push(lastAddr.district)
     }
   },
+  watch: {
+    phone(v, vv) {
+      if (v.length > 11) {
+        this.phone = vv
+      }
+    }
+  },
   methods: {
     save() {
       // 保存

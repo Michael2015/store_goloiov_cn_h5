@@ -100,6 +100,7 @@ export default {
         Loading.close()
         if (data) {
           this.$refs.notice.show('您的申请已提交', () => {
+            this.$store.commit('refreshOrder')
             this.$router.back()
           })
         }

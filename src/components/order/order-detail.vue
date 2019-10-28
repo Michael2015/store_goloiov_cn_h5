@@ -199,6 +199,7 @@ export default {
           if (data) {
             this.$refs.notice.show('退款成功', () => {
               this.loaddata()
+              this.$store.commit('refreshOrder')
             })
           }
         })
