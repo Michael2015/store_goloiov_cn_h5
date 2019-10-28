@@ -1,5 +1,5 @@
 import { Indicator, Toast as toast } from 'mint-ui'
-import * as clipboard from 'clipboard-polyfill'
+import Clipboard from 'clipboard'
 
 export const Loading = {
   open: Indicator.open.bind(Indicator),
@@ -8,7 +8,18 @@ export const Loading = {
 
 export const Toast = toast
 
-export const setClipboard = (s) => clipboard.writeText(s)
+export const setClipboard = (s) => new Promise(function(resolve) {
+  let button = document.createElement('button')
+  button.setAttribute('data-clipboard-text', s)
+  let clip = new Clipboard(button)
+  clip.on('success', () => {
+    resolve()
+    clip.destroy()
+    button = null
+    clip = null
+  })
+  button.click()
+})
 
 // 滚动条在Y轴上的滚动距离
 export function getScrollTop() {
