@@ -7,7 +7,7 @@
           <img src="~img/close.png" alt @click="hide"/>
         </div>
         <div class="add_card" @click="$emit('add-card')">
-          <div class="add">+</div>
+          <div class="add"><span>+</span></div>
           <div class="show_title">
             <div class="title">添加储蓄卡</div>
             <img src="~img/icon/right.png" alt />
@@ -67,6 +67,11 @@ export default {
       border: solid 1px #e6e6e6;
       font-size: size(35);
       color: #999999;
+      position: relative;
+      span{
+        position: absolute;
+        @include mid;
+      }
     }
     .show_title {
       flex: 1;

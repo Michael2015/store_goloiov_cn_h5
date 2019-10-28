@@ -8,19 +8,17 @@
     </div>
     <div class="showItem">
       <div class="title">金额</div>
-      <div class="setMoney">
-        <div class="money">
-          <input
-            type="number"
-            :placeholder="showCanWithdraw"
-            v-model="wantWithdraw"
-            autocomplete="off"
-            pattern="[0-9]*"
-            maxlength="24"
-          />
-        </div>
-        <div class="all_withdraw" @click="allWithdraw">全部提现</div>
+      <div class="money">
+        <input
+          type="number"
+          :placeholder="showCanWithdraw"
+          v-model="wantWithdraw"
+          autocomplete="off"
+          pattern="[0-9]*"
+          maxlength="24"
+        />
       </div>
+      <div class="all_withdraw" @click="allWithdraw">全部提现</div>
     </div>
     <div class="withdraw_button" @click="jumpWithdraw">提现</div>
     <div class="hint_list" v-if="isShowBottom">
@@ -161,47 +159,38 @@ export default {
     display: flex;
     padding: 0 size(30);
     height: size(100);
-    line-height: size(100);
     background: #ffffff;
     font-size: size(28);
+    align-items: center;
     .title {
       color: #333;
       width: size(150);
     }
     .no_card {
-      width: size(562);
       color: #aaaaaa;
       flex: 1;
     }
     .have_card {
-      width: size(562);
       color: #333;
       flex: 1;
     }
-    .setMoney {
-      width: size(562);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #aaaaaa;
+    .money {
       flex: 1;
-      .money {
-        flex: 1;
-        & > input {
-          height: size(60);
-          line-height: normal;
+      > input {
+        height: size(60);
+        line-height: normal;
+        font-size: size(28);
+        &::-webkit-input-placeholder {
+          color: #aaaaaa;
           font-size: size(28);
-          &::-webkit-input-placeholder {
-            color: #aaaaaa;
-            font-size: size(28);
-            line-height: normal;
-          }
+          line-height: normal;
         }
       }
-      .all_withdraw {
-        color: #ff0000;
-        padding-left: size(30);
-      }
+    }
+    .all_withdraw {
+      color: #ff0000;
+      padding-left: size(30);
+      width: size(160);
     }
   }
   .withdraw_button {
