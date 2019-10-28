@@ -48,7 +48,7 @@
                 class="item"
                 v-for="(item,index) in list"
                 :key="index"
-                @click="clickMianDan(item.order_sn)"
+                @click="clickMianDan(item.order_id,item.user_id,item.type_num)"
               >
                 <div class="queue border-bottom" v-if="item.left&&item.left !== ''">{{item.left}}</div>
                 <div class="detail">
@@ -86,6 +86,7 @@
                 <div class="left">
                   <div class="name">
                     {{item.type_text}}
+                    <!-- {{item.type}} -->
                     <!-- <span>/待结算</span> -->
                   </div>
                   <div class="reason">{{item.title}}</div>
@@ -199,8 +200,8 @@ export default {
       }
       this.tojump(url);
     },
-    clickMianDan(sn) {
-      this.tojump("/order-detail/" + sn);
+    clickMianDan(id,uid,type_num) {
+      this.tojump(`/public?order_id=${id}&user_id=${uid}&type_num=${type_num}`);
     },
     tojieshao() {
       if (this.active === "charge") {
