@@ -29,8 +29,9 @@ export default {
 <style lang="scss" scoped>
 @import "~css/def";
 .msg-wrap{
-  color: #ff383c;
-  background-color: rgba(#453d3d, .68);
+  // color: #ff383c;
+  color: #fff;
+  background-color: rgba(#453d3d, .7);
   position: fixed;
   left:0;
   bottom: size(100);

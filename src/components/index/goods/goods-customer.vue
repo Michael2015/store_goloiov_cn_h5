@@ -167,7 +167,7 @@ export default {
       Promise.all([
         this.poster.drawGoods(this.info.slider_image[0]),
         this.poster.drawTips(tips),
-        getQrcode([this.userInfo.uid,  this.userInfo.partner_id, this.id].join(',')).then(data => {
+        getQrcode([this.userInfo.uid,  this.userInfo.partner_id || 0, this.id].join(',')).then(data => {
           if (data) {
             return this.poster.drawQrcode(data)
           } else {
@@ -178,7 +178,8 @@ export default {
         console.log(this.poster.getBase64())
         this.poster.base64 = this.poster.getBase64().replace('data:image/png;base64,', '')
         sharePoster(this.poster.base64)
-      },() => {
+      },(e) => {
+        console.log(e)
         this.poster = null
       }).finally(() => {
         Loading.close()

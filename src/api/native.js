@@ -75,7 +75,7 @@ export function invitePartner(uid, name) {
   }).then(img => {
     const len = 'data:image/png;base64,'.length
     return api('MiniProgram', {
-      webpageUrl: 'https://wcp.szyrwl.com',
+      webpageUrl: 'https://wcp.szyrwl.com/app',
       path: '/pages/index/index?share_id=' + uid + '&type=invite',
       title: name + '邀请您免费注册万车品商城会员',
       img: img.substring(len)

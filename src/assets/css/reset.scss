@@ -56,6 +56,8 @@ input,button{
 }
 *{
     box-sizing: border-box;
+    // 禁用iso长按弹窗，比如复制图片
+    -webkit-touch-callout: none;
 }
 a{
 	text-decoration: none;
