@@ -4,7 +4,7 @@
     <div class="award">奖励金额：{{showObj.income_number}}元</div>
     <div class="simpleness_show">
       <div class="left">结算状态</div>
-      <div class="right">{{showObj.refund_reason_time}}</div>
+      <div class="right">{{showObj.settle_time}}</div>
     </div>
     <div class="simpleness_show">
       <div class="left">被培养人</div>

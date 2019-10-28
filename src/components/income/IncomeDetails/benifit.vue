@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="simpleness_show">
-      <div class="left">结算状态: {{showObj.refund_reason_time}}</div>
+      <div class="left">结算状态: {{showObj.settle_time}}</div>
       <div class="right">{{showObj.income_status}}</div>
     </div>
     <div class="simpleness_show">

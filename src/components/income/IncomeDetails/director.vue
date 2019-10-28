@@ -11,7 +11,7 @@
     </div>
     <div class="simpleness_show">
       <div class="left">结算状态</div>
-      <div class="right">{{showObj.refund_reason_time}}</div>
+      <div class="right">{{showObj.settle_time}}</div>
     </div>
     <div class="simpleness_show">
       <div class="left">您的等级</div>
