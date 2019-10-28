@@ -3,7 +3,7 @@
     <top-head>加入合伙人</top-head>
     <div class="join-form table">
       <div>
-        <input type="number" placeholder="请输入推荐人的手机号，选填" pattern="[0-9]*" v-model="phone">
+        <input type="number" placeholder="请输入推荐人的手机号，选填" pattern="[0-9]*" v-model="phone" oninput = "value=value.replace(/[^\d]/g,'')">
       </div>
     </div>
     <div class="join" @click="join">加入合伙人</div>
@@ -42,7 +42,15 @@ export default {
         }
       }, (msg) => Toast(msg || '加入失败'))
     }
-  }
+  },
+  watch: {
+    phone(val){
+      console.log(val)
+      if(val.length > 11){
+        this.phone = val.substring(0,11)
+      }
+    }
+  },
 }
 </script>
 
