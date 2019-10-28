@@ -91,7 +91,7 @@
                   </div>
                   <div class="reason">{{item.title}}</div>
                 </div>
-                <div class="right">{{item.number}}元</div>
+                <div class="right">{{item.pm?'+':'-'}}{{item.number}}元</div>
               </div>
             </div>
           </load-more>
