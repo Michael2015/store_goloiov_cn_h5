@@ -48,8 +48,8 @@ function api(action, data = {}) {
 export function getToken() {
   if (process.env.NODE_ENV !== 'production') {
     // return Promise.resolve('577de11cb52426332fc15c56529325b1')
-    return Promise.resolve('7c8abee43cb4bf232318bc21eec03a31')
-    // return Promise.resolve('15f6c1d3204c6e2ecc5fb8744426de42')
+    // return Promise.resolve('7c8abee43cb4bf232318bc21eec03a31')
+    return Promise.resolve('15f6c1d3204c6e2ecc5fb8744426de42')
   }
   return api('loginToken')
 }

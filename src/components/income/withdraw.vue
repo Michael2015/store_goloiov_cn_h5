@@ -194,7 +194,6 @@ export default {
     }
   }
   .withdraw_button {
-    width: size(690);
     height: size(90);
     line-height: size(90);
     border-radius: size(46);
@@ -202,8 +201,7 @@ export default {
     text-align: center;
     background-image: linear-gradient(90deg, #ff2d23 0%, #ff4169 100%);
     color: #ffffff;
-    margin: auto;
-    margin-top: size(66);
+    margin: size(66) size(30) 0;
   }
   .hint_list {
     position: absolute;
