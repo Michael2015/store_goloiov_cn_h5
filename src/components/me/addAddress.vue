@@ -2,17 +2,23 @@
   <div class="wrap">
     <top-head>{{edit ? '编辑收货地址':'新增收货地址'}}</top-head>
     <div class="col border-bottom table">
-      <div><input type="text" placeholder="收货人姓名" v-model="real_name"></div>
+      <div>
+        <input type="text" placeholder="收货人姓名" v-model="real_name" />
+      </div>
     </div>
     <div class="col border-bottom table">
-      <div><input type="number" placeholder="收货人手机" v-model="phone" pattern="[0-9]*"></div>
+      <div>
+        <input type="number" placeholder="收货人手机" v-model="phone" pattern="[0-9]*" />
+      </div>
     </div>
     <div class="col border-bottom table" @click="$refs.selAddr.show()">
       <div>
         <label v-if="addr.length <= 0">选择地区</label>
-        <span v-else>{{addr.join('   ')}}</span>
+        <span v-else>{{addr.join(' ')}}</span>
       </div>
-      <div class="icon"><img src="~img/icon/join-right.png" alt="" class="right"></div>
+      <div class="icon">
+        <img src="~img/icon/join-right.png" alt class="right" />
+      </div>
     </div>
     <div class="detail-addr">
       <text-area class="input" placeholder="详细地址" v-model="detail" :max="0"></text-area>
@@ -25,10 +31,10 @@
 </template>
 
 <script>
-import City from 'com/common/city'
-import TextArea from 'base/ui/text-area'
-import {Toast} from 'lib'
-import {editAddress, addAddress} from 'api/me'
+import City from "com/common/city";
+import TextArea from "base/ui/text-area";
+import { Toast } from "lib";
+import { editAddress, addAddress } from "api/me";
 export default {
   components: {
     TextArea,
@@ -36,57 +42,60 @@ export default {
   },
   data() {
     return {
-      real_name: '',
-      phone: '',
+      real_name: "",
+      phone: "",
       addr: [],
-      detail: '',
+      detail: "",
       edit: false, // 是否是编辑模式，编辑新建 共用一个页面
-      editId: '', // 编辑的哪一条地址
-    }
+      editId: "" // 编辑的哪一条地址
+    };
   },
   created() {
-    const lastAddr = this.$route.params.data
+    const lastAddr = this.$route.params.data;
     if (lastAddr) {
       // 编辑地址
-      this.edit = true
-      this.editId = lastAddr.id
-      this.real_name = lastAddr.real_name
-      this.phone = lastAddr.phone
-      this.detail = lastAddr.detail
-      this.addr.push(lastAddr.province)
-      this.addr.push(lastAddr.city)
-      this.addr.push(lastAddr.district)
+      this.edit = true;
+      this.editId = lastAddr.id;
+      this.real_name = lastAddr.real_name;
+      this.phone = lastAddr.phone;
+      this.detail = lastAddr.detail;
+      this.addr.push(lastAddr.province);
+      this.addr.push(lastAddr.city);
+      this.addr.push(lastAddr.district);
     }
   },
   watch: {
     phone(v, vv) {
       if (v.length > 11) {
-        this.phone = vv
+        this.phone = vv;
       }
+    },
+    real_name(v) {
+      this.real_name = this.filterEmoji(v);
     }
   },
   methods: {
     save() {
       // 保存
-      if (!this.real_name) {
-        Toast('请输入收货人姓名')
-        return
+      if (!this.real_name.trim()) {
+        Toast("请输入收货人姓名");
+        return;
       }
-      if (!this.phone) {
-        Toast('请输入收货人手机')
-        return
+      if (!this.phone.trim()) {
+        Toast("请输入收货人手机");
+        return;
       }
       if (!/^1[\d]{10}$/.test(this.phone)) {
-        Toast('收货人手机不正确')
-        return
+        Toast("收货人手机不正确");
+        return;
       }
       if (this.addr.length <= 0) {
-        Toast('请选择地区')
-        return
+        Toast("请选择地区");
+        return;
       }
-      if (!this.detail) {
-        Toast('请输入详细地址')
-        return
+      if (!this.detail.trim()) {
+        Toast("请输入详细地址");
+        return;
       }
       // 校验过了
       if (this.edit) {
@@ -101,14 +110,14 @@ export default {
         }).then(data => {
           if (data) {
             Toast({
-              message: '保存成功',
+              message: "保存成功",
               duration: 1000
-            })
+            });
             setTimeout(() => {
-              this.$router.back()
-            }, 1000)
+              this.$router.back();
+            }, 1000);
           }
-        })
+        });
       } else {
         addAddress({
           real_name: this.real_name,
@@ -119,68 +128,76 @@ export default {
           detail: this.detail
         }).then(data => {
           if (data) {
-            Toast('保存成功')
+            Toast("保存成功");
             setTimeout(() => {
-              this.$router.back()
-            }, 1000)
+              this.$router.back();
+            }, 1000);
           }
-        })
+        });
       }
+    },
+    // 过滤表情
+    filterEmoji(name) {
+      const str = name.replace(
+        /[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/gi,
+        ""
+      );
+      return str;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 @import "~css/def";
-.wrap{
+.wrap {
   min-height: 100vh;
   background-color: $color-body-bg;
   position: relative;
 }
-.col{
+.col {
   background: #fff;
   padding: 0 size(20);
   min-height: size(86);
   font-size: size(28);
-  >div{
+  > div {
     display: table-cell;
     vertical-align: middle;
   }
-  label{
+  label {
     color: #c4c4c6;
   }
-  input{
+  input {
     display: block;
     font-size: size(28);
-    &::-webkit-input-placeholder{
+    &::-webkit-input-placeholder {
       font-size: size(28);
       color: #c4c4c6;
     }
   }
-  .icon{
+  .icon {
     width: size(50);
     text-align: right;
-    img{
+    img {
       width: size(22);
     }
   }
 }
-.detail-addr{
+.detail-addr {
   background: #fff;
   padding: size(20);
-  .input{
+  .input {
     background: #fff;
     min-height: size(190);
   }
-  /deep/ textarea{
-    &::-webkit-input-placeholder{
+  /deep/ textarea {
+    &::-webkit-input-placeholder {
       font-size: size(28);
       color: #c4c4c6;
     }
   }
 }
-.save{
+.save {
   position: fixed;
   z-index: 1;
   left: 0;

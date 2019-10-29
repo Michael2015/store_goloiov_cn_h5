@@ -542,6 +542,7 @@ export default {
           text-align: right;
           font-size: size(30);
           color: #ff0000;
+          @include txt-overflow();
         }
         &:nth-child(1) {
           margin-top: 0;
