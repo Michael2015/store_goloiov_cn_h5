@@ -2,7 +2,7 @@
   <div class="table">
     <div class="table-cell">
       <div class="clearfix">
-        <img v-if="partner.avatar" :src="partner.avatar" alt="" class="parent-avatar" @click="showPartner" style="background:#fff;">
+        <img v-if="partner.phone" :src="partner.avatar" alt="" class="parent-avatar" @click="showPartner" style="background:#fff;">
         <!-- <img v-else src="~img/shop-logo.png" alt="" class="parent-avatar"> -->
         <span class="shop-name">{{info.site_name||'万车品商城'}}</span>
       </div>
