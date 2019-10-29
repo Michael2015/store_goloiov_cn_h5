@@ -54,13 +54,13 @@ export default {
 .swiper-slide {
 	// -webkit-transition: transform 1.0s;
 	// transition: transform 1.0s;
-	-webkit-transform: scale(0.89);
-  transform: scale(0.89);
+	-webkit-transform: scale(0.89)!important;
+  transform: scale(0.89)!important;
   width: 85%;
 }
 .swiper-slide-active,.swiper-slide-duplicate-active {
-	-webkit-transform: scale(1);
-	transform: scale(1);
+	-webkit-transform: scale(1)!important;
+	transform: scale(1)!important;
 }
 
 // .swiper-pagination{

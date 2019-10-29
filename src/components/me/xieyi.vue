@@ -328,7 +328,6 @@ export default {};
   .p {
     font-size: size(28);
     margin: size(20) 0;
-    line-height: size(38);
     /* text-indent: 56); */
   }
   .sub {
