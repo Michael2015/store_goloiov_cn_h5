@@ -46,9 +46,6 @@ export default {
       const length = this.v.length
       if (this.max > 0 && length > this.max) {
         this.v = this.v.substring(0, this.max)
-        this.length = this.max
-      } else {
-        this.length = length
       }
       this.$emit('input', this.v)
     }
