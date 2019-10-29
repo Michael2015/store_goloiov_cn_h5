@@ -120,9 +120,9 @@ export default {
       display: flex;
       flex-wrap: wrap;
       .item {
-        width: size(100);
+        width: p(100/660);
         height: size(141);
-        margin-right: size(40);
+        margin-right: p(39.6/660);
         margin-top: size(25);
         position: relative;
         &:nth-child(5n) {
