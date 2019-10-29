@@ -124,19 +124,18 @@ export default {
     font-size: size(28);
     align-items: center;
     .title {
-      flex: 1;
+      width: size(155);
       padding-left: size(30);
     }
     .import {
-      width: size(570);
+      flex: 1;
       &>input{
         line-height: normal;
       }
     }
   }
   .withdraw_btn {
-    margin: size(80) auto size(22) auto;
-    width: size(690);
+    margin: size(80) size(30) size(22) size(30);
     height: size(90);
     line-height: size(90);
     background: linear-gradient(90deg, #ff2d23 0%, #ff4169 100%);
