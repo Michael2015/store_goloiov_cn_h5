@@ -131,6 +131,11 @@ export default {
             this.$router.back()
           })
         }
+      },() => {
+        this.$refs.notice.show('未查询到订单信息', () => {
+          this.$router.back()
+        })
+      }).finally(() => {
         Loading.close()
       })
     },
