@@ -4,11 +4,11 @@
     <div class="city-wrap">
       <div class="title border-bottom">所在地区<img src="~img/close.png" alt="" class="close" @click="hide"></div>
       <div class="col border-bottom result">
-        <div class="one" :class="{blank: step < 1}">{{step>=1 ? selProvince.areaname : '请选择'}}</div>
-        <div class="two" v-if="step>=1" :class="{blank: step < 2}">{{step>=2 ? selCity.areaname : '请选择'}}</div>
-        <div class="three" v-if="step>=2" :class="{blank: step < 3}">{{step>=3 ? selArea.areaname : '请选择'}}</div>
+        <div class="one" :class="{blank: step < 1}">{{step>=1 ? result[0].areaname : '请选择'}}</div>
+        <div class="two" v-if="step>=1" :class="{blank: step < 2}">{{step>=2 ? result[1].areaname : '请选择'}}</div>
+        <div class="three" v-if="step>=2" :class="{blank: step < 3}">{{step>=3 ? result[2].areaname : '请选择'}}</div>
       </div>
-      <div class="list">
+      <div class="list" ref="list">
         <!-- eslint-disable-next-line -->
         <div class="col border-bottom" v-for="item in maxLength" :i="item">
           <div class="one" v-if="province[item - 1]" @click="selP(province[item - 1])">{{province[item - 1].areaname}}</div>
@@ -31,12 +31,14 @@ export default {
   data() {
     return {
       step: 0,
+      // 省
       province: [],
-      selProvince: null,
+      // 市
       city: [],
-      selCity: null,
+      // 区
       area: [],
-      selArea: null
+      // 选择的结果，省,市,区 三个元素
+      result: []
     }
   },
   computed: {
@@ -45,13 +47,22 @@ export default {
       return Math.max(l, this.area.length)
     }
   },
+  watch: {
+    step(l) {
+      // 主要清除数据
+      this.result.length = l
+    }
+  },
   created() {
-    
   },
   methods: {
     show() {
       this.isShow = true
       this.step = 0
+      // 要延迟这个设置才会起作用
+      this.$nextTick(() => {
+        this.goTop()
+      })
       if (this.province.length <= 0) {
         // 加载省的数据
         getAreaInfo().then(data => {
@@ -62,28 +73,38 @@ export default {
       }
     },
     selP(p) {
+      this.goTop()
       getAreaInfo(p.id).then(data => {
         if (data) {
-          this.selProvince = p
+          this.result[0] = p
           this.city = data
           this.step = 1
         }
       })
     },
     selC(c) {
+      this.goTop()
       getAreaInfo(c.id).then(data => {
         if (data) {
-          this.selCity = c
+          this.result[1] = c
           this.area = data
           this.step = 2
+          if (data.length === 0) {
+            // 没有区了,提前返回
+            this.$emit('input', this.result.map(d => d.areaname))
+            this.hide()
+          }
         }
       })
     },
     selA(a) {
-      this.selArea = a
+      this.result[2] = a
       this.step = 3
-      this.$emit('input', [this.selProvince.areaname, this.selCity.areaname, this.selArea.areaname])
+      this.$emit('input', this.result.map(d => d.areaname))
       this.hide()
+    },
+    goTop() {
+      this.$refs.list.scrollTop = 0
     }
   }
 }

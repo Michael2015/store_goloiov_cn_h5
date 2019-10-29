@@ -105,7 +105,7 @@ export default {
           phone: this.phone,
           province: this.addr[0],
           city: this.addr[1],
-          district: this.addr[2],
+          district: this.addr[2] || '',  // 可能没有区
           detail: this.detail
         }).then(data => {
           if (data) {
@@ -124,7 +124,7 @@ export default {
           phone: this.phone,
           province: this.addr[0],
           city: this.addr[1],
-          district: this.addr[2],
+          district: this.addr[2] || '',  // 可能没有区
           detail: this.detail
         }).then(data => {
           if (data) {
