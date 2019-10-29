@@ -123,9 +123,9 @@ export default {
         border-bottom: size(1) solid #f2f2f2;
         padding-bottom: size(28);
         .desc {
-          width: size(432);
           font-size: size(26);
           color: #333333;
+          flex: 1;
           .color {
             color: #999999;
             font-size: size(24);
@@ -133,7 +133,7 @@ export default {
           }
         }
         .about_money {
-          flex: 1;
+          width: size(120);
           font-size: size(24);
           text-align: right;
           .money {
