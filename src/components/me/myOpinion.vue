@@ -1,7 +1,9 @@
 <template>
   <div class="opinion_warp">
     <top-head>反馈意见</top-head>
-    <input type="number" v-model="phone" placeholder="输入联系手机号" />
+    <div class="input-wrap border-bottom">
+      <input type="number" v-model="phone" placeholder="请输入联系手机号" pattern="[0-9]*" />
+    </div>
     <div class="reasons">
       <div class="more">
         <img src="~img/icon/typo.png" alt />
@@ -75,16 +77,20 @@ export default {
   width: 100%;
   height: 100%;
   background: #f5f5f5;
-  > input {
+  .input-wrap{
+    display: flex;
+    align-items: center;
     height: size(120);
-    padding-left: size(30);
-    &::-webkit-input-placeholder {
-      font-size: size(30);
-      color: #d9dad9;
+    padding: 0 size(32);
+    background: #fff;
+    input {
+      &::-webkit-input-placeholder {
+        font-size: size(30);
+        color: #d9dad9;
+      }
     }
   }
   .reasons {
-    margin-top: size(4);
     background: #fff;
     padding-left: size(20);
     padding-top: size(16);
