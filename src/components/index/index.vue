@@ -46,10 +46,10 @@
     <!-- 退出登录 非合伙才有 -->
     <div class="logout" v-if="isLogin && role !== 1" @click="logout">退出</div>
     <!-- 查看教程 -->
-    <router-link class="how-to" to="/useDesc" tag="div">
+    <!-- <router-link class="how-to" to="/useDesc" tag="div">
       <div>使用</div>
       <div>说明</div>
-    </router-link>
+    </router-link> -->
     <!-- 提示弹窗 -->
     <notice ref="notice" :autoClose="true"></notice>
     <confirm ref="confirm"></confirm>

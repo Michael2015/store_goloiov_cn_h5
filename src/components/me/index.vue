@@ -66,16 +66,16 @@ export default {
           tit: "我的评论",
           path: "/myComment"
         },
-        {
-          img: require("img/me/icon4.png"),
-          tit: "升级攻略",
-          path: "/myStrategy"
-        },
-        {
-          img: require("img/me/icon5.png"),
-          tit: "商城使用说明",
-          path: "/useDesc"
-        },
+        // {
+        //   img: require("img/me/icon4.png"),
+        //   tit: "升级攻略",
+        //   path: "/myStrategy"
+        // },
+        // {
+        //   img: require("img/me/icon5.png"),
+        //   tit: "商城使用说明",
+        //   path: "/useDesc"
+        // },
         {
           img: require("img/me/icon6.png"),
           tit: "反馈意见",
