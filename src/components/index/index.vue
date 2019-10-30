@@ -23,7 +23,7 @@
       <div class="blank"><img src="~img/index-top-bg.png" alt=""></div>
     </div>
     <index-msg-loop v-if="isLogin && role === 1"></index-msg-loop>
-    <index-focus :cid="cid" v-if="cid"></index-focus>
+    <index-focus :cid="cid" v-if="cid" :key="loginKey"></index-focus>
     <div class="filters table">
       <div>
         <div class="">
@@ -33,12 +33,12 @@
         </div>
       </div>
     </div>
-    <load-more v-slot="{list}" class="list-wrap" :getData="getCategoryProducts" v-if="activeCategoryIndex >= 0" :key="activeCategoryIndex">
+    <load-more v-slot="{list}" class="list-wrap" :getData="getCategoryProducts" v-if="activeCategoryIndex >= 0" :key="activeCategoryIndex+loginKey">
       <div class="list clearfix">
         <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
       </div>
     </load-more>
-    <load-more v-slot="{list}" class="list-wrap" :getData="getDefaultProducts" v-else :key="key">
+    <load-more v-slot="{list}" class="list-wrap" :getData="getDefaultProducts" v-else :key="key+loginKey">
       <div class="list clearfix">
         <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
       </div>
@@ -110,6 +110,9 @@ export default {
       return (page, size) => {
         return this.role === 1 ? PartnerGetProducts(this.keyword, page, size) : CustomerGetProducts(page, size)
       }
+    },
+    loginKey() {
+      return this.isLogin + ''
     }
   },
   watch: {
@@ -118,6 +121,11 @@ export default {
       if (this.keyword === '') {
         this.search()
       }
+    },
+    isLogin() {
+      // 重置关键字和标签
+      this.keyword = ''
+      this.activeCategoryIndex = -1
     }
   },
   created() {
@@ -197,6 +205,9 @@ export default {
   padding-bottom: 0;
   .banner-wrap{
     margin-top: size(28);
+    // 原来是不撑满屏幕的
+    margin-left: size(-20);
+    margin-right: size(-20);
     height: size(224);
     position: relative;
     .banner{
@@ -206,7 +217,7 @@ export default {
       width: 100%;
       height: size(300);
       background: #fff;
-      border-radius: size(14);
+      // border-radius: size(14);
       overflow: hidden;
       z-index: 1;
     }
