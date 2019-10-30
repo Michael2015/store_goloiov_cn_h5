@@ -3,7 +3,8 @@
     <top-head>加入合伙人</top-head>
     <div class="join-form table">
       <div>
-        <input type="number" placeholder="请输入推荐人的手机号，选填" pattern="[0-9]*" v-model="phone" oninput = "value=value.replace(/[^\d]/g,'')">
+        <!-- oninput = "value=value.replace(/[^\d]/g)" -->
+        <input type="number" placeholder="请输入推荐人的手机号，选填" pattern="[0-9]*" v-model="phone" @input="ha" >
       </div>
     </div>
     <div class="join" @click="join">加入合伙人</div>
@@ -22,7 +23,9 @@ export default {
   },
   data () {
     return {
-      phone: ''
+      phone: '',
+      legitimateInput:true,   //标识用户是否非法输入
+      lastPhone:''            //用以保存非法输入前的内容
     }
   },
   methods: {
@@ -41,14 +44,28 @@ export default {
           Toast('加入失败')
         }
       }, (msg) => Toast(msg || '加入失败'))
+    },
+    ha(event){
+      if(event.data === '+'||event.data === '-' || event.data === '.'){
+        // console.log('非法')
+        this.legitimateInput = false;
+      }
     }
   },
   watch: {
     phone(val){
-      console.log(val)
+      // console.log(/[^\d]/g.test(val))
+      // console.log('val'+val.substring(val.length-1,val.length))
       if(val.length > 11){
         this.phone = val.substring(0,11)
       }
+      if(!this.legitimateInput){
+        // console.log(this.lastPhone)
+        this.phone = this.lastPhone;
+        this.legitimateInput = true;
+        // console.log('解除')
+      }
+      this.lastPhone = this.phone
     }
   },
 }
