@@ -1,9 +1,10 @@
 <template>
   <div class="wrap">
     <top-head :transparent="true">
-      <div class="share" @click="createPoster" slot="right">
+      <!-- 非合伙人屏蔽分享 -->
+      <!-- <div class="share" @click="createPoster" slot="right">
         <img src="~img/icon/share.png" alt="">
-      </div>
+      </div> -->
     </top-head>
     <goods-banner :imgs="info.slider_image"></goods-banner>
     <div class="tips-for-free">适用免单奖励的商品不适用7天无理由退货</div>
