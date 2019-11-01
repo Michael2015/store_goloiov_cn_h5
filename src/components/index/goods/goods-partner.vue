@@ -9,7 +9,7 @@
     <div class="tips-for-free">适用免单奖励的商品不适用7天无理由退货</div>
     <div class="intro-wrap">
       <div class="price-num">
-        <span class="price">原价 <span>{{info.price}} </span></span>
+        <span class="price">¥ <span>{{info.vip_price}} </span> ¥ {{info.price}}</span>
         <span class="price-cut" v-if="false"> 合伙人价 ¥999</span>
         <span class="num">已售：{{info.sales}}</span>
       </div>
