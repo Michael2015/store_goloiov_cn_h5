@@ -9,7 +9,8 @@
     <div class="tips-for-free">适用免单奖励的商品不适用7天无理由退货</div>
     <div class="intro-wrap">
       <div class="price-num">
-        <span class="price">¥ <span>{{info.vip_price}} </span> ¥ {{info.price}}</span>
+        <span class="price">¥ <span>{{info.is_newborn?info.newborn_price:info.vip_price}} </span> ¥ {{info.is_newborn?info.vip_price:info.price}}</span>
+        <span class="news" v-if="info.is_newborn">新人专享</span>
         <span class="price-cut" v-if="false"> 合伙人价 ¥999</span>
         <span class="num">已售：{{info.sales}}</span>
       </div>
@@ -203,6 +204,16 @@ export default {
       >span{
         font-size: size(48);
       }
+    }
+    .news{
+      display: inline-block;
+      color: #fe0000;
+      background: #FFCCFF;
+      height: size(40);
+      line-height: size(40);
+      padding: 0 size(10);
+      margin-left: size(20);
+      font-size: size(28);  
     }
   }
   .price-cut{

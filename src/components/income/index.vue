@@ -196,7 +196,7 @@ export default {
         //  跳转订单详情那order_sn去查询
         url += `/${sn}`;
       } else {
-        url += `?order_id=${id}&user_id=${uid}&type_num=${type_num}`;
+        url += `?order_id=${id}&user_id=${uid}&type_num=${type_num}&order_sn=${sn}`;
       }
       this.tojump(url);
     },

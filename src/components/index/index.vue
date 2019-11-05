@@ -53,6 +53,7 @@
     <!-- 提示弹窗 -->
     <notice ref="notice" :autoClose="true"></notice>
     <confirm ref="confirm"></confirm>
+    <new-people ref='newpeople'></new-people>
   </div>
 </template>
 
@@ -64,12 +65,13 @@ import IndexTopCustomer from './index-top-customer'
 import IndexMsgLoop from './index-msg-loop'
 import IndexBanner from './index-banner'
 import IndexFocus from './index-focus'
+import newPeople from './newPeople'
 import IndexGoodsItem from './index-goods-item'
 import LoadMore from 'base/load-more'
 import {Loading} from 'lib'
 import {getCategory, getCategoryProducts, CustomerGetProducts, PartnerGetProducts} from 'api'
 import {invitePartner} from 'api/native'
-import {mapState} from 'vuex'
+import {mapState,mapMutations} from 'vuex'
 import {login, logout} from 'api/login'
 
 export default {
@@ -82,7 +84,8 @@ export default {
     IndexBanner,
     IndexMsgLoop,
     IndexFocus,
-    IndexGoodsItem
+    IndexGoodsItem,
+    newPeople
   },
   data() {
     return {
@@ -93,7 +96,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLogin', 'role', 'userInfo']),
+    ...mapState(['isLogin', 'role', 'userInfo','isFirst']),
     category() {
       return this.categoryList.slice(1)
     },
@@ -126,6 +129,8 @@ export default {
       // 重置关键字和标签
       this.keyword = ''
       this.activeCategoryIndex = -1
+      this.setFirst(true),
+      this.$refs.newpeople.show()
     }
   },
   created() {
@@ -141,6 +146,7 @@ export default {
     })
   },
   methods: {
+    ...mapMutations(['setFirst']),
     setCategory(i){
       console.log(i)
       if (i !== this.activeCategoryIndex) {

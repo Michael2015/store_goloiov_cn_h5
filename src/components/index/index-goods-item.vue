@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-item" :class="{free: item.is_platoon === 1}">
+  <div class="goods-item" :class="{free: item.is_platoon === 1,news:item.is_new_born}">
     <router-link tag="div" class="img-wrap" :to="'/goods/'+item.id"><img v-lazy="item.image" alt=""></router-link>
     <div class="con">
       <router-link tag="div" class="name" :to="'/goods/'+item.id">{{item.store_name}}</router-link>
@@ -81,6 +81,22 @@ export default {
       text-align: center;
       transform-origin: 0% 0%;
       transform: rotateZ(45deg);
+    }
+  }
+  // 新人专享标签
+  &.news{
+    &:before{
+      content: '新人专享';
+      position: absolute;
+      height: size(32);
+      line-height: size(32);
+      background: #ff0000;
+      color: #fff;
+      font-size: size(22);
+      width: size(120);
+      text-align: center;
+      transform-origin: 0% 0%;
+      z-index: 1;
     }
   }
 }

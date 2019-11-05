@@ -19,7 +19,9 @@ export default new Vuex.Store({
     // 买商品时，选择收货地址
     selectAddress: null,
     // 发生订单操作,触发刷新，比如删除订单，支付成功订单，重新下单
-    refreshOrder: 0
+    refreshOrder: 0,
+    // 是否第一次进入首页
+    isFirst:false
   },
   mutations: {
     loginTest(state) {
@@ -45,6 +47,9 @@ export default new Vuex.Store({
     },
     refreshOrder(state) {
       state.refreshOrder++
+    },
+    setFirst(state,falg){
+      state.isFirst = falg
     }
   },
   strict: debug,
