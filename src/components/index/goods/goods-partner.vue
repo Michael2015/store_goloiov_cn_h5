@@ -2,24 +2,26 @@
   <div class="wrap">
     <top-head :transparent="true">
       <div class="share" slot="right" @click="createPoster" v-if="isLogin">
-        <img src="~img/icon/share.png" alt="">
+        <img src="~img/icon/share.png" alt />
       </div>
     </top-head>
     <goods-banner :imgs="info.slider_image"></goods-banner>
     <div class="tips-for-free">适用免单奖励的商品不适用7天无理由退货</div>
     <div class="intro-wrap">
       <div class="price-num">
-        <span class="price">¥ <span>{{info.is_newborn?info.newborn_price:info.vip_price}} </span> ¥ {{info.is_newborn?info.vip_price:info.price}}</span>
-        <span class="news" v-if="info.is_newborn">新人专享</span>
-        <span class="price-cut" v-if="false"> 合伙人价 ¥999</span>
+        <span class="price">
+          ¥
+          <span>{{info.newbornzone.is_newborn?info.newbornzone.price:info.vip_price}}</span>
+          ¥ {{info.newbornzone.is_newborn?info.vip_price:info.price}}
+        </span>
+        <span class="news" v-if="info.newbornzone.is_newborn">新人专享</span>
+        <span class="price-cut" v-if="false">合伙人价 ¥999</span>
         <span class="num">已售：{{info.sales}}</span>
       </div>
-      <div class="goods-name">
-        {{info.store_name}}
-      </div>
+      <div class="goods-name">{{info.store_name}}</div>
       <div class="free-intro table" v-if="info.is_platoon === 1">
         <div class="icon-wrap">
-          <img src="~img/icon/tips.png" alt="">
+          <img src="~img/icon/tips.png" alt />
         </div>
         <div class="text">
           <div>下单即享免单</div>
@@ -43,14 +45,16 @@
     </div>
     <div class="action-bar table border-top">
       <div class="shop border-right" @click="goIndex">
-        <div class="icon"><img src="~img/icon/shop.png" alt=""></div>
+        <div class="icon">
+          <img src="~img/icon/shop.png" alt />
+        </div>
         <div class="text">店铺</div>
       </div>
       <!-- 合伙人没有联系 -->
       <!-- <div class="contact border-right">
         <div class="icon"><img src="~img/icon/contact.png" alt=""></div>
         <div class="text">联系</div>
-      </div> -->
+      </div>-->
       <div class="buy" @click="buy">
         <span>立即购买</span>
       </div>
@@ -58,124 +62,147 @@
     <notice ref="notice" :autoClose="true"></notice>
     <!-- 免单奖励介绍 -->
     <free-intro ref="showFreeIntro" :info="info"></free-intro>
+    <set-num ref="setNum"></set-num>
   </div>
 </template>
 
 <script>
-import GoodsBanner from './goods-banner'
-import FreeIntro from 'base/free-intro'
-import Notice from 'base/notice'
-import {Loading} from 'lib'
-import {PartnerGetGoodsInfo, getQrcode} from 'api'
-import {mapState} from 'vuex'
-import {login} from 'api/login'
-import {sharePoster} from 'api/native'
-import Poster from 'lib/poster'
+import GoodsBanner from "./goods-banner";
+import FreeIntro from "base/free-intro";
+import Notice from "base/notice";
+import setNum from "base/setNum";
+import { Loading } from "lib";
+import { PartnerGetGoodsInfo, getQrcode } from "api";
+import { mapState } from "vuex";
+import { login } from "api/login";
+import { sharePoster } from "api/native";
+import Poster from "lib/poster";
 
 // 海报上的图片
-const tips = require('img/blessing.png')
+const tips = require("img/blessing.png");
 
 export default {
   props: {
     id: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   components: {
     GoodsBanner,
     FreeIntro,
-    Notice
+    Notice,
+    setNum
   },
   data() {
     return {
       // 商品的基本信息，价格，图片啊
-      info: {}
-    }
+      info: {
+        newbornzone: {}
+      }
+    };
   },
   computed: {
-    ...mapState(['isLogin', 'userInfo']),
+    ...mapState(["isLogin", "userInfo"])
   },
   created() {
-    Loading.open()
+    Loading.open();
     Promise.all([
       PartnerGetGoodsInfo(this.id).then(data => {
         if (data) {
-          this.info = data
+          this.info = data;
         }
       })
     ]).then(() => {
-      Loading.close()
-    })
+      Loading.close();
+    });
   },
   methods: {
     goIndex() {
-      this.$router.push('/index')
+      this.$router.push("/index");
     },
     createPoster() {
       if (this.poster) {
-        sharePoster(this.poster.base64)
-        return
+        sharePoster(this.poster.base64);
+        return;
       }
-      Loading.open()
-      this.poster = new Poster(this.info.store_name)
+      Loading.open();
+      this.poster = new Poster(this.info.store_name);
       Promise.all([
         this.poster.drawGoods(this.info.slider_image[0]),
         this.poster.drawTips(tips),
-        getQrcode([this.userInfo.uid, this.userInfo.uid, this.id].join(',')).then(data => {
+        getQrcode(
+          [this.userInfo.uid, this.userInfo.uid, this.id].join(",")
+        ).then(data => {
           if (data) {
-            return this.poster.drawQrcode(data)
+            return this.poster.drawQrcode(data);
           } else {
-            return Promise.reject('获取二维码失败')
+            return Promise.reject("获取二维码失败");
           }
         })
-      ]).then(() => {
-        console.log(this.poster.getBase64())
-        this.poster.base64 = this.poster.getBase64().replace('data:image/png;base64,', '')
-        sharePoster(this.poster.base64)
-      },() => {
-        this.poster = null
-      }).finally(() => {
-        Loading.close()
-      })
+      ])
+        .then(
+          () => {
+            console.log(this.poster.getBase64());
+            this.poster.base64 = this.poster
+              .getBase64()
+              .replace("data:image/png;base64,", "");
+            sharePoster(this.poster.base64);
+          },
+          () => {
+            this.poster = null;
+          }
+        )
+        .finally(() => {
+          Loading.close();
+        });
     },
     buy() {
       // 购买商品
       if (!this.isLogin) {
         // 没有登录
-        this.$refs.notice.show('请先登录', () => {
-          login().then(() => {
-            // 登录成功了
-          }, () => {
-            this.$refs.notice.show('登录失败，请稍后再试')
-          }).finally(() => {
-            // 最后
-          })
-        })
-        return
+        this.$refs.notice.show("请先登录", () => {
+          login()
+            .then(
+              () => {
+                // 登录成功了
+              },
+              () => {
+                this.$refs.notice.show("登录失败，请稍后再试");
+              }
+            )
+            .finally(() => {
+              // 最后
+            });
+        });
+        return;
       }
-      // 跳入购买页面 传入商品id
-      this.$router.push({
-        name: 'buy-goods',
-        params: {
-          id: this.id,
-          info: this.info
-        }
-      })
+      this.$refs.setNum.show(this.info.newbornzone, (total_num, callback) => {
+        // 跳入购买页面 传入商品id
+        this.$router.push({
+          name: "buy-goods",
+          params: {
+            id: this.id,
+            info: this.info,
+            total_num
+          }
+        });
+        callback();
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 @import "~css/def";
-.wrap{
+.wrap {
   min-height: 100vh;
   background-color: $color-body-bg;
 }
-.share{
+.share {
   text-align: right;
-  img{
+  img {
     width: size(34);
     display: inline-block;
   }
@@ -183,50 +210,50 @@ export default {
   padding-right: size(12);
   padding-left: size(18);
 }
-.tips-for-free{
+.tips-for-free {
   line-height: size(54);
   padding: 0 size(30);
   background: #fff0f0;
   color: #333;
   font-size: size(24);
 }
-.intro-wrap{
+.intro-wrap {
   padding: 0 size(30) size(40);
   background: #fff;
-  .price-num{
+  .price-num {
     line-height: size(66);
-    .price{
-      color:#fe0000;
+    .price {
+      color: #fe0000;
       font-family: PingFangSC-Medium;
       font-weight: normal;
       font-stretch: normal;
       font-size: size(36);
-      >span{
+      > span {
         font-size: size(48);
       }
     }
-    .news{
+    .news {
       display: inline-block;
       color: #fe0000;
-      background: #FFCCFF;
+      background: #ffccff;
       height: size(40);
       line-height: size(40);
       padding: 0 size(10);
       margin-left: size(20);
-      font-size: size(28);  
+      font-size: size(28);
     }
   }
-  .price-cut{
+  .price-cut {
     font-size: size(26);
   }
-  .num{
+  .num {
     float: right;
     font-size: size(24);
     color: #555;
     position: relative;
     top: size(12);
   }
-  .goods-name{
+  .goods-name {
     font-size: size(30);
     color: #303030;
     line-height: size(52);
@@ -234,7 +261,7 @@ export default {
     font-weight: 800;
     margin: size(20) 0;
   }
-  .free-intro{
+  .free-intro {
     height: size(78);
     background-color: #f7f7f7;
     border: solid 1px #f0f0f0;
@@ -242,47 +269,47 @@ export default {
     font-size: size(24);
     color: #7c7b7b;
     line-height: 1.4;
-    >div{
+    > div {
       display: table-cell;
       vertical-align: middle;
     }
-    .go-free-intro{
+    .go-free-intro {
       color: #ff0000;
       text-align: right;
       padding-right: size(12);
     }
-    .text{
+    .text {
       padding-left: size(18);
     }
-    .icon-wrap{
+    .icon-wrap {
       width: size(48);
-      img{
+      img {
         width: 100%;
         display: block;
       }
     }
   }
 }
-.navs{
+.navs {
   text-align: center;
   font-size: 0;
   background: #fff;
   margin-top: size(20);
-  >span{
+  > span {
     display: inline-block;
     font-size: size(30);
     color: #666;
     padding: size(0) size(30);
     line-height: size(96);
     position: relative;
-    &.router-link-active{
-      color:#333;
+    &.router-link-active {
+      color: #333;
       font-weight: 800;
       font-size: size(38);
     }
   }
 }
-.action-bar{
+.action-bar {
   position: fixed;
   z-index: 9;
   width: 100%;
@@ -291,32 +318,33 @@ export default {
   bottom: 0;
   background: #fff;
   height: size(100);
-  >div{
+  > div {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
   }
-  .shop,.contact{
+  .shop,
+  .contact {
     width: size(126);
     font-size: 0;
-    .text{
+    .text {
       font-size: size(18);
       color: #666;
       line-height: size(25);
       margin-top: 2px;
     }
   }
-  .shop{
-    img{
+  .shop {
+    img {
       width: size(44);
     }
   }
-  .contact{
-    img{
+  .contact {
+    img {
       height: size(44);
     }
   }
-  .buy{
+  .buy {
     background-image: linear-gradient(135deg, #ff0000 0%, #ff3061 100%);
     font-size: size(30);
     color: #fff;

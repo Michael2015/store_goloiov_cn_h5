@@ -78,6 +78,11 @@ export function PartnerGetProducts(keyword ,page, size) {
   }).then(clean)
 }
 
+// 获取首页新人专区信息
+export function getNewbornZoneStore(){
+  return req.get('/api/marketing/getNewbornZoneStore').then(clean)
+}
+
 // 商品详情相关接口(接口是分两组的)
 
 // 获取商品的基本信息

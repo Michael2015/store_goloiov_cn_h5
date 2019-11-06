@@ -69,7 +69,7 @@ import newPeople from './newPeople'
 import IndexGoodsItem from './index-goods-item'
 import LoadMore from 'base/load-more'
 import {Loading} from 'lib'
-import {getCategory, getCategoryProducts, CustomerGetProducts, PartnerGetProducts} from 'api'
+import {getCategory, getCategoryProducts, CustomerGetProducts, PartnerGetProducts,getNewbornZoneStore} from 'api'
 import {invitePartner} from 'api/native'
 import {mapState,mapMutations} from 'vuex'
 import {login, logout} from 'api/login'
@@ -130,7 +130,7 @@ export default {
       this.keyword = ''
       this.activeCategoryIndex = -1
       this.setFirst(true),
-      this.$refs.newpeople.show()
+      this.$refs.newpeople.show(getNewbornZoneStore)
     }
   },
   created() {

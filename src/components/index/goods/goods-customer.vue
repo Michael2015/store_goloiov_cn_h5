@@ -11,11 +11,11 @@
     <div class="intro-wrap">
       <div class="price-num">
         <span class="price">
-          {{info.is_newborn?'':'原价'}}
-          <span>{{info.is_newborn?'¥ '+info.newborn_price:info.price}}</span>
-          <span class="vip_price" v-if="!info.is_newborn">¥{{info.vip_price}}</span>
-          <span class="vip_icon" v-if="!info.is_newborn">vip</span>
-          <span class="news" v-if="info.is_newborn" >新人专享</span>
+          {{info.newbornzone.is_newborn?'':'原价'}}
+          <span>{{info.newbornzone.is_newborn?'¥ '+info.newbornzone.price:info.price}}</span>
+          <span class="vip_price" v-if="!info.newbornzone.is_newborn">¥{{info.vip_price}}</span>
+          <span class="vip_icon" v-if="!info.newbornzone.is_newborn">vip</span>
+          <span class="news" v-if="info.newbornzone.is_newborn" >新人专享</span>
         </span>
         <span class="price-cut" v-if="false">合伙人价 ¥999</span>
         <span class="num">已售：{{info.sales}}</span>
@@ -79,6 +79,7 @@
     <notice ref="notice" :autoClose="true"></notice>
     <contact ref="contact" :data="partner"></contact>
     <free-intro ref="showFreeIntro" :info="info"></free-intro>
+    <set-num ref="setNum"></set-num>
   </div>
 </template>
 
@@ -93,6 +94,7 @@ import { login } from "api/login";
 import { mapState } from "vuex";
 import Poster from "lib/poster";
 import { sharePoster } from "api/native";
+import setNum from "base/setNum";
 
 // 海报上的图片
 const tips = require("img/blessing.png");
@@ -108,12 +110,15 @@ export default {
     Contact,
     Notice,
     GoodsBanner,
-    FreeIntro
+    FreeIntro,
+    setNum
   },
   data() {
     return {
       // 商品的基本信息，价格，图片啊
-      info: {},
+      info: {
+        newbornzone:{}
+      },
       // 店铺信息
       partner: {}
     };
@@ -227,13 +232,17 @@ export default {
         this.triggerLogin();
         return;
       }
-      // 跳入购买页面 传入商品id
-      this.$router.push({
-        name: "buy-goods",
-        params: {
-          id: this.id,
-          info: this.info
-        }
+      this.$refs.setNum.show(this.info.newbornzone, (total_num, callback) => {
+        // 跳入购买页面 传入商品id
+        this.$router.push({
+          name: "buy-goods",
+          params: {
+            id: this.id,
+            info: this.info,
+            total_num
+          }
+        });
+        callback();
       });
     }
   }

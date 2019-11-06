@@ -30,15 +30,15 @@
         <div class="name">{{info.store_name}}</div>
         <div class="type">{{preInfo.attr}}</div>
         <div class="price-num">
-          <span class="price">￥{{preInfo.price}}</span>
-          <span class="num">x1</span>
+          <span class="price">￥{{unitPrice}}</span>
+          <span class="num">x{{total_num}}</span>
         </div>
       </div>
     </div>
     <div class="spec">
       <div class="col clearfix">
         <div class="left">商品单价</div>
-        <div class="right">¥{{preInfo.price}}</div>
+        <div class="right">¥{{unitPrice}}</div>
       </div>
       <div class="col clearfix">
         <div class="left">优惠金额</div>
@@ -50,13 +50,13 @@
     </div>
     <div class="opts table">
       <div class="price">
-        <span>实付金额：¥{{preInfo.price}}</span>
+        <span>实付金额：¥{{pay_price}}</span>
       </div>
       <div class="buy">
         <span @click="doPay">{{this.paying ? '支付中...('+status+')' : '立即购买'}}</span>
       </div>
     </div>
-    <pay-method ref="payMethod">{{preInfo.price}}</pay-method>
+    <pay-method ref="payMethod">{{pay_price}}</pay-method>
     <notice ref="notice" :autoClose="false"></notice>
     <confirm ref="leaveConfirm" :autoClose="false">
       <span slot="btn-left">我已支付</span><span slot="btn-right">离开</span>
@@ -95,7 +95,9 @@ export default {
       preInfo: {},
       // 路由传过来的信息
       // 不同地方跳入，带的信息不同
-      info: {},
+      info: {
+        newbornzone:{}
+      },
       // 订单号, 重新支付才会有
       orderId: '',
       // 订单号，不是重新支付，是新创建的订单
@@ -250,7 +252,8 @@ export default {
             product_id: this.id,
             address_id: this.addr.id,
             mark: this.remark,
-            miandan_type
+            miandan_type,
+            total_num: this.total_num
           }).then(data => {
             if (data && data.order_id) {
               // 下单成功，触发支付
@@ -332,7 +335,25 @@ export default {
         this.$refs.notice.show(msg || '查询支付失败，请联系客服处理')
       })
     }
-  }
+  },
+  computed: {
+    //true为从现有的订单进入支付页,flase为商品详情进入
+    show_model(){
+      return !!this.$route.params.orderId
+    },
+    //不同进入情况取的单价
+    unitPrice(){
+      return this.show_model?this.preInfo.price:(this.info.newbornzone&&this.info.newbornzone.is_newborn?this.info.newbornzone.price:this.preInfo.price)
+    },
+    //不同进入情况取的个数
+    total_num(){
+      return this.show_model?this.info.total_num:this.$route.params.total_num
+    },
+    //不同进入情况取的总价
+    pay_price(){
+      return this.show_model?this.info.pay_price:(parseFloat(this.unitPrice*this.total_num).toFixed(2))
+    }
+  },
 }
 </script>
 

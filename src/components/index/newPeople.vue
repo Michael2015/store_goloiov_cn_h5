@@ -6,9 +6,9 @@
           <img class="close" src="~img/closeTip.png" @click="close" />
           <img class="new_bg" src="~img/news.png" />
           <div class="new_msg">
-            <div class="discount">0.99元包邮！</div>
-            <div class="discount_name">纳米镀膜剂</div>
-            <div class="discount_time">48小时内购买有效</div>
+            <div class="discount">{{newObj.price}}元包邮！</div>
+            <div class="discount_name">{{newObj.store_name}}</div>
+            <div class="discount_time">{{newObj.valid_time}}小时内购买有效</div>
           </div>
           <div class="gobaybtn" @click="goBay"></div>
         </div>
@@ -23,6 +23,11 @@ import tojump from "mixins/tojump";
 import showHide from "mixins/show-hide";
 import popup from "ui/popup";
 export default {
+  data() {
+    return {
+      newObj:{}
+    }
+  },
   computed: {
     ...mapState(["isLogin", "isFirst"])
   },
@@ -34,6 +39,16 @@ export default {
     goBay() {
       this.tojump("/goods/1");
       this.close();
+    },
+    show(callback){
+      callback().then(res=>{
+        if(res.length === 0){
+          return
+        }else{
+          this.newObj = res[0]
+          this.isShow = true
+        }
+      })
     }
   },
   mixins: [showHide, tojump],
@@ -75,6 +90,10 @@ export default {
       color: #fff;
       text-align: center;
       margin-top: size(10);
+      width: size(200);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .discount_time {
       font-size: size(20);
