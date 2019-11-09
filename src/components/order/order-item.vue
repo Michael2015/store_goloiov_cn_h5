@@ -19,7 +19,7 @@
         <div class="spec">{{item.suk}}</div>
       </div>
       <div class="price-num">
-        <div class="price">¥{{item.price}}</div>
+        <div class="price">¥{{item.per_price}}</div>
         <div class="num">x{{item.total_num}}</div>
       </div>
     </router-link >

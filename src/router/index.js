@@ -231,6 +231,34 @@ export default new Router({
       component: () => import(/* webpackChunkName: "me" */ 'com/me/xieyi'),
     },
     {
+      path: '/myhaibao',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/myhaibao'),
+    },
+    {
+      path: '/haibaoDetali',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/haibaoDetali'),
+    },
+    {
+      path: '/applyAdmin',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/admin/index'),
+    },
+    {
+      path: '/applyflag',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/admin/applyflag'),
+    },
+    {
+      path: '/applylist',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/admin/applylist'),
+    },
+    {
+      path: '/applydetail',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/admin/applydetail'),
+    },
+    {
+      path: '/applyadopt',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/admin/applyadopt'),
+    },
+    {
       path: '/',
       redirect:'/index'
     }

@@ -71,7 +71,7 @@ import GoodsBanner from "./goods-banner";
 import FreeIntro from "base/free-intro";
 import Notice from "base/notice";
 import setNum from "base/setNum";
-import { Loading } from "lib";
+import { Loading,Toast } from "lib";
 import { PartnerGetGoodsInfo, getQrcode } from "api";
 import { mapState } from "vuex";
 import { login } from "api/login";
@@ -99,7 +99,8 @@ export default {
       // 商品的基本信息，价格，图片啊
       info: {
         newbornzone: {}
-      }
+      },
+      isFirst: true
     };
   },
   computed: {
@@ -116,6 +117,9 @@ export default {
     ]).then(() => {
       Loading.close();
     });
+  },
+  mounted() {
+    // this.$refs.setNum.show(this.info);
   },
   methods: {
     goIndex() {
@@ -177,17 +181,26 @@ export default {
         });
         return;
       }
-      this.$refs.setNum.show(this.info.newbornzone, (total_num, callback) => {
-        // 跳入购买页面 传入商品id
-        this.$router.push({
-          name: "buy-goods",
-          params: {
-            id: this.id,
-            info: this.info,
-            total_num
-          }
-        });
-        callback();
+      if (this.isFirst) {
+        this.$refs.setNum.show(this.info);
+        this.isFirst = false;
+        return;
+      }
+      if(+this.$refs.setNum.total_num == 0){
+        Toast('请输入正确金额')
+        return
+      }
+      if(this.info.newbornzone.is_newborn && +this.$refs.setNum.total_num > this.info.newbornzone.limit_num){
+        Toast(`最多下单${this.info.newbornzone.limit_num}个`);
+        return
+      }
+      this.$router.push({
+        name: "buy-goods",
+        params: {
+          id: this.id,
+          info: this.info,
+          total_num: +this.$refs.setNum.total_num
+        }
       });
     }
   }

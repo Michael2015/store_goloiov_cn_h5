@@ -24,10 +24,10 @@
     </div>
     <div class="vertical_tab">
       <div class="vertical_item" v-for="(item,index) in tabList" :key="index">
-        <router-link tag="div" class="left" :to="item.path?item.path:''">
+        <div class="left" @click="to(item.path?item.path:'')">
           <img :src="item.img" alt />
           <div class="title">{{item.tit}}</div>
-        </router-link>
+        </div>
         <div class="right">
           <img src="~img/icon/join-right.png" alt />
         </div>
@@ -41,7 +41,7 @@
 
 <script>
 import tojump from "mixins/tojump";
-import { partnerNum, updateUserInfo } from "api/me";
+import { partnerNum, updateUserInfo, get_region_partner } from "api/me";
 import { mapState } from "vuex";
 import partnerLevelObj from "mixins/partner-level-obj";
 import { logout } from "api/login";
@@ -51,6 +51,16 @@ export default {
   data() {
     return {
       tabList: [
+        {
+          img: require("img/me/Slice1.png"),
+          tit: "我的海报",
+          path: "/myhaibao"
+        },
+        {
+          img: require("img/me/Slice2.png"),
+          tit: "区域管理员",
+          path: "/applyAdmin"
+        },
         {
           img: require("img/me/icon1.png"),
           tit: "我的优惠券",
@@ -100,6 +110,30 @@ export default {
           });
         });
       });
+    },
+    seeFlag(url) {
+      get_region_partner().then(res => {
+        //  后台查不到数据说明没有申请过
+        if (res == null) {
+          // 不需要修改路径
+        } else if (res.status == 0) {
+          // 审核中
+          url = "/applyflag";
+        } else if (res.status == 1) {
+          // 审核通过
+          url = `/applyadopt?id=${res.id}`;
+        } else if (res.status == -1) {
+          // 拒绝通过不需要改路径
+        }
+        this.$router.push(url);
+      });
+    },
+    to(url) {
+      if (url === "/applyAdmin") {
+        this.seeFlag(url);
+        return;
+      }
+      this.$router.push(url);
     }
   },
   computed: {

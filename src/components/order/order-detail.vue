@@ -40,7 +40,7 @@
             <div class="spec">{{orderInfo.suk}}</div>
           </div>
           <div class="price-num">
-            <div class="price">¥{{orderInfo.pay_price}}</div>
+            <div class="price">¥{{orderInfo.per_price}}</div>
             <div class="num">x{{orderInfo.total_num}}</div>
           </div>
         </div>

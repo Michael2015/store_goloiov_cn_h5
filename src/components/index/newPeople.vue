@@ -37,7 +37,7 @@ export default {
       this.setFirst(false);
     },
     goBay() {
-      this.tojump("/goods/1");
+      this.tojump(`/goods/${this.newObj.pro_id}`);
       this.close();
     },
     show(callback){

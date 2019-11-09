@@ -120,7 +120,8 @@ export default {
         newbornzone:{}
       },
       // 店铺信息
-      partner: {}
+      partner: {},
+      isFirst:true
     };
   },
   computed: {
@@ -232,17 +233,18 @@ export default {
         this.triggerLogin();
         return;
       }
-      this.$refs.setNum.show(this.info.newbornzone, (total_num, callback) => {
-        // 跳入购买页面 传入商品id
-        this.$router.push({
-          name: "buy-goods",
-          params: {
-            id: this.id,
-            info: this.info,
-            total_num
-          }
-        });
-        callback();
+      if (this.isFirst) {
+        this.$refs.setNum.show(this.info);
+        this.isFirst = false;
+        return;
+      }
+      this.$router.push({
+        name: "buy-goods",
+        params: {
+          id: this.id,
+          info: this.info,
+          total_num: this.$refs.setNum.total_num
+        }
       });
     }
   }

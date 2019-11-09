@@ -165,3 +165,38 @@ export function edituserinfo(userinfo){
   }).then(special)
 }
 
+// 区域管理员相关=======================
+
+// 申请
+export function region_partner_applye(applyObj){
+  return req.get('/api/partner/home/region_partner_apply',{
+    params:{
+      ...applyObj
+    }
+  }).then(clean)
+}
+
+//  记录
+export function get_my_region_log(){
+  return req.get('/api/partner/home/get_my_region_log').then(clean)
+}
+
+//  查看用户申请状态
+export function get_region_partner(){
+  return req.get('/api/partner/home/get_region_partner').then(clean)
+}
+
+// 详情
+export function get_my_region_log_detail(id){
+  return req.get('/api/partner/home/get_my_region_log_detail',{
+    params:{
+      id
+    }
+  }).then(clean)
+}
+
+// 海报=======================
+//  获取海报列表
+export function getposterlist(){
+  return req.get('/api/partner.partner/getposterlist').then(clean)
+}
