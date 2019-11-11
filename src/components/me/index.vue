@@ -52,12 +52,12 @@ export default {
     return {
       tabList: [
         {
-          img: require("img/me/Slice1.png"),
+          img: require("img/me/Poster.png"),
           tit: "我的海报",
           path: "/myhaibao"
         },
         {
-          img: require("img/me/Slice2.png"),
+          img: require("img/me/Administrator.png"),
           tit: "区域管理员",
           path: "/applyAdmin"
         },
