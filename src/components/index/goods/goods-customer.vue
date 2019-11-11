@@ -13,9 +13,11 @@
         <span class="price">
           {{info.newbornzone.is_newborn?'':'原价'}}
           <span>{{info.newbornzone.is_newborn?'¥ '+info.newbornzone.price:info.price}}</span>
-          <span class="vip_price" v-if="!info.newbornzone.is_newborn">¥{{info.vip_price}}</span>
-          <span class="vip_icon" v-if="!info.newbornzone.is_newborn">vip</span>
-          <span class="news" v-if="info.newbornzone.is_newborn" >新人专享</span>
+          <span class="vip_price" v-if="!info.newbornzone.is_newborn">
+            <span class="vip_icon" v-if="!info.newbornzone.is_newborn">vip</span>
+            ¥{{info.vip_price}}
+          </span>
+          <span class="news" v-if="info.newbornzone.is_newborn">新人专享</span>
         </span>
         <span class="price-cut" v-if="false">合伙人价 ¥999</span>
         <span class="num">已售：{{info.sales}}</span>
@@ -117,11 +119,11 @@ export default {
     return {
       // 商品的基本信息，价格，图片啊
       info: {
-        newbornzone:{}
+        newbornzone: {}
       },
       // 店铺信息
       partner: {},
-      isFirst:true
+      isFirst: true
     };
   },
   computed: {
@@ -289,17 +291,24 @@ export default {
         font-size: size(48);
       }
       .vip_price {
-        background: #333333;
-        color: #ff9900;
-        font-size: size(30);
-        padding: 0 size(10);
+        background-image: linear-gradient(
+          49deg,
+          #ffac00 0%,
+          #ffd884 34%,
+          #ffbc29 100%
+        );
+        border-radius: size(8);
+        color: #ffffff;
+        font-size: size(24);
+        padding: size(6);
         margin-left: size(10);
-      }
-      .vip_icon {
-        background: #ff9900;
-        color: #333333;
-        font-size: size(30);
-        padding: 0 size(10);
+        .vip_icon {
+          background-color: #ffffff;
+          border-radius: size(87);
+          color: #e4be6b;
+          font-size: size(20);
+          padding: 0 size(10);
+        }
       }
     }
     .news {
@@ -310,7 +319,7 @@ export default {
       line-height: size(40);
       padding: 0 size(10);
       margin-left: size(20);
-      font-size: size(28)!important;
+      font-size: size(28) !important;
     }
   }
   .price-cut {

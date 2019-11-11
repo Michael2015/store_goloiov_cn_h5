@@ -150,6 +150,10 @@ export default new Router({
       path: '/cultivate',
       component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/cultivate')
     },
+    {
+      path: '/region',
+      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/region')
+    },
     
     
     {

@@ -6,8 +6,8 @@
           <img class="close" src="~img/closeTip.png" @click="close" />
           <img class="new_bg" src="~img/news.png" />
           <div class="new_msg">
-            <div class="discount">{{newObj.price}}元包邮！</div>
             <div class="discount_name">{{newObj.store_name}}</div>
+            <div class="discount">新人专享爆款抢购<span>{{newObj.price}}元</span>包邮！</div>
             <div class="discount_time">{{newObj.valid_time}}小时内购买有效</div>
           </div>
           <div class="gobaybtn" @click="goBay"></div>
@@ -70,44 +70,48 @@ export default {
     width: size(50);
     position: absolute;
     right: 0;
-    top: size(-55);
+    top: size(70);
   }
   .new_bg {
-    width: size(600);
+    width: size(536);
   }
   .new_msg {
     position: absolute;
-    right: size(267);
-    bottom: size(175);
+    left: 50%;
+    top:40%;
+    transform: translate(-50%,-50%);
+    width: size(467);
     .discount {
-      font-weight: 550;
-      color: #bf0805;
+      color: #ff9f0e;
       text-align: center;
-      font-size: size(35);
+      font-size: size(32);
+      margin-top: size(38);
+      >span{
+        color: #ff6815;
+        font-size: size(38);
+      }
     }
     .discount_name {
-      font-weight: 550;
-      color: #fff;
+      color: #ff6815;
+      font-size: size(36);
       text-align: center;
-      margin-top: size(10);
-      width: size(200);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .discount_time {
-      font-size: size(20);
-      color: #980120;
-      text-align: center;
-      margin-top: size(10);
+      font-size: size(32);
+      color: #ff9f0e;
+      margin-top: size(14);
     }
   }
   .gobaybtn {
-    width: size(128);
-    height: size(175);
+    width: size(360);
+    height: size(88);
     position: absolute;
-    right: size(117);
-    bottom: size(153);
+    right: size(90);
+    bottom: size(6);
+    border-radius: size(88);
   }
 }
 </style>

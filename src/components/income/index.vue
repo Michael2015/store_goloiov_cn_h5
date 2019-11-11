@@ -127,7 +127,8 @@ export default {
         allowance: "/allowance", //管理律贴
         supplier: "/supplier", //开发供应商
         share_bonus: "/director", //董事分红详情
-        develop_bonus: "/cultivate" //培养合伙人
+        develop_bonus: "/cultivate", //培养合伙人
+        regional_agent:'/region' //区域合伙人
       }
     };
   },

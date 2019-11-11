@@ -1,7 +1,7 @@
 <template>
   <div class="post-list">
     <top-head>海报列表</top-head>
-    <div class="item" v-for="(item,index) in list" :key="index" @click="jump(item.img_url)">
+    <div class="item" v-for="(item,index) in list" :key="index" @click="jump(item.img_url,item.name)">
       <img :src="item.img_url" class="icon" />
       <div class="middle">
         <div class="title">{{item.name}}</div>
@@ -20,8 +20,8 @@ export default {
     };
   },
   methods: {
-    jump(url) {
-      this.$router.push(`/haibaoDetali?url=${url}`);
+    jump(url,name) {
+      this.$router.push(`/haibaoDetali?url=${url}&name=${name}`);
     }
   },
   mounted() {

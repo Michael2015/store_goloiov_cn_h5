@@ -1,26 +1,95 @@
 <template>
   <div class="wrap">
+    <top-head>海报</top-head>
     <div class="thunder">
-      <img src="~img/me/commodity_share_poster.png" class="icon" />
+      <img :src="url" class="icon" />
     </div>
-    <img src="~img/me/footer.png" class="foot" />
-    <div class="save_btn">保存到相册</div>
+    <div class="save_btn" @click="createPoster">保存到相册</div>
   </div>
 </template>
 
 <script>
 import { getQrcode } from "api";
-import { mapState } from 'vuex'
+import { createPosterImage } from "api/me";
+import { sharePoster } from "api/native";
+import { mapState } from "vuex";
+import { Toast, Loading } from "lib";
+import haibaoPoster from "lib/poster-haibao";
+
 export default {
-  mounted() {
-    console.log(this.$route.query.url);
-    getQrcode([this.userInfo.uid, this.userInfo.uid,0,'invite'].join(",")).then(res=>{
-      console.log(res)
-    })
+  data() {
+    return {
+      imgObj: {},
+      url: "",
+      canClick: false
+    };
+  },
+  async mounted() {
+    this.imgObj.poster_img_url = this.updateUrl(this.$route.query.url);
+    this.imgObj.poster_name = this.$route.query.name;
+    Loading.open();
+    await getQrcode(
+      [this.userInfo.uid, this.userInfo.uid, 0, "invite"].join(",")
+    ).then(res => {
+      this.imgObj.qrcode_img_url = res;
+    });
+    createPosterImage(this.imgObj).then(
+      res => {
+        this.poster = new haibaoPoster();
+        this.url = res.img_url
+        this.poster
+          .drawAllcode(res.img_url)
+          .then(
+            () => {
+              this.poster.base64 = this.poster
+                .getBase64()
+                .replace("data:image/png;base64,", "");
+              this.canClick = true;
+            },
+            () => {
+              this.poster = null;
+            }
+          )
+          .finally(() => {
+            Loading.close();
+          });
+        Loading.close();
+      },
+      msg => {
+        Toast(msg);
+        Loading.close();
+      }
+    );
   },
   computed: {
     ...mapState(["userInfo"])
   },
+  methods: {
+    updateUrl(url) {
+      return url.split(".com/")[1];
+    },
+    createPoster() {
+      if (!this.canClick) {
+        return;
+      }
+      if (this.poster) {
+        sharePoster(this.poster.base64);
+        return;
+      }
+      // this.poster = new haibaoPoster();
+      // this.poster
+      //   .drawAllcode(this.url)
+      //   .then(() => {
+      //     this.poster.base64 = this.poster
+      //       .getBase64()
+      //       .replace("data:image/png;base64,", "");
+      //     sharePoster(this.poster.base64);
+      //   })
+      //   .finally(() => {
+      //     Loading.close();
+      //   });
+    }
+  }
 };
 </script>
 
@@ -29,13 +98,8 @@ export default {
 .wrap .thunder img {
   width: 100%;
 }
-.foot {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 0 size(30) 0 size(30);
-  height: size(138);
-  position: fixed;
-  bottom: size(136);
+.thunder {
+  padding-bottom: size(100);
 }
 .wrap .save_btn {
   position: fixed;

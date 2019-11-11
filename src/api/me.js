@@ -200,3 +200,11 @@ export function get_my_region_log_detail(id){
 export function getposterlist(){
   return req.get('/api/partner.partner/getposterlist').then(clean)
 }
+
+export function createPosterImage(imgObj){
+  return req.get('/api/partner.partner/createPosterImage',{
+    params:{
+      ...imgObj
+    }
+  }).then(clean)
+}
