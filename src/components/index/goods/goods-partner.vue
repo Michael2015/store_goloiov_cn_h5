@@ -10,8 +10,7 @@
     <div class="intro-wrap">
       <div class="price-num">
         <span class="price">
-          ¥
-          <span>{{info.newbornzone.is_newborn?info.newbornzone.price:info.vip_price}}</span>
+          <span>¥{{info.newbornzone.is_newborn?info.newbornzone.price:info.vip_price}}</span>
           ¥ {{info.newbornzone.is_newborn?info.vip_price:info.price}}
         </span>
         <span class="news" v-if="info.newbornzone.is_newborn">新人专享</span>
@@ -71,7 +70,7 @@ import GoodsBanner from "./goods-banner";
 import FreeIntro from "base/free-intro";
 import Notice from "base/notice";
 import setNum from "base/setNum";
-import { Loading,Toast } from "lib";
+import { Loading, Toast } from "lib";
 import { PartnerGetGoodsInfo, getQrcode } from "api";
 import { mapState } from "vuex";
 import { login } from "api/login";
@@ -186,13 +185,16 @@ export default {
         this.isFirst = false;
         return;
       }
-      if(+this.$refs.setNum.total_num == 0){
-        Toast('请输入正确金额')
-        return
+      if (+this.$refs.setNum.total_num == 0) {
+        Toast("请输入正确金额");
+        return;
       }
-      if(this.info.newbornzone.is_newborn && +this.$refs.setNum.total_num > this.info.newbornzone.limit_num){
+      if (
+        this.info.newbornzone.is_newborn &&
+        +this.$refs.setNum.total_num > this.info.newbornzone.limit_num
+      ) {
         Toast(`最多下单${this.info.newbornzone.limit_num}个`);
-        return
+        return;
       }
       this.$router.push({
         name: "buy-goods",
@@ -236,13 +238,14 @@ export default {
   .price-num {
     line-height: size(66);
     .price {
-      color: #fe0000;
+      color: #333333;
       font-family: PingFangSC-Medium;
       font-weight: normal;
       font-stretch: normal;
       font-size: size(36);
       > span {
         font-size: size(48);
+        color: #fe0000;
       }
     }
     .news {

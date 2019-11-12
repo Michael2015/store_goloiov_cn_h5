@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mask" @click="$emit('mask-click')"></div>
+    <div class="mask" @touchmove.prevent @click="$emit('mask-click')"></div>
     <div class="slot"><slot></slot></div>
   </div>
 </template>

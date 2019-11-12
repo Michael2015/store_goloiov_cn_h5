@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mask-bootom" @click="$emit('mask-click')">
+    <div class="mask-bootom" @touchmove.prevent @click="$emit('mask-click')">
       <div class="slot">
         <slot></slot>
       </div>

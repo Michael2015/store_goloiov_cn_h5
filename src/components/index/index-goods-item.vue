@@ -4,7 +4,7 @@
     <div class="con">
       <router-link tag="div" class="name" :to="'/goods/'+item.id">{{item.store_name}}</router-link>
       <div class="price-num">
-        <span class="price">¥{{item.price}}</span>
+        <span class="price">¥{{item.newbornzone.is_newborn?item.newbornzone.price:item.price}}</span>
         <span class="num">销量{{item.sales}}</span>
       </div>
     </div>

@@ -65,7 +65,16 @@ export default {
   },
   computed: {
     ...mapState(["role"])
-  }
+  },
+  watch: {
+    total_num(v,vv){
+      if(v>50){
+        Toast('最多下单50个')
+        this.total_num = 50
+        return
+      }
+    }
+  },
 };
 </script>
 
