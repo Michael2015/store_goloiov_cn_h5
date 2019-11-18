@@ -72,7 +72,7 @@ import Notice from "base/notice";
 import setNum from "base/setNum";
 import { Loading, Toast } from "lib";
 import { PartnerGetGoodsInfo, getQrcode } from "api";
-import { mapState } from "vuex";
+import { mapState,mapMutations } from "vuex";
 import { login } from "api/login";
 import { sharePoster } from "api/native";
 import Poster from "lib/poster";
@@ -121,6 +121,7 @@ export default {
     // this.$refs.setNum.show(this.info);
   },
   methods: {
+    ...mapMutations(['setBuyTotalNum']),
     goIndex() {
       this.$router.push("/index");
     },
@@ -186,7 +187,7 @@ export default {
         return;
       }
       if (+this.$refs.setNum.total_num == 0) {
-        Toast("请输入正确金额");
+        Toast("请输入正确个数");
         return;
       }
       if (
@@ -196,6 +197,7 @@ export default {
         Toast(`最多下单${this.info.newbornzone.limit_num}个`);
         return;
       }
+      this.setBuyTotalNum(+this.$refs.setNum.total_num)
       this.$router.push({
         name: "buy-goods",
         params: {
@@ -250,8 +252,8 @@ export default {
     }
     .news {
       display: inline-block;
-      color: #fe0000;
-      background: #ffccff;
+      color: #ffffff;
+      background: red;
       height: size(40);
       line-height: size(40);
       padding: 0 size(10);

@@ -65,7 +65,7 @@
       <div class="btn-inline warn" v-if="orderInfo.status_of_order === 0" @click="goPay">重新支付</div>
       <div class="btn-inline warn" v-if="orderInfo.status_of_order === 1" @click="fastRefund">申请退款</div>
       <div class="btn-inline warn" v-if="orderInfo.status_of_order === 3" @click="confirmOrder">确认收货</div> 
-      <div class="btn-inline" v-if="orderInfo.status_of_order === 5 && orderInfo.is_allow_refund !== 0" @click="goRefund">申请退货</div> 
+      <div class="btn-inline" v-if="(orderInfo.status_of_order === 5 && orderInfo.is_allow_refund !== 0) || orderInfo.status_of_order === 3" @click="goRefund">申请退货</div> 
       <div class="btn-inline" v-if="orderInfo.status_of_order === 5 && orderInfo.status !== 3" @click="goRemark">去评价</div> 
     </div>
     <!-- 卖家信息 -->

@@ -114,14 +114,8 @@ export default {
       inConfirmLeave: false
     }
   },
-  computed: {
-    ...mapState(['selectAddress']),
-  },
   created() {
     // this.loaddata()
-  },
-  mounted() {
-    
   },
   beforeRouteLeave(to, from, next) {
     if (this.paying && this.status === 2) {
@@ -140,6 +134,7 @@ export default {
         this.inConfirmLeave = false
       })
     } else {
+      this.$refs.payMethod.hide()
       next()
     }
   },
@@ -201,10 +196,12 @@ export default {
         // 有订单了，重做地址
         const a = this.info.user_address.split(' ')
         const addr = {
-          province: a[0],
+          province: a[0], 
           city: a[1],
           district: a[2],
-          detail: a.slice(3).join(' ')
+          detail: a.slice(3).join(' '),
+          real_name:this.info.real_name,
+          phone:this.info.user_phone
         }
         this.addr = addr
         // 重写备注
@@ -212,6 +209,9 @@ export default {
       }
     },
     goSelectAddr() {
+      if(this.show_model){
+        return
+      }
       // 清空上次保存的地址
       this.$store.commit('setAddress', null)
       // 选择地址，就刷新地址
@@ -337,6 +337,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['selectAddress','buyTotalNum']),
     //true为从现有的订单进入支付页,flase为商品详情进入
     show_model(){
       return !!this.$route.params.orderId
@@ -347,13 +348,14 @@ export default {
     },
     //不同进入情况取的个数
     total_num(){
-      return this.show_model?this.info.total_num:this.$route.params.total_num
+      let num = this.show_model?this.info.total_num:this.$route.params.total_num;
+      return num?num:this.buyTotalNum;
     },
     //不同进入情况取的总价
     pay_price(){
       return this.show_model?this.info.pay_price:(parseFloat(this.unitPrice*this.total_num).toFixed(2))
     }
-  },
+  }
 }
 </script>
 

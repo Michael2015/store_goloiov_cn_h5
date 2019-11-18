@@ -21,7 +21,9 @@ export default new Vuex.Store({
     // 发生订单操作,触发刷新，比如删除订单，支付成功订单，重新下单
     refreshOrder: 0,
     // 是否第一次进入首页
-    isFirst:false
+    isFirst:false,
+    // 储存结算页显示个数,多数情况用不上,解决用户在结算页重选地址丢失个数问题
+    buyTotalNum:1
   },
   mutations: {
     loginTest(state) {
@@ -50,6 +52,9 @@ export default new Vuex.Store({
     },
     setFirst(state,falg){
       state.isFirst = falg
+    },
+    setBuyTotalNum(state,totalnum){
+      state.buyTotalNum = totalnum
     }
   },
   strict: debug,

@@ -10,7 +10,7 @@
     </router-link>
     <router-link to="/income" tag="div" replace>
       <div class="icon income"></div>
-      <div class="name">收益</div>
+      <div class="name">积分</div>
     </router-link>
     <router-link to="/me" tag="div" replace v-if="role === 1">
       <div class="icon me"></div>

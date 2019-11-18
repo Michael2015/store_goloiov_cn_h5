@@ -11,10 +11,21 @@
             <div class="setter">请选择规格属性</div>
           </div>
         </div>
+        <div v-for="(overitem,overindex) in suklist" :key="overindex">
+          <div class="title">{{overitem.title}}</div>
+          <div class="selectIcon">
+            <div
+              :class="{icon:true,active:selectList[overindex] == index}"
+              v-for="(sukitem,index) in overitem.suks"
+              :key="index"
+              @click="checkIcon(overindex,index)"
+            >{{sukitem}}</div>
+          </div>
+        </div>
         <div class="title">数量</div>
         <div class="setcount">
           <div class="reduce" @click="reduce">-</div>
-          <input class="count" type='number' v-model="total_num" />
+          <input class="count" type="number" v-model="total_num" />
           <div class="add" @click="add">+</div>
         </div>
       </div>
@@ -37,8 +48,27 @@ export default {
       isShow: false,
       total_num: 1,
       info: {
-        newbornzone:{}
-      }
+        newbornzone: {}
+      },
+      // 假设后端传来的suk
+      suklist: [
+        {
+          title: "颜色",
+          suks: [
+            "灰色",
+            "白色",
+            "黑色",
+            "字体很多很多怎么办",
+            "字体很多很多很多很多很多怎么办"
+          ]
+        },
+        {
+          title: "尺寸",
+          suks: ["2G", "3G", "4G", "66666666G"]
+        }
+      ],
+      // 对应的选择suk下标集合,有id用最好id,数据结构只是假设
+      selectList: [0, 0]
     };
   },
   methods: {
@@ -61,20 +91,34 @@ export default {
       this.isShow = true;
       this.info = info;
       console.log(this.info);
+    },
+    checkIcon(outindex,inContent){
+      this.$set(this.selectList,outindex,inContent)
+      // let selectList = this.selectList
+      // selectList[outindex] = inContent;
+      // this.selectList = selectList;
+      // console.log(this.selectList)
     }
   },
   computed: {
     ...mapState(["role"])
   },
   watch: {
-    total_num(v,vv){
-      if(v>50){
-        Toast('最多下单50个')
-        this.total_num = 50
-        return
+    total_num(v) {
+      if (this.info.newbornzone.is_newborn) {
+        if (v > this.info.newbornzone.limit_num) {
+          Toast(`最多下单${this.info.newbornzone.limit_num}个`);
+          this.total_num = this.info.newbornzone.limit_num;
+          return;
+        }
+      }
+      if (v > 50) {
+        Toast("最多下单50个");
+        this.total_num = 50;
+        return;
       }
     }
-  },
+  }
 };
 </script>
 
@@ -85,8 +129,8 @@ export default {
   background: #fff;
   width: 100%;
   box-sizing: border-box;
-  height: size(900);
-  padding: size(36) size(30);
+  // height: size(900);
+  padding: size(36) size(30) size(176) size(30);
   .good_msg {
     display: flex;
     > img {
@@ -117,7 +161,29 @@ export default {
     line-height: size(35);
     color: #4b4b4b;
     margin-top: size(42);
-    margin-bottom: size(12);
+  }
+  .selectIcon {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    .icon {
+      height: size(70);
+      line-height: size(70);
+      border-radius: size(6);
+      border: size(1) solid #7f7f7f;
+      padding: 0 size(25);
+      color: #363636;
+      font-size: size(24);
+      margin: size(12) size(30) 0 0;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .active {
+      color: #fe0000;
+      border: size(1) solid #fe0000;
+    }
   }
   .setcount {
     width: size(320);
@@ -127,15 +193,14 @@ export default {
     justify-content: space-between;
     font-size: size(28);
     border-radius: size(2);
-    border: size(1) solid #878787;
+    margin-top: size(12);
     box-sizing: border-box;
-    overflow: hidden;
     .add {
       height: size(70);
       width: size(94);
       text-align: center;
       color: #696969;
-      border-left: size(1) solid #878787;
+      border: size(1) solid #878787;
       box-sizing: content-box;
     }
     .reduce {
@@ -143,13 +208,19 @@ export default {
       width: size(94);
       text-align: center;
       color: #696969;
-      border-right: size(1) solid #878787;
+      border: size(1) solid #878787;
       box-sizing: content-box;
     }
     .count {
+      height: size(70);
       flex: 1;
       text-align: center;
       color: #363636;
+      border-top: size(1) solid #878787;
+      border-bottom: size(1) solid #878787;
+      box-sizing: content-box;
+      padding: 0;
+      border-radius: 0;
     }
   }
 }

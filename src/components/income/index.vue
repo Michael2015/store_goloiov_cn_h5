@@ -3,14 +3,14 @@
     <div class="topbox">
       <div class="banner">
         <div class="content">
-          <div class="title">可提现金额:</div>
+          <div class="title">积分余额:</div>
           <div class="all_money">
             <span>¥</span>
             <!--
             -->
             {{isLogin?cash:'0.00'}}
           </div>
-          <div class="record" @click="record">提现记录</div>
+          <!-- <div class="record" @click="record">提现记录</div>  -->
           <div class="detail">
             <div class="left">
               <span>待结算</span>
@@ -28,13 +28,13 @@
             </div>
           </div>
         </div>
-        <div class="withdraw-wrap">
+        <!-- <div class="withdraw-wrap">
           <div class="withdraw" @click="withdraw">提现</div>
-        </div>
+        </div> -->
       </div>
       <div class="in-title">
         <span :class="{active: active === 'charge'}" @click="checkShow('charge')">免单</span>
-        <span :class="{active: active === 'earnings'}" @click="checkShow('earnings')">收益</span>
+        <span :class="{active: active === 'earnings'}" @click="checkShow('earnings')">积分流水</span>
         <div class="showtitle" @click="tojieshao">{{showtitle}}</div>
       </div>
     </div>
@@ -229,7 +229,8 @@ export default {
       let title;
       const { active } = this;
       if (active === "earnings") {
-        title = "收益及提现结算";
+        title = "";
+        // title = "收益及提现结算";
       } else if (active === "charge") {
         title = "如何免单";
       }
@@ -387,7 +388,7 @@ export default {
       & > span {
         font-size: size(34);
         display: inline-block;
-        padding-left: size(43);
+        margin-left: size(43);
         height: size(48);
         line-height: size(48);
         font-family: PingFangSC-Regular;
@@ -399,12 +400,13 @@ export default {
           &:after {
             content: " ";
             display: block;
-            width: size(44);
+            width: 100%;
             height: size(8);
             background: #ff1f3d;
             position: absolute;
             border-radius: size(4);
-            left: 52%;
+            left: 50%;
+            transform: translateX(-50%)
           }
         }
       }

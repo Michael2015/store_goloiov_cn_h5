@@ -10,6 +10,17 @@
         <span class="i">￥</span>
         <span><slot>0.00</slot></span>
       </div>
+      <div class="col table border-bottom" @click="active=2">
+        <div class="icon">
+          <img src="~img/alipay.png" alt="">
+        </div>
+        <div class="name">
+          <div class="">积分余额</div>
+        </div>
+        <div class="check-icon" :class="{active: active===2}">
+          <span></span>
+        </div>
+      </div>
       <div class="col table border-bottom" @click="active=0">
         <div class="icon">
           <img src="~img/alipay.png" alt="">
@@ -43,7 +54,8 @@ export default {
   mixins: [showHide],
   data() {
     return {
-      methods: ['alipay', 'wechat'],
+      //  问ui要这个积分余额的icon
+      methods: ['alipay', 'wechat','jifen'],
       active: 1,
     }
   },
