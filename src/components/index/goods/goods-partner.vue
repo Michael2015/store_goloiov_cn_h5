@@ -181,11 +181,12 @@ export default {
         });
         return;
       }
-      if (this.isFirst) {
-        this.$refs.setNum.show(this.info);
+      // 是否第一次进来
+      this.$refs.setNum.show(this.info);
+      if (this.isFirst) {  
         this.isFirst = false;
         return;
-      }
+      }   
       if (+this.$refs.setNum.total_num == 0) {
         Toast("请输入正确个数");
         return;
@@ -197,15 +198,17 @@ export default {
         Toast(`最多下单${this.info.newbornzone.limit_num}个`);
         return;
       }
+      if( !this.$refs.setNum.sku_unique && this.info.attr.length > 0) return Toast('未选择商品规格！');
       this.setBuyTotalNum(+this.$refs.setNum.total_num)
       this.$router.push({
         name: "buy-goods",
-        params: {
+        params: { 
           id: this.id,
           info: this.info,
-          total_num: +this.$refs.setNum.total_num
+          total_num: +this.$refs.setNum.total_num,
+          sku_id: this.$refs.setNum.sku_unique
         }
-      });
+      })
     }
   }
 };

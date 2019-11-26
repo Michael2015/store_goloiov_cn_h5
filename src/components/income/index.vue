@@ -3,14 +3,20 @@
     <div class="topbox">
       <div class="banner">
         <div class="content">
-          <div class="title">积分余额:</div>
+          <div class="title">账户余额:</div>
           <div class="all_money">
             <span>¥</span>
             <!--
             -->
-            {{isLogin?cash:'0.00'}}
+            {{isLogin?balance:'0.00'}}
           </div>
-          <!-- <div class="record" @click="record">提现记录</div>  -->
+          <div class="tixi_money">
+            可提现金额：¥ {{isLogin?cash:'0.00'}}
+          </div>
+          <div class="xf_money">
+            可消费金额：¥ {{isLogin?cons:'0.00'}}
+          </div>
+          <div class="record" @click="record">提现记录</div> 
           <div class="detail">
             <div class="left">
               <span>待结算</span>
@@ -28,13 +34,13 @@
             </div>
           </div>
         </div>
-        <!-- <div class="withdraw-wrap">
+        <div class="withdraw-wrap">
           <div class="withdraw" @click="withdraw">提现</div>
-        </div> -->
+        </div>
       </div>
       <div class="in-title">
         <span :class="{active: active === 'charge'}" @click="checkShow('charge')">免单</span>
-        <span :class="{active: active === 'earnings'}" @click="checkShow('earnings')">积分流水</span>
+        <span :class="{active: active === 'earnings'}" @click="checkShow('earnings')">收益</span>
         <div class="showtitle" @click="tojieshao">{{showtitle}}</div>
       </div>
     </div>
@@ -115,7 +121,9 @@ export default {
   data() {
     return {
       active: "earnings",
+      balance: "0.00", //账户余额
       cash: "0.00", //可提现金额
+      cons: "0.00", // 可消费金额
       uncash: "0.00", //待结算金额
       all: "0.00", //总收入金额
       jumpObj: {
@@ -135,6 +143,8 @@ export default {
   mounted() {
     getUserAmount().then(reque => {
       this.cash = reque.cash_money;
+      this.balance = reque.can_withdraw;
+      this.cons = reque.can_consume;
       this.uncash = reque.unsettled_money;
       this.all = reque.total_money;
       this.$refs.charge.disabled = true;
@@ -294,7 +304,8 @@ export default {
         height: 100%;
         .title {
           font-size: size(28);
-          padding-top: size(45);
+          padding-top: size(40);
+          color: #ffe9ef;
         }
         .all_money {
           font-size: size(59);
@@ -302,7 +313,7 @@ export default {
           font-family: Helvetica;
           font-stretch: normal;
           letter-spacing: size(1);
-          padding-top: size(36);
+          padding-top: size(0);
           text-align: center;
           line-height: 1;
           & > span {
@@ -312,13 +323,29 @@ export default {
             vertical-align: middle;
           }
         }
+        .tixi_money{
+          text-align: center;
+          color: #ffe9ef;
+          font-size: size(20);
+          padding-top: size(12);
+          margin-bottom: size(15);
+        }
+        .xf_money{
+          text-align: center;
+          color: #ffe9ef;
+          font-size: size(20);
+        }
         .record {
           font-family: PingFangSC-Light;
           text-decoration: underline;
+          position: absolute  ;
+          top: size(32);
+          right: size(10);
           font-size: size(26);
           font-weight: normal;
           font-stretch: normal;
           text-align: center;
+          color: #ffe9ef;
           margin-top: size(12);
         }
         .detail {

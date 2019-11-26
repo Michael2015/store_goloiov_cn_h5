@@ -10,14 +10,14 @@
         <span class="i">￥</span>
         <span><slot>0.00</slot></span>
       </div>
-      <div class="col table border-bottom" @click="active=2">
+      <div class="col table border-bottom" @click="type_jf">
         <div class="icon">
-          <img src="~img/alipay.png" alt="">
+          <img src="~img/icon/jifenpay.png" alt="">
         </div>
         <div class="name">
-          <div class="">积分余额</div>
+          <div class="">积分支付 <span class="jifen">(剩余积分{{now_money}})</span></div>
         </div>
-        <div class="check-icon" :class="{active: active===2}">
+        <div class="check-icon" :class="{active: active===2, no_disab: is_jf == true}">
           <span></span>
         </div>
       </div>
@@ -50,16 +50,35 @@
 
 <script>
 import showHide from 'mixins/show-hide'
+import {Toast} from 'lib'
+
 export default {
   mixins: [showHide],
+  props: {
+    is_jf: {
+      type: Boolean,
+      default: false
+    },
+    now_money: {
+      type: String,
+      default: '0.00'
+    }
+  },
   data() {
     return {
       //  问ui要这个积分余额的icon
-      methods: ['alipay', 'wechat','jifen'],
+      methods: ['alipay', 'wechat','yue'],
       active: 1,
     }
   },
   methods: {
+    type_jf() {
+      if(this.is_jf == true) {
+        Toast('积分不足，请选择其他支付方式')
+        return
+      }
+      this.active = 2
+    },
     pay() {
       if (this.cb) {
         this.cb(this.methods[this.active])
@@ -117,16 +136,21 @@ export default {
       display: table-cell;
     }
     .icon{
-      width: size(56);
+      width: size(32);
       img{
         width: 100%;
-        height: size(56);
+        height: size(32);
         display: block;
       }
     }
     .name{
       padding-left: size(28);
       font-size: size(30);
+      color: #333;
+      .jifen{
+        font-size: size(26);
+        color: #666;
+      }
     }
     .check-icon{
       text-align: right;
@@ -139,6 +163,12 @@ export default {
       &.active{
         span{
           @include bg('~img/icon/checked.png'); 
+        }
+      }
+      &.no_disab{
+        span{
+          background: #ccc;
+          border-radius: 50%;
         }
       }
     }

@@ -9,7 +9,7 @@
       </div>
       <div class="user_name">{{userInfo.nickname}}</div>
       <div class="grade">{{partnerLevelObj[userInfo.partner_level]}}</div>
-      <div class="team_no">伙伴{{Num}}人</div>
+      <div class="team_no">伙伴 {{Num || 0}} 人</div>
     </div>
     <div class="crosswise_tab">
       <div class="crosswise_item" @click="tojump('/myVisitor')">
@@ -33,7 +33,9 @@
         </div>
       </div>
     </div>
-    <div class="quit" @click="logout">退出登录</div>
+    <div class="quit">
+      <div class="btn-out" @click="logout">退出登录</div>
+    </div>
     <confirm ref="logOut">确定退出吗？</confirm>
     <notice ref="notice"></notice>
   </div>
@@ -154,19 +156,20 @@ export default {
   .header {
     height: size(385);
     overflow: hidden;
+    background-image: linear-gradient(236deg, #ef5456 0%, #e70002 100%);
     position: relative;
     .avater_warp {
       margin: size(36) auto size(28) auto;
       box-sizing: border-box;
       width: size(169);
       height: size(169);
-      border: size(2) solid #0c0422;
+      // border: size(2) solid #0c0422;
       border-radius: 50%;
-      padding: size(10);
+      // padding: size(10);
       position: relative;
       & > img {
-        width: size(148);
-        height: size(148);
+        width: 100%;
+        height: 100%;
         border-radius: 50%;
       }
       .amend {
@@ -198,7 +201,7 @@ export default {
       height: size(43);
       line-height: size(43);
       text-align: center;
-      background-color: #000000;
+      background-color: #222;
       color: #fff;
       font-size: size(24);
       border-radius: size(6);
@@ -207,7 +210,7 @@ export default {
       height: size(37);
       line-height: size(37);
       font-size: size(26);
-      color: #727076;
+      color: #eee;
       position: absolute;
       right: size(30);
       bottom: size(9);
@@ -274,12 +277,17 @@ export default {
   .quit {
     width: 100%;
     height: size(100);
-    line-height: size(100);
     text-align: center;
-    background: #fff;
-    color: #333333;
-    font-size: size(28);
-    color: #0c0422;
+    .btn-out {
+      display: inline-block;
+      padding: size(10) size(50);
+      margin: 0 auto;
+      text-align: center;
+      border-radius: size(50);
+      background: #777;
+      color: #ddd;
+      font-size: size(26);
+    }
   }
 }
 </style>

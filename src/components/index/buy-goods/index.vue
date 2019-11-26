@@ -56,7 +56,7 @@
         <span @click="doPay">{{this.paying ? '支付中...('+status+')' : '立即购买'}}</span>
       </div>
     </div>
-    <pay-method ref="payMethod">{{pay_price}}</pay-method>
+    <pay-method ref="payMethod" :is_jf="is_jf" :now_money="now_money">{{pay_price}}</pay-method>
     <notice ref="notice" :autoClose="false"></notice>
     <confirm ref="leaveConfirm" :autoClose="false">
       <span slot="btn-left">我已支付</span><span slot="btn-right">离开</span>
@@ -111,7 +111,8 @@ export default {
       // 4 app回调支付失败
       status: 0,
       // 询问用户是否离开
-      inConfirmLeave: false
+      inConfirmLeave: false,
+      now_money:'' //我的积分余额
     }
   },
   created() {
@@ -174,9 +175,10 @@ export default {
   },
   methods: {
     loaddata() {
-      getPreOrderProductInfo(this.id, this.orderId).then(data => {
+      getPreOrderProductInfo(this.id, this.orderId, this.$route.params.sku_id).then(data => {
         if (data) {
           this.preInfo = data
+          this.now_money = data.now_money
         }
       })
       if (!this.orderId) {
@@ -235,28 +237,30 @@ export default {
         return
       }
       this.$refs.payMethod.show(type => {
-        console.log(type)
         // 去支付
         Loading.open()
         this.paying = true
         if (this.orderId || this.createdOrderId) {
           // 已经有订单了,或者已经创建过订单了
           this.status = 1
+          // 发起支付
           getNativePayParams(this.orderId || this.createdOrderId, type)
         } else {
           let miandan_type
           if (this.info.is_platoon == 1 && this.info.is_self_buy_platoon == 1) {
             miandan_type = 1
           }
+          // 创建订单
           createOrder({
             product_id: this.id,
             address_id: this.addr.id,
             mark: this.remark,
+            paytype: type,
             miandan_type,
             total_num: this.total_num
           }).then(data => {
             if (data && data.order_id) {
-              // 下单成功，触发支付
+              // 下单成功，触发支付 
               this.createdOrderId = data.order_id
               this.status = 1
               getNativePayParams(data.order_id, type)
@@ -279,6 +283,11 @@ export default {
       const getNativePayParams = (id, type) => {
         pay(id, type).then(data => {
           if (data) {
+            // 发起积分支付
+            if(type == 'yue') {
+              this.queryOrder()
+              return
+            }
             // 支付参数获取成功
             this.status = 2
             nativePay(type, data).then((result) => {
@@ -330,9 +339,11 @@ export default {
           })
         } else {
           this.$refs.notice.show('查询支付失败，请联系客服处理')
+          Loading.close()
         }
       }, (msg) => {
         this.$refs.notice.show(msg || '查询支付失败，请联系客服处理')
+        Loading.close()
       })
     }
   },
@@ -354,6 +365,10 @@ export default {
     //不同进入情况取的总价
     pay_price(){
       return this.show_model?this.info.pay_price:(parseFloat(this.unitPrice*this.total_num).toFixed(2))
+    },
+    //是否满足积分支付
+    is_jf() {
+      return parseFloat(this.pay_price) > parseFloat(this.now_money) ? true : false
     }
   }
 }
@@ -382,7 +397,8 @@ export default {
     }
   }
   .detail{
-    font-size: size(36);
+    font-size: size(24);
+    color: #888;
     line-height: 1.4;
     word-break: break-all;
     word-wrap: break-word;

@@ -25,6 +25,7 @@ export default {
     };
   },
   async mounted() {
+    // 生成海报
     this.imgObj.poster_img_url = this.updateUrl(this.$route.query.url);
     this.imgObj.poster_name = this.$route.query.name;
     Loading.open();
@@ -76,18 +77,18 @@ export default {
         sharePoster(this.poster.base64);
         return;
       }
-      // this.poster = new haibaoPoster();
-      // this.poster
-      //   .drawAllcode(this.url)
-      //   .then(() => {
-      //     this.poster.base64 = this.poster
-      //       .getBase64()
-      //       .replace("data:image/png;base64,", "");
-      //     sharePoster(this.poster.base64);
-      //   })
-      //   .finally(() => {
-      //     Loading.close();
-      //   });
+      this.poster = new haibaoPoster();
+      this.poster
+        .drawAllcode(this.url)
+        .then(() => {
+          this.poster.base64 = this.poster
+            .getBase64()
+            .replace("data:image/png;base64,", "");
+          sharePoster(this.poster.base64);
+        })
+        .finally(() => {
+          Loading.close();
+        });
     }
   }
 };

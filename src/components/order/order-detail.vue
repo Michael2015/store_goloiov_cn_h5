@@ -56,8 +56,10 @@
           -->{{orderInfo.delivery_id ? orderInfo.delivery_name + ' ('+ orderInfo.delivery_id +')' : '暂无物流信息' }}
           <div class="btn-inline where" v-if="orderInfo.delivery_id" @click="goTrack">查看</div>
         </div>
+        <div class="line">支付方式：&nbsp;&nbsp;{{orderInfo.pay_type}}</div>
         <div class="line" v-if="orderInfo.status_of_order === 4">退款时间：&nbsp;&nbsp;{{orderInfo.refund_reason_time}}</div>
       </div>
+
     </div>
     <div class="panel" v-if="orderInfo.is_allow_operation==1">
       <div class="btn-inline" @click="contact" v-if="partnerInfo.phone">联系卖家</div>
