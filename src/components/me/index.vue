@@ -277,6 +277,7 @@ export default {
   .quit {
     width: 100%;
     height: size(100);
+    margin-top: size(30);
     text-align: center;
     .btn-out {
       display: inline-block;

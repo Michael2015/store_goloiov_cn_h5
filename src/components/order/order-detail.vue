@@ -209,6 +209,9 @@ export default {
               this.$store.commit('refreshOrder')
             })
           }
+        },(msg) => {
+          this.$refs.notice.show(msg || '退款失败，请联系客服处理')
+          Loading.close()
         })
       })
     },
