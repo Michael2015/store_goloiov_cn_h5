@@ -1,5 +1,5 @@
 import {req} from './request'
-import {clean} from './index'
+import {clean, special} from './index'
 
 // 购买页，购物，下单
 
@@ -37,4 +37,25 @@ export function queryOrder(id) {
       order_id: id
     }
   }).then(clean)
+}
+
+// 虚拟资产验证
+// 发送验证码
+export function sendCode(data) {
+  return req.get('/api/server/sms/sendCode', {
+    params: {
+      mobile: data.phone,
+      event: data.event
+    }
+  }).then(special)
+}
+
+// 校验验证码
+export function checkCode(data) {
+  return req.get('/api/server/sms/checkCode', {
+    params: {
+      phone: data.phone,
+      smscode: data.code
+    }
+  }).then(special)
 }

@@ -50,6 +50,7 @@
 
 <script>
 import showHide from 'mixins/show-hide'
+import {mapState} from 'vuex'
 import {Toast} from 'lib'
 
 export default {
@@ -64,11 +65,15 @@ export default {
       default: '0.00'
     }
   },
+  computed: {
+    ...mapState(['is_testing_money'])
+  },
   data() {
     return {
       //  问ui要这个积分余额的icon
       methods: ['alipay', 'wechat','yue'],
       active: 1,
+      show_testing: false
     }
   },
   methods: {
@@ -80,6 +85,12 @@ export default {
       this.active = 2
     },
     pay() {
+      // 虚拟资产需要验证
+      if (this.active == 2 && !this.is_testing_money) {
+        // 跳转到验证页面
+        this.$router.push('/testingMoney')
+        return
+      }
       if (this.cb) {
         this.cb(this.methods[this.active])
       }
@@ -181,5 +192,14 @@ export default {
     margin-top: size(148);
     background-image: linear-gradient(135deg, #ff0000 0%, #ff3061 100%);
   }
+}
+.testing_container{
+  position: fixed;
+  top:0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background: #fff;
 }
 </style>

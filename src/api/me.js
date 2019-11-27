@@ -1,11 +1,7 @@
 import { req } from './request'
-import { clean } from './index'
+import { clean, special} from './index'
 import { getUserInfo } from 'api'
 import store from '@/store'
-
-const special = ({ data }) => {
-  return data
-}
 
 // 更新全局用户信息
 export function updateUserInfo() {
@@ -125,7 +121,6 @@ export function sendsms(data) {
     }
   }).then(special)
 }
-
 // 修改手机号
 export function editphone(data) {
   return req.post('/app/user/editphone', {

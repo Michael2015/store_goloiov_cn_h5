@@ -37,7 +37,7 @@ export default {
     createPosterImage(this.imgObj).then(
       res => {
         this.poster = new haibaoPoster();
-        this.url = res.img_url
+        this.url = res.img_url;
         this.poster
           .drawAllcode(res.img_url)
           .then(
@@ -75,20 +75,25 @@ export default {
       }
       if (this.poster) {
         sharePoster(this.poster.base64);
+        // this.downloadIamge(this.poster.base64, 'haibao')
         return;
       }
-      this.poster = new haibaoPoster();
-      this.poster
-        .drawAllcode(this.url)
-        .then(() => {
-          this.poster.base64 = this.poster
-            .getBase64()
-            .replace("data:image/png;base64,", "");
-          sharePoster(this.poster.base64);
-        })
-        .finally(() => {
-          Loading.close();
-        });
+      
+    },
+    downloadIamge(imgsrc, name) { 
+      // //下载图片地址和图片名
+      var image = new Image();
+      // // 解决跨域 Canvas 污染问题
+      image.setAttribute("crossOrigin", "anonymous");
+      var a = document.createElement("a"); // 生成一个a元素
+      a.href = imgsrc
+      a.download = name || 'photo'
+      // 触发点击
+      document.body.appendChild(a)
+      a.click()
+      image.src = imgsrc;
+      // 然后移除
+      document.body.removeChild(a)
     }
   }
 };

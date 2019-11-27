@@ -23,9 +23,14 @@ export default new Vuex.Store({
     // 是否第一次进入首页
     isFirst:false,
     // 储存结算页显示个数,多数情况用不上,解决用户在结算页重选地址丢失个数问题
-    buyTotalNum:1
+    buyTotalNum:1,
+    // 虚拟资产标识
+    is_testing_money: false 
   },
   mutations: {
+    testingMoney(state, flag) {
+      state.is_testing_money = flag
+    },
     loginTest(state) {
       state.isLogin = true
       state.role = 1

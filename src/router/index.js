@@ -115,6 +115,10 @@ export default new Router({
       component: () => import(/* webpackChunkName: "income" */ 'com/income/record')
     },
     {
+      path: '/testingMoney',
+      component: () => import(/* webpackChunkName: "income" */ 'com/me/testingMoney')
+    },
+    {
       path: '/withdraw',
       component: () => import(/* webpackChunkName: "income" */ 'com/income/withdraw')
     },

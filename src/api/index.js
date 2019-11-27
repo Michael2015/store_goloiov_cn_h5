@@ -4,6 +4,10 @@ export const clean = ({data}) => {
   return data && data.code === OK ? (data.data ? data.data : true) : Promise.reject(data.msg || '')
 }
 
+export const special = ({ data }) => {
+  return data
+}
+
 // 获取当前环境的host
 export function getHost() {
   if (process.env.NODE_ENV !== 'production') {

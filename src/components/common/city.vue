@@ -10,11 +10,11 @@
       </div>
       <div class="list" ref="list">
         <!-- eslint-disable-next-line -->
-        <div class="col border-bottom" v-for="item in maxLength" :i="item">
+        <div class="col border-bottom" v-for="item in maxLength" :key="item">
           <div class="one" v-if="province[item - 1]" @click="selP(province[item - 1])">{{province[item - 1].areaname}}</div>
           <div class="one" v-else></div>
           <div class="two" v-if="step>=1 && city[item - 1]" @click="selC(city[item - 1])">{{city[item - 1].areaname}}</div>
-          <div class="tow" v-else></div>
+          <div class="two" v-else></div>
           <div class="three" v-if="step>=2 && area[item - 1]" @click="selA(area[item - 1])">{{area[item - 1].areaname}}</div>
           <div class="three" v-else></div>
         </div>
@@ -100,6 +100,7 @@ export default {
     selA(a) {
       this.result[2] = a
       this.step = 3
+      // console.log(this.result.map(d => d.areaname))
       this.$emit('input', this.result.map(d => d.areaname))
       this.hide()
     },
