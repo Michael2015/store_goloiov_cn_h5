@@ -2,6 +2,11 @@ const path = require('path')
 
 const assetsDir = 'public/h5'
 
+ // 线上地址
+// const url = 'https://wcp.szyrwl.com/' 
+// 测试地址
+const url = 'https://storemp.golodata.com/'
+
 class GenHeadAndBody {
   apply(compiler) {
     compiler.hooks.compilation.tap('GenHeadAndBody', function(compilation){
@@ -31,17 +36,17 @@ class GenHeadAndBody {
 module.exports = {
   productionSourceMap: true,
   filenameHashing: true,
-  // publicPath: './',
-  assetsDir: assetsDir,
+  // publicPath: './public',
+  assetsDir,
   devServer: {
     proxy: {
       '/api|/app': {
-        target: 'https://storemp.golodata.com/',
+        target: url,
         ws: true,
         changeOrigin: true
       },
       '/public/uploads/': {
-        target: 'https://storemp.golodata.com/',
+        target: url,
         ws: true,
         changeOrigin: true
       }

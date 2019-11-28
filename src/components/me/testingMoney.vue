@@ -42,7 +42,7 @@ export default {
       // 获取验证码
       const res2 = await sendCode({
         phone: this.inputPhone,
-        event: 'default'
+        event: 'virtual_property'
       });
       if (res2.code == 200) {
         Toast(res2.msg);
