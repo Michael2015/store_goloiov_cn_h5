@@ -15,7 +15,7 @@
           <img src="~img/icon/jifenpay.png" alt="">
         </div>
         <div class="name">
-          <div class="">积分支付 <span class="jifen">(剩余积分{{now_money}})</span></div>
+          <div class="">积分支付 <span class="jifen">(余额 <b>{{now_money}}</b>)</span></div>
         </div>
         <div class="check-icon" :class="{active: active===2, no_disab: is_jf == true}">
           <span></span>
@@ -78,10 +78,7 @@ export default {
   },
   methods: {
     type_jf() {
-      if(this.is_jf == true) {
-        Toast('积分不足，请选择其他支付方式')
-        return
-      }
+      if(this.is_jf) return Toast('余额不足，请选择其他支付方式')
       this.active = 2
     },
     pay() {
@@ -189,7 +186,7 @@ export default {
     text-align: center;
     color: #fff;
     font-size: size(30);
-    margin-top: size(148);
+    margin-top: size(80);
     background-image: linear-gradient(135deg, #ff0000 0%, #ff3061 100%);
   }
 }

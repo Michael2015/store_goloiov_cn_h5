@@ -267,8 +267,13 @@ export default {
   flex-direction: column;
   .topbox {
     // padding: size(24) size(24) 0;
-    position: relative;
+    position: fixed;
     overflow: hidden;
+    background: #fff;
+    height: size(560);
+    width: 100%;
+    z-index: 99;
+    box-shadow: 0 1px 5px #eee;
     &:after {
       content: " ";
       display: block;
@@ -409,7 +414,7 @@ export default {
     .in-title {
       font-size: 0;
       color: #666;
-      padding: size(105) 0 size(34) size(9);
+      padding: size(105) 0 size(15) size(9);
       line-height: 1;
       position: relative;
       & > span {
@@ -451,7 +456,10 @@ export default {
   .mint-tab-container {
     flex: 1;
     overflow: auto;
-
+    position: absolute;
+    width: 100%;
+    top: size(560);
+    bottom: size(100);
     // /deep/ .mint-tab-container-wrap {
     //   flex: 1;
     //   overflow: auto;

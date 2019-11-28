@@ -8,10 +8,8 @@
         <div class="good_msg">
           <img v-if="info.slider_image" :src="sku_img || info.slider_image[0]" alt />
           <div class="show_price">
-            <div
-              class="price"
-            >价格：¥{{price}}</div>
-            <div class="setter">{{attr_sku ? '已选: ' +attr_sku : '请选择规格属性'}}</div>
+            <div class="price">价格：¥{{price}}</div>
+            <div class="setter" v-if="skuLists && skuLists.length > 0">{{attr_sku ? '已选: ' +attr_sku : '请选择规格属性'}}</div>
           </div>
         </div>
         <div v-for="(overitem,overindex) in skuLists" :key="overindex">
@@ -220,7 +218,7 @@ export default {
     margin-top: size(42);
     &.num_t{
       padding-top: size(20);
-      border-top: 1px solid #ddd;
+      @include border('top');
     }
   }
   .selectIcon {

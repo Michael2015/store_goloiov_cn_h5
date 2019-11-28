@@ -71,7 +71,7 @@ export default {
           this.$router.go(-1)
         },2000) 
       } else {
-        Toast(data.msg);
+        Toast(data.msg)
       }  
     }
   },

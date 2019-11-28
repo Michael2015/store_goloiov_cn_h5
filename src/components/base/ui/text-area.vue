@@ -76,7 +76,7 @@ export default {
   .length{
     position: absolute;
     right: size(8);
-    bottom: size(2);
+    bottom: size(8);
     color: #999;
     font-size: size(24);
   }

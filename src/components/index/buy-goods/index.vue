@@ -117,10 +117,15 @@ export default {
       now_money: "" //我的积分余额
     };
   },
-  created() {
-    // this.loaddata()
+  watch: {
+    '$route'() {
+      if (this.is_testing_money) {
+        this.doPay()
+      }
+    }
   },
   beforeRouteLeave(to, from, next) {
+    if( this.is_testing_money) this.$store.commit('testingMoney', false)
     if (this.paying && this.status === 2) {
       // 支付中 并且已经调用app原生支付，但是还没收到app的回调
       if (this.inConfirmLeave) return;
@@ -415,8 +420,6 @@ export default {
     //是否满足积分支付
     is_jf() {
       return parseFloat(this.pay_price) > parseFloat(this.now_money)
-        ? true
-        : false;
     }
   }
 };

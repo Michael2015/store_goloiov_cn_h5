@@ -105,10 +105,11 @@ export default {
     }
   }
   .detail{
-    font-size: size(36);
+    font-size: size(24);
     line-height: 1.4;
     word-break: break-all;
     word-wrap: break-word;
+    color: #888;
     margin: size(9) 0 size(16);
     padding-right: size(120);
     position: relative;

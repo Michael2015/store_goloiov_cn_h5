@@ -41,7 +41,7 @@ export default {
   align-items: center;
   text-align: center;
   background: rgba(255,255,255,0.78);
-  box-shadow: 0 0px 1px 1px rgba(0,0,0,.01);
+  box-shadow: 0 0px 1px 1px rgba(0,0,0,0.1);
   >div{
     flex: 1;
   }

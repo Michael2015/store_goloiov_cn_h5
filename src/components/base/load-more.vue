@@ -88,6 +88,6 @@ export default {
   line-height: 1.6;
   font-size: size(24);
   text-align: center;
-  color: #666;
+  color: #888;
 }
 </style>
