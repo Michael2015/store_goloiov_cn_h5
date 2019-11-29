@@ -105,7 +105,7 @@ export default {
     },
     getCategoryProducts() {
       return (page, size) => {
-        return getCategoryProducts(this.category[this.activeCategoryIndex].id, page, size)
+        return getCategoryProducts(this.category[this.activeCategoryIndex].id, this.keyword, page, size)
       }
     },
     getDefaultProducts() {

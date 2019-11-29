@@ -47,7 +47,7 @@
     <keep-alive>
       <mt-tab-container v-model="active" swipeable>
         <!-- 免单列 -->
-        <mt-tab-container-item id="charge">
+        <mt-tab-container-item id="charge" class="touch-no">
           <load-more v-slot="{list}" :getData="isLogin?loadCharge:null" ref="charge">
             <div class="pub_list">
               <div
@@ -80,7 +80,7 @@
         </mt-tab-container-item>
 
         <!-- 收益列 -->
-        <mt-tab-container-item id="earnings">
+        <mt-tab-container-item id="earnings" class="touch-no">
           <load-more v-slot="{list}" :getData="isLogin?loadEarnings:null" ref="earnings">
             <div class="in_record">
               <div
@@ -460,13 +460,10 @@ export default {
     width: 100%;
     top: size(560);
     bottom: size(100);
-    // /deep/ .mint-tab-container-wrap {
-    //   flex: 1;
-    //   overflow: auto;
-    // }
-    // .mint-tab-container-item{
-    //   overflow: auto;
-    // }
+    .touch-no{
+      padding-bottom: size(10);
+
+    }
     .border-bottom {
       position: relative;
     }
@@ -578,7 +575,8 @@ export default {
         .right {
           width: 30%;
           text-align: right;
-          font-size: size(30);
+          // height: size(30);
+          font-size: size(28);
           color: #ff0000;
           @include txt-overflow();
         }

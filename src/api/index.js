@@ -51,9 +51,10 @@ export function getCategory() {
   return req.get('/api/marketing/getCategory').then(clean)
 }
 // 根据标签获取商品列表
-export function getCategoryProducts(cate_id) {
+export function getCategoryProducts(cate_id, keyword) {
   return req.post('/api/marketing/getCategoryProducts', {
-    cate_id
+    cate_id,
+    keyword
   }).then(clean)
 }
 // 获取首页滚动消息列表

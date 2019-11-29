@@ -22,3 +22,4 @@ yarn-error.log*
 
 # UI directories
 /UI
+dist.rar
