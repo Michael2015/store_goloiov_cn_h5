@@ -26,7 +26,7 @@
     <index-msg-loop v-if="isLogin && role === 1"></index-msg-loop>
     <index-focus :cid="cid" v-if="cid" :key="loginKey"></index-focus>
     <div class="filters table" :class="[ is_tab_fixed ? 'tab_fixed': 's_opc']" ref="filters_tab">
-      <div>
+      <div v-if="category && category.length > 0"> 
         <div class="tab-left" ref="tab_left">
           <div class="item" key="-1" @click="setCategory(-1)" :class="{active:activeCategoryIndex===-1}">全部</div>
           <div class="item" :class="{active:activeCategoryIndex===index}" v-for="(item,index) in category" :key="index"
