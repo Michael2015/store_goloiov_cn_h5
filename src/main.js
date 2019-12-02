@@ -5,6 +5,11 @@ import store from './store'
 import { TabContainer, TabContainerItem, InfiniteScroll,Swipe, SwipeItem, Picker, Lazyload } from 'mint-ui';
 import TopHead from 'base/top-head'
 import {Loading} from 'lib'
+//引入nprogress
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css' //这个样式必须引入
+
+NProgress.configure({showSpinner: false})
 
 Vue.use(InfiniteScroll)
 Vue.use(Lazyload)
@@ -27,6 +32,15 @@ Vue.mixin({
     Loading.close()
     next()
   }
+})
+
+router.beforeEach((to,from,next) => {
+  NProgress.start()
+  next()
+})
+
+router.afterEach(() => {
+  NProgress.done()
 })
 
 new Vue({
