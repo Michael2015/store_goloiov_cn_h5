@@ -18,7 +18,7 @@ import JoinPartner from 'com/common/join-partner'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'hash',
+  mode: 'history',
   scrollBehavior(to, from, saveTop){
     if (saveTop) {
       return saveTop

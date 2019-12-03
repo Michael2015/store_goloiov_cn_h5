@@ -14,19 +14,20 @@
         <!-- 非合伙人 | 游客(未登录) --->
         <index-top-customer v-else></index-top-customer>
         <!-- 轮播图 -->
-        <div class="banner-wrap">
+        
+      </div>
+      <div class="banner-wrap">
           <div class="banner">
             <index-banner></index-banner>
           </div>
         </div>
-      </div>
-      <div class="blank"><img src="~img/index-top-bg.png" alt=""></div>
+      <!-- <div class="blank"><img src="~img/index-top-bg.png" alt=""></div> -->
     </div>
     <index-msg-loop v-if="isLogin && role === 1"></index-msg-loop>
     <index-focus :cid="cid" v-if="cid" :key="loginKey"></index-focus>
-    <div class="filters table">
-      <div>
-        <div class="">
+    <div class="filters table" :class="[ is_tab_fixed ? 'tab_fixed': 's_opc']" ref="filters_tab">
+      <div v-if="category && category.length > 0"> 
+        <div class="tab-left" ref="tab_left">
           <div class="item" key="-1" @click="setCategory(-1)" :class="{active:activeCategoryIndex===-1}">全部</div>
           <div class="item" :class="{active:activeCategoryIndex===index}" v-for="(item,index) in category" :key="index"
           @click="setCategory(index)"><span>{{item.cate_name}}</span></div>
@@ -91,6 +92,7 @@ export default {
     return {
       key: 'empty',
       keyword: '',
+      is_tab_fixed: false,
       categoryList: [],
       activeCategoryIndex: -1
     }
@@ -145,13 +147,44 @@ export default {
       Loading.close()
     })
   },
+  mounted() {
+    this.$nextTick(() => {
+      // 获取元素
+      let header = this.$refs.filters_tab;
+      this.tab_left = this.$refs.tab_left;
+      // 这里要得到top的距离和元素自身的高度
+      this.offsetTop = header.offsetTop;
+      this.offsetHeight = header.offsetHeight;
+    })
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed() {
+    window.addEventListener('scroll', this.handleScroll);
+    clearTimeout(this.timer);  
+  },
   methods: {
     ...mapMutations(['setFirst']),
-    setCategory(i){
-      console.log(i)
+    handleScroll() {
+      // 得到页面滚动的距离
+      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      // 判断页面滚动的距离是否大于吸顶元素的位置
+      this.is_tab_fixed = scrollTop > (this.offsetTop + this.offsetHeight * 2);  
+    },
+    setCategory(i){ 
       if (i !== this.activeCategoryIndex) {
         this.activeCategoryIndex = i
-      }
+      }   
+      this._scroll_animation(this.tab_left, 30 * i, 80)
+    },
+    _scroll_animation(element, to, duration) {
+      if (duration <= 0) return;
+      const diff = to - element.scrollLeft;
+      const perTick = diff / duration * 10;
+      this.timer = setTimeout(() => {
+        element.scrollLeft += perTick;
+        if (element.scrollLeft === to) return;
+        this._scroll_animation(element, to, duration - 10);
+      }, 10);
     },
     search() {
       console.log(this.keyword)
@@ -194,6 +227,7 @@ export default {
 }
 .top-wrap{
   position: relative;
+  padding-top: size(90);
   .blank{
     height: size(78);
     position: relative;
@@ -206,11 +240,15 @@ export default {
   }
 }
 .top{
+  position: fixed;
+  top:0;
+  width: 100%;
+  height: size(90);
   background: linear-gradient(to right, #ff090b, #fe3847);
-  padding: size(28) size(20);
-  padding-bottom: 0;
+  padding: 0 size(20);
+  z-index: 99;
   .banner-wrap{
-    margin-top: size(28);
+    // margin-top: size(90);
     // 原来是不撑满屏幕的
     margin-left: size(-20);
     margin-right: size(-20);
@@ -229,7 +267,9 @@ export default {
     }
   }
   .table{
+    padding-top: size(10);
     height: size(64);
+    // margin-bottom: size(10);
   }
   .input{
     height: size(64);
@@ -277,6 +317,7 @@ export default {
   overflow: hidden;
   width: 100%;
   position: relative;
+  transition: all 0.4s;
   >div{
     position: absolute;
     width: 100%;
@@ -288,6 +329,24 @@ export default {
   >div>div{
     white-space: nowrap;
     overflow: scroll;
+  }
+  &.tab_fixed{
+    position: fixed;
+    top:size(86);
+    margin-top: size(-1);
+    z-index: 100;
+    background: linear-gradient(to right, #ff090b, #fe3847);
+    .item{
+      color: #eee;
+      &.active{
+        color: #fff;
+        &:after{
+          content: ' ';  
+          height: size(4);  
+          background-color: #fff;  
+        }
+      }
+    }
   }
   .item{
     display: inline-block;
@@ -326,7 +385,6 @@ export default {
   color: #4d4d4d;
   padding: size(15) size(17);
   padding-left: size(10);
-  // opacity: 0.71;
 }
 .how-to{
   position: fixed;

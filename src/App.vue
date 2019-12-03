@@ -28,4 +28,7 @@ export default {
     width: 100%;
     height: 100%;
   }
+  #nprogress .bar{
+    background-image: linear-gradient(236deg, #ef5456 0%, #e70002 100%) !important;
+  }
 </style>
