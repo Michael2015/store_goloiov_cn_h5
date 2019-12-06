@@ -1,5 +1,5 @@
 <template>
-  <div class="tab">
+  <div class="tab" ref="tab">
     <router-link to="/index" tag="div" replace>
       <div class="icon home"></div>
       <div class="name">商城</div>

@@ -11,10 +11,10 @@
             {{isLogin?balance:'0.00'}}
           </div>
           <div class="tixi_money">
-            可提现金额：¥ {{isLogin?cash:'0.00'}}
+            可提现：¥ {{isLogin?cash:'0.00'}}
           </div>
           <div class="xf_money">
-            可消费金额：¥ {{isLogin?cons:'0.00'}}
+            购物金：¥ {{isLogin?cons:'0.00'}}
           </div>
           <div class="record" @click="record">提现记录</div> 
           <div class="detail">

@@ -25,9 +25,13 @@ export default new Vuex.Store({
     // 储存结算页显示个数,多数情况用不上,解决用户在结算页重选地址丢失个数问题
     buyTotalNum:1,
     // 虚拟资产标识
-    is_testing_money: false 
+    is_testing_money: false,
+    topNum: 0
   },
   mutations: {
+    topNum( state, h) {
+      state.topNum = h
+    },
     testingMoney(state, flag) {
       state.is_testing_money = flag
     },

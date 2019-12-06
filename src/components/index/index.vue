@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <div class="top-wrap">
-      <div class="top">
+      <div class="top" ref="top">
         <!-- 合伙人端 -->
         <div class="table" v-if="isLogin && role === 1">
           <div class="table-cell">
@@ -14,33 +14,61 @@
         <!-- 非合伙人 | 游客(未登录) --->
         <index-top-customer v-else></index-top-customer>
         <!-- 轮播图 -->
-        
       </div>
       <div class="banner-wrap">
-          <div class="banner">
-            <index-banner></index-banner>
-          </div>
+        <div class="banner">
+          <index-banner></index-banner>
         </div>
+      </div>
       <!-- <div class="blank"><img src="~img/index-top-bg.png" alt=""></div> -->
     </div>
-    <index-msg-loop v-if="isLogin && role === 1"></index-msg-loop>
-    <index-focus :cid="cid" v-if="cid" :key="loginKey"></index-focus>
+    <div>
+      <index-msg-loop v-if="isLogin && role === 1"></index-msg-loop>
+      <index-focus :cid="cid" v-if="cid" :key="loginKey"></index-focus>
+    </div>
     <div class="filters table" :class="[ is_tab_fixed ? 'tab_fixed': 's_opc']" ref="filters_tab">
-      <div v-if="category && category.length > 0"> 
+      <div>
         <div class="tab-left" ref="tab_left">
-          <div class="item" key="-1" @click="setCategory(-1)" :class="{active:activeCategoryIndex===-1}">全部</div>
-          <div class="item" :class="{active:activeCategoryIndex===index}" v-for="(item,index) in category" :key="index"
-          @click="setCategory(index)"><span>{{item.cate_name}}</span></div>
+          <div
+            v-if="category && category.length > 0"
+            class="item"
+            key="-1"
+            @click="setCategory(-1)"
+            :class="{active:activeCategoryIndex===-1}"
+          >全部</div>
+          <div
+            class="item"
+            :class="{active:activeCategoryIndex===index}"
+            v-for="(item,index) in category"
+            :key="index"
+            @click="setCategory(index)"
+          >
+            <span>{{item.cate_name}}</span>
+          </div>
         </div>
       </div>
     </div>
-    <load-more v-slot="{list}" class="list-wrap" :getData="getCategoryProducts" v-if="activeCategoryIndex >= 0" :key="activeCategoryIndex+loginKey">
-      <div class="list clearfix">
+    <load-more
+      v-slot="{list}"
+      class="list-wrap"
+      :setSize="0"
+      :getData="getCategoryProducts"
+      v-if="activeCategoryIndex >= 0"
+      :key="activeCategoryIndex+loginKey"
+    >
+      <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
         <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
       </div>
     </load-more>
-    <load-more v-slot="{list}" class="list-wrap" :getData="getDefaultProducts" v-else :key="key+loginKey">
-      <div class="list clearfix">
+    <load-more
+      v-slot="{list}"
+      class="list-wrap"
+      :setSize="0"
+      :getData="getDefaultProducts"
+      v-else
+      :key="key+loginKey"
+    >
+      <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
         <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
       </div>
     </load-more>
@@ -50,30 +78,36 @@
     <!-- <router-link class="how-to" to="/useDesc" tag="div">
       <div>使用</div>
       <div>说明</div>
-    </router-link> -->
+    </router-link>-->
     <!-- 提示弹窗 -->
     <notice ref="notice" :autoClose="true"></notice>
     <confirm ref="confirm"></confirm>
-    <new-people ref='newpeople'></new-people>
+    <new-people ref="newpeople"></new-people>
   </div>
 </template>
 
 <script>
-import Notice from 'base/notice'
-import Confirm from "base/confirm"
-import SearchInput from 'base/ui/search-input'
-import IndexTopCustomer from './index-top-customer'
-import IndexMsgLoop from './index-msg-loop'
-import IndexBanner from './index-banner'
-import IndexFocus from './index-focus'
-import newPeople from './newPeople'
-import IndexGoodsItem from './index-goods-item'
-import LoadMore from 'base/load-more'
-import {Loading} from 'lib'
-import {getCategory, getCategoryProducts, CustomerGetProducts, PartnerGetProducts,getNewbornZoneStore} from 'api'
-import {invitePartner} from 'api/native'
-import {mapState,mapMutations} from 'vuex'
-import {login, logout} from 'api/login'
+import Notice from "base/notice";
+import Confirm from "base/confirm";
+import SearchInput from "base/ui/search-input";
+import IndexTopCustomer from "./index-top-customer";
+import IndexMsgLoop from "./index-msg-loop";
+import IndexBanner from "./index-banner";
+import IndexFocus from "./index-focus";
+import newPeople from "./newPeople";
+import IndexGoodsItem from "./index-goods-item";
+import LoadMore from "base/load-more";
+import { Loading } from "lib";
+import {
+  getCategory,
+  getCategoryProducts,
+  CustomerGetProducts,
+  PartnerGetProducts,
+  getNewbornZoneStore
+} from "api";
+import { invitePartner } from "api/native";
+import { mapState, mapMutations } from "vuex";
+import { login, logout } from "api/login";
 
 export default {
   components: {
@@ -90,96 +124,131 @@ export default {
   },
   data() {
     return {
-      key: 'empty',
-      keyword: '',
+      key: "empty",
+      keyword: "",
       is_tab_fixed: false,
       categoryList: [],
-      activeCategoryIndex: -1
-    }
+      activeCategoryIndex: -1,
+      topHeight: 480,
+      flag: true
+    };
   },
   computed: {
-    ...mapState(['isLogin', 'role', 'userInfo','isFirst']),
+    ...mapState(["isLogin", "role", "userInfo", "isFirst"]),
     category() {
-      return this.categoryList.slice(1)
+      return this.categoryList.slice(1);
     },
     cid() {
-      return this.categoryList[0] && this.categoryList[0].id
+      return this.categoryList[0] && this.categoryList[0].id;
     },
     getCategoryProducts() {
-      return (page, size) => {
-        return getCategoryProducts(this.category[this.activeCategoryIndex].id, this.keyword, page, size)
-      }
+      return () => {
+        return getCategoryProducts(
+          this.category[this.activeCategoryIndex].id,
+          this.keyword
+        );
+      };
     },
     getDefaultProducts() {
       // 没有选择标签时
-      return (page, size) => {
-        return this.role === 1 ? PartnerGetProducts(this.keyword, page, size) : CustomerGetProducts(page, size)
-      }
+      return () => {
+        return this.role === 1
+          ? PartnerGetProducts(this.keyword)
+          : CustomerGetProducts(this.keyword);
+      };
     },
     loginKey() {
-      return this.isLogin + ''
+      return this.isLogin + "";
     }
   },
   watch: {
     keyword() {
       // 关键字改变，当为空的时候触发搜索全部
-      if (this.keyword === '') {
-        this.search()
+      if (this.keyword == "") {
+        this.search();
       }
     },
     isLogin() {
       // 重置关键字和标签
-      this.keyword = ''
-      this.activeCategoryIndex = -1
-      this.setFirst(true),
-      this.$refs.newpeople.show(getNewbornZoneStore)
+      this.keyword = "";
+      this.activeCategoryIndex = -1;
+      this.setFirst(true), this.$refs.newpeople.show(getNewbornZoneStore);
     }
   },
   created() {
-    Loading.open()
+    Loading.open();
     Promise.all([
       getCategory().then(data => {
         if (data) {
-          this.categoryList = data
+          this.categoryList = data;
         }
       })
     ]).then(() => {
-      Loading.close()
-    })
+      Loading.close();
+    });
   },
   mounted() {
     this.$nextTick(() => {
-      // 获取元素
-      let header = this.$refs.filters_tab;
-      this.tab_left = this.$refs.tab_left;
       // 这里要得到top的距离和元素自身的高度
+      let header = this.$refs.filters_tab
       this.offsetTop = header.offsetTop;
       this.offsetHeight = header.offsetHeight;
+      // 获取浏览器可视区域高度
+      this.clientHeight = window.innerHeight || document.documentElement.clientHeight;
+      // 获取元素
+      this.T_H = this.$refs.top.offsetHeight;
+      this.tab_left = this.$refs.tab_left;
     })
-    window.addEventListener('scroll', this.handleScroll);
   },
-  destroyed() {
-    window.addEventListener('scroll', this.handleScroll);
-    clearTimeout(this.timer);  
+  activated() {
+    this.$nextTick(() => {
+      this.topHeight = this.clientHeight - (this.offsetHeight + this.T_H + 100);
+    });
+    window.addEventListener("scroll", this.handleScroll, true);
+  },
+  deactivated() {
+    window.removeEventListener("scroll", this.handleScroll, true);
+    clearTimeout(this.timer);
+    // 初始化参数，避免bug
+    this.topHeight = 0;
+    this.is_tab_fixed = false
+    this.$store.commit("topNum", 0)
+    this.flag = true
+    this.top = 0
   },
   methods: {
-    ...mapMutations(['setFirst']),
+    ...mapMutations(["setFirst"]),
     handleScroll() {
       // 得到页面滚动的距离
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      let scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
       // 判断页面滚动的距离是否大于吸顶元素的位置
-      this.is_tab_fixed = scrollTop > (this.offsetTop + this.offsetHeight * 2);  
+      this.top = scrollTop;
+      let scale = this.offsetTop + this.offsetHeight * 2 - Number(this.T_H / 2);
+      if (this.top >= scale && this.flag) {
+        this.$store.commit("topNum", this.clientHeight - this.topHeight + 100);
+        this.flag = false;
+      }
+      this.is_tab_fixed = this.top >= scale;
     },
-    setCategory(i){ 
+    setCategory(i) {
       if (i !== this.activeCategoryIndex) {
-        this.activeCategoryIndex = i
-      }   
-      this._scroll_animation(this.tab_left, 30 * i, 80)
+        this.activeCategoryIndex = i;
+      }
+      // 如果达到吸顶的位置
+      if (this.is_tab_fixed) {
+        window.scrollTo(0, this.$store.state.topNum );
+      } else {
+        window.scrollTo(0, this.top);
+      }
+      this._scroll_animation(this.tab_left, 30 * i, 80);
     },
     _scroll_animation(element, to, duration) {
       if (duration <= 0) return;
       const diff = to - element.scrollLeft;
-      const perTick = diff / duration * 10;
+      const perTick = (diff / duration) * 10;
       this.timer = setTimeout(() => {
         element.scrollLeft += perTick;
         if (element.scrollLeft === to) return;
@@ -187,51 +256,50 @@ export default {
       }, 10);
     },
     search() {
-      console.log(this.keyword)
       if (this.keyword) {
-        this.key = this.keyword
+        this.key = this.keyword;
       } else {
-        this.key = 'empty'
+        this.key = "empty";
       }
     },
     invite() {
-      Loading.open()
+      Loading.open();
       invitePartner(this.userInfo.uid, this.userInfo.nickname).finally(() => {
-        Loading.close()
-      })
+        Loading.close();
+      });
     },
     logout() {
-      this.$refs.confirm.show('确定退出吗？', () => {
-        logout()
-      })
+      this.$refs.confirm.show("确定退出吗？", () => {
+        logout();
+      });
     }
   },
-  beforeRouteLeave(to, from , next) {
-    if (!this.isLogin && (to.path === '/order' || to.path === '/income')) {
-      this.$refs.notice.show('请先登录', () => {
-        login()
-      })
-      next(false)
+  beforeRouteLeave(to, from, next) {
+    if (!this.isLogin && (to.path === "/order" || to.path === "/income")) {
+      this.$refs.notice.show("请先登录", () => {
+        login();
+      });
+      next(false);
     } else {
-      next()
+      next();
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 @import "~css/def";
-.wrap{
+.wrap {
   min-height: 100vh;
   background-color: $color-body-bg;
 }
-.top-wrap{
+.top-wrap {
   position: relative;
   padding-top: size(90);
-  .blank{
+  .blank {
     height: size(78);
     position: relative;
-    img{
+    img {
       position: absolute;
       width: 100%;
       left: 0;
@@ -239,25 +307,25 @@ export default {
     }
   }
 }
-.top{
+.top {
   position: fixed;
-  top:0;
+  top: 0;
   width: 100%;
   height: size(90);
   background: linear-gradient(to right, #ff090b, #fe3847);
   padding: 0 size(20);
   z-index: 99;
-  .banner-wrap{
+  .banner-wrap {
     // margin-top: size(90);
     // 原来是不撑满屏幕的
     margin-left: size(-20);
     margin-right: size(-20);
     height: size(224);
     position: relative;
-    .banner{
+    .banner {
       position: absolute;
       left: 0;
-      top:0;
+      top: 0;
       width: 100%;
       height: size(300);
       background: #fff;
@@ -266,19 +334,19 @@ export default {
       z-index: 1;
     }
   }
-  .table{
+  .table {
     padding-top: size(10);
     height: size(64);
     // margin-bottom: size(10);
   }
-  .input{
+  .input {
     height: size(64);
   }
-  .invite-wrap{
+  .invite-wrap {
     text-align: right;
     width: size(180);
   }
-  .invite{
+  .invite {
     color: #fff;
     font-size: size(26);
     line-height: size(60);
@@ -292,14 +360,14 @@ export default {
     border-radius: 4px;
     text-align: center;
   }
-  .parent-avatar{
+  .parent-avatar {
     width: size(72);
     height: size(72);
     border-radius: 5px;
     float: left;
     background: #ddd;
   }
-  .shop-name{
+  .shop-name {
     vertical-align: middle;
     float: left;
     line-height: size(72);
@@ -308,7 +376,7 @@ export default {
     margin-left: size(22);
   }
 }
-.filters{
+.filters {
   text-align: center;
   height: size(72);
   margin: size(12) 0;
@@ -317,8 +385,8 @@ export default {
   overflow: hidden;
   width: 100%;
   position: relative;
-  transition: all 0.4s;
-  >div{
+  // transition: all 0.4s;
+  > div {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -326,42 +394,42 @@ export default {
     top: 0;
     padding: 0 size(16);
   }
-  >div>div{
+  > div > div {
     white-space: nowrap;
     overflow: scroll;
   }
-  &.tab_fixed{
+  &.tab_fixed {
     position: fixed;
-    top:size(86);
+    top: size(86);
     margin-top: size(-1);
     z-index: 100;
     background: linear-gradient(to right, #ff090b, #fe3847);
-    .item{
+    .item {
       color: #eee;
-      &.active{
+      &.active {
         color: #fff;
-        &:after{
-          content: ' ';  
-          height: size(4);  
-          background-color: #fff;  
+        &:after {
+          content: " ";
+          height: size(4);
+          background-color: #fff;
         }
       }
     }
   }
-  .item{
+  .item {
     display: inline-block;
     // min-width: 25%;
     text-align: center;
     line-height: size(72);
     padding: 0 size(20);
-    &.active{
+    &.active {
       font-size: size(32);
       color: #252525;
       position: relative;
-      &:after{
-        content: ' ';
+      &:after {
+        content: " ";
         position: absolute;
-        left:50%;
+        left: 50%;
         bottom: 0;
         height: size(6);
         background-color: #ff0000;
@@ -372,40 +440,41 @@ export default {
     }
   }
 }
-.logout{
+.logout {
   position: fixed;
   z-index: 1;
   left: 0;
   bottom: size(156);
   background-color: #d8d8d8;
-	box-shadow: 0px 1px 2px 0px rgba(207, 206, 206, 0.5);
-	border-bottom-right-radius: 6px;
+  box-shadow: 0px 1px 2px 0px rgba(207, 206, 206, 0.5);
+  border-bottom-right-radius: 6px;
   border-top-right-radius: 6px;
   font-size: size(24);
   color: #4d4d4d;
   padding: size(15) size(17);
   padding-left: size(10);
 }
-.how-to{
+.how-to {
   position: fixed;
   right: size(20);
   bottom: size(164);
   @include circle(90);
   background-color: #eb0a0a;
-	box-shadow: 0px 1px 5px 0px rgba(135, 135, 135, 0.5);
+  box-shadow: 0px 1px 5px 0px rgba(135, 135, 135, 0.5);
   color: #fff;
   text-align: center;
   font-size: size(24);
   line-height: 1.4;
   padding-top: size(12);
 }
-.list-wrap{
+.list-wrap {
   padding-bottom: size(120);
+  // min-height: size(1200);
 }
-.list{
+.list {
   padding: 0 size(20);
   margin-left: -3%;
-  .item{
+  .item {
     float: left;
     margin-bottom: size(18);
   }

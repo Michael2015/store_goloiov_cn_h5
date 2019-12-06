@@ -54,7 +54,7 @@ export function getCategory() {
 export function getCategoryProducts(cate_id, keyword) {
   return req.post('/api/marketing/getCategoryProducts', {
     cate_id,
-    keyword
+    keyword 
   }).then(clean)
 }
 // 获取首页滚动消息列表
@@ -63,22 +63,19 @@ export function getIndexNotice() {
 }
 
 // 获取首页商品列表（非合伙人）
-export function CustomerGetProducts(page, size) {
+export function CustomerGetProducts(keyword) {
   return req.get('/api/customer/mall/getProductList', {
     params: {
-      page,
-      limit: size
+      keyword   
     }
   }).then(clean)
 }
 
 // 获取首页商品列表（合伙人）
-export function PartnerGetProducts(keyword ,page, size) {
+export function PartnerGetProducts(keyword) {
   return req.get('/api/partner/home/storelist', {
     params: {
       keyword,
-      page,
-      limit: size
     }
   }).then(clean)
 }
