@@ -53,19 +53,6 @@
       class="list-wrap"
       :setSize="0"
       :getData="getCategoryProducts"
-      v-if="activeCategoryIndex >= 0"
-      :key="activeCategoryIndex+loginKey"
-    >
-      <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
-        <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
-      </div>
-    </load-more>
-    <load-more
-      v-slot="{list}"
-      class="list-wrap"
-      :setSize="0"
-      :getData="getDefaultProducts"
-      v-else
       :key="key+loginKey"
     >
       <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
@@ -143,19 +130,15 @@ export default {
     },
     getCategoryProducts() {
       return () => {
-        return getCategoryProducts(
-          this.category[this.activeCategoryIndex].id,
-          this.keyword
-        );
-      };
-    },
-    getDefaultProducts() {
-      // 没有选择标签时
-      return () => {
-        return this.role === 1
-          ? PartnerGetProducts(this.keyword)
-          : CustomerGetProducts(this.keyword);
-      };
+        return this.activeCategoryIndex == -1
+          ? this.role === 1
+            ? PartnerGetProducts(this.keyword)
+            : CustomerGetProducts(this.keyword)
+          : getCategoryProducts(
+              this.category[this.activeCategoryIndex].id,
+              this.keyword
+            )
+      }
     },
     loginKey() {
       return this.isLogin + "";
@@ -190,15 +173,16 @@ export default {
   mounted() {
     this.$nextTick(() => {
       // 这里要得到top的距离和元素自身的高度
-      let header = this.$refs.filters_tab
+      let header = this.$refs.filters_tab;
       this.offsetTop = header.offsetTop;
       this.offsetHeight = header.offsetHeight;
       // 获取浏览器可视区域高度
-      this.clientHeight = window.innerHeight || document.documentElement.clientHeight;
+      this.clientHeight =
+        window.innerHeight || document.documentElement.clientHeight;
       // 获取元素
       this.T_H = this.$refs.top.offsetHeight;
       this.tab_left = this.$refs.tab_left;
-    })
+    });
   },
   activated() {
     this.$nextTick(() => {
@@ -211,10 +195,10 @@ export default {
     clearTimeout(this.timer);
     // 初始化参数，避免bug
     this.topHeight = 0;
-    this.is_tab_fixed = false
-    this.$store.commit("topNum", 0)
-    this.flag = true
-    this.top = 0
+    this.is_tab_fixed = false;
+    this.$store.commit("topNum", 0);
+    this.flag = true;
+    this.top = 0;
   },
   methods: {
     ...mapMutations(["setFirst"]),
@@ -236,10 +220,11 @@ export default {
     setCategory(i) {
       if (i !== this.activeCategoryIndex) {
         this.activeCategoryIndex = i;
+        this.key = i;
       }
       // 如果达到吸顶的位置
       if (this.is_tab_fixed) {
-        window.scrollTo(0, this.$store.state.topNum );
+        window.scrollTo(0, this.$store.state.topNum);
       } else {
         window.scrollTo(0, this.top);
       }
@@ -256,11 +241,7 @@ export default {
       }, 10);
     },
     search() {
-      if (this.keyword) {
-        this.key = this.keyword;
-      } else {
-        this.key = "empty";
-      }
+      this.key = this.keyword ? this.keyword : "empty";
     },
     invite() {
       Loading.open();
