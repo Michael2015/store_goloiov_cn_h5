@@ -8,6 +8,18 @@
       </div>
       <div class="right">{{reque.member_nums}}人</div>
     </div>
+    <div class="header header2">
+      <div class="left">
+        计算管理津贴业绩：
+      </div>
+      <div class="right">{{sales.sale_total}}</div>
+    </div>
+    <div class="header header2">
+      <div class="left">
+        计算级别晋升业绩：
+      </div>
+      <div class="right">{{sales.update_level_sale_total}}</div>
+    </div>
     <div class="content">
       <div class="search">
         <img src="~img/sousuo.png" alt />
@@ -27,6 +39,7 @@
 
 <script>
 import { member } from "api/me";
+import { sales } from "api/me";
 import { mapState } from "vuex";
 import {invitePartner} from 'api/native'
 import {Loading} from 'lib'
@@ -34,6 +47,7 @@ export default {
   data() {
     return {
       reque: {},
+      sales: {},
       value: ""
     };
   },
@@ -43,6 +57,7 @@ export default {
   methods: {
     async getdata() {
       this.reque = await member(this.value);
+      this.sales = await sales();
     },
     invite() {
       Loading.open()
@@ -87,6 +102,19 @@ export default {
       color: #000;
     }
   }
+ .header2 {
+    height: size(50);
+    line-height: size(50);
+    .left {
+      color: #999;
+      font-size: size(20);
+    }
+    .right
+    {
+      color: #fc4747;
+      font-size: size(20);
+    }
+ }
   .content {
     margin-top: size(2);
     background: #fff;

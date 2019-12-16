@@ -15,7 +15,7 @@
           <img src="~img/icon/jifenpay.png" alt="">
         </div>
         <div class="name">
-          <div class="">积分支付 <span class="jifen">(余额 <b>{{now_money}}</b>)</span></div>
+          <div class="">余额支付 <span class="jifen">(余额 <b>{{now_money}}</b>)</span></div>
         </div>
         <div class="check-icon" :class="{active: active===2, no_disab: is_jf == true}">
           <span></span>

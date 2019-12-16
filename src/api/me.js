@@ -70,6 +70,13 @@ export function member(keyword) {
   }).then(clean)
 }
 
+
+//  获取我的业绩（计入管理津贴业绩以及晋升业绩）
+export function sales() {
+  return req.get('/api/partner/partner/getMyselfSales', {params: {}
+  }).then(clean)
+}
+
 // 获取我的伙伴个数
 export function partnerNum() {
   return req.get('/api/partner/index').then(clean)

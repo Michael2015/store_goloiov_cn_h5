@@ -3,15 +3,13 @@
     <div class="topbox">
       <div class="banner">
         <div class="content">
-          <div class="title">账户余额:</div>
+          <div class="title">账户总余额:</div>
           <div class="all_money">
             <span>¥</span>
-            <!--
-            -->
-            {{isLogin?balance:'0.00'}}
+            {{isLogin?cash:'0.00'}}
           </div>
           <div class="tixi_money">
-            可提现：¥ {{isLogin?cash:'0.00'}}
+            可提现：¥ {{isLogin?balance:'0.00'}}
           </div>
           <div class="xf_money">
             购物金：¥ {{isLogin?cons:'0.00'}}
