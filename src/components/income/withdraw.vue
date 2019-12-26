@@ -1,6 +1,12 @@
 <template>
   <div class="withdraw_warp">
     <top-head>提现</top-head>
+    <div class="tap">
+      <ul>
+        <li @click="extract_type=0" :class="{active:extract_type==0}">提现到银行卡<li>
+        <li @click="extract_type=1" :class="{active:extract_type==1}">提现到微信</li>  
+      </ul>
+    </div>
     <!--
     <div class="showItem">
       <div class="title">储蓄卡</div>
@@ -87,6 +93,11 @@ export default {
       // }
     },
     jumpWithdraw() {
+      if(this.extract_type == 0){
+        this.extract_type = 1;
+        Toast("暂不支持提现到银行卡");
+        return;
+      }
       if (this.extract_type == 0 && this.haveCard === 0) {
         Toast("请先添加银行卡");
         return;
@@ -157,7 +168,6 @@ export default {
   width: 100%;
   height: 100%;
   background: #f5f5f5;
-  padding-top: size(40);
   position: relative;
   .showItem {
     display: flex;
@@ -237,5 +247,21 @@ export default {
   line-height: size(50);
   color: #555555;
 }
+.withdraw_warp ul{
+  display: flex;
+  background: #ffffff;
+  margin-bottom: size(20);
 
+}
+.withdraw_warp ul li{
+  float: left;
+  width: 50%;
+  text-align: center;
+  height: size(80);
+  line-height: size(80)
+}
+
+.withdraw_warp ul li.active{
+  border-bottom: size(2) solid #ff2d23;
+}
 </style>
