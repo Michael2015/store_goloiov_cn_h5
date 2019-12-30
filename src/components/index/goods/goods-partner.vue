@@ -10,13 +10,14 @@
     <div class="intro-wrap">
       <div class="price-num">
         <span class="price">
-          <span>¥{{info.newbornzone.is_newborn?info.newbornzone.price:info.vip_price}}</span>
-          ¥ {{info.newbornzone.is_newborn?info.vip_price:info.price}}
+          <span>¥{{info.newbornzone.is_newborn?info.newbornzone.price:info.vip_price}}</span>&nbsp;
+          <em>¥{{info.newbornzone.is_newborn?info.vip_price:info.price}}</em>
         </span>
         <span class="news" v-if="info.newbornzone.is_newborn">新人专享</span>
         <span class="price-cut" v-if="false">合伙人价 ¥999</span>
         <span class="num">已售：{{info.sales}}</span>
       </div>
+      <div class="profit" v-if="userInfo.partner_level">返利：¥{{info.profit}}</div>
       <div class="goods-name">{{info.store_name}}</div>
       <div class="free-intro table" v-if="info.is_platoon === 1">
         <div class="icon-wrap">
@@ -84,7 +85,7 @@ export default {
   props: {
     id: {
       type: String,
-      default: ""
+      default: "",
     }
   },
   components: {
@@ -106,6 +107,7 @@ export default {
     ...mapState(["isLogin", "userInfo"])
   },
   created() {
+    console.log(this.userInfo)
     Loading.open();
     Promise.all([
       PartnerGetGoodsInfo(this.id).then(data => {
@@ -240,6 +242,7 @@ export default {
 .intro-wrap {
   padding: 0 size(30) size(40);
   background: #fff;
+  padding-top:size(20);
   .price-num {
     line-height: size(66);
     .price {
@@ -252,6 +255,11 @@ export default {
         font-size: size(48);
         color: #fe0000;
       }
+      > em {
+        color: #999;
+        font-size: size(30);
+        text-decoration: line-through;
+      }
     }
     .news {
       display: inline-block;
@@ -263,6 +271,10 @@ export default {
       margin-left: size(20);
       font-size: size(28);
     }
+  }
+  .profit{
+    color: #fa6400;
+    font-size: size(30);
   }
   .price-cut {
     font-size: size(26);
