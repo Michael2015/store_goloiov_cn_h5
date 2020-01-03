@@ -64,6 +64,11 @@ export default {
           path: "/applyAdmin"
         },
         {
+          img: require("img/me/vips.png"),
+          tit: "VIP服务商",
+          path: "/applyVip"
+        },
+        {
           img: require("img/me/icon1.png"),
           tit: "我的优惠券",
           path: "/myDiscount"

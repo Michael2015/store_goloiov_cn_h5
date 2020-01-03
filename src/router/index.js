@@ -243,6 +243,18 @@ export default new Router({
       component: () => import(/* webpackChunkName: "me" */ 'com/me/myhaibao'),
     },
     {
+      path: '/applyVip',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/vip/index'),
+    },
+    {
+      path: '/vipApplyList',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/vip/vipApplyList'),
+    },
+    {
+      path: '/vipApplyDetail',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/vip/vipApplyDetail'),
+    },
+    {
       path: '/haibaoDetali',
       component: () => import(/* webpackChunkName: "me" */ 'com/me/haibaoDetali'),
     },

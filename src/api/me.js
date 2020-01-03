@@ -166,10 +166,35 @@ export function edituserinfo(userinfo){
     ...userinfo
   }).then(special)
 }
+//vip服务商相关
+export function apply_vip(applyObj){
+  return req.get('/api/partner/home/server_vip_apply',{
+    params:{
+      ...applyObj
+    }
+  }).then(clean)
+}
+
+//vip服务商记录
+export function get_vip_apply_log(){
+  return req.get('/api/partner/home/server_vip_apply_log').then(clean)
+}
+
+// vip服务商详情
+export function get_vip_apply_log_detail(id){
+  return req.get('/api/partner/home/server_vip_apply_detail',{
+    params:{
+      id
+    }
+  }).then(clean)
+}
+
+
+
 
 // 区域管理员相关=======================
 
-// 申请
+// 申请区域管理员相关
 export function region_partner_applye(applyObj){
   return req.get('/api/partner/home/region_partner_apply',{
     params:{
