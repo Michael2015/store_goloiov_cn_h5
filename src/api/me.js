@@ -188,7 +188,10 @@ export function get_vip_apply_log_detail(id){
     }
   }).then(clean)
 }
-
+//查看vip申请状态
+export function get_vip_server(){
+  return req.get('/api/partner/home/get_vip_server').then(clean)
+}
 
 
 

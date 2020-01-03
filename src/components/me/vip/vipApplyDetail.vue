@@ -129,6 +129,7 @@ export default {
   .textarea {
     width: 100%;
     font-size: size(28);
+    margin-bottom: size(80);
   }
 }
 

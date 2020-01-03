@@ -109,7 +109,7 @@ export default {
         license_imgs:license_imgs,
       }).then(res => {
         Toast('申请成功');
-        this.$router.push('/applyflag')
+        this.$router.push('/vipApplyFlag')
       }, msg => {
         Toast(msg)
       });

@@ -43,7 +43,7 @@
 
 <script>
 import tojump from "mixins/tojump";
-import { partnerNum, updateUserInfo, get_region_partner } from "api/me";
+import { partnerNum, updateUserInfo, get_region_partner ,get_vip_server} from "api/me";
 import { mapState } from "vuex";
 import partnerLevelObj from "mixins/partner-level-obj";
 import { logout } from "api/login";
@@ -135,9 +135,33 @@ export default {
         this.$router.push(url);
       });
     },
+    seeVipFlag(url) {
+      get_vip_server().then(res => {
+        //  后台查不到数据说明没有申请过
+        if (res == null) {
+          // 不需要修改路径
+        } else if (res.status == 0) {
+          // 审核中
+          url = "/vipApplyFlag";
+        } else if (res.status == 1) {
+          // 审核通过
+          url = `/vipApplyDetail?id=${res.id}`;
+        } else if (res.status == -1) {
+          // 拒绝通过不需要改路径
+        }
+        this.$router.push(url);
+      });
+    },
+
+
     to(url) {
       if (url === "/applyAdmin") {
         this.seeFlag(url);
+        return;
+      }
+      if(url === "/applyVip")
+      {
+        this.seeVipFlag(url);
         return;
       }
       this.$router.push(url);

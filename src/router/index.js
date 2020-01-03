@@ -255,6 +255,10 @@ export default new Router({
       component: () => import(/* webpackChunkName: "me" */ 'com/me/vip/vipApplyDetail'),
     },
     {
+      path: '/vipApplyFlag',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/vip/vipApplyFlag'),
+    },
+    {
       path: '/haibaoDetali',
       component: () => import(/* webpackChunkName: "me" */ 'com/me/haibaoDetali'),
     },
