@@ -168,10 +168,8 @@ export function edituserinfo(userinfo){
 }
 //vip服务商相关
 export function apply_vip(applyObj){
-  return req.get('/api/partner/home/server_vip_apply',{
-    params:{
+  return req.post('/api/partner/home/server_vip_apply',{
       ...applyObj
-    }
   }).then(clean)
 }
 
