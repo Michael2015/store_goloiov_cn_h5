@@ -3,7 +3,7 @@
     <top-head>VIP服务商申请详情</top-head>
     <div class="item">
       <div class="left">审核状态</div>
-      <div :class="{red:showObj.status == 0,pink:showObj.status == -1}">{{applyObj[showObj.status]}}</div>
+      <div class="red">{{applyObj[showObj.status]}}</div>
     </div>
     <div class="item">
       <div class="left">姓名</div>
@@ -120,10 +120,11 @@ export default {
       font-size: size(28);
     }
     .img>img{
-        width: 25%;
+        width: 23%;
         display: block;
         float: left;
         box-shadow: 0px 1px 9px 0px rgba(225, 225, 225, 0.5);
+        margin-right:2%
     }
   }
   .textarea {

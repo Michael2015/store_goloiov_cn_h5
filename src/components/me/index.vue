@@ -7,8 +7,23 @@
           <img src="~img/me/bianji.png" alt />
         </div>
       </div>
-      <div class="user_name">{{userInfo.nickname}}</div>
+      <div class="user_name">
+        {{userInfo.nickname}}
+        <img v-if="userInfo.partner_level == 0" class="partner_level" src="~img/me/vip0.png" alt />
+        <img v-if="userInfo.partner_level == 1" class="partner_level" src="~img/me/vip1.png" alt />
+        <img v-if="userInfo.partner_level == 2" class="partner_level" src="~img/me/vip2.png" alt />
+        <img v-if="userInfo.partner_level == 3" class="partner_level" src="~img/me/vip3.png" alt />
+        <img v-if="userInfo.partner_level == 4" class="partner_level" src="~img/me/vip4.png" alt />
+        <img v-if="userInfo.partner_level == 5" class="partner_level" src="~img/me/vip5.png" alt />
+        <img v-if="userInfo.partner_level == 6" class="partner_level" src="~img/me/vip6.png" alt />
+      </div>
+      <!--
       <div class="grade">{{partnerLevelObj[userInfo.partner_level]}}</div>
+      -->
+      <div class="label">
+        <div class="grade2" v-if="server_vip">VIP服务商</div>
+        <div class="grade2" v-if="region_agent">区域管理员</div>
+      </div>
       <div class="team_no">伙伴 {{Num || 0}} 人</div>
     </div>
     <div class="crosswise_tab">
@@ -40,7 +55,6 @@
     <notice ref="notice"></notice>
   </div>
 </template>
-
 <script>
 import tojump from "mixins/tojump";
 import { partnerNum, updateUserInfo, get_region_partner ,get_vip_server} from "api/me";
@@ -99,13 +113,18 @@ export default {
           path: "/myOpinion"
         }
       ],
-      Num: ""
+      Num: "",
+      server_vip:false,
+      region_agent:false,
     };
   },
   mixins: [tojump, partnerLevelObj],
   async mounted() {
     const reque = await partnerNum();
     this.Num = reque && reque.member_nums;
+    console.log(reque)
+    this.server_vip = reque && reque.server_vip;
+    this.region_agent = reque && reque.region_agent;
     updateUserInfo();
   },
   methods: {
@@ -224,6 +243,9 @@ export default {
       color: #0c0423;
       text-align: center;
     }
+    .partner_level{
+      height: size(35)
+    }
     .grade {
       margin: size(8) auto 0 auto;
       width: size(158);
@@ -234,6 +256,24 @@ export default {
       color: #fff;
       font-size: size(24);
       border-radius: size(6);
+    }
+    .label
+    {
+      text-align: center;
+      width: 60%;
+      margin-left: 20%;
+    }
+    .grade2 {
+      width: 40%;
+      height: size(50);
+      margin-left: 5%;
+      margin-right: 5%;
+      line-height: size(50);
+      background-color: #222;
+      color: #fff;
+      font-size: size(24);
+      border-radius: size(6);
+      display: inline-block;
     }
     .team_no {
       height: size(37);

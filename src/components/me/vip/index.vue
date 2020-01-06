@@ -20,7 +20,7 @@
         <label>营业执照</label>
         <select-img2 v-model="license_imgs"></select-img2>
     </div>
-    <textarea cols="30" rows="10" placeholder="申请原因" v-model="reason"></textarea>
+    <textarea cols="30" rows="15" placeholder="申请原因" v-model="reason"></textarea>
     <div class="Apply_record" @click="vipApplyList">申请记录</div>
     <div class="Apply_btn" @click="goApply">立即申请</div>
     <city v-model="addr" ref="selAddr"></city>
@@ -145,8 +145,9 @@ export default {
 
 .warp {
   width: 100%;
-  height: 100%;
   background: #f5f5f5;
+  overflow: hidden;
+  margin-bottom: size(150);
   > input {
     height: size(84);
     background-color: #ffffff;
@@ -172,7 +173,7 @@ export default {
     border: size(1) solid #f5f5f5;
     height: size(84);
     background: #fff;
-    padding: 0 size(30);
+    padding: 0 4%;
     .name {
       font-size: size(28);
       color: #333333;
@@ -195,12 +196,13 @@ export default {
     }
   }
   > textarea {
-    width: 100%;
     background: #fff;
-    border: size(1) solid #f5f5f5;
     padding-left: size(30);
     padding-top: size(22);
     font-size: size(28);
+    width: 100%;
+    height:size(250);
+    display: block;
   }
   .Apply_record {
     position: fixed;
