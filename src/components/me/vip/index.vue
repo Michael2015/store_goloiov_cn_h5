@@ -63,7 +63,7 @@ export default {
       this.$router.push("/vipApplyList");
     },
     goApply() {
-      const { name, phone,address,addr,reason,shop_name,shop_imgs,license_imgs} = this;
+      const { name,phone,address,addr,reason,shop_name,shop_imgs,license_imgs} = this;
       let addr2 = addr.join(" ");
       if (name.trim().length == 0) {
         Toast("请输入名字");
@@ -93,8 +93,12 @@ export default {
         Toast("请上传营业执照");
         return;
       }
-      if (reason.trim().length == 0) {
-        Toast("请输入申请原因");
+      if (address.trim().length == 0 ||  address.trim().length > 300) {
+        Toast("请输入详细地址（0-300字符）");
+        return;
+      }
+      if (reason.trim().length == 0 || reason.trim().length > 300) {
+        Toast("请输入申请原因（0-300字符）");
         return;
       }
     
