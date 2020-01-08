@@ -9,8 +9,7 @@
         </div>
         <div class="right">
           <div class="money">¥{{item.extract_price}}</div>
-          <div class="processeding" v-if="item.status === 0">处理中</div>
-          <div class="accomplish" v-else-if="item.status === 1">已完成</div>
+          <div class="processeding">{{item.state}}</div>
         </div>
       </div>
     </load-more>  
