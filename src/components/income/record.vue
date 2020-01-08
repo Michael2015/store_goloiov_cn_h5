@@ -65,7 +65,6 @@ export default {
       }
     }
     .right {
-      color: #fe0000;
       .money {
         margin-bottom: size(9);
         font-size: size(34);

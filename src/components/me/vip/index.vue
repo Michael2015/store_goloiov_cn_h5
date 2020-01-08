@@ -17,8 +17,8 @@
         <select-img v-model="shop_imgs"  :max="5"></select-img>
     </div>
     <div class="imgs">
-        <label>营业执照</label>
-        <select-img2 v-model="license_imgs"></select-img2>
+        <label>营业执照（1-3张）</label>
+        <select-img2 v-model="license_imgs" :max="3"></select-img2>
     </div>
     <textarea cols="30" rows="15" placeholder="申请原因" v-model="reason"></textarea>
     <div class="Apply_record" @click="vipApplyList">申请记录</div>
