@@ -49,7 +49,7 @@ export default {
       line-height: size(50);
       width: 100%;
       display: inline-block;
-      font-size: size(30);
+      font-size: size(25);
     }
   }
   .clearfix:after{

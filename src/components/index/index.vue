@@ -30,7 +30,7 @@
     <load-more
       v-slot="{list}"
       class="list-wrap"
-      :setSize="2"
+      :setSize="8"
       :getData="getCategoryProducts"
       :key="key+loginKey"
       :isShowMore="true"
@@ -44,7 +44,7 @@
     <load-more
       v-slot="{list}"
       class="list-wrap2"
-      :setSize="5"
+      :setSize="50"
       :getData="getCategoryProducts2"
       :key="key+loginKey+1"
       :isShowMore="true"
