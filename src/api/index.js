@@ -63,22 +63,55 @@ export function getIndexNotice() {
 }
 
 // 获取首页商品列表（非合伙人）
-export function CustomerGetProducts(keyword) {
+export function CustomerGetProducts(keyword,limit = 10) {
   return req.get('/api/customer/mall/getProductList', {
     params: {
-      keyword   
+      keyword,
+      limit
     }
   }).then(clean)
 }
 
-// 获取首页商品列表（合伙人）
-export function PartnerGetProducts(keyword) {
-  return req.get('/api/partner/home/storelist', {
+// 获取首页爆款商品列表（非合伙人）
+export function CustomerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_field = 'order',order_sort = 'desc',cate_id = 0) {
+  return req.get('/api/customer/mall/getProductList', {
     params: {
       keyword,
+      is_blast,
+      order_field,
+      order_sort,
+      cate_id,
+      limit
     }
   }).then(clean)
 }
+
+
+// 获取首页商品列表（合伙人）
+export function PartnerGetProducts(keyword,limit = 10) {
+  return req.get('/api/partner/home/storelist', {
+    params: {
+      keyword,
+      limit
+    }
+  }).then(clean)
+}
+
+
+// 获取首页爆款商品列表（合伙人）
+export function PartnerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_field = 'order',order_sort = 'desc',cate_id = 0) {
+  return req.get('/api/partner/home/storelist', {
+    params: {
+      keyword,
+      is_blast,
+      order_field,
+      order_sort,
+      cate_id,
+      limit
+    }
+  }).then(clean)
+}
+
 
 // 获取首页新人专区信息
 export function getNewbornZoneStore(){

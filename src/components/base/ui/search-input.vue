@@ -34,13 +34,17 @@ export default {
 
 <style lang="scss" scoped>
 @import '~css/def';
+.top .table{
+  padding: 0;
+  height: size(90);
+}
 .input-wrap{
   width: 100%;
   background: #fff;
-  padding: 0 size(20);
   padding-right: 0;
-  height: size(70);
-  border-radius: size(35);
+  border-radius: size(10);
+  padding: 0;
+  margin: 0;
   >div{
     display: table-cell;
     vertical-align: middle;
@@ -49,9 +53,12 @@ export default {
     width: size(24);
   }
   .search{
-    padding-right: size(28);
+    padding-right: size(15);
     width: size(80);
     text-align: right;
+  }
+  form{
+    height: 100%;
   }
   input{
     padding:0 4px;

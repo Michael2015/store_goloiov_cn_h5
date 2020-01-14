@@ -14,6 +14,7 @@ import OrderDetail from 'com/order/order-detail'
 // import Income from 'com/income'
 // import Me from 'com/me'
 import JoinPartner from 'com/common/join-partner'
+import Search from 'com/index/search'
 
 Vue.use(Router)
 
@@ -67,6 +68,11 @@ export default new Router({
     {
       path: '/join-partner',
       component: JoinPartner
+    },
+    {
+      path: '/search',
+      component: Search,
+      meta: { haveTab: true , keepAlive: true}
     },
     {
       path: '/buy-goods/:id',

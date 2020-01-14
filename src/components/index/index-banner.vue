@@ -37,13 +37,16 @@ export default {
 <style lang="scss" scoped>
 @import "~css/def";
 .banner{
+  padding: size(20);
   height: size(300);
   .img{
     height: 100%;
     background: #fff;
     img{
-      display: block;
-      @include fill;
+        border-top-left-radius: size(30);
+        border-bottom-right-radius: size(30);
+        display: block;
+        @include fill;
     }
   }
 }

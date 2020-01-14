@@ -96,7 +96,7 @@ export default {
   padding: 0 size(12);
   // margin-left: size(20);
   display: inline-block;
-  background-color: #fe2b36;
+  background-image: linear-gradient(to right, red , #daa849);
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.5);
   border-radius: 4px;
   text-align: center;

@@ -24,39 +24,34 @@
     </div>
     <div>
       <index-msg-loop v-if="isLogin && role === 1"></index-msg-loop>
-      <index-focus :cid="cid" v-if="cid" :key="loginKey"></index-focus>
+      <index-focus></index-focus>
     </div>
-    <div class="filters table" :class="[ is_tab_fixed ? 'tab_fixed': 's_opc']" ref="filters_tab">
-      <div>
-        <div class="tab-left" ref="tab_left">
-          <div
-            v-if="category && category.length > 0"
-            class="item"
-            key="-1"
-            @click="setCategory(-1)"
-            :class="{active:activeCategoryIndex===-1}"
-          >全部</div>
-          <div
-            class="item"
-            :class="{active:activeCategoryIndex===index}"
-            v-for="(item,index) in category"
-            :key="index"
-            @click="setCategory(index)"
-          >
-            <span>{{item.cate_name}}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="ht"><img src="~img/hot.png" /></div>
     <load-more
       v-slot="{list}"
       class="list-wrap"
-      :setSize="0"
+      :setSize="2"
       :getData="getCategoryProducts"
       :key="key+loginKey"
+      :isShowMore="true"
+      :fliter="'is_blast=1&name=爆品商品'"
     >
       <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
         <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
+      </div>
+    </load-more>
+    <div class="ht"><img src="~img/all_goods.png" /></div>
+    <load-more
+      v-slot="{list}"
+      class="list-wrap2"
+      :setSize="5"
+      :getData="getCategoryProducts2"
+      :key="key+loginKey+1"
+      :isShowMore="true"
+      :fliter="'name=全部商品'"
+    >
+      <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
+        <index-goods-item2 class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item2>
       </div>
     </load-more>
     <!-- 退出登录 非合伙才有 -->
@@ -83,14 +78,16 @@ import IndexBanner from "./index-banner";
 import IndexFocus from "./index-focus";
 import newPeople from "./newPeople";
 import IndexGoodsItem from "./index-goods-item";
+import IndexGoodsItem2 from "./index-goods-item2";
 import LoadMore from "base/load-more";
 import { Loading } from "lib";
 import {
   getCategory,
-  getCategoryProducts,
-  CustomerGetProducts,
   PartnerGetProducts,
-  getNewbornZoneStore
+  CustomerGetProducts,
+  PartnerGetBlastProducts,
+  getNewbornZoneStore,
+  CustomerGetBlastProducts
 } from "api";
 import { invitePartner } from "api/native";
 import { mapState, mapMutations } from "vuex";
@@ -107,6 +104,7 @@ export default {
     IndexMsgLoop,
     IndexFocus,
     IndexGoodsItem,
+    IndexGoodsItem2,
     newPeople
   },
   data() {
@@ -130,16 +128,16 @@ export default {
     },
     getCategoryProducts() {
       return () => {
-        return this.activeCategoryIndex == -1
-          ? this.role === 1
-            ? PartnerGetProducts(this.keyword)
-            : CustomerGetProducts(this.keyword)
-          : getCategoryProducts(
-              this.category[this.activeCategoryIndex].id,
-              this.keyword
-            )
+        return this.role === 1 ? PartnerGetBlastProducts(this.keyword,1,10) : CustomerGetBlastProducts(this.keyword,1,10);
       }
     },
+
+    getCategoryProducts2() {
+      return () => {
+        return this.role === 1? PartnerGetProducts(this.keyword,51) : CustomerGetProducts(this.keyword,51);
+      }
+    },
+
     loginKey() {
       return this.isLogin + "";
     }
@@ -288,6 +286,12 @@ export default {
     }
   }
 }
+.ht{
+  padding: size(20);
+  >img{
+    width: 100%;
+  }
+}
 .top {
   position: fixed;
   top: 0;
@@ -316,7 +320,7 @@ export default {
     }
   }
   .table {
-    padding-top: size(10);
+    padding-top: size(15);
     height: size(64);
     // margin-bottom: size(10);
   }
@@ -336,7 +340,8 @@ export default {
     padding: 0 size(12);
     // margin-left: size(20);
     display: inline-block;
-    background-color: #fe2b36;
+    //background-color: #fe2b36;
+    background-image: linear-gradient(to right, red , #daa849);
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.5);
     border-radius: 4px;
     text-align: center;
@@ -448,8 +453,10 @@ export default {
   line-height: 1.4;
   padding-top: size(12);
 }
-.list-wrap {
-  padding-bottom: size(120);
+.list-wrap2{
+ 
+  padding:0 size(20) size(140) 0; 
+  margin-right:size(0);
   // min-height: size(1200);
 }
 .list {

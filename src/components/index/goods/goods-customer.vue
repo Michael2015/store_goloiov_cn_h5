@@ -11,7 +11,7 @@
     <div class="intro-wrap">
       <div class="price-num">
         <span class="price">
-          {{info.newbornzone.is_newborn?'':'原价'}}
+          <em>{{info.newbornzone.is_newborn?'':'原价:'}}</em>
           <span>{{info.newbornzone.is_newborn?'¥ '+info.newbornzone.price:info.price}}</span>
           <span class="vip_price" v-if="!info.newbornzone.is_newborn">
             <span class="vip_icon" v-if="!info.newbornzone.is_newborn">vip</span>
@@ -303,8 +303,14 @@ export default {
       font-weight: normal;
       font-stretch: normal;
       font-size: size(36);
+      vertical-align: middle;
       > span {
-        font-size: size(48);
+        font-size: size(40);
+      }
+      >em{
+        color: #555;
+        font-style: normal;
+        font-weight: normal;
       }
       .vip_price {
         background-image: linear-gradient(

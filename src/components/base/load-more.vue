@@ -6,7 +6,12 @@
       <div class="status-text">暂无数据</div>
     </div>
     <slot :list="list"></slot>
+    <keep-alive>
+      <router-link tag="div" v-if="isShowMore && list.length > setSize" class="lmore" :to="{path:'/search?'+fliter}" :key="$route.fullPath">加载更多>></router-link>
+    </keep-alive>
+    <!--
     <div class="status-text" v-if="loaded">{{page === 1 && list.length === 0 ? '' : '没有更多了'}}</div>
+    -->
   </div>
 </template>
 
@@ -25,7 +30,15 @@ export default {
     paused: {
       type: Boolean,
       default: false
-    }
+    },
+     isShowMore: {
+      type: Boolean,
+      default: false
+    },
+     fliter: {
+      type: String,
+      default: ''
+    },
   },
   data() {
     return {
@@ -34,7 +47,7 @@ export default {
       loaded: false,
       list: [],
       page: 1,
-      size: this.setSize // 默认一页数量
+      size: this.setSize, // 默认一页数量
     }
   },
   watch: {
@@ -78,7 +91,7 @@ export default {
         }
         if (data) {
           this.list.push(...data)
-          if (data.length < this.size) {
+          if (data.length < this.size || this.isShowMore) {
             this.loaded = true
           } else {
             this.page++
@@ -90,10 +103,9 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
 @import "~css/def";
-.status-text{
+.status-text,.lmore{
   padding: size(20) 0;
   line-height: 1.6;
   font-size: size(24);

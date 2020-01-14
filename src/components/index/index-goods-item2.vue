@@ -1,6 +1,8 @@
 <template>
   <div class="goods-item" :class="{free: item.is_platoon === 1,news:item.newbornzone.is_newborn}">
-    <router-link tag="div" class="img-wrap" :to="'/goods/'+item.id"><img v-lazy="item.image" alt=""></router-link>
+    <router-link tag="div" class="img-wrap" :to="'/goods/'+item.id">
+      <img v-lazy="item.image" alt="">
+    </router-link>
     <div class="con">
       <router-link tag="div" class="name" :to="'/goods/'+item.id">{{item.store_name}}</router-link>
       <div class="price-num">
@@ -10,6 +12,7 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
   props: {
@@ -27,32 +30,38 @@ export default {
   border-radius: 6px;
   background: #fff;
   overflow: hidden;
-  width: 47%;
-  margin-left: 2.95%;
+  width: 100%;
+  padding: size(20);
+  margin-left: size(20);
   .img-wrap{
     position: relative;
-    padding-bottom: 100%;
+    height: 100%;
+    float: left;
+    margin-right: 5%;
     img{
-      position: absolute;
       @include fill;
-      left: 0;
-      top:0;
+      width: size(180);
+      height: size(180);
+      border-radius: size(8);
     }
   }
   .con{
-    padding: 0 size(16);
+    padding:size(20);
+    height:size(180);
+    overflow: hidden;
   }
   .name{
-    margin-top: size(20);
+    margin-top: size(0);
     font-size: size(28);
     color: #4a4a4a;
     line-height: size(34);
     height: size(68);
     @include txt-overflow(2);
+    text-align:justify;
   }
   .price-num{
     line-height: size(42);
-    margin: size(26) 0;
+    margin: size(20) 0;
     .price{
       font-size: sizeZ(30);
       color: #ff5500;

@@ -11,7 +11,7 @@
       <div class="price-num">
         <span class="price">
           <span>¥{{info.newbornzone.is_newborn?info.newbornzone.price:info.vip_price}}</span>&nbsp;
-          <em>¥{{info.newbornzone.is_newborn?info.vip_price:info.price}}</em>
+          <em>原价:¥{{info.newbornzone.is_newborn?info.vip_price:info.price}}</em>
         </span>
         <span class="news" v-if="info.newbornzone.is_newborn">新人专享</span>
         <span class="price-cut" v-if="false">合伙人价 ¥999</span>
@@ -107,7 +107,6 @@ export default {
     ...mapState(["isLogin", "userInfo"])
   },
   created() {
-    console.log(this.userInfo)
     Loading.open();
     Promise.all([
       PartnerGetGoodsInfo(this.id).then(data => {
@@ -259,6 +258,7 @@ export default {
         color: #999;
         font-size: size(30);
         text-decoration: line-through;
+        font-style:normal;
       }
     }
     .news {
