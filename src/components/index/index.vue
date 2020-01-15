@@ -37,7 +37,7 @@
       :fliter="'is_blast=1&name=爆品商品'"
     >
       <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
-        <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
+        <index-goods-item class="item" v-for="(item,index) in list.slice(0,8)" :key="index" :item="item" ></index-goods-item>
       </div>
     </load-more>
     <div class="ht"><img src="~img/all_goods.png" /></div>
@@ -51,7 +51,7 @@
       :fliter="'name=全部商品'"
     >
       <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
-        <index-goods-item2 class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item2>
+        <index-goods-item2 class="item" v-for="(item,index) in list.slice(0,50)" :key="index" :item="item"></index-goods-item2>
       </div>
     </load-more>
 
