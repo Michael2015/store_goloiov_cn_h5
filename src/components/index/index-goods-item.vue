@@ -2,7 +2,7 @@
   <div class="goods-item" :class="{free: item.is_platoon === 1,news:item.newbornzone.is_newborn}">
     <router-link tag="div" class="img-wrap" :to="'/goods/'+item.id"><img v-lazy="item.image" alt=""></router-link>
     <div class="con">
-      <router-link tag="div" class="name" :to="'/goods/'+item.id">{{index}}{{item.store_name}}</router-link>
+      <router-link tag="div" class="name" :to="'/goods/'+item.id">{{item.store_name}}</router-link>
       <div class="price-num">
         <span class="price">¥{{item.newbornzone.is_newborn?item.newbornzone.price:item.price}}</span>
         <span class="num">销量{{item.sales}}</span>
