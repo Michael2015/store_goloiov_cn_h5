@@ -54,6 +54,7 @@
         <index-goods-item2 class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item2>
       </div>
     </load-more>
+
     <!-- 退出登录 非合伙才有 -->
     <div class="logout" v-if="isLogin && role !== 1" @click="logout">退出</div>
     <!-- 查看教程 -->
@@ -239,7 +240,8 @@ export default {
       }, 10);
     },
     search() {
-      this.key = this.keyword ? this.keyword : "empty";
+      //this.key = this.keyword ? this.keyword : "empty";
+      this.$router.push({path:'/search',query:{name:this.keyword,keyword:this.keyword}});
     },
     invite() {
       Loading.open();

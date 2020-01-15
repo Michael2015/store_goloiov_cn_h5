@@ -22,11 +22,11 @@
         <li :class="{active:active_tab == 2}" @click="tab(2,order_sort,'sales')">销量</li>
         <li :class="{active:active_tab == 3}" @click="showPrice">
           价格
-          <em v-if="price_type == 1">
-            <img src="~img/search_down.png" />
-          </em>
           <em v-if="price_type == 2">
             <img src="~img/search_up.png" />
+          </em>
+          <em v-if="price_type == 1">
+            <img src="~img/search_down.png" />
           </em>
         </li>
       </ul>
@@ -34,11 +34,11 @@
         <div class="select-price-mask"></div>
         <div :class="{active:sort_price == 1}" @click="select_price(1)">
           价格从高到低
-          <em>√</em>
+          <em v-if="sort_price == 1">√</em>
         </div>
         <div :class="{active:sort_price == 2}" @click="select_price(2)">
           价格从低到高
-          <em>√</em>
+          <em v-if="sort_price == 2">√</em>
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@
       <div class="list clearfix" :style="{minHeight: `${topHeight}px`}" v-if="list.length > 0">
         <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
       </div>
-      <div class="no-data" v-else-if="list.length === 0">
+      <div class="no-data" >
          <img src="~img/no_data.png" alt="">
       <div class="status-text">暂无数据</div>
     </div>
@@ -115,6 +115,7 @@ export default {
   },
   activated() {
     this.placeholder = this.$route.query.name;
+    this.keyword = this.$route.query.keyword ? this.$route.query.keyword : '';
     this.getProducts();
     this.$nextTick(() => {
       this.topHeight = this.clientHeight - (this.offsetHeight + this.T_H + 100);
@@ -236,6 +237,7 @@ export default {
   width: 100%;
   top: size(90);
   z-index: 99;
+  font-size: size(30);
   background: #f9f9f9f9;
 }
 .sc-navbar ul {
@@ -250,6 +252,9 @@ export default {
     color: #999;
     em {
       vertical-align: middle;
+      >img{
+        margin-top:size(20);
+      }
     }
   }
   .active {

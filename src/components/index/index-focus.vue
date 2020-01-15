@@ -38,7 +38,7 @@ export default {
     list-style: none;
     float: left;
     width: 21%;
-    margin: 0 2% size(20);
+    margin: 2% 2% size(20);
     text-align: center;
     img {
       width: 90%
