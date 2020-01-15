@@ -139,12 +139,12 @@ export default {
       var cate_id = this.$route.query.cate_id ? this.$route.query.cate_id : 0;
         if(this.role === 1)
         {
-            PartnerGetBlastProducts(this.keyword,is_blast,10,this.order_field,this.order_sort,cate_id).then(data=>{
+            PartnerGetBlastProducts(this.keyword,is_blast,10000,this.order_field,this.order_sort,cate_id).then(data=>{
               this.list = data;
             });
         }
         else{
-            CustomerGetBlastProducts(this.keyword,is_blast,10,this.order_field,this.order_sort,cate_id).then(data=>{
+            CustomerGetBlastProducts(this.keyword,is_blast,10000,this.order_field,this.order_sort,cate_id).then(data=>{
               this.list = data;
             });
         }
