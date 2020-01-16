@@ -18,8 +18,8 @@
     </div>
     <div class="sc-navbar">
       <ul>
-        <li :class="{active:active_tab == 1}" @click="tab(1,order_sort,'order')">人气</li>
-        <li :class="{active:active_tab == 2}" @click="tab(2,order_sort,'sales')">销量</li>
+        <li :class="{active:active_tab == 1}" @click="tab(1,order_sort,'sales')">销量</li>
+        <li :class="{active:active_tab == 2}" @click="tab(2,order_sort,'order')">人气</li>
         <li :class="{active:active_tab == 3}" @click="showPrice">
           价格
           <em v-if="price_type == 2">

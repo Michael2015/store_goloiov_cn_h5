@@ -96,7 +96,7 @@ export default {
   padding: 0 size(12);
   // margin-left: size(20);
   display: inline-block;
-  background-image: linear-gradient(to right, red , #daa849);
+  background:linear-gradient(167deg,rgba(254,19,25,1) 0%,rgba(255,143,146,1) 100%);
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.5);
   border-radius: 4px;
   text-align: center;

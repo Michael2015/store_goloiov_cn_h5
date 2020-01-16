@@ -41,7 +41,7 @@ export default {
     margin: 2% 2% size(20);
     text-align: center;
     img {
-      width: 90%
+      width: 80%
     }
     label{
       text-align: center;
