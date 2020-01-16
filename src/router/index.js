@@ -15,7 +15,7 @@ import OrderDetail from 'com/order/order-detail'
 // import Me from 'com/me'
 import JoinPartner from 'com/common/join-partner'
 import Search from 'com/index/search'
-
+import Blank from 'com/index/blank'
 Vue.use(Router)
 
 export default new Router({
@@ -72,6 +72,11 @@ export default new Router({
     {
       path: '/search',
       component: Search,
+      meta: { haveTab: true , keepAlive: true}
+    },
+    {
+      path: '/blank',
+      component: Blank,
       meta: { haveTab: true , keepAlive: true}
     },
     {

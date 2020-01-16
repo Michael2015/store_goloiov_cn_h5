@@ -1,6 +1,6 @@
 <template>
   <div class="focus">
-    <li class="foucs-tiem" v-for="(item,index) in list" :key="index" @click="rediect_cate(item.id)">
+    <li class="foucs-tiem" v-for="(item,index) in list" :key="index" @click="rediect_cate(item.id,item.cate_name)">
       <img v-lazy="item.pic" />
       <label>{{item.cate_name}}</label>
     </li>
@@ -23,9 +23,15 @@ export default {
     });
   },
   methods:{
-    rediect_cate(cate_id)
+    rediect_cate(cate_id,cate_name)
     {
-      this.$router.push({path:'/search',query:{cate_id:cate_id}});
+      if(cate_name == '油卡充值' || cate_name == 'VIP服务商')
+      {
+          this.$router.push({path:'/blank'});
+      }else
+      {
+          this.$router.push({path:'/search',query:{cate_id:cate_id}});
+      }
     }
   }
 };
