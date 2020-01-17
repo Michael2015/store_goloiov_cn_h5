@@ -61,12 +61,14 @@ export default {
     height: 100%;
   }
   input{
-    padding:0 4px;
-    font-size: size(28);
-    line-height: normal;
+    margin-top:size(9);
+    height: size(50);
+    font-size: size(25);
+    line-height: size(50);
+    padding-left: size(8);
     &::-webkit-input-placeholder{
       color: #9ea2a0;
-      line-height: normal;
+      line-height: size(50);
     }
   }
 }

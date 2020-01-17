@@ -3,7 +3,7 @@
     <div class="top-wrap">
       <div class="top" ref="top">
         <!-- 合伙人端 -->
-        <div class="table" v-if="isLogin && role === 1">
+        <div class="table table2" v-if="isLogin && role === 1">
           <div class="table-cell">
             <search-input v-model="keyword" class="input" @search="search"></search-input>
           </div>
@@ -322,8 +322,8 @@ export default {
       z-index: 1;
     }
   }
-  .table {
-    padding-top: size(15);
+  .table2 {
+    margin-top: size(15);
     height: size(64);
     // margin-bottom: size(10);
   }

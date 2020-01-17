@@ -4,7 +4,7 @@
     <div class="top-wrap">
       <div class="top" ref="top">
         <!-- 合伙人端 -->
-        <div class="table">
+        <div class="table table2">
           <div class="table-cell">
             <search-input
               v-model="keyword"
@@ -34,11 +34,11 @@
         <div class="select-price-mask"></div>
         <div :class="{active:sort_price == 1}" @click="select_price(1)">
           价格从高到低
-          <em v-if="sort_price == 1">√</em>
+          <em v-if="sort_price == 1">✔️</em>
         </div>
         <div :class="{active:sort_price == 2}" @click="select_price(2)">
           价格从低到高
-          <em v-if="sort_price == 2">√</em>
+          <em v-if="sort_price == 2">✔️</em>
         </div>
       </div>
     </div>
@@ -223,8 +223,8 @@ export default {
   background: linear-gradient(to right, #ff090b, #fe3847);
   padding: 0 size(20);
   z-index: 99;
-  .table {
-    padding-top: size(15);
+  .table2 {
+    margin-top: size(15);
     height: size(64);
     // margin-bottom: size(10);
   }
@@ -250,6 +250,7 @@ export default {
     flex: 1;
     text-align: center;
     color: #999;
+    font-size: size(30);
     em {
       vertical-align: middle;
       >img{
