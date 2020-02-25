@@ -323,9 +323,8 @@ export default {
     }
   }
   .table2 {
-    margin-top: size(15);
+    margin-top: size(13);
     height: size(64);
-    // margin-bottom: size(10);
   }
   .input {
     height: size(64);

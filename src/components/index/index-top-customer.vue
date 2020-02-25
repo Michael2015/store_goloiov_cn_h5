@@ -83,11 +83,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "~css/def";
-.table2 {
-    margin-top: size(13);
-    height: size(64);
-    // margin-bottom: size(10);
-  }
 .invite-wrap{
   text-align: right;
   width: size(180);
