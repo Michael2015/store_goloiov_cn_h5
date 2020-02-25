@@ -1,5 +1,5 @@
 <template>
-  <div class="table">
+  <div class="table table2">
     <div class="table-cell">
       <div class="clearfix">
         <img v-if="partner.phone" :src="partner.avatar" alt="" class="parent-avatar" @click="showPartner" style="background:#fff;">
@@ -83,6 +83,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "~css/def";
+.table2 {
+    margin-top: size(13);
+    height: size(64);
+    // margin-bottom: size(10);
+  }
 .invite-wrap{
   text-align: right;
   width: size(180);
@@ -102,8 +107,8 @@ export default {
   text-align: center;
 }
 .parent-avatar{
-  width: size(72);
-  height: size(72);
+  width: size(64);
+  height: size(64);
   border-radius: 5px;
   float: left;
   background: transparent;
@@ -111,7 +116,7 @@ export default {
 .shop-name{
   vertical-align: middle;
   float: left;
-  line-height: size(72);
+  line-height: size(64);
   font-size: size(38);
   color: #fff;
   margin-left: size(22);
