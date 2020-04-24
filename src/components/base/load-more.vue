@@ -9,12 +9,12 @@
     <keep-alive>
       <router-link tag="div" v-if="isShowMore && list.length > setSize" class="lmore" :to="{path:'/search?'+fliter}" :key="$route.fullPath">加载更多>></router-link>
     </keep-alive>
-    <!--
-    <div class="status-text" v-if="loaded">{{page === 1 && list.length === 0 ? '' : '没有更多了'}}</div>
-    -->
-  </div>
+    <div class="no-data" v-if="setSize == 20 && loaded && list.length > 0">
+      <img src="~img/no_data.png" alt="">
+      <div class="status-text">暂无数据</div>
+    </div>
+    </div>
 </template>
-
 <script>
 import {SIZE} from 'api/request'
 export default {
@@ -108,7 +108,7 @@ export default {
 .status-text,.lmore{
   padding: size(20) 0;
   line-height: 1.6;
-  font-size: size(24);
+  font-size: size(35);
   text-align: center;
   color: #888;
 }

@@ -236,3 +236,11 @@ export function createPosterImage(imgObj){
     }
   }).then(clean)
 }
+
+
+//金卡贝积分
+export function getUserIntegralList(){
+  return req.get('/api/partner.partner/getUserIntegralList',{
+    limit:1000
+  }).then()
+}

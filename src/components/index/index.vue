@@ -44,17 +44,16 @@
     <load-more
       v-slot="{list}"
       class="list-wrap2"
-      :setSize="50"
+      :setSize="20"
       :getData="getCategoryProducts2"
       :key="key+loginKey+1"
-      :isShowMore="true"
+      :isShowMore="false"
       :fliter="'name=全部商品'"
     >
       <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
-        <index-goods-item2 class="item" v-for="(item,index) in list.slice(0,50)" :key="index" :item="item"></index-goods-item2>
+        <index-goods-item2 class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item2>
       </div>
     </load-more>
-
     <!-- 退出登录 非合伙才有 -->
     <div class="logout" v-if="isLogin && role !== 1" @click="logout">退出</div>
     <!-- 查看教程 -->
@@ -134,8 +133,8 @@ export default {
     },
 
     getCategoryProducts2() {
-      return () => {
-        return this.role === 1? PartnerGetProducts(this.keyword,51) : CustomerGetProducts(this.keyword,51);
+      return (page,limit) => {
+        return this.role === 1? PartnerGetProducts(page,limit) : CustomerGetProducts(page,limit);
       }
     },
 

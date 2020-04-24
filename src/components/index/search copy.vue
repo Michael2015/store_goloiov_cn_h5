@@ -43,13 +43,16 @@
       </div>
     </div>
     <div class="list-wrap">
-      <div class="list clearfix" :style="{minHeight: `${topHeight}px`}" v-if="list.length > 0" v-infinite-scroll="loadMore" >
+      <load-more 
+      v-slot="{list}" 
+      class="list-wrap"  
+      :getData="getProducts" 
+      :setSize="20"
+      :key="1">
+      <div class="list">
         <index-goods-item class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item>
       </div>
-      <div class="no-data" >
-         <img src="~img/no_data.png" alt="">
-      <div class="status-text">暂无数据</div>
-    </div>
+    </load-more>
     </div>
   </div>
 </template>
@@ -57,6 +60,7 @@
 import SearchInput from "base/ui/search-input";
 import IndexGoodsItem from "./index-goods-item";
 import { mapState, mapMutations } from "vuex";
+import LoadMore from 'base/load-more'
 import {
   PartnerGetBlastProducts,
   CustomerGetBlastProducts
@@ -70,7 +74,8 @@ export default {
   },
   components: {
     SearchInput,
-    IndexGoodsItem
+    IndexGoodsItem,
+    LoadMore
   },
   data() {
     return {
@@ -90,12 +95,27 @@ export default {
       list:[],
       sort_price:1,
       cate_id:0,
-      page:1,
-      loaded:false,
+      is_blast:0,
     };
   },
   computed: {
      ...mapState(["role","userInfo"]),
+    category() {
+      return this.categoryList.slice(1);
+    },
+    loginKey() {
+      return this.isLogin + 1;
+    },
+    getProducts() {
+        if(this.role === 1)
+        {
+          return (page,limit) => PartnerGetBlastProducts(this.keyword,this.is_blast,limit,this.order_field,this.order_sort,this.cate_id,page);
+        }
+        else{
+          return (page, limit) => CustomerGetBlastProducts(this.keyword,this.is_blast,limit,this.order_field,this.order_sort,this.cate_id,page);
+        }
+        
+    }
   },
   watch: {
     keyword() {
@@ -108,13 +128,13 @@ export default {
   activated() {
     this.placeholder = this.$route.query.name;
     this.keyword = this.$route.query.keyword ? this.$route.query.keyword : '';
-    this.list = [];
-    this.loaded = false;
-    this.page = 1;
-    this.getProducts();
     this.$nextTick(() => {
       this.topHeight = this.clientHeight - (this.offsetHeight + this.T_H + 100);
     });
+    this.is_blast = this.$route.query.is_blast ? 1 : 0;
+    this.cate_id = this.$route.query.cate_id ? this.$route.query.cate_id : 0;
+    this.getProducts();
+    this.loginKey = this.loginKey++;
     window.addEventListener("scroll", this.handleScroll, true);
   },
   deactivated() {
@@ -129,38 +149,6 @@ export default {
   },
   methods: {
     ...mapMutations(["setFirst"]),
-    loadMore(){
-      if(!this.loaded)
-      {
-      this.page++;
-      this.getProducts();
-      }
-    },
-    getProducts() {
-      var is_blast = this.$route.query.is_blast ? 1 : 0;
-      var cate_id = this.$route.query.cate_id ? this.$route.query.cate_id : 0;
-        if(this.role === 1)
-        {
-            PartnerGetBlastProducts(this.keyword,is_blast,20,this.order_field,this.order_sort,cate_id,this.page).then(data=>{
-              if(data.length < 20)
-              {
-                this.loaded = true;
-              }
-              this.list.push(...data);
-            });
-        }
-        else{
-            CustomerGetBlastProducts(this.keyword,is_blast,20,this.order_field,this.order_sort,cate_id,this.page).then(data=>{
-                if(data.length < 20)
-              {
-               this.loaded = true;
-              }
-              this.list.push(...data)
-              
-            });
-        }
-        this.isMaskShow = false;
-    },
     //显示价格
     showPrice()
     {
@@ -174,10 +162,8 @@ export default {
       this.order_sort = order_sort == 'desc' ? 'asc' : 'desc';
       this.order_field = order_field,
       this.active_tab = index;
-      this.list = [];
-      this.loaded = false;
-      this.page = 1;
       this.getProducts();
+      this.isMaskShow = false;
     },
     //选择价格
     select_price(sort)
@@ -185,10 +171,8 @@ export default {
       this.order_field = 'price';
       this.order_sort = sort == 2 ? 'asc' : 'desc';
       this.sort_price = sort;
-      this.list = [];
-      this.loaded = false;
-      this.page = 1;
       this.getProducts();
+      this.isMaskShow = false;
     },
     handleScroll() {
       // 得到页面滚动的距离
@@ -217,6 +201,7 @@ export default {
     },
     search() {
       this.getProducts();
+      this.isMaskShow = false;
     }
   }
 };
@@ -226,7 +211,7 @@ export default {
 @import "~css/def";
 .list-wrap {
   margin-top: size(150);
-  padding: 0 size(20) size(130) size(20);
+  padding: 0 size(20) size(50) size(20);
 }
 .wrap {
   min-height: 100vh;

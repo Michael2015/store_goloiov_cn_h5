@@ -45,6 +45,15 @@
         <div class="right">¥0</div>
       </div>
     </div>
+     <div class="spec">
+      <div class="col clearfix">
+        <div class="left jifen"><img src="~img/me/jifen.png" class="one" />可用{{golo_points}}积分抵扣{{golo_points_money}}元<img src="~img/question.png" @click="showinfo" alt /></div>
+        <div class="right">
+          <img  v-if="!used_golo_points" src="~img/radio.png" @click="check_golo_points" alt />
+          <img  v-else src="~img/radio-checked.png" @click="check_golo_points" alt />
+          </div>
+      </div>
+    </div>
     <div class="remark">
       <text-area class="input" placeholder="留言内容/备注" v-model="remark"></text-area>
     </div>
@@ -114,7 +123,11 @@ export default {
       status: 0,
       // 询问用户是否离开
       inConfirmLeave: false,
-      now_money: "" //我的积分余额
+      now_money: "", //我的积分余额
+      golo_points:0,//golo 积分
+      used_golo_points:false,
+      golo_points_money:0,
+      sku_id:'',
     };
   },
   watch: {
@@ -161,6 +174,7 @@ export default {
       this.preInfo = {};
       this.info = this.$route.params.info;
       this.orderId = this.$route.params.orderId || "";
+      this.sku_id = this.$route.query.sku_id || "";
       this.createdOrderId = "";
       this.loaddata();
     }
@@ -193,6 +207,8 @@ export default {
         if (data) {
           this.preInfo = data;
           this.now_money = data.now_money;
+          this.golo_points = data.golo_intergal.golo_points;
+          this.golo_points_money = data.golo_intergal.golo_points_money;
         }
       });
       if (!this.orderId) {
@@ -222,6 +238,18 @@ export default {
         this.addr = addr;
         // 重写备注
         this.remark = this.info.mark;
+      }
+    },
+     //showinfo显示提示
+    showinfo(){
+        this.$refs.notice.show("在golo APP开车1公里获得1积分");
+    },
+    check_golo_points()
+    {
+      if(this.golo_points > 0)
+      {
+        this.used_golo_points = !this.used_golo_points;
+        this.pay_price = parseFloat(this.pay_price - this.golo_points_money);
       }
     },
     goSelectAddr() {
@@ -284,7 +312,9 @@ export default {
           mark: this.remark,
           paytype: type,
           miandan_type,
-          total_num: this.total_num
+          total_num: this.total_num,
+          used_golo_points:this.used_golo_points,
+          unique:this.sku_id,
         }).then(
           data => {
             this.isReClick = true
@@ -415,7 +445,9 @@ export default {
     pay_price() {
       return this.show_model
         ? this.info.pay_price
-        : parseFloat(this.unitPrice * this.total_num).toFixed(2);
+        : this.used_golo_points 
+        ? parseFloat(this.unitPrice * this.total_num - this.golo_points_money)
+        : parseFloat(this.unitPrice * this.total_num).toFixed(2)
     },
     //是否满足积分支付
     is_jf() {
@@ -529,9 +561,26 @@ export default {
   .col {
     .left {
       float: left;
+      position: relative;
+    }
+    .left.jifen{
+      padding-left: size(40);
     }
     .right {
       float: right;
+      position: relative;
+      >img{
+        right:size(0);
+      }
+    }
+    img{
+        width: size(30);
+        height: size(30);
+        position: absolute;
+        top:size(5);
+    }
+    img.one{
+        left:0;
     }
     margin-top: size(20);
     &:first-child {

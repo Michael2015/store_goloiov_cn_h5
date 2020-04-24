@@ -177,6 +177,10 @@ export default new Router({
       meta: { haveTab: true }
     },
     {
+      path: '/jifen',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/jifen'),
+    },
+    {
       path: '/mymsg',
       component: () => import(/* webpackChunkName: "me" */ 'com/me/myMsg'),
     },

@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="sum">
-          <span class="cut">已优惠金额：¥{{orderInfo.coupon_price}} |</span> 合计：<span class="price">￥{{orderInfo.pay_price}}</span>
+          <span class="cut">优惠:¥{{orderInfo.coupon_price}} |</span>  <span class="cut"> 积分:{{orderInfo.used_golo_points}} | </span> 合计:<span class="price">￥{{orderInfo.pay_price}}</span>
         </div>
       </div>
       <div class="order-detail">

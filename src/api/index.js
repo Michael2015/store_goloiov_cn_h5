@@ -63,17 +63,17 @@ export function getIndexNotice() {
 }
 
 // 获取首页商品列表（非合伙人）
-export function CustomerGetProducts(keyword,limit = 10) {
+export function CustomerGetProducts(page,limit) {
   return req.get('/api/customer/mall/getProductList', {
     params: {
-      keyword,
+      page,
       limit
     }
   }).then(clean)
 }
 
 // 获取首页爆款商品列表（非合伙人）
-export function CustomerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_field = 'order',order_sort = 'desc',cate_id = 0) {
+export function CustomerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_field = 'order',order_sort = 'desc',cate_id = 0,page =1) {
   return req.get('/api/customer/mall/getProductList', {
     params: {
       keyword,
@@ -81,17 +81,18 @@ export function CustomerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_fi
       order_field,
       order_sort,
       cate_id,
-      limit
+      limit,
+      page
     }
   }).then(clean)
 }
 
 
 // 获取首页商品列表（合伙人）
-export function PartnerGetProducts(keyword,limit = 10) {
+export function PartnerGetProducts(page,limit) {
   return req.get('/api/partner/home/storelist', {
     params: {
-      keyword,
+      page,
       limit
     }
   }).then(clean)
@@ -99,7 +100,7 @@ export function PartnerGetProducts(keyword,limit = 10) {
 
 
 // 获取首页爆款商品列表（合伙人）
-export function PartnerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_field = 'order',order_sort = 'desc',cate_id = 0) {
+export function PartnerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_field = 'order',order_sort = 'desc',cate_id = 0,page=1) {
   return req.get('/api/partner/home/storelist', {
     params: {
       keyword,
@@ -107,7 +108,8 @@ export function PartnerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_fie
       order_field,
       order_sort,
       cate_id,
-      limit
+      limit,
+      page:page,
     }
   }).then(clean)
 }

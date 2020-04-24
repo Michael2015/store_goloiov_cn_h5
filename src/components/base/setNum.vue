@@ -159,6 +159,11 @@ export default {
         this.total_num = 50;
         return;
       }
+      else if(v < 1){
+        Toast("最少不能少于1个");
+        this.total_num = 1;
+        return;
+      }
     }
   }
 };

@@ -67,6 +67,11 @@ export default {
   data() {
     return {
       tabList: [
+         {
+          img: require("img/me/jifen.png"),
+          tit: "我的积分",
+          path: "/jifen"
+        },
         {
           img: require("img/me/Poster.png"),
           tit: "我的海报",
