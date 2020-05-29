@@ -1,10 +1,15 @@
 <template>
   <div class="focus">
-    <li class="foucs-tiem" v-for="(item,index) in list" :key="index" @click="rediect_cate(item.id,item.cate_name)">
+    <li
+      class="foucs-tiem"
+      v-for="(item,index) in list"
+      :key="index"
+      @click="rediect_cate(item.id,item.cate_name,item.url)"
+    >
       <img v-lazy="item.pic" />
       <label>{{item.cate_name}}</label>
     </li>
-     <div class="clearfix"></div>
+    <div class="clearfix"></div>
   </div>
 </template>
 <script>
@@ -22,15 +27,17 @@ export default {
       }
     });
   },
-  methods:{
-    rediect_cate(cate_id,cate_name)
-    {
-      if(cate_name == '油卡充值' || cate_name == 'VIP服务商')
-      {
-          this.$router.push({path:'/blank'});
-      }else
-      {
-          this.$router.push({path:'/search',query:{cate_id:cate_id}});
+  methods: {
+    rediect_cate(cate_id, cate_name, url) {
+      if (!url) {
+        if (cate_name == "油卡充值" || cate_name == "VIP服务商") {
+          this.$router.push({ path: "/blank" });
+        } else {
+          this.$router.push({ path: "/search", query: { cate_id: cate_id } });
+        }
+      }
+      else{
+        window.location.href = decodeURIComponent(url);
       }
     }
   }
@@ -47,21 +54,21 @@ export default {
     margin: 2% 2% size(20);
     text-align: center;
     img {
-      width: 80%
+      width: 62%;
     }
-    label{
+    label {
       text-align: center;
       height: size(50);
       line-height: size(50);
       width: 100%;
       display: inline-block;
-      font-size: size(25);
+      font-size: size(20);
     }
   }
-  .clearfix:after{
+  .clearfix:after {
     content: "";
     display: table;
-    clear:both;
+    clear: both;
   }
 }
 </style>

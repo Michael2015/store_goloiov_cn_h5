@@ -26,6 +26,9 @@
       </div>
       <div class="team_no">伙伴 {{Num || 0}} 人</div>
     </div>
+    <div class="my_contribution">
+       <img src="~img/me/contribution_value.png" @click="tojump('/my_contribution')" />
+    </div>
     <div class="crosswise_tab">
       <div class="crosswise_item" @click="tojump('/myVisitor')">
         <img src="~img/me/fangkexiaoxi.png" alt />
@@ -290,10 +293,15 @@ export default {
       bottom: size(9);
     }
   }
+  .my_contribution 
+  {
+    >img{
+      width: 100%;
+    }
+  }
   .crosswise_tab {
     box-sizing: border-box;
     height: size(162);
-    border-top: size(2) solid #eaeaea;
     border-bottom: size(2) solid #eaeaea;
     display: flex;
     .gang {

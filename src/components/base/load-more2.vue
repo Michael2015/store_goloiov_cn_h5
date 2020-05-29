@@ -1,11 +1,10 @@
 <template>
-  <div class="load-more" v-infinite-scroll="loadMore">
-    <slot :list="list"></slot>
+  <div class="load-more">
     <div class="status-text" v-if="loading">加载中...</div>
-    <div class="no-data" v-else-if="list.length === 0 || loaded">
-      <img src="~img/no_data.png" alt="">
-      <div class="status-text">暂无数据</div>
-    </div>
+    <slot :list="list"></slot>
+    <keep-alive>
+      <router-link tag="div" v-if="isShowMore && list.length > setSize" class="lmore" :to="{path:'/search?'+fliter}" :key="$route.fullPath">加载更多>></router-link>
+    </keep-alive>
     </div>
 </template>
 <script>
@@ -111,8 +110,5 @@ export default {
   img{
     width: 100%;
   }
-}
-.list{
-  padding-bottom: 0!important;
 }
 </style>

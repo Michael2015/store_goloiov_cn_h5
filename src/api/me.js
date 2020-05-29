@@ -237,10 +237,24 @@ export function createPosterImage(imgObj){
   }).then(clean)
 }
 
-
 //金卡贝积分
 export function getUserIntegralList(){
   return req.get('/api/partner.partner/getUserIntegralList',{
     limit:1000
   }).then()
 }
+
+//获取贡献值详情
+export function getUserContributionDetail(){
+  return req.get('/api/partner.partner/getUserContributionDetail',{
+  }).then()
+}
+//贡献值流水
+export function getUserContributionList(page, limit){
+  return req.get('/api/partner.partner/getUserContributionList',{
+    page,
+    limit
+  }).then(clean)
+}
+
+

@@ -42,7 +42,7 @@
       </div>
       <div class="col clearfix">
         <div class="left">优惠金额</div>
-        <div class="right">¥0</div>
+        <div class="right">¥{{discountPrice}}</div>
       </div>
     </div>
      <div class="spec">
@@ -434,6 +434,7 @@ export default {
         ? this.info.newbornzone.price
         : this.preInfo.price;
     },
+    
     //不同进入情况取的个数
     total_num() {
       let num = this.show_model
@@ -441,13 +442,20 @@ export default {
         : this.$route.params.total_num;
       return num ? num : this.buyTotalNum;
     },
+    //计算优惠
+    discountPrice()
+    {
+      let discount_price = this.preInfo.discount.status == 1 ? this.preInfo.discount.data.total :0.00;
+      return parseFloat(discount_price,2);
+    },
     //不同进入情况取的总价
     pay_price() {
-      return this.show_model
+      let pay_price_temp =  this.show_model
         ? this.info.pay_price
         : this.used_golo_points 
         ? parseFloat(this.unitPrice * this.total_num - this.golo_points_money)
-        : parseFloat(this.unitPrice * this.total_num).toFixed(2)
+        : parseFloat(this.unitPrice * this.total_num).toFixed(2);
+        return pay_price_temp - this.discountPrice;
     },
     //是否满足积分支付
     is_jf() {

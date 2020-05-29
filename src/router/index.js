@@ -181,6 +181,15 @@ export default new Router({
       component: () => import(/* webpackChunkName: "me" */ 'com/me/jifen'),
     },
     {
+      path: '/my_contribution',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/my_contribution'),
+      meta: { haveTab: true , keepAlive: true}
+    },
+    {
+      path: '/my_contribution_detail',
+      component: () => import(/* webpackChunkName: "me" */ 'com/me/my_contribution_detail'),
+    },
+    {
       path: '/mymsg',
       component: () => import(/* webpackChunkName: "me" */ 'com/me/myMsg'),
     },

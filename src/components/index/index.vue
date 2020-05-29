@@ -27,7 +27,7 @@
       <index-focus></index-focus>
     </div>
     <div class="ht"><img src="~img/hot.png" /></div>
-    <load-more
+    <load-more2
       v-slot="{list}"
       class="list-wrap"
       :setSize="8"
@@ -39,7 +39,7 @@
       <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
         <index-goods-item class="item" v-for="(item,index) in list.slice(0,8)" :key="index" :item="item" ></index-goods-item>
       </div>
-    </load-more>
+    </load-more2>
     <div class="ht"><img src="~img/all_goods.png" /></div>
     <load-more
       v-slot="{list}"
@@ -80,6 +80,7 @@ import newPeople from "./newPeople";
 import IndexGoodsItem from "./index-goods-item";
 import IndexGoodsItem2 from "./index-goods-item2";
 import LoadMore from "base/load-more";
+import LoadMore2 from "base/load-more2";
 import { Loading } from "lib";
 import {
   getCategory,
@@ -98,6 +99,7 @@ export default {
     Confirm,
     Notice,
     LoadMore,
+    LoadMore2,
     SearchInput,
     IndexTopCustomer,
     IndexBanner,
@@ -214,6 +216,7 @@ export default {
         this.flag = false;
       }
       this.is_tab_fixed = this.top >= scale;
+      this.key = this.$store.state.topNum+1;
     },
     setCategory(i) {
       if (i !== this.activeCategoryIndex) {
@@ -290,8 +293,9 @@ export default {
 .ht{
   padding: size(20);
   padding-top: 0;
+  text-align: center;
   >img{
-    width: 100%;
+    width: 90%;
   }
 }
 .top {
@@ -334,7 +338,7 @@ export default {
   }
   .invite {
     color: #fff;
-    font-size: size(26);
+    font-size: size(20);
     line-height: size(60);
     height: size(60);
     min-width: size(154);
@@ -454,8 +458,7 @@ export default {
   padding-top: size(12);
 }
 .list-wrap2{
- 
-  padding:0 size(20) size(140) 0; 
+  padding:0 size(20) size(120) 0; 
   margin-right:size(0);
   // min-height: size(1200);
 }

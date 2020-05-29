@@ -52,7 +52,7 @@ export default {
   }
   .name{
     margin-top: size(0);
-    font-size: size(28);
+    font-size: size(26);
     color: #4a4a4a;
     line-height: size(34);
     height: size(68);
@@ -63,12 +63,12 @@ export default {
     line-height: size(42);
     margin: size(20) 0;
     .price{
-      font-size: sizeZ(30);
+      font-size: size(30);
       color: #ff5500;
     }
     .num{
       float:right;
-      font-size: size(22);
+      font-size: size(16);
       color: #c7c7c7;
     }
   }
