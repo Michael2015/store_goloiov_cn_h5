@@ -1,15 +1,13 @@
 <template>
   <div class="load-more" >
-    <slot :list="list"></slot>
-    <div class="status-text" v-if="loading">加载中...</div>
-    <div class="no-data" v-else-if="list.length === 0 || loaded">
-      <img src="~img/no_data.png" alt="">
-      <div class="status-text">暂无数据</div>
-    </div>
+    <slot :allArr='allArr'></slot>
     </div>
 </template>
 <script>
 import {SIZE} from 'api/request'
+import {
+  getAdv
+} from "api";
 export default {
   props: {
     getData: {
@@ -38,24 +36,25 @@ export default {
       disabled: false,
       loading: false,
       loaded: false,
-      list: [],
-      page: 1,
+      allArr: [],
+      page: 0,
       size: this.setSize, // 默认一页数量
     }
   },
   watch: {
     paused() {
-      this.loadMore()
+     // this.loadMore()
     }
   },
   created(){
     // 设置默认值
-    this._disabled = null
-    if (!this.getData) {
-      this.disabled = true
-    }
+    
+    this.page=0;
+    this.allArr=[];
+    
     // 手动触发第一次加载
-    this.loadMore()
+    //this.loadMore()
+
     
   },
   activated() {
@@ -71,39 +70,30 @@ export default {
     this.disabled = true
   },
   methods: {
-    toLoadMore(){
-   //   console.log('触底');
-   // this.loadMore();
-    },
     loadMore() {
-     
-      if (this.disabled || this.loading || this.loaded || this.paused) {
-        return
-      }
-      this.loading = true
-      this.getData(this.page, this.size).then(data => {
-        if ( this.size == 0) {
-          this.list = data
-          this.loading = false
-          this.loaded = true
-          return
-        }
-        if (data) {
-          this.list.push(...data)
-          if (data.length < this.size || this.isShowMore) {
-            this.loaded = true
-          } else {
-            this.page++
+      this.$parent.busy=true;
+     //console.log('s===============',this.allArr);
+     getAdv(3,++this.page).then(data => {
+      
+      if (data) {
+         this.$parent.busy=false;
+        this.allArr.push(...data.map(item=>{
+          return {
+            adListInfo:item,
+            size:6,
+            showMore:item.product.length>=6?true:false
           }
-          this.loading = false
-        }
-      })
+        }))
+
+      }
+    });
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 @import "~css/def";
+
 .status-text,.lmore{
   padding: size(20) 0;
   line-height: 1.6;

@@ -4,16 +4,16 @@
       class="foucs-tiem"
       v-for="(item,index) in list"
       :key="index"
-      @click="rediect_cate(item.id,item.cate_name,item.url)"
+      @click="rediect_cate(item.id,item.cate_name,item.url,item.kind)"
     >
-      <img v-lazy="item.pic" />
-      <label>{{item.cate_name}}</label>
+      <img v-lazy="item.icon" />
+      <label>{{item.name}}</label>
     </li>
     <div class="clearfix"></div>
   </div>
 </template>
 <script>
-import { getCategory } from "api";
+import { getAdv } from "api";
 export default {
   data() {
     return {
@@ -21,23 +21,36 @@ export default {
     };
   },
   created() {
-    getCategory().then(data => {
+    //之前是调用getCategory
+    getAdv(1).then(data => {
+     // console.log(data);
       if (data) {
         this.list = data;
       }
     });
   },
   methods: {
-    rediect_cate(cate_id, cate_name, url) {
+    rediect_cate(cate_id, cate_name, url, kind) {
+     // console.log(cate_id, cate_name, url, kind);
       if (!url) {
         if (cate_name == "油卡充值" || cate_name == "VIP服务商") {
           this.$router.push({ path: "/blank" });
         } else {
           this.$router.push({ path: "/search", query: { cate_id: cate_id } });
         }
-      }
-      else{
-        window.location.href = decodeURIComponent(url);
+      } else {
+        switch (kind) {
+          case 1:
+          case 2:
+          case 3:
+            this.$router.push(url);
+            break;
+          case 5:
+            window.location.href = decodeURIComponent(url);
+            break;
+          default:
+            break;
+        }
       }
     }
   }
@@ -50,7 +63,7 @@ export default {
   .foucs-tiem {
     list-style: none;
     float: left;
-    width: 21%;
+    width: 16%;
     margin: 2% 2% size(20);
     text-align: center;
     img {

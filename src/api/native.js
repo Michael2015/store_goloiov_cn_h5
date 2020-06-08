@@ -50,8 +50,8 @@ export function getToken() {
     // return Promise.resolve('7499508be6601cef1d2cc6c6ac7f6512')
     // return Promise.resolve('543a2d96bc77c89ed982e8f801e1f244')
     // 线上toekn 86399b1c0d922fa339cabe3c9473b2bc
-    // 测试token 199b67345294167c0fad6fa9b2d5ab23
-    return Promise.resolve('86399b1c0d922fa339cabe3c9473b2bc')
+    // 测试token 577de11cb52426332fc15c56529325b1
+    return Promise.resolve('577de11cb52426332fc15c56529325b1')
   }
   return api('loginToken')
 }

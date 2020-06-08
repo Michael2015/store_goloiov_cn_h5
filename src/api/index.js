@@ -50,6 +50,16 @@ export function getBanner() {
 export function getCategory() {
   return req.get('/api/marketing/getCategory').then(clean)
 }
+
+//获取首页广告数据
+export function getAdv(type,page) {
+  return req.get('/api/Marketing/getAdv',{
+    params: {
+      type,
+      page
+    }
+  }).then(clean)
+}
 // 根据标签获取商品列表
 export function getCategoryProducts(cate_id, keyword) {
   return req.post('/api/marketing/getCategoryProducts', {
@@ -102,6 +112,21 @@ export function PartnerGetProducts(page,limit) {
 // 获取首页爆款商品列表（合伙人）
 export function PartnerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_field = 'order',order_sort = 'desc',cate_id = 0,page=1) {
   return req.get('/api/partner/home/storelist', {
+    params: {
+      keyword,
+      is_blast,
+      order_field,
+      order_sort,
+      cate_id,
+      limit,
+      page:page,
+    }
+  }).then(clean)
+}
+
+//广告商品
+export function getAdvProducts(keyword,is_blast = 1,limit = 8,order_field = 'order',order_sort = 'desc',cate_id = 0,page=1) {
+  return req.get('/api/Marketing/getAdvProducts', {
     params: {
       keyword,
       is_blast,

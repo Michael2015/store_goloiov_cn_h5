@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div :class="[wrap,(isLogin && role === 1)?wrap_pad_bot:'']" v-infinite-scroll="loadMore_wrap" inifinite-scroll-disabled='busy'>
     <div class="top-wrap">
       <div class="top" ref="top">
         <!-- 合伙人端 -->
@@ -20,40 +20,85 @@
           <index-banner></index-banner>
         </div>
       </div>
+
       <!-- <div class="blank"><img src="~img/index-top-bg.png" alt=""></div> -->
     </div>
     <div>
       <index-msg-loop v-if="isLogin && role === 1"></index-msg-loop>
       <index-focus></index-focus>
     </div>
-    <div class="ht"><img src="~img/hot.png" /></div>
+
+    <!--广告区-->
+    <IndexAd></IndexAd>
+
+    <!-- <div class="ht"><img src="~img/hot.png" /></div>-->
+    <div class="rexiao">
+      <img src="~img/rexiao.png" />
+    </div>
     <load-more2
       v-slot="{list}"
       class="list-wrap"
-      :setSize="8"
+      :setSize="6"
       :getData="getCategoryProducts"
       :key="key+loginKey"
       :isShowMore="true"
       :fliter="'is_blast=1&name=爆品商品'"
     >
       <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
-        <index-goods-item class="item" v-for="(item,index) in list.slice(0,8)" :key="index" :item="item" ></index-goods-item>
+        <index-goods-item
+          class="item"
+          v-for="(item,index) in list.slice(0,6)"
+          :key="index"
+          :item="item"
+        ></index-goods-item>
       </div>
     </load-more2>
-    <div class="ht"><img src="~img/all_goods.png" /></div>
-    <load-more
-      v-slot="{list}"
-      class="list-wrap2"
-      :setSize="20"
-      :getData="getCategoryProducts2"
-      :key="key+loginKey+1"
-      :isShowMore="false"
-      :fliter="'name=全部商品'"
-    >
-      <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
-        <index-goods-item2 class="item" v-for="(item,index) in list" :key="index" :item="item"></index-goods-item2>
+
+    <!-- <div class="ht"><img src="~img/all_goods.png" /></div> -->
+    <!-- <div class="all_product_wrap" >
+      <div v-for='(it,ind) in allArr' :key='ind'>
+        <div class="all_goods_ad">广告区</div>
+        <load-more
+          v-slot="{list}"
+          class="list-wrap2"
+          :setSize="it.size"
+          :getData="getCategoryProducts2"
+          :key="key+loginKey+1"
+          :isShowMore="false"
+          :fliter="'name=全部商品'"
+        >
+          <div class="list1 clearfix all_pro" :style="{minHeight: `${topHeight}px`}">
+            <index-goods-item2 class="item1" v-for="(item,index) in it.adListInfo.product" :key="index" :item="item"></index-goods-item2>
+          </div>
+          
+          <div class="seeMore" v-if='it.showMore' @click='goMore($event,it.adListInfo)'>
+            <img src="~img/more.png" />
+          </div>
+        </load-more>
       </div>
-    </load-more>
+    </div>
+    -->
+
+    <load-more3 v-slot="{allArr}" ref='loadmore3'>
+      <div class="all_product_wrap">
+        <div v-for="(it,ind) in allArr" :key="ind">
+          <div class="all_goods_ad">
+            <img :src="it.adListInfo.icon" />
+          </div>
+          <div class="list1 clearfix all_pro" :style="{minHeight: `${topHeight}px`}">
+            <index-goods-item2
+              class="item1"
+              v-for="(item,index) in it.adListInfo.product"
+              :key="index"
+              :item="item"
+            ></index-goods-item2>
+          </div>
+          <div class="seeMore" v-if="it.showMore" @click="goMore($event,it.adListInfo)">
+            <img src="~img/more.png" />
+          </div>
+        </div>
+      </div>
+    </load-more3>
     <!-- 退出登录 非合伙才有 -->
     <div class="logout" v-if="isLogin && role !== 1" @click="logout">退出</div>
     <!-- 查看教程 -->
@@ -76,11 +121,13 @@ import IndexTopCustomer from "./index-top-customer";
 import IndexMsgLoop from "./index-msg-loop";
 import IndexBanner from "./index-banner";
 import IndexFocus from "./index-focus";
+import IndexAd from "./index-ad";
 import newPeople from "./newPeople";
 import IndexGoodsItem from "./index-goods-item";
 import IndexGoodsItem2 from "./index-goods-item2";
-import LoadMore from "base/load-more";
+//import LoadMore from "base/load-more";
 import LoadMore2 from "base/load-more2";
+import LoadMore3 from "base/load-more3";
 import { Loading } from "lib";
 import {
   getCategory,
@@ -88,7 +135,8 @@ import {
   CustomerGetProducts,
   PartnerGetBlastProducts,
   getNewbornZoneStore,
-  CustomerGetBlastProducts
+  CustomerGetBlastProducts,
+  getAdv
 } from "api";
 import { invitePartner } from "api/native";
 import { mapState, mapMutations } from "vuex";
@@ -98,19 +146,25 @@ export default {
   components: {
     Confirm,
     Notice,
-    LoadMore,
     LoadMore2,
+    LoadMore3,
     SearchInput,
     IndexTopCustomer,
     IndexBanner,
     IndexMsgLoop,
     IndexFocus,
     IndexGoodsItem,
+    IndexAd,
     IndexGoodsItem2,
     newPeople
   },
   data() {
     return {
+      allArr: [],
+      page: 0,
+      busy:false,
+      wrap: "wrap",
+      wrap_pad_bot: "wrap_pad_bot",
       key: "empty",
       keyword: "",
       is_tab_fixed: false,
@@ -130,14 +184,18 @@ export default {
     },
     getCategoryProducts() {
       return () => {
-        return this.role === 1 ? PartnerGetBlastProducts(this.keyword,1,10) : CustomerGetBlastProducts(this.keyword,1,10);
-      }
+        return this.role === 1
+          ? PartnerGetBlastProducts(this.keyword, 1, 10)
+          : CustomerGetBlastProducts(this.keyword, 1, 10);
+      };
     },
 
     getCategoryProducts2() {
-      return (page,limit) => {
-        return this.role === 1? PartnerGetProducts(page,limit) : CustomerGetProducts(page,limit);
-      }
+      return (page, limit) => {
+        return this.role === 1
+          ? PartnerGetProducts(page, limit)
+          : CustomerGetProducts(page, limit);
+      };
     },
 
     loginKey() {
@@ -169,12 +227,16 @@ export default {
     ]).then(() => {
       Loading.close();
     });
+
+    // this.getAdList();
   },
   mounted() {
     this.$nextTick(() => {
       // 这里要得到top的距离和元素自身的高度
+this.loadMore_wrap();
       let header = this.$refs.filters_tab;
       this.offsetTop = header.offsetTop;
+
       this.offsetHeight = header.offsetHeight;
       // 获取浏览器可视区域高度
       this.clientHeight =
@@ -202,7 +264,46 @@ export default {
   },
   methods: {
     ...mapMutations(["setFirst"]),
+    loadMore_wrap(){
+      this.$refs.loadmore3.loadMore();
+    },
+    goMore(e, adListInfo) {
+      console.log(adListInfo);
+      let { kind, url } = adListInfo;
+      switch (kind) {
+        case 1:
+        case 2:
+        case 3:
+          this.$router.push(url);
+          break;
+        case 5:
+          window.location.href = decodeURIComponent(url);
+          break;
+        default:
+          break;
+      }
+    },
+    getAdList() {
+      getAdv(3, ++this.page).then(data => {
+        //console.log('s===============',data);
+        if (data) {
+          this.allArr = data.map(item => {
+            return {
+              adListInfo: item,
+              size: 6,
+              showMore: item.product.length >= 6 ? true : false
+            };
+          });
+        }
+      });
+    },
+    toLoadMore() {
+      console.log(111);
+      // this.getAdList();
+      // this.allArr.push({size:6,showMore:true});
+    },
     handleScroll() {
+      //console.log(this.$refs.all_product_wrap.getBoundingClientRect())
       // 得到页面滚动的距离
       let scrollTop =
         window.pageYOffset ||
@@ -216,7 +317,7 @@ export default {
         this.flag = false;
       }
       this.is_tab_fixed = this.top >= scale;
-      this.key = this.$store.state.topNum+1;
+      this.key = this.$store.state.topNum + 1;
     },
     setCategory(i) {
       if (i !== this.activeCategoryIndex) {
@@ -243,7 +344,10 @@ export default {
     },
     search() {
       //this.key = this.keyword ? this.keyword : "empty";
-      this.$router.push({path:'/search',query:{name:this.keyword,keyword:this.keyword}});
+      this.$router.push({
+        path: "/search",
+        query: { name: this.keyword, keyword: this.keyword }
+      });
     },
     invite() {
       Loading.open();
@@ -273,8 +377,12 @@ export default {
 <style lang="scss" scoped>
 @import "~css/def";
 .wrap {
-  min-height: 100vh;
+ height: 100vh;
+  overflow: auto;
   background-color: $color-body-bg;
+}
+.wrap_pad_bot {
+  padding-bottom: size(24);
 }
 .top-wrap {
   position: relative;
@@ -290,13 +398,33 @@ export default {
     }
   }
 }
-.ht{
+.rexiao {
+  height: size(130);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: size(255);
+    height: size(53);
+  }
+}
+.ht {
   padding: size(20);
   padding-top: 0;
   text-align: center;
-  >img{
+  > img {
     width: 90%;
   }
+}
+.all_goods_ad {
+  height: size(146);
+  margin: 0 size(20) size(20);
+}
+.all_goods_ad img {
+  width: 100%;
+  height: 100%;
 }
 .top {
   position: fixed;
@@ -345,7 +473,11 @@ export default {
     padding: 0 size(12);
     // margin-left: size(20);
     display: inline-block;
-    background:linear-gradient(167deg,rgba(254,19,25,1) 0%,rgba(255,143,146,1) 100%);
+    background: linear-gradient(
+      167deg,
+      rgba(254, 19, 25, 1) 0%,
+      rgba(255, 143, 146, 1) 100%
+    );
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.5);
     border-radius: 4px;
     text-align: center;
@@ -457,17 +589,50 @@ export default {
   line-height: 1.4;
   padding-top: size(12);
 }
-.list-wrap2{
-  padding:0 size(20) size(120) 0; 
-  margin-right:size(0);
+.list-wrap2 {
+  margin-right: size(0);
   // min-height: size(1200);
 }
+.all_pro {
+  margin-left: 0 !important;
+}
+.seeMore {
+  height: size(62);
+  line-height: size(62);
+  text-align: center;
+  img {
+    width: size(110);
+    height: size(30);
+  }
+}
 .list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   padding: 0 size(20);
   margin-left: -3%;
   .item {
-    float: left;
-    margin-bottom: size(18);
+    margin-bottom: size(20);
+  }
+}
+
+//全部商品
+.all_product_wrap {
+  padding: 0 0 size(120) 0;
+}
+.list1 {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 size(20);
+  margin-left: -3%;
+
+  .item1 {
+    width: 32%;
+    margin-right: 2%;
+    margin-bottom: 2%;
+  }
+  .item1:nth-child(3n) {
+    margin-right: 0%;
   }
 }
 </style>

@@ -59,7 +59,8 @@ import IndexGoodsItem from "./index-goods-item";
 import { mapState, mapMutations } from "vuex";
 import {
   PartnerGetBlastProducts,
-  CustomerGetBlastProducts
+  CustomerGetBlastProducts,
+  getAdvProducts
 } from "api";
 export default {
    props: {
@@ -139,7 +140,18 @@ export default {
     getProducts() {
       var is_blast = this.$route.query.is_blast ? 1 : 0;
       var cate_id = this.$route.query.cate_id ? this.$route.query.cate_id : 0;
-        if(this.role === 1)
+      var type=this.$route.query.type ? this.$route.query.type : '';
+      
+      if(type==='other'){
+        getAdvProducts(this.keyword,is_blast,20,this.order_field,this.order_sort,cate_id,this.page).then(data=>{
+              if(data.length < 20)
+              {
+                this.loaded = true;
+              }
+              this.list.push(...data);
+            });
+      }
+       else if(this.role === 1)
         {
             PartnerGetBlastProducts(this.keyword,is_blast,20,this.order_field,this.order_sort,cate_id,this.page).then(data=>{
               if(data.length < 20)
