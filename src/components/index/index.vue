@@ -83,7 +83,7 @@
       <div class="all_product_wrap">
         <div v-for="(it,ind) in allArr" :key="ind">
           <div class="all_goods_ad">
-            <img :src="it.adListInfo.icon" />
+            <img :src="it.adListInfo.icon" @click="goMore($event,it.adListInfo)"/>
           </div>
           <div class="list1 clearfix all_pro" :style="{minHeight: `${topHeight}px`}">
             <index-goods-item2
@@ -227,8 +227,7 @@ export default {
     ]).then(() => {
       Loading.close();
     });
-
-    // this.getAdList();
+      
   },
   mounted() {
     this.$nextTick(() => {
@@ -284,6 +283,7 @@ this.loadMore_wrap();
       }
     },
     getAdList() {
+      
       getAdv(3, ++this.page).then(data => {
         //console.log('s===============',data);
         if (data) {

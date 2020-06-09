@@ -72,7 +72,7 @@ getAdv(2).then(data => {
     text-align: center;
     position: relative;
     height: size(146);
-    margin: size(5) size(20) size(20);
+    margin: size(5) size(20) size(16);
     img {
       width: 100%;
       height: size(146);
@@ -97,7 +97,7 @@ height: size(602);
 display: flex;
 flex-direction: column;
 box-sizing: border-box;
-padding: size(20);
+padding: 0 size(20) size(20);
 img{
   width: 100%;
   height: 100%;

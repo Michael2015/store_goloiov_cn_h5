@@ -5,6 +5,7 @@
 </template>
 <script>
 import {SIZE} from 'api/request'
+import { Loading } from "lib";
 import {
   getAdv
 } from "api";
@@ -73,8 +74,9 @@ export default {
     loadMore() {
       this.$parent.busy=true;
      //console.log('s===============',this.allArr);
+     Loading.open();
      getAdv(3,++this.page).then(data => {
-      
+      Loading.close();
       if (data) {
          this.$parent.busy=false;
         this.allArr.push(...data.map(item=>{
