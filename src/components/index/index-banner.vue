@@ -38,7 +38,7 @@ export default {
 @import "~css/def";
 .banner{
   padding: size(20);
-  height: size(300);
+  height: size(340);
   .img{
     height: 100%;
     background: #fff;
