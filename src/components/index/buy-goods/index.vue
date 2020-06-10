@@ -249,7 +249,7 @@ export default {
       if(this.golo_points > 0)
       {
         this.used_golo_points = !this.used_golo_points;
-        this.pay_price = parseFloat(this.pay_price - this.golo_points_money);
+        this.pay_price = parseFloat(this.pay_price - this.golo_points_money).toFixed(2);
       }
     },
     goSelectAddr() {
@@ -455,7 +455,7 @@ export default {
         : this.used_golo_points 
         ? parseFloat(this.unitPrice * this.total_num - this.golo_points_money)
         : parseFloat(this.unitPrice * this.total_num).toFixed(2);
-        return pay_price_temp - this.discountPrice;
+        return parseFloat(pay_price_temp - this.discountPrice).toFixed(2);
     },
     //是否满足积分支付
     is_jf() {

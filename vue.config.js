@@ -3,9 +3,9 @@ const path = require('path')
 const assetsDir = 'public/h5'
 
  // 线上地址
-//const url = 'https://wcp.wanchepin.com/' 
+const url = 'https://wcp.wanchepin.com/' 
 // 测试地址
-const url = 'https://storemp.golodata.com/'
+//const url = 'https://storemp.golodata.com/'
 
 class GenHeadAndBody {
   apply(compiler) {
