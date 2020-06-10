@@ -26,9 +26,14 @@ export default new Vuex.Store({
     buyTotalNum:1,
     // 虚拟资产标识
     is_testing_money: false,
-    topNum: 0
+    topNum: 0,
+    //首页scrollTop高度
+    indexScrollTop:0,
   },
   mutations: {
+    setIndexScrollTop( state, h) {
+      state.indexScrollTop = h
+    },
     topNum( state, h) {
       state.topNum = h
     },

@@ -1,5 +1,5 @@
 <template>
-  <div :class="[wrap,(isLogin && role === 1)?wrap_pad_bot:'']" v-infinite-scroll="loadMore_wrap" inifinite-scroll-disabled='busy'>
+  <div :class="[wrap,(isLogin && role === 1)?wrap_pad_bot:'']" v-infinite-scroll="loadMore_wrap" inifinite-scroll-disabled='busy' ref='wrap'>
     <div class="top-wrap">
       <div class="top" ref="top">
         <!-- 合伙人端 -->
@@ -175,7 +175,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["isLogin", "role", "userInfo", "isFirst"]),
+    ...mapState(["isLogin", "role", "userInfo", "isFirst",'indexScrollTop']),
     category() {
       return this.categoryList.slice(1);
     },
@@ -216,7 +216,8 @@ export default {
       this.setFirst(true), this.$refs.newpeople.show(getNewbornZoneStore);
     }
   },
-  created() {
+  
+  created() { 
     Loading.open();
     Promise.all([
       getCategory().then(data => {
@@ -246,8 +247,10 @@ this.loadMore_wrap();
     });
   },
   activated() {
+    
     this.$nextTick(() => {
       this.topHeight = this.clientHeight - (this.offsetHeight + this.T_H + 100);
+      this.$refs.wrap.scrollTop=this.indexScrollTop;
     });
     window.addEventListener("scroll", this.handleScroll, true);
   },
@@ -262,7 +265,7 @@ this.loadMore_wrap();
     this.top = 0;
   },
   methods: {
-    ...mapMutations(["setFirst"]),
+    ...mapMutations(["setFirst","setIndexScrollTop"]),
     loadMore_wrap(){
       this.$refs.loadmore3.loadMore();
     },
@@ -302,9 +305,10 @@ this.loadMore_wrap();
       // this.getAdList();
       // this.allArr.push({size:6,showMore:true});
     },
-    handleScroll() {
+    handleScroll(e) {
       //console.log(this.$refs.all_product_wrap.getBoundingClientRect())
       // 得到页面滚动的距离
+       this.wrapScrollTop=e.target.scrollTop;
       let scrollTop =
         window.pageYOffset ||
         document.documentElement.scrollTop ||
@@ -362,6 +366,13 @@ this.loadMore_wrap();
     }
   },
   beforeRouteLeave(to, from, next) {
+    if(to.path === "/order" || to.path === "/income"||to.path === "/me"){
+      this.setIndexScrollTop(0);
+    }
+    else{
+this.setIndexScrollTop(this.$refs.wrap.scrollTop);
+    }
+    
     if (!this.isLogin && (to.path === "/order" || to.path === "/income")) {
       this.$refs.notice.show("请先登录", () => {
         login();
@@ -420,7 +431,7 @@ this.loadMore_wrap();
 }
 .all_goods_ad {
   height: size(146);
-  margin: 0 size(20) size(20);
+  margin:size(20);
 }
 .all_goods_ad img {
   width: 100%;
