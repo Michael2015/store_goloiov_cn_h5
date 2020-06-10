@@ -76,7 +76,7 @@ export default {
       line-height: size(50);
       width: 100%;
       display: inline-block;
-      font-size: size(27); 
+      font-size: size(22); 
     }
   }
   .clearfix:after {
