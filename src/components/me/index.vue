@@ -26,9 +26,11 @@
       </div>
       <div class="team_no">伙伴 {{Num || 0}} 人</div>
     </div>
+    <!--
     <div class="my_contribution">
        <img src="~img/me/contribution_value.png" @click="tojump('/my_contribution')" />
     </div>
+    -->
     <div class="crosswise_tab">
       <div class="crosswise_item" @click="tojump('/myVisitor')">
         <img src="~img/me/fangkexiaoxi.png" alt />
