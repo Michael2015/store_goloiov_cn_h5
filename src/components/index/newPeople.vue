@@ -1,16 +1,11 @@
 <template>
-  <div v-show="isShow&&isLogin&&isFirst">
+  <div v-if="isShow&&isLogin&&isFirst">
     <popup @mask-click="hide">
       <div class="wrap">
         <div class="news_box">
           <img class="close" src="~img/closeTip.png" @click="close" />
-          <img class="new_bg" src="~img/news.png" />
-          <div class="new_msg">
-            <div class="discount_name">{{newObj.store_name}}</div>
-            <div class="discount">新人专享爆款抢购<span>{{newObj.price}}元</span>包邮！</div>
-            <div class="discount_time">{{newObj.valid_time}}小时内购买有效</div>
-          </div>
-          <div class="gobaybtn" @click="goBay"></div>
+          <img class="new_bg" :src="newObj.img_url" @click='$router.push(newObj.jump_url)'/>
+          
         </div>
       </div>
     </popup>

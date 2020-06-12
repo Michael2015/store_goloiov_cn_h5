@@ -1,5 +1,10 @@
 <template>
-  <div :class="[wrap,(isLogin && role === 1)?wrap_pad_bot:'']" v-infinite-scroll="loadMore_wrap" inifinite-scroll-disabled='busy' ref='wrap'>
+  <div
+    :class="[wrap,(isLogin && role === 1)?wrap_pad_bot:'']"
+    v-infinite-scroll="loadMore_wrap"
+    inifinite-scroll-disabled="busy"
+    ref="wrap"
+  >
     <div class="top-wrap">
       <div class="top" ref="top">
         <!-- 合伙人端 -->
@@ -79,11 +84,11 @@
     </div>
     -->
 
-    <load-more3 v-slot="{allArr}" ref='loadmore3'>
+    <load-more3 v-slot="{allArr}" ref="loadmore3">
       <div class="all_product_wrap">
         <div v-for="(it,ind) in allArr" :key="ind">
           <div class="all_goods_ad">
-            <img :src="it.adListInfo.icon" @click="goMore($event,it.adListInfo)"/>
+            <img :src="it.adListInfo.icon" @click="goMore($event,it.adListInfo)" />
           </div>
           <div class="list1 clearfix all_pro" :style="{minHeight: `${topHeight}px`}">
             <index-goods-item2
@@ -162,7 +167,7 @@ export default {
     return {
       allArr: [],
       page: 0,
-      busy:false,
+      busy: false,
       wrap: "wrap",
       wrap_pad_bot: "wrap_pad_bot",
       key: "empty",
@@ -175,7 +180,14 @@ export default {
     };
   },
   computed: {
-    ...mapState(["isLogin", "role", "userInfo", "isFirst",'indexScrollTop']),
+    ...mapState([
+      "isLogin",
+      "role",
+      "userInfo",
+      "isFirst",
+      "indexScrollTop",
+      "token"
+    ]),
     category() {
       return this.categoryList.slice(1);
     },
@@ -209,15 +221,18 @@ export default {
         this.search();
       }
     },
-    isLogin() {
+    isLogin(val) {
       // 重置关键字和标签
       this.keyword = "";
       this.activeCategoryIndex = -1;
-      this.setFirst(true), this.$refs.newpeople.show(getNewbornZoneStore);
+      
+      if (val) {
+        this.isShowNewPeop();
+      }
     }
   },
-  
-  created() { 
+
+  created() {
     Loading.open();
     Promise.all([
       getCategory().then(data => {
@@ -228,12 +243,11 @@ export default {
     ]).then(() => {
       Loading.close();
     });
-      
   },
   mounted() {
     this.$nextTick(() => {
       // 这里要得到top的距离和元素自身的高度
-this.loadMore_wrap();
+      this.loadMore_wrap();
       let header = this.$refs.filters_tab;
       this.offsetTop = header.offsetTop;
 
@@ -247,10 +261,10 @@ this.loadMore_wrap();
     });
   },
   activated() {
-    
     this.$nextTick(() => {
+      this.isShowNewPeop();
       this.topHeight = this.clientHeight - (this.offsetHeight + this.T_H + 100);
-      this.$refs.wrap.scrollTop=this.indexScrollTop;
+      this.$refs.wrap.scrollTop = this.indexScrollTop;
     });
     window.addEventListener("scroll", this.handleScroll, true);
   },
@@ -265,8 +279,29 @@ this.loadMore_wrap();
     this.top = 0;
   },
   methods: {
-    ...mapMutations(["setFirst","setIndexScrollTop"]),
-    loadMore_wrap(){
+    ...mapMutations(["setFirst", "setIndexScrollTop"]),
+    isShowNewPeop(){
+      var time = new Date().getTime();
+        if (!localStorage.getItem(this.token + "showNewPerson")) {
+          this.setNewPersonTime(time);
+        } else {
+          if (Number(localStorage.getItem(this.token + "remain")) - time > 0) {
+            if(this.isFirst){
+                this.setFirst(false);
+            }
+            
+          } else {
+            this.setNewPersonTime(time);
+          }
+        }
+    },
+    setNewPersonTime(time) {
+      localStorage.setItem(this.token + "showNewPerson", true);
+      localStorage.setItem(this.token + "remain", time + 1000*60*60*24);
+      this.setFirst(true);
+      this.$refs.newpeople.show(getNewbornZoneStore);
+    },
+    loadMore_wrap() {
       this.$refs.loadmore3.loadMore();
     },
     goMore(e, adListInfo) {
@@ -286,9 +321,7 @@ this.loadMore_wrap();
       }
     },
     getAdList() {
-      
       getAdv(3, ++this.page).then(data => {
-        //console.log('s===============',data);
         if (data) {
           this.allArr = data.map(item => {
             return {
@@ -308,7 +341,7 @@ this.loadMore_wrap();
     handleScroll(e) {
       //console.log(this.$refs.all_product_wrap.getBoundingClientRect())
       // 得到页面滚动的距离
-       this.wrapScrollTop=e.target.scrollTop;
+      this.wrapScrollTop = e.target.scrollTop;
       let scrollTop =
         window.pageYOffset ||
         document.documentElement.scrollTop ||
@@ -366,13 +399,14 @@ this.loadMore_wrap();
     }
   },
   beforeRouteLeave(to, from, next) {
-    if(to.path === "/order" || to.path === "/income"||to.path === "/me"){
-      this.setIndexScrollTop(0);
+    if (this.setIndexScrollTop) {
+      if (to.path === "/order" || to.path === "/income" || to.path === "/me") {
+        this.setIndexScrollTop(0);
+      } else {
+        this.setIndexScrollTop(this.$refs.wrap.scrollTop);
+      }
     }
-    else{
-this.setIndexScrollTop(this.$refs.wrap.scrollTop);
-    }
-    
+
     if (!this.isLogin && (to.path === "/order" || to.path === "/income")) {
       this.$refs.notice.show("请先登录", () => {
         login();
@@ -388,8 +422,11 @@ this.setIndexScrollTop(this.$refs.wrap.scrollTop);
 <style lang="scss" scoped>
 @import "~css/def";
 .wrap {
- height: 100vh;
-  overflow: auto;
+  height: 100vh;
+  -webkit-overflow-scrolling: touch;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
   background-color: $color-body-bg;
 }
 .wrap_pad_bot {
@@ -431,7 +468,7 @@ this.setIndexScrollTop(this.$refs.wrap.scrollTop);
 }
 .all_goods_ad {
   height: size(146);
-  margin:size(20);
+  margin: size(20);
 }
 .all_goods_ad img {
   width: 100%;

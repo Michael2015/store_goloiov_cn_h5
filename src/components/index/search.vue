@@ -62,6 +62,7 @@ import {
   CustomerGetBlastProducts,
   getAdvProducts
 } from "api";
+let ReLoad=true;
 export default {
    props: {
     fliter: {
@@ -107,15 +108,9 @@ export default {
     }
   },
   activated() {
-    this.placeholder = this.$route.query.name;
-    this.keyword = this.$route.query.keyword ? this.$route.query.keyword : '';
-    this.list = [];
-    this.loaded = false;
-    this.page = 1;
-    this.getProducts();
-    this.$nextTick(() => {
-      this.topHeight = this.clientHeight - (this.offsetHeight + this.T_H + 100);
-    });
+    if(ReLoad){
+    this.enterFunc();
+  }
     window.addEventListener("scroll", this.handleScroll, true);
   },
   deactivated() {
@@ -128,8 +123,29 @@ export default {
     this.flag = true;
     this.top = 1;
   },
+  beforeRouteEnter(to,from,next){
+    
+    if(from.path.includes('detail')){
+      ReLoad=false;
+    }
+    else{
+      ReLoad=true;
+    }
+    next();
+  },
   methods: {
     ...mapMutations(["setFirst"]),
+     enterFunc(){
+      this.placeholder = this.$route.query.name;
+    this.keyword = this.$route.query.keyword ? this.$route.query.keyword : '';
+    this.list = [];
+    this.loaded = false;
+    this.page = 1;
+    this.getProducts();
+    this.$nextTick(() => {
+      this.topHeight = this.clientHeight - (this.offsetHeight + this.T_H + 100);
+    });
+    },
     loadMore(){
       if(!this.loaded)
       {
