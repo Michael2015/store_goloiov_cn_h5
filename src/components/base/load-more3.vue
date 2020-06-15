@@ -79,13 +79,22 @@ export default {
       Loading.close();
       if (data) {
          this.$parent.busy=false;
-        this.allArr.push(...data.map(item=>{
+         if(data.length){
+           this.allArr.push(...data.map(item=>{
           return {
             adListInfo:item,
             size:6,
             showMore:item.product.length>=6?true:false
           }
         }))
+         }else{
+           this.$parent.loadAll=true;
+           this.page--;
+            if(this.$parent.Phone==='ios'){
+       this.$parent.$refs.wrap.scrollTop=this.$parent.$refs.wrap.scrollTop-1;
+        } 
+         }
+        
 
       }
     });

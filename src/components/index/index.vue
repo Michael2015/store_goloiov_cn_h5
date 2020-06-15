@@ -146,7 +146,9 @@ import {
 import { invitePartner } from "api/native";
 import { mapState, mapMutations } from "vuex";
 import { login, logout } from "api/login";
-
+import { appSource } from "lib";
+//设备是IOS还是其他
+let Phone = appSource();
 export default {
   components: {
     Confirm,
@@ -176,7 +178,8 @@ export default {
       categoryList: [],
       activeCategoryIndex: -1,
       topHeight: 480,
-      flag: true
+      flag: true,
+      loadAll: false
     };
   },
   computed: {
@@ -244,8 +247,18 @@ export default {
       Loading.close();
     });
   },
+   destroyed() {
+    if (Phone === "ios") {
+      this.$refs.wrap.removeEventListener("scroll", this.wrap_scroll, true);
+    }
+  },
   mounted() {
-    this.$nextTick(() => {
+    this.Phone=Phone;
+    this.$nextTick(() => { 
+       if (Phone === "ios") {
+      this.$refs.wrap.addEventListener("scroll", this.wrap_scroll, true);
+      this.$refs.wrap.scrollTop=1;
+    }
       // 这里要得到top的距离和元素自身的高度
       this.loadMore_wrap();
       let header = this.$refs.filters_tab;
@@ -280,6 +293,16 @@ export default {
   },
   methods: {
     ...mapMutations(["setFirst", "setIndexScrollTop"]),
+      wrap_scroll(e) {
+      if (e.target.scrollTop === 0) {
+        e.target.scrollTop = 1;
+      } else if (
+        e.target.scrollTop + e.target.offsetHeight === e.target.scrollHeight &&
+        this.loadAll
+      ) {
+        e.target.scrollTop = e.target.scrollTop - 1;
+      }
+    },
     isShowNewPeop(){
       var time = new Date().getTime();
         if (!localStorage.getItem(this.token + "showNewPerson")) {
@@ -302,8 +325,13 @@ export default {
       this.$refs.newpeople.show(getNewbornZoneStore);
     },
     loadMore_wrap() {
-      this.$refs.loadmore3.loadMore();
-    },
+ if (!this.busy) {
+        this.busy = true;
+        if (!this.loadAll) {
+          this.$refs.loadmore3.loadMore();
+        }
+      }   
+        },
     goMore(e, adListInfo) {
       console.log(adListInfo);
       let { kind, url } = adListInfo;
@@ -401,7 +429,11 @@ export default {
   beforeRouteLeave(to, from, next) {
     if (this.setIndexScrollTop) {
       if (to.path === "/order" || to.path === "/income" || to.path === "/me") {
-        this.setIndexScrollTop(0);
+        if (Phone === "ios") {
+          this.setIndexScrollTop(1);
+        } else {
+          this.setIndexScrollTop(0);
+        }
       } else {
         this.setIndexScrollTop(this.$refs.wrap.scrollTop);
       }
@@ -422,11 +454,15 @@ export default {
 <style lang="scss" scoped>
 @import "~css/def";
 .wrap {
-  height: 100vh;
   -webkit-overflow-scrolling: touch;
-  height: 100vh;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: size(100);
+  //padding-bottom: size(20);
+  box-sizing: border-box;
   background-color: $color-body-bg;
 }
 .wrap_pad_bot {
@@ -666,7 +702,8 @@ export default {
 
 //全部商品
 .all_product_wrap {
-  padding: 0 0 size(120) 0;
+  overflow: hidden;
+  padding: 0 0 size(20) 0;
 }
 .list1 {
   display: flex;

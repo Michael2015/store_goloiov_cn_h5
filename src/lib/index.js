@@ -29,3 +29,14 @@ export function getScrollTop() {
   scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop
   return scrollTop
 }
+
+//判断是否是IOS设备
+export function appSource() {
+  const u = navigator.userAgent;
+  const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+  if (isiOS) {
+   return "ios";
+  } else {
+   return "others";
+  }
+ }
