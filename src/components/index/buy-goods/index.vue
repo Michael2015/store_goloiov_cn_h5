@@ -445,7 +445,7 @@ export default {
     //计算优惠
     discountPrice()
     {
-      let discount_price = this.preInfo.discount.status == 1 ? this.preInfo.discount.data.total :0.00;
+      let discount_price = this.preInfo.discount.status == 1 ? this.preInfo.discount.data.price :0.00;
       return parseFloat(discount_price,2);
     },
     //不同进入情况取的总价

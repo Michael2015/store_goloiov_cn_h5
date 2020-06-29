@@ -1,10 +1,5 @@
 <template>
-  <div
-    :class="[wrap,(isLogin && role === 1)?wrap_pad_bot:'']"
-    v-infinite-scroll="loadMore_wrap"
-    inifinite-scroll-disabled="busy"
-    ref="wrap"
-  >
+  <div :class="[wrap,(isLogin && role === 1)?wrap_pad_bot:'']" ref="wrap">
     <div class="top-wrap">
       <div class="top" ref="top">
         <!-- 合伙人端 -->
@@ -146,7 +141,7 @@ import {
 import { invitePartner } from "api/native";
 import { mapState, mapMutations } from "vuex";
 import { login, logout } from "api/login";
-import { appSource } from "lib";
+import { appSource} from "lib";
 //设备是IOS还是其他
 let Phone = appSource();
 export default {
@@ -228,7 +223,7 @@ export default {
       // 重置关键字和标签
       this.keyword = "";
       this.activeCategoryIndex = -1;
-      
+
       if (val) {
         this.isShowNewPeop();
       }
@@ -236,6 +231,7 @@ export default {
   },
 
   created() {
+    
     Loading.open();
     Promise.all([
       getCategory().then(data => {
@@ -247,18 +243,16 @@ export default {
       Loading.close();
     });
   },
-   destroyed() {
-    if (Phone === "ios") {
-      this.$refs.wrap.removeEventListener("scroll", this.wrap_scroll, true);
-    }
+  destroyed() {
+    this.$refs.wrap.removeEventListener("scroll", this.wrap_scroll, true);
   },
   mounted() {
-    this.Phone=Phone;
-    this.$nextTick(() => { 
-       if (Phone === "ios") {
+    this.Phone = Phone;
+    this.$nextTick(() => {
       this.$refs.wrap.addEventListener("scroll", this.wrap_scroll, true);
-      this.$refs.wrap.scrollTop=1;
-    }
+      if (Phone === "ios") {
+        this.$refs.wrap.scrollTop = 1;
+      }
       // 这里要得到top的距离和元素自身的高度
       this.loadMore_wrap();
       let header = this.$refs.filters_tab;
@@ -293,45 +287,55 @@ export default {
   },
   methods: {
     ...mapMutations(["setFirst", "setIndexScrollTop"]),
-      wrap_scroll(e) {
+    wrap_scroll(e) {
+      
       if (e.target.scrollTop === 0) {
-        e.target.scrollTop = 1;
+        if (Phone === "ios") {
+          e.target.scrollTop = 1;
+        }
       } else if (
-        e.target.scrollTop + e.target.offsetHeight === e.target.scrollHeight &&
-        this.loadAll
+        Math.floor(e.target.scrollTop) + e.target.offsetHeight ===
+        e.target.scrollHeight
       ) {
-        e.target.scrollTop = e.target.scrollTop - 1;
+        
+        if (this.loadAll) {
+          if (Phone === "ios") {
+            e.target.scrollTop = e.target.scrollTop - 1;
+          }
+        } else {
+          this.loadMore_wrap();
+        }
       }
     },
-    isShowNewPeop(){
+    isShowNewPeop() {
       var time = new Date().getTime();
-        if (!localStorage.getItem(this.token + "showNewPerson")) {
-          this.setNewPersonTime(time);
-        } else {
-          if (Number(localStorage.getItem(this.token + "remain")) - time > 0) {
-            if(this.isFirst){
-                this.setFirst(false);
-            }
-            
-          } else {
-            this.setNewPersonTime(time);
+      if (!localStorage.getItem(this.token + "showNewPerson")) {
+        this.setNewPersonTime(time);
+      } else {
+        if (Number(localStorage.getItem(this.token + "remain")) - time > 0) {
+          if (this.isFirst) {
+            this.setFirst(false);
           }
+        } else {
+          this.setNewPersonTime(time);
         }
+      }
     },
     setNewPersonTime(time) {
       localStorage.setItem(this.token + "showNewPerson", true);
-      localStorage.setItem(this.token + "remain", time + 1000*60*60*24);
+      localStorage.setItem(this.token + "remain", time + 1000 * 60 * 60 * 24);
       this.setFirst(true);
       this.$refs.newpeople.show(getNewbornZoneStore);
     },
     loadMore_wrap() {
- if (!this.busy) {
+      
+      if (!this.busy) {
         this.busy = true;
         if (!this.loadAll) {
           this.$refs.loadmore3.loadMore();
         }
-      }   
-        },
+      }
+    },
     goMore(e, adListInfo) {
       console.log(adListInfo);
       let { kind, url } = adListInfo;
