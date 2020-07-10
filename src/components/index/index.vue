@@ -109,7 +109,7 @@
     <!-- 提示弹窗 -->
     <notice ref="notice" :autoClose="true"></notice>
     <confirm ref="confirm"></confirm>
-    <new-people ref="newpeople"></new-people>
+    <new-people ref="newpeople" :newObj="newObj" :is_fisrt_pop="is_fisrt_pop"></new-people>
   </div>
 </template>
 
@@ -130,6 +130,7 @@ import LoadMore2 from "base/load-more2";
 import LoadMore3 from "base/load-more3";
 import { Loading } from "lib";
 import {
+  getPop,
   getCategory,
   PartnerGetProducts,
   CustomerGetProducts,
@@ -141,7 +142,7 @@ import {
 import { invitePartner } from "api/native";
 import { mapState, mapMutations } from "vuex";
 import { login, logout } from "api/login";
-import { appSource} from "lib";
+import { appSource,getNowDate} from "lib";
 //设备是IOS还是其他
 let Phone = appSource();
 export default {
@@ -174,7 +175,9 @@ export default {
       activeCategoryIndex: -1,
       topHeight: 480,
       flag: true,
-      loadAll: false
+      loadAll: false,
+      newObj:[],  
+      is_fisrt_pop:true,//是否是第一次弹框
     };
   },
   computed: {
@@ -231,6 +234,7 @@ export default {
   },
 
   created() {
+    this.is_fisrt_pop =  !localStorage.getItem("new_people_pop_"+getNowDate());//是否是第一次弹框
     
     Loading.open();
     Promise.all([
@@ -238,7 +242,10 @@ export default {
         if (data) {
           this.categoryList = data;
         }
-      })
+      }),
+        getPop().then(data => {
+       this.newObj = data;
+      }),
     ]).then(() => {
       Loading.close();
     });

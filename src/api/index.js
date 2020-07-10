@@ -270,3 +270,12 @@ export function getQrcode(scene) {
     }
   }).then(clean)
 }
+
+
+// 获取首页弹框内容
+export function getPop() {
+  return req.get('/api/marketing/getNewbornZoneStore', {
+    params: {
+    }
+  }).then(clean)
+}

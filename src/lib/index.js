@@ -40,3 +40,12 @@ export function appSource() {
    return "others";
   }
  }
+
+
+// 获取当前日期
+export function getNowDate() {
+  let yy = new Date().getFullYear();
+  let mm = new Date().getMonth() + 1;
+  let dd = new Date().getDate();
+  return yy+''+mm+''+dd;
+}

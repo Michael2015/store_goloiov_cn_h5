@@ -1,27 +1,42 @@
 <template>
-  <div v-if="isShow&&isLogin&&isFirst">
+  <div v-if="newObj && is_fisrt_pop && is_show">
     <popup @mask-click="hide">
-      <div class="wrap">
+      <div class="wrap" @click="goBay">
         <div class="news_box">
           <img class="close" src="~img/closeTip.png" @click="close" />
-          <img class="new_bg" :src="newObj.img_url" @click='$router.push(newObj.jump_url)'/>
-          
+          <img class="new_bg" :src="newObj[0]?newObj[0].img_url:''" />
+          <!--
+          <div class="new_msg">
+            <div class="discount_name">{{newObj.store_name}}</div>
+            <div class="discount">新人专享爆款抢购<span>{{newObj.price}}元</span>包邮！</div>
+            <div class="discount_time">{{newObj.valid_time}}小时内购买有效</div>
+          </div>
+          -->
+          <div class="gobaybtn" ></div>
         </div>
       </div>
     </popup>
   </div>
 </template>
-
 <script>
 import { mapState, mapMutations } from "vuex";
 import tojump from "mixins/tojump";
 import showHide from "mixins/show-hide";
 import popup from "ui/popup";
+import {getNowDate} from "lib";
 export default {
+  props: {
+    newObj: {
+      type: Array
+    },
+    is_fisrt_pop:{
+      type: Boolean
+    }
+  },
   data() {
     return {
-      newObj:{}
-    }
+      is_show: true
+    };
   },
   computed: {
     ...mapState(["isLogin", "isFirst"])
@@ -29,21 +44,22 @@ export default {
   methods: {
     ...mapMutations(["setFirst"]),
     close() {
-      this.setFirst(false);
+      this.is_show = false;
     },
     goBay() {
-      this.tojump(`/goods/${this.newObj.pro_id}`);
+      localStorage.setItem("new_people_pop_"+getNowDate(), 1); //记录时间
+      this.tojump(this.newObj[0].jump_url);
       this.close();
     },
-    show(callback){
-      callback().then(res=>{
-        if(res.length === 0){
-          return
-        }else{
-          this.newObj = res[0]
-          this.isShow = true
+    show(callback) {
+      callback().then(res => {
+        if (res.length === 0) {
+          return;
+        } else {
+          this.newObj = res[0];
+          this.isShow = true;
         }
-      })
+      });
     }
   },
   mixins: [showHide, tojump],
@@ -52,7 +68,6 @@ export default {
   }
 };
 </script>
-
 <style lang="scss" scoped>
 @import "~css/def";
 .news_box {
@@ -73,15 +88,15 @@ export default {
   .new_msg {
     position: absolute;
     left: 50%;
-    top:40%;
-    transform: translate(-50%,-50%);
+    top: 40%;
+    transform: translate(-50%, -50%);
     width: size(467);
     .discount {
       color: #ff9f0e;
       text-align: center;
       font-size: size(32);
       margin-top: size(38);
-      >span{
+      > span {
         color: #ff6815;
         font-size: size(38);
       }
