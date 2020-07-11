@@ -1,5 +1,5 @@
 <template>
-  <div v-if="newObj && is_fisrt_pop && is_show">
+  <div v-if="newObj.length != 0 && is_fisrt_pop && is_show">
     <popup @mask-click="hide">
       <div class="wrap" @click="goBay">
         <div class="news_box">
