@@ -1,18 +1,21 @@
 <template>
-  <div v-if="newObj.length != 0 && is_fisrt_pop && is_show">
+  <div v-if="newObj.length != 0 && is_show">
     <popup @mask-click="hide">
-      <div class="wrap" @click="goBay">
+      <div class="wrap">
         <div class="news_box">
-          <img class="close" src="~img/closeTip.png" @click="close" />
-          <img class="new_bg" :src="newObj[0]?newObj[0].img_url:''" />
-          <!--
-          <div class="new_msg">
-            <div class="discount_name">{{newObj.store_name}}</div>
-            <div class="discount">新人专享爆款抢购<span>{{newObj.price}}元</span>包邮！</div>
-            <div class="discount_time">{{newObj.valid_time}}小时内购买有效</div>
+          <div v-for='(item,index) in filterList(poplist,"hidden")' :key='index'>
+            <div class="header">
+            <span>{{item.label}}</span>
+            <img src="~img/closeTip.png" @click="close" />
           </div>
-          -->
-          <div class="gobaybtn" ></div>
+          <div class="main"> 
+            <img :src="item.img_url" @click='toSeek(item.jump_url)'/>
+          </div>
+          <div class="footer">
+            <button @click='toSeek(item.jump_url)'>去看看</button>
+            <button @click='next'>下一条</button>
+          </div>
+          </div>
         </div>
       </div>
     </popup>
@@ -23,42 +26,74 @@ import { mapState, mapMutations } from "vuex";
 import tojump from "mixins/tojump";
 import showHide from "mixins/show-hide";
 import popup from "ui/popup";
-import {getNowDate} from "lib";
+import { getNowDate } from "lib";
 export default {
   props: {
     newObj: {
       type: Array
     },
-    is_fisrt_pop:{
+    is_fisrt_pop: {
       type: Boolean
     }
   },
   data() {
     return {
-      is_show: true
+      is_show: false,
+      poplist:[],
+      current:0,
     };
   },
   computed: {
-    ...mapState(["isLogin", "isFirst"])
+    ...mapState(["isLogin", "isFirst"]),
+    filterList(){
+      return (arr,hidden)=>{
+       return arr.filter(item=>{
+          return !item[hidden]
+        })
+      }
+    }
   },
   methods: {
     ...mapMutations(["setFirst"]),
+    toSeek(args){
+      this.$router.push(args);
+    },
+    next(){
+     if(this.current===this.poplist.length-1){
+       this.current=0;
+     }else{
+        this.current++;
+     }
+      for(var i in this.poplist){
+        if(this.current===Number(i)){
+          this.poplist[i].hidden=false;
+        }
+        else{
+          this.poplist[i].hidden=true;
+        }
+      }
+    },
     close() {
       this.is_show = false;
     },
     goBay() {
-      localStorage.setItem("new_people_pop_"+getNowDate(), 1); //记录时间
+      localStorage.setItem("new_people_pop_" + getNowDate(), 1); //记录时间
       this.tojump(this.newObj[0].jump_url);
       this.close();
     },
     show(callback) {
       callback().then(res => {
-        if (res.length === 0) {
-          return;
-        } else {
-          this.newObj = res[0];
-          this.isShow = true;
-        }
+       console.log(res);
+       this.poplist=res.map((item,index)=>{
+         return{
+           ...item,
+           hidden:index===0?false:true
+         }
+       });
+       this.current=0;
+       if(res.length){
+         this.is_show=true;
+       }
       });
     }
   },
@@ -75,7 +110,47 @@ export default {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  border-radius: size(20);
+  width: size(600);
+  min-height: size(300);
+  background: white;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding: size(30) 0;
+    margin: 0 size(30);
+    border-bottom: size(2) solid whitesmoke;
+    font-size: size(28);
+    align-items: center;
+    img {
+      width: size(40);
+    }
+  }
+  .main{
+    margin: size(30);
+    img{
+      width: 100%;
+      height: size(400);
+    }
+  }
+  .footer{
+    display: flex;
+    button:focus{
+      outline: 0;
+    }
+    button{
+      width: 50%;
+      height: size(70);
+      font-size: size(28);
+    }
+    button:nth-of-type(1){
+      background: rgba(240,240,240,1);
+      color: rgba(217,0,27,1);
+    }
+    button:nth-of-type(2){
+      background: rgba(217,0,27,1);
+      color: white;
+    }
+  }
   .close {
     width: size(50);
     position: absolute;

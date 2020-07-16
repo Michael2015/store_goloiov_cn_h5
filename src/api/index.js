@@ -279,3 +279,10 @@ export function getPop() {
     }
   }).then(clean)
 }
+
+export function indexGetPop() {
+  return req.get('/api/marketing/getpop', {
+    params: {
+    }
+  }).then(clean)
+}

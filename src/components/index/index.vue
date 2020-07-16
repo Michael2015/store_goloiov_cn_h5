@@ -135,14 +135,14 @@ import {
   PartnerGetProducts,
   CustomerGetProducts,
   PartnerGetBlastProducts,
-  getNewbornZoneStore,
+  indexGetPop,
   CustomerGetBlastProducts,
   getAdv
 } from "api";
 import { invitePartner } from "api/native";
 import { mapState, mapMutations } from "vuex";
 import { login, logout } from "api/login";
-import { appSource,getNowDate} from "lib";
+import { appSource, getNowDate } from "lib";
 //设备是IOS还是其他
 let Phone = appSource();
 export default {
@@ -176,8 +176,8 @@ export default {
       topHeight: 480,
       flag: true,
       loadAll: false,
-      newObj:[],  
-      is_fisrt_pop:true,//是否是第一次弹框
+      newObj: [],
+      is_fisrt_pop: true //是否是第一次弹框
     };
   },
   computed: {
@@ -234,8 +234,8 @@ export default {
   },
 
   created() {
-    this.is_fisrt_pop =  !localStorage.getItem("new_people_pop_"+getNowDate());//是否是第一次弹框
-    
+    this.is_fisrt_pop = !localStorage.getItem("new_people_pop_" + getNowDate()); //是否是第一次弹框
+
     Loading.open();
     Promise.all([
       getCategory().then(data => {
@@ -243,9 +243,9 @@ export default {
           this.categoryList = data;
         }
       }),
-        getPop().then(data => {
-       this.newObj = data;
-      }),
+      getPop().then(data => {
+        this.newObj = data;
+      })
     ]).then(() => {
       Loading.close();
     });
@@ -295,7 +295,6 @@ export default {
   methods: {
     ...mapMutations(["setFirst", "setIndexScrollTop"]),
     wrap_scroll(e) {
-      
       if (e.target.scrollTop === 0) {
         if (Phone === "ios") {
           e.target.scrollTop = 1;
@@ -304,7 +303,6 @@ export default {
         Math.floor(e.target.scrollTop) + e.target.offsetHeight ===
         e.target.scrollHeight
       ) {
-        
         if (this.loadAll) {
           if (Phone === "ios") {
             e.target.scrollTop = e.target.scrollTop - 1;
@@ -316,12 +314,26 @@ export default {
     },
     isShowNewPeop() {
       var time = new Date().getTime();
+
       if (!localStorage.getItem(this.token + "showNewPerson")) {
         this.setNewPersonTime(time);
       } else {
         if (Number(localStorage.getItem(this.token + "remain")) - time > 0) {
-          if (this.isFirst) {
-            this.setFirst(false);
+          if (Number(localStorage.getItem(this.token + "countTime") < 3)) {
+            localStorage.setItem(
+              this.token + "countTime",
+              Number(localStorage.getItem(this.token + "countTime")) + 1
+            );
+            if (!this.$refs.newpeople.poplist.length) {
+              this.$refs.newpeople.show(indexGetPop);
+            } else {
+              this.$refs.newpeople.is_show = true;
+            }
+
+            console.log(1);
+          } else {
+            this.$refs.newpeople.is_show = false;
+            console.log(2);
           }
         } else {
           this.setNewPersonTime(time);
@@ -331,11 +343,11 @@ export default {
     setNewPersonTime(time) {
       localStorage.setItem(this.token + "showNewPerson", true);
       localStorage.setItem(this.token + "remain", time + 1000 * 60 * 60 * 24);
-      this.setFirst(true);
-      this.$refs.newpeople.show(getNewbornZoneStore);
+      localStorage.setItem(this.token + "countTime", 1);
+      //this.setFirst(true);
+      this.$refs.newpeople.show(indexGetPop);
     },
     loadMore_wrap() {
-      
       if (!this.busy) {
         this.busy = true;
         if (!this.loadAll) {

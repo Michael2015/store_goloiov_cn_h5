@@ -16,7 +16,7 @@
         <div class="right">
           <div :class="item.status !== 0?'clickbtn no':'clickbtn'">
             <span v-if="item.status == -1" class="used" @click="touse(item.with_products)">未开始</span>
-            <span v-else-if="item.status == 0" @click="touse(item.with_products)">立即使用</span>
+            <span v-else-if="item.status == 0" @click="touse(item.jump_url)">立即使用</span>
             <span v-else-if="item.status == 1" class="used">已使用</span>
             <span v-else-if="item.status == 2" class="used">已过期</span>
           </div>
@@ -43,11 +43,12 @@ export default {
     const reque = await getcouponlist();
     Loading.close();
     this.couponList = reque;
+    console.log(reque);
   },
   mixins: [tojump],
   methods: {
-    touse(id) {
-      this.tojump("/goods/" + id);
+    touse(url) {
+      this.tojump(url);
     }
   }
 };

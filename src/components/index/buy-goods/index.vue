@@ -45,15 +45,32 @@
         <div class="right">¥{{discountPrice}}</div>
       </div>
     </div>
-     <div class="spec">
+    <div class="spec" v-show='!$route.params.hiddenDiscount'>
       <div class="col clearfix">
-        <div class="left jifen"><img src="~img/me/jifen.png" class="one" />可用{{golo_points}}积分抵扣{{golo_points_money}}元<img src="~img/question.png" @click="showinfo" alt /></div>
+        <div class="left jifen">
+          <img src="~img/me/jifen.png" class="one" />
+          可用{{golo_points}}积分抵扣{{golo_points_money}}元
+          <img src="~img/question.png" @click="showinfo" alt />
+        </div>
         <div class="right">
-          <img  v-if="!used_golo_points" src="~img/radio.png" @click="check_golo_points" alt />
-          <img  v-else src="~img/radio-checked.png" @click="check_golo_points" alt />
-          </div>
+          <img v-if="!used_golo_points" src="~img/radio.png" @click="check_golo_points" alt />
+          <img v-else src="~img/radio-checked.png" @click="check_golo_points" alt />
+        </div>
       </div>
     </div>
+
+    <div class="spec" v-show='!$route.params.hiddenDiscount'>
+      <div class="col clearfix" @click="yhq_show=yhq.length?true:false">
+        <div class="left jifen">
+          <img src="~img/yhq.png" class="one yhq_icon" />
+          {{yhq_title}}
+        </div>
+        <div class="right">
+          <img src="~img/icon/yhq_rght.png" />
+        </div>
+      </div>
+    </div>
+
     <div class="remark">
       <text-area class="input" placeholder="留言内容/备注" v-model="remark"></text-area>
     </div>
@@ -71,6 +88,32 @@
       <span slot="btn-left">我已支付</span>
       <span slot="btn-right">离开</span>
     </confirm>
+
+    <div class="yhq_pop" v-show="yhq_show">
+      <div class="yhq">
+        <div class="header">
+          <span>优惠券</span>
+          <img src="~img/closeTip.png" @click="close" />
+        </div>
+        <div class="main">
+          <div class="list" v-for="(item,index) in yhq" :key="index">
+            <div class="one">
+              <img src="~img/yhq1.png" />
+              <div class="ti">
+                <span>{{parseInt(item.discount_price)}}</span>
+              </div>
+            </div>
+            <div class="two">
+              <div class="title">{{item.title}}</div>
+              <div class="date">有效期至{{item.end_date}}</div>
+            </div>
+            <div class="three">
+              <button @click='userYhq(item)'>立即使用</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -99,6 +142,12 @@ export default {
   },
   data() {
     return {
+      yhq: [],
+      discount_type:0,
+      ID:'',
+      yhq_title: "",
+      yhq_price:0,
+      yhq_show: false,
       isReClick: true, // 点击标识
       remark: "",
       addr: null,
@@ -124,21 +173,21 @@ export default {
       // 询问用户是否离开
       inConfirmLeave: false,
       now_money: "", //我的积分余额
-      golo_points:0,//golo 积分
-      used_golo_points:false,
-      golo_points_money:0,
-      sku_id:'',
+      golo_points: 0, //golo 积分
+      used_golo_points: false,
+      golo_points_money: 0,
+      sku_id: ""
     };
   },
   watch: {
-    '$route'() {
+    $route() {
       if (this.is_testing_money) {
-        this.doPay()
+        this.doPay();
       }
     }
   },
   beforeRouteLeave(to, from, next) {
-    if( this.is_testing_money) this.$store.commit('testingMoney', false)
+    if (this.is_testing_money) this.$store.commit("testingMoney", false);
     if (this.paying && this.status === 2) {
       // 支付中 并且已经调用app原生支付，但是还没收到app的回调
       if (this.inConfirmLeave) return;
@@ -164,6 +213,7 @@ export default {
     }
   },
   activated() {
+   
     // 这里用了上一个页面传进来的数据
     // 判断是否需要刷新页面
     if (this.$route.params.info) {
@@ -198,17 +248,36 @@ export default {
     }
   },
   methods: {
+    userYhq(args){
+      var {discount_price,title,discount_type,id}=args;
+      this.yhq_show = false;
+      this.yhq_price=discount_price;
+      this.used_golo_points=false;
+      this.yhq_title=title;
+      this.discount_type=discount_type;
+      this.ID=id;
+    },
+    close() {
+      this.yhq_show = false;
+    },
     loaddata() {
       getPreOrderProductInfo(
         this.id,
         this.orderId,
-        this.$route.params.sku_id
+       this.$route.params.unique
       ).then(data => {
         if (data) {
           this.preInfo = data;
           this.now_money = data.now_money;
           this.golo_points = data.golo_intergal.golo_points;
           this.golo_points_money = data.golo_intergal.golo_points_money;
+          this.yhq_title = data.discount.length + "张优惠券可用";
+          this.yhq_title_copy=data.discount.length + "张优惠券可用";
+          this.yhq = data.discount;
+          this.yhq_price=data.discount_price||0;
+          this.discount_type=0;
+          this.ID=0;
+          this.used_golo_points=false;
         }
       });
       if (!this.orderId) {
@@ -240,17 +309,22 @@ export default {
         this.remark = this.info.mark;
       }
     },
-     //showinfo显示提示
-    showinfo(){
-        this.$refs.notice.show("在golo APP开车1公里获得1积分");
+    //showinfo显示提示
+    showinfo() {
+      this.$refs.notice.show("在golo APP开车1公里获得1积分");
     },
-    check_golo_points()
-    {
-      if(this.golo_points > 0)
-      {
+    check_golo_points() {
+      if (this.golo_points > 0) {
         this.used_golo_points = !this.used_golo_points;
-        this.pay_price = parseFloat(this.pay_price - this.golo_points_money).toFixed(2);
+        this.pay_price = parseFloat(
+          this.pay_price - this.golo_points_money
+        ).toFixed(2);
+        this.yhq_title =this.yhq_title_copy;
+        this.yhq_price=0;
+        this.discount_type=this.used_golo_points?4:0;
+        this.ID=0;
       }
+      
     },
     goSelectAddr() {
       if (this.show_model) {
@@ -295,12 +369,11 @@ export default {
           // 创建订单, 避免并发
           if (this.isReClick) {
             getCreateOrder(type, miandan_type);
-            this.isReClick = false
+            this.isReClick = false;
           } else {
-            Toast('请勿重复提交订单')
-            return
+            Toast("请勿重复提交订单");
+            return;
           }
-          
         }
       });
 
@@ -313,11 +386,13 @@ export default {
           paytype: type,
           miandan_type,
           total_num: this.total_num,
-          used_golo_points:this.used_golo_points,
-          unique:this.sku_id,
+          //used_golo_points: this.used_golo_points,
+          unique: this.$route.params.sku_id||'',
+          discount_type:this.discount_type,
+          discount_id:this.ID
         }).then(
           data => {
-            this.isReClick = true
+            this.isReClick = true;
             if (data && data.order_id) {
               // 下单成功，触发支付
               this.createdOrderId = data.order_id;
@@ -334,7 +409,7 @@ export default {
           () => {
             // 下单失败
             Loading.close();
-            this.isReClick = true
+            this.isReClick = true;
             this.paying = false;
             Toast("下单失败,请稍后再试");
           }
@@ -434,7 +509,7 @@ export default {
         ? this.info.newbornzone.price
         : this.preInfo.price;
     },
-    
+
     //不同进入情况取的个数
     total_num() {
       let num = this.show_model
@@ -443,23 +518,44 @@ export default {
       return num ? num : this.buyTotalNum;
     },
     //计算优惠
-    discountPrice()
-    {
-      let discount_price = this.preInfo.discount.status == 1 ? this.preInfo.discount.data.price :0.00;
-      return parseFloat(discount_price,2);
+    discountPrice() {
+      let discount_price = this.used_golo_points ? this.golo_points_money : (this.yhq_price ? this.yhq_price:0);
+      return this.formatPrice(discount_price);
+    },
+    //保留小数
+    formatPrice() {
+      return function(pri, flag) {
+        if (!flag) {
+          var arr = pri.toString().split("."),
+            len = arr.length;
+          if (len === 1) {
+            return pri + ".00";
+          } else {
+            if (arr[1].length === 1) {
+              return pri + "0";
+            } else if (arr[1].length === 2) {
+              return pri;
+            } else {
+              return arr[0] + "." + arr[1].substring(0, 2);
+            }
+          }
+        } else {
+          return parseInt(pri);
+        }
+      };
     },
     //不同进入情况取的总价
     pay_price() {
-      let pay_price_temp =  this.show_model
+      let pay_price_temp = this.show_model
         ? this.info.pay_price
-        : this.used_golo_points 
+        : this.used_golo_points
         ? parseFloat(this.unitPrice * this.total_num - this.golo_points_money)
-        : parseFloat(this.unitPrice * this.total_num).toFixed(2);
-        return parseFloat(pay_price_temp - this.discountPrice).toFixed(2);
+        : parseFloat(this.unitPrice * this.total_num-this.discountPrice).toFixed(2);
+      return parseFloat(pay_price_temp).toFixed(2);
     },
     //是否满足积分支付
     is_jf() {
-      return parseFloat(this.pay_price) > parseFloat(this.now_money)
+      return parseFloat(this.pay_price) > parseFloat(this.now_money);
     }
   }
 };
@@ -467,6 +563,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "~css/def";
+body {
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  display: none;
+}
 .wrap {
   min-height: 100vh;
   background-color: $color-body-bg;
@@ -571,24 +673,24 @@ export default {
       float: left;
       position: relative;
     }
-    .left.jifen{
+    .left.jifen {
       padding-left: size(40);
     }
     .right {
       float: right;
       position: relative;
-      >img{
-        right:size(0);
+      > img {
+        right: size(0);
       }
     }
-    img{
-        width: size(30);
-        height: size(30);
-        position: absolute;
-        top:size(5);
+    img {
+      width: size(30);
+      height: size(30);
+      position: absolute;
+      top: size(5);
     }
-    img.one{
-        left:0;
+    img.one {
+      left: 0;
     }
     margin-top: size(20);
     &:first-child {
@@ -626,6 +728,108 @@ export default {
     width: size(240);
     background: linear-gradient(135deg, #ff0000, #ff3061);
     color: #fff;
+  }
+}
+.spec .col .yhq_icon {
+  width: size(36);
+  height: size(36);
+  top: size(2);
+  left: size(-2) !important;
+}
+.yhq_pop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  .yhq {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: size(660);
+    background: whitesmoke;
+    border-radius: size(40) size(40) 0 0;
+    font-size: size(28);
+    display: flex;
+    flex-direction: column;
+    .header {
+      padding: size(40) size(30) size(30) size(30);
+      text-align: center;
+      position: relative;
+      height: size(40);
+      margin-bottom: size(30);
+      img {
+        width: size(40);
+        position: absolute;
+        bottom: 0;
+        right: size(30);
+      }
+    }
+
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      margin: 0 size(30) size(30) size(30);
+      .list:nth-of-type(1) {
+        margin-top: 0;
+      }
+      .list {
+        margin: size(30) 0;
+        height: size(150);
+        background: white;
+        display: flex;
+        align-items: center;
+        .one {
+          width: size(206);
+          text-align: center;
+          position: relative;
+          img {
+            width: size(144);
+          }
+          .ti {
+            position: absolute;
+            top: 50%;
+            right: size(38);
+            width: size(88);
+            height: size(88);
+            transform: translate(0, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            span {
+              font-size: size(34);
+              color: #e31436;
+            }
+          }
+        }
+        .two {
+          flex: 1;
+          .title {
+            font-size: size(28);
+            width: 100%;
+          }
+          .date {
+            font-size: size(20);
+            color: gray;
+            margin-top: size(20);
+          }
+        }
+        .three {
+          width: size(206);
+          text-align: center;
+          button {
+            color: white;
+            background: #e70002;
+            font-size: size(24);
+            padding: size(15);
+            border-radius: size(5);
+          }
+        }
+      }
+    }
   }
 }
 </style>

@@ -188,12 +188,15 @@ export default {
     goPay() {
       // 去支付
       // 跳入购买页面 传入商品id
+    //  console.log(this.orderInfo);
       this.$router.push({
         name: 'buy-goods',
         params: {
           id: this.orderInfo.product_id + '',
           orderId: this.id,
-          info: this.orderInfo
+          info: this.orderInfo,
+          unique:this.orderInfo.unique,
+          hiddenDiscount:true
         }
       })
     },
