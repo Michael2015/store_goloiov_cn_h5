@@ -550,7 +550,8 @@ export default {
         ? this.info.pay_price
         : this.used_golo_points
         ? parseFloat(this.unitPrice * this.total_num - this.golo_points_money)
-        : parseFloat(this.unitPrice * this.total_num-this.discountPrice).toFixed(2);
+        : parseFloat(this.unitPrice * this.total_num - this.discountPrice).toFixed(2);
+          pay_price_temp = pay_price_temp < 0.01 ? 0.01 : pay_price_temp;
       return parseFloat(pay_price_temp).toFixed(2);
     },
     //是否满足积分支付
