@@ -27,7 +27,8 @@
           <index-banner></index-banner>
         </div>
       </div>
-      <index-echarts />
+      <index-echarts :option='option' />
+      <index-echarts :option='option1' />
       <!-- <div class="blank"><img src="~img/index-top-bg.png" alt=""></div> -->
     </div>
     <div>
@@ -180,6 +181,8 @@ export default {
   data() {
     return {
       allArr: [],
+      option: {},
+      option1: {},
       page: 0,
       busy: false,
       wrap: "wrap",
@@ -271,6 +274,56 @@ export default {
   },
   mounted() {
     this.Phone = Phone;
+    this.option = {
+      xAxis: {
+        type: 'category',
+        data: ['13.00', '12.01', '13.02', '13.03', '13.04', '13.05', '13.06']
+      },
+      yAxis: {
+        type: 'value',
+        max: 15,
+        axisLine: {
+          show: true,
+          symbol: ['none', 'arrow'],
+          symbolSize: [5, 10],
+          symbolOffset: [0, 8]
+        },
+        axisLabel: {
+          formatter: function (value, index) {
+            return value.toFixed(2)
+          }
+        }
+      },
+      color: 'gray',
+      series: [{
+        data: [4.00, 5.00, 6.00, 1.00, 8.00, 9.00, 2.00],
+        type: 'line',
+        itemStyle: { normal: { label: { show: true } } }
+      }]
+    };
+    this.option1 = {
+      xAxis: {
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [{
+        data: [120, 200, 150, 80, 70, 110, 130],
+        type: 'bar'
+      },
+      {
+        data: [120, 200, 150, 80, 70, 110, 130],
+        type: 'line',
+      }
+      ]
+    };
+    setInterval(() => {
+      this.option.series[0].data = Array.from({ length: 7 }, (ele, ind) => {
+        return (Math.random() * 10).toFixed(2)
+      })
+    }, 3000)
     this.$nextTick(() => {
       this.$refs.wrap.addEventListener("scroll", this.wrap_scroll, true);
       if (Phone === "ios") {
