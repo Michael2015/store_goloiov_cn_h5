@@ -1,16 +1,23 @@
 <template>
-  <div :class="[wrap,(isLogin && role === 1)?wrap_pad_bot:'']" ref="wrap">
+  <div :class="[wrap,(isLogin && role === 1)?wrap_pad_bot:'']"
+       ref="wrap">
     <div class="top-wrap">
-      <div class="top" ref="top">
+      <div class="top"
+           ref="top">
         <!-- 合伙人端 -->
-        <div class="table table2" v-if="isLogin && role === 1">
+        <div class="table table2"
+             v-if="isLogin && role === 1">
           <div class="table-cell">
-            <search-input v-model="keyword" class="input" @search="search"></search-input>
+            <search-input v-model="keyword"
+                          class="input"
+                          @search="search"></search-input>
           </div>
           <div class="table-cell invite-wrap">
-            <span class="invite" @click="invite">邀请合伙人</span>
+            <span class="invite"
+                  @click="invite">邀请合伙人</span>
           </div>
         </div>
+
         <!-- 非合伙人 | 游客(未登录) --->
         <index-top-customer v-else></index-top-customer>
         <!-- 轮播图 -->
@@ -20,7 +27,7 @@
           <index-banner></index-banner>
         </div>
       </div>
-
+      <index-echarts />
       <!-- <div class="blank"><img src="~img/index-top-bg.png" alt=""></div> -->
     </div>
     <div>
@@ -35,22 +42,19 @@
     <div class="rexiao">
       <img src="~img/rexiao.png" />
     </div>
-    <load-more2
-      v-slot="{list}"
-      class="list-wrap"
-      :setSize="6"
-      :getData="getCategoryProducts"
-      :key="key+loginKey"
-      :isShowMore="true"
-      :fliter="'is_blast=1&name=爆品商品'"
-    >
-      <div class="list clearfix" :style="{minHeight: `${topHeight}px`}">
-        <index-goods-item
-          class="item"
-          v-for="(item,index) in list.slice(0,6)"
-          :key="index"
-          :item="item"
-        ></index-goods-item>
+    <load-more2 v-slot="{list}"
+                class="list-wrap"
+                :setSize="6"
+                :getData="getCategoryProducts"
+                :key="key+loginKey"
+                :isShowMore="true"
+                :fliter="'is_blast=1&name=爆品商品'">
+      <div class="list clearfix"
+           :style="{minHeight: `${topHeight}px`}">
+        <index-goods-item class="item"
+                          v-for="(item,index) in list.slice(0,6)"
+                          :key="index"
+                          :item="item"></index-goods-item>
       </div>
     </load-more2>
 
@@ -79,37 +83,46 @@
     </div>
     -->
 
-    <load-more3 v-slot="{allArr}" ref="loadmore3">
+    <load-more3 v-slot="{allArr}"
+                ref="loadmore3">
       <div class="all_product_wrap">
-        <div v-for="(it,ind) in allArr" :key="ind">
+        <div v-for="(it,ind) in allArr"
+             :key="ind">
           <div class="all_goods_ad">
-            <img :src="it.adListInfo.icon" @click="goMore($event,it.adListInfo)" />
+            <img :src="it.adListInfo.icon"
+                 @click="goMore($event,it.adListInfo)" />
           </div>
-          <div class="list1 clearfix all_pro" :style="{minHeight: `${topHeight}px`}">
-            <index-goods-item2
-              class="item1"
-              v-for="(item,index) in it.adListInfo.product"
-              :key="index"
-              :item="item"
-            ></index-goods-item2>
+          <div class="list1 clearfix all_pro"
+               :style="{minHeight: `${topHeight}px`}">
+            <index-goods-item2 class="item1"
+                               v-for="(item,index) in it.adListInfo.product"
+                               :key="index"
+                               :item="item"></index-goods-item2>
           </div>
-          <div class="seeMore" v-if="it.showMore" @click="goMore($event,it.adListInfo)">
+          <div class="seeMore"
+               v-if="it.showMore"
+               @click="goMore($event,it.adListInfo)">
             <img src="~img/more.png" />
           </div>
         </div>
       </div>
     </load-more3>
     <!-- 退出登录 非合伙才有 -->
-    <div class="logout" v-if="isLogin && role !== 1" @click="logout">退出</div>
+    <div class="logout"
+         v-if="isLogin && role !== 1"
+         @click="logout">退出</div>
     <!-- 查看教程 -->
     <!-- <router-link class="how-to" to="/useDesc" tag="div">
       <div>使用</div>
       <div>说明</div>
     </router-link>-->
     <!-- 提示弹窗 -->
-    <notice ref="notice" :autoClose="true"></notice>
+    <notice ref="notice"
+            :autoClose="true"></notice>
     <confirm ref="confirm"></confirm>
-    <new-people ref="newpeople" :newObj="newObj" :is_fisrt_pop="is_fisrt_pop"></new-people>
+    <new-people ref="newpeople"
+                :newObj="newObj"
+                :is_fisrt_pop="is_fisrt_pop"></new-people>
   </div>
 </template>
 
@@ -125,6 +138,7 @@ import IndexAd from "./index-ad";
 import newPeople from "./newPeople";
 import IndexGoodsItem from "./index-goods-item";
 import IndexGoodsItem2 from "./index-goods-item2";
+import indexEcharts from './echarts/echarts'
 //import LoadMore from "base/load-more";
 import LoadMore2 from "base/load-more2";
 import LoadMore3 from "base/load-more3";
@@ -159,7 +173,9 @@ export default {
     IndexGoodsItem,
     IndexAd,
     IndexGoodsItem2,
-    newPeople
+    newPeople,
+    indexEcharts
+
   },
   data() {
     return {
