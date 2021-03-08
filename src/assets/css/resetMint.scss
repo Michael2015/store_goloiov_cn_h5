@@ -1,0 +1,37 @@
+@import 'def';
+
+/* 我的会员页 */
+.cicle-img {
+  border-radius: 50%;
+}
+
+.myvip {
+  .mint-search {
+    border-radius: size(44);
+    height: auto;
+    background: #F5F5F5;
+    margin: 0 size(20);
+
+    .mint-searchbar {
+      background: #F5F5F5 !important;
+
+      >.mint-searchbar-cancel {
+        font-size: size(50) !important;
+        color: #999 !important;
+        border-radius: 50%;
+      }
+
+      .mint-searchbar-inner {
+        background: #F5F5F5 !important;
+
+        >.mintui-search:before {
+          font-size: size(40);
+        }
+
+        >input {
+          background: #F5F5F5;
+        }
+      }
+    }
+  }
+}

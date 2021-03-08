@@ -2,17 +2,17 @@ const path = require('path')
 
 const assetsDir = 'public/h5'
 
- // 线上地址
-const url = 'https://wcp.wanchepin.com/' 
+// 线上地址
+//const url = 'https://wcp.wanchepin.com/'
 // 测试地址
-//const url = 'https://storemp.golodata.com/'
+const url = 'https://storemp.golodata.com/'
 
 class GenHeadAndBody {
   apply(compiler) {
-    compiler.hooks.compilation.tap('GenHeadAndBody', function(compilation){
+    compiler.hooks.compilation.tap('GenHeadAndBody', function (compilation) {
       // html-webpack-plugin 3.x
       if (compilation.hooks.htmlWebpackPluginAlterAssetTags) {
-        compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync('GenHeadAndBody', function(data, cb) {
+        compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync('GenHeadAndBody', function (data, cb) {
           const htmlWebpackPlugin = data.plugin
           if (htmlWebpackPlugin.createHtmlTag) {
             const head = data.head.map(tag => htmlWebpackPlugin.createHtmlTag(tag)).join('\r\n')
@@ -39,6 +39,7 @@ module.exports = {
   // publicPath: './public',
   assetsDir,
   devServer: {
+    host: '192.168.0.162', //万车品wify测试
     proxy: {
       '/api|/app': {
         target: url,
@@ -67,25 +68,21 @@ module.exports = {
       }
     },
     module: {
-      rules: [
-        {
-          test: /mini\.png$/, // 分享小程序封面图
-          use: [
-            {
-              loader: 'url-loader',
+      rules: [{
+        test: /mini\.png$/, // 分享小程序封面图
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 1024 * 1024 * 4,
+            fallback: {
+              loader: 'file-loader',
               options: {
-                limit: 1024 * 1024 * 4,
-                fallback: {
-                  loader: 'file-loader',
-                  options: {
-                    name: 'public/h5/img/[name].[hash:8].[ext]'
-                  }
-                }
+                name: 'public/h5/img/[name].[hash:8].[ext]'
               }
             }
-          ]
-        }
-      ]
+          }
+        }]
+      }]
     },
     plugins: [new GenHeadAndBody()]
   },

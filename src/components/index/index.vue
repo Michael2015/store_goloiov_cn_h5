@@ -27,8 +27,7 @@
           <index-banner></index-banner>
         </div>
       </div>
-      <index-echarts :option='option' />
-      <index-echarts :option='option1' />
+
       <!-- <div class="blank"><img src="~img/index-top-bg.png" alt=""></div> -->
     </div>
     <div>
@@ -139,7 +138,6 @@ import IndexAd from "./index-ad";
 import newPeople from "./newPeople";
 import IndexGoodsItem from "./index-goods-item";
 import IndexGoodsItem2 from "./index-goods-item2";
-import indexEcharts from './echarts/echarts'
 //import LoadMore from "base/load-more";
 import LoadMore2 from "base/load-more2";
 import LoadMore3 from "base/load-more3";
@@ -175,14 +173,11 @@ export default {
     IndexAd,
     IndexGoodsItem2,
     newPeople,
-    indexEcharts
 
   },
-  data () {
+  data() {
     return {
       allArr: [],
-      option: {},
-      option1: {},
       page: 0,
       busy: false,
       wrap: "wrap",
@@ -208,13 +203,13 @@ export default {
       "indexScrollTop",
       "token"
     ]),
-    category () {
+    category() {
       return this.categoryList.slice(1);
     },
-    cid () {
+    cid() {
       return this.categoryList[0] && this.categoryList[0].id;
     },
-    getCategoryProducts () {
+    getCategoryProducts() {
       return () => {
         return this.role === 1
           ? PartnerGetBlastProducts(this.keyword, 1, 10)
@@ -222,7 +217,7 @@ export default {
       };
     },
 
-    getCategoryProducts2 () {
+    getCategoryProducts2() {
       return (page, limit) => {
         return this.role === 1
           ? PartnerGetProducts(page, limit)
@@ -230,18 +225,18 @@ export default {
       };
     },
 
-    loginKey () {
+    loginKey() {
       return this.isLogin + "";
     }
   },
   watch: {
-    keyword () {
+    keyword() {
       // 关键字改变，当为空的时候触发搜索全部
       if (this.keyword == "") {
         this.search();
       }
     },
-    isLogin (val) {
+    isLogin(val) {
       // 重置关键字和标签
       this.keyword = "";
       this.activeCategoryIndex = -1;
@@ -252,7 +247,7 @@ export default {
     }
   },
 
-  created () {
+  created() {
     this.is_fisrt_pop = !localStorage.getItem("new_people_pop_" + getNowDate()); //是否是第一次弹框
 
     Loading.open();
@@ -269,61 +264,11 @@ export default {
       Loading.close();
     });
   },
-  destroyed () {
+  destroyed() {
     this.$refs.wrap.removeEventListener("scroll", this.wrap_scroll, true);
   },
-  mounted () {
+  mounted() {
     this.Phone = Phone;
-    this.option = {
-      xAxis: {
-        type: 'category',
-        data: ['13.00', '12.01', '13.02', '13.03', '13.04', '13.05', '13.06']
-      },
-      yAxis: {
-        type: 'value',
-        max: 15,
-        axisLine: {
-          show: true,
-          symbol: ['none', 'arrow'],
-          symbolSize: [5, 10],
-          symbolOffset: [0, 8]
-        },
-        axisLabel: {
-          formatter: function (value, index) {
-            return value.toFixed(2)
-          }
-        }
-      },
-      color: 'gray',
-      series: [{
-        data: [4.00, 5.00, 6.00, 1.00, 8.00, 9.00, 2.00],
-        type: 'line',
-        itemStyle: { normal: { label: { show: true } } }
-      }]
-    };
-    this.option1 = {
-      xAxis: {
-        type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: [{
-        data: [120, 200, 150, 80, 70, 110, 130],
-        type: 'bar'
-      },
-      {
-        data: [120, 200, 150, 80, 70, 110, 130],
-        type: 'line',
-      }
-      ]
-    };
-    setInterval(() => {
-      this.option.series[0].data = Array.from({ length: 7 }, (ele, ind) => {
-        return (Math.random() * 10).toFixed(2)
-      })
-    }, 3000)
     this.$nextTick(() => {
       this.$refs.wrap.addEventListener("scroll", this.wrap_scroll, true);
       if (Phone === "ios") {
@@ -343,7 +288,7 @@ export default {
       this.tab_left = this.$refs.tab_left;
     });
   },
-  activated () {
+  activated() {
     this.$nextTick(() => {
       this.isShowNewPeop();
       this.topHeight = this.clientHeight - (this.offsetHeight + this.T_H + 100);
@@ -351,7 +296,7 @@ export default {
     });
     window.addEventListener("scroll", this.handleScroll, true);
   },
-  deactivated () {
+  deactivated() {
     window.removeEventListener("scroll", this.handleScroll, true);
     clearTimeout(this.timer);
     // 初始化参数，避免bug
@@ -363,7 +308,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setFirst", "setIndexScrollTop"]),
-    wrap_scroll (e) {
+    wrap_scroll(e) {
       if (e.target.scrollTop === 0) {
         if (Phone === "ios") {
           e.target.scrollTop = 1;
@@ -381,7 +326,7 @@ export default {
         }
       }
     },
-    isShowNewPeop () {
+    isShowNewPeop() {
       var time = new Date().getTime();
 
       if (!localStorage.getItem(this.token + "showNewPerson")) {
@@ -409,14 +354,14 @@ export default {
         }
       }
     },
-    setNewPersonTime (time) {
+    setNewPersonTime(time) {
       localStorage.setItem(this.token + "showNewPerson", true);
       localStorage.setItem(this.token + "remain", time + 1000 * 60 * 60 * 24);
       localStorage.setItem(this.token + "countTime", 1);
       //this.setFirst(true);
       this.$refs.newpeople.show(indexGetPop);
     },
-    loadMore_wrap () {
+    loadMore_wrap() {
       if (!this.busy) {
         this.busy = true;
         if (!this.loadAll) {
@@ -424,7 +369,7 @@ export default {
         }
       }
     },
-    goMore (e, adListInfo) {
+    goMore(e, adListInfo) {
       console.log(adListInfo);
       let { kind, url } = adListInfo;
       switch (kind) {
@@ -440,7 +385,7 @@ export default {
           break;
       }
     },
-    getAdList () {
+    getAdList() {
       getAdv(3, ++this.page).then(data => {
         if (data) {
           this.allArr = data.map(item => {
@@ -453,12 +398,12 @@ export default {
         }
       });
     },
-    toLoadMore () {
+    toLoadMore() {
       console.log(111);
       // this.getAdList();
       // this.allArr.push({size:6,showMore:true});
     },
-    handleScroll (e) {
+    handleScroll(e) {
       //console.log(this.$refs.all_product_wrap.getBoundingClientRect())
       // 得到页面滚动的距离
       this.wrapScrollTop = e.target.scrollTop;
@@ -476,7 +421,7 @@ export default {
       this.is_tab_fixed = this.top >= scale;
       this.key = this.$store.state.topNum + 1;
     },
-    setCategory (i) {
+    setCategory(i) {
       if (i !== this.activeCategoryIndex) {
         this.activeCategoryIndex = i;
         this.key = i;
@@ -489,7 +434,7 @@ export default {
       }
       this._scroll_animation(this.tab_left, 30 * i, 80);
     },
-    _scroll_animation (element, to, duration) {
+    _scroll_animation(element, to, duration) {
       if (duration <= 0) return;
       const diff = to - element.scrollLeft;
       const perTick = (diff / duration) * 10;
@@ -499,26 +444,26 @@ export default {
         this._scroll_animation(element, to, duration - 10);
       }, 10);
     },
-    search () {
+    search() {
       //this.key = this.keyword ? this.keyword : "empty";
       this.$router.push({
         path: "/search",
         query: { name: this.keyword, keyword: this.keyword }
       });
     },
-    invite () {
+    invite() {
       Loading.open();
       invitePartner(this.userInfo.uid, this.userInfo.nickname).finally(() => {
         Loading.close();
       });
     },
-    logout () {
+    logout() {
       this.$refs.confirm.show("确定退出吗？", () => {
         logout();
       });
     }
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     if (this.setIndexScrollTop) {
       if (to.path === "/order" || to.path === "/income" || to.path === "/me") {
         if (Phone === "ios") {

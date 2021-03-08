@@ -1,7 +1,6 @@
 <template>
   <div ref="echarts"
-       class="echarts"
-       style="width: 100%;height:300px"></div>
+       class="echarts"></div>
 </template>
 
 <script>
@@ -38,4 +37,9 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~css/def";
+.echarts {
+  width: 90%;
+  height: size(600);
+  margin: 0 auto;
+}
 </style>

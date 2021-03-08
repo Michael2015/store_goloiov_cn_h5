@@ -1,36 +1,17 @@
 <template>
   <div class="income_warp">
-    <top-head>我的积分</top-head>
+    <top-head>我的贡献值</top-head>
 
     <div class="topbox">
       <div class="banner">
         <i class="iconfont wenhao">&#xe605;</i>
         <div class="content">
-          <div class="remain">剩余总积分</div>
-          <div class="jifen-num">
-            10000000000
-            <span>≈2653.1元</span>
-          </div>
-        </div>
-        <div class="cumulat">
-          <div class="left">
-            <p>累计获得</p>
-            <p>999999</p>
-          </div>
-          <div class="right">
-            <p>累计消耗</p>
-            <p>999999</p>
-          </div>
-        </div>
-        <div class="withdraw-wrap">
-          <div class="withdraw"
-               @click="withdraw">提现</div>
+          10000000000
         </div>
       </div>
     </div>
 
-    <div class="loadmore"
-         @scroll='scroll'>
+    <div class="loadmore">
       <li class="list-title">
         <span>日期</span>
         <span>类型</span>
@@ -42,7 +23,7 @@
             :key='i'><span>日期</span>
           <span>类型</span>
           <span class="num"
-                :class="i>0?'red':''">{{ale}}</span></li>
+                :class="i>0?'red':''">{{i-10}}</span></li>
       </Load-more>
     </div>
     <notice ref="notive"
@@ -61,7 +42,7 @@ import { Toast } from "lib";
 export default {
   data() {
     return {
-      ale: 0,
+
       active: "earnings",
       balance: "0.00", //账户余额
       cash: "0.00", //可提现金额
@@ -83,20 +64,6 @@ export default {
     };
   },
   mounted() {
-    window.addEventListener('scroll', e => {
-      let scrollTop =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop;
-      let clientHeight =
-        window.innerHeight || document.documentElement.clientHeight;
-      let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-      // console.log(scrollTop, clientHeight, scrollHeight)
-      this.ale = scrollHeight + ',' + (scrollTop + clientHeight)
-      if (scrollHeight === scrollTop + clientHeight) {
-        console.log('到底了')
-      }
-    })
     getUserAmount().then(reque => {
       this.cash = reque.cash_money;
       this.balance = reque.can_withdraw;
@@ -107,9 +74,7 @@ export default {
     });
   },
   methods: {
-    scroll(e) {
-      console.log(e)
-    },
+
     checkShow(demo) {
       this.active = demo;
       if (this.active === "charge") {
@@ -217,6 +182,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "~css/def";
+
 .income_warp {
   padding-bottom: size(96);
   width: 100%;
@@ -230,7 +196,7 @@ export default {
     top: size(88);
     overflow: hidden;
     background: #fff;
-    height: size(560);
+    height: size(380);
     width: 100%;
     z-index: 99;
     box-shadow: 0 1px 5px #eee;
@@ -272,26 +238,16 @@ export default {
         z-index: 99;
       }
       .content {
+        height: 100%;
         text-align: center;
-        .remain {
-          font-size: size(28);
-          margin: size(50) 0 size(30);
-        }
-        .jifen-num {
+        font-size: size(52);
+        font-weight: bolder;
+        &:after {
           display: inline-block;
-          font-size: size(52);
-          font-weight: bolder;
-          position: relative;
-          white-space: nowrap;
-          > span {
-            font-size: size(28);
-            font-weight: normal;
-            position: absolute;
-            bottom: size(4);
-            right: size(-10);
-            transform: translate(100%, 0);
-            white-space: nowrap;
-          }
+          content: "";
+          vertical-align: middle;
+          height: 100%;
+          width: 0;
         }
       }
       .cumulat {
@@ -343,7 +299,7 @@ export default {
     }
   }
   .loadmore {
-    margin-top: size(560);
+    margin-top: size(420);
     padding: 0 size(30);
     li {
       list-style: none;
@@ -373,7 +329,7 @@ export default {
     overflow: auto;
     position: absolute;
     width: 100%;
-    top: size(560);
+    top: size(380);
     bottom: size(100);
     .touch-no {
       padding-bottom: size(10);

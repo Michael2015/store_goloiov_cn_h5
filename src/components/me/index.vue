@@ -1,78 +1,91 @@
 <template>
   <div class="me_warp">
-    <div class="header">
-      <div class="avater_warp" @click="tojump('/myMsg')">
-        <img class="averer" :src="userInfo.avatar" alt />
-        <div class="amend">
-          <img src="~img/me/bianji.png" alt />
+    <div class='header'>
+      <div class="head_top">
+        <div class="part_left">
+          <i class="iconfont user">&#xe640;</i>
+          <span>赵子龙</span>
+          <span>&nbsp;|&nbsp;</span>
+          <span>原始股东</span>
+        </div>
+        <div class="part_right">
+          <i class="iconfont code">&#xe646;</i>
+          <i class="iconfont setup">&#xe60b;</i>
         </div>
       </div>
-      <div class="user_name">
-        {{userInfo.nickname}}
-        <img v-if="userInfo.partner_level == 0" class="partner_level" src="~img/me/vip0.png" alt />
-        <img v-if="userInfo.partner_level == 1" class="partner_level" src="~img/me/vip1.png" alt />
-        <img v-if="userInfo.partner_level == 2" class="partner_level" src="~img/me/vip2.png" alt />
-        <img v-if="userInfo.partner_level == 3" class="partner_level" src="~img/me/vip3.png" alt />
-        <img v-if="userInfo.partner_level == 4" class="partner_level" src="~img/me/vip4.png" alt />
-        <img v-if="userInfo.partner_level == 5" class="partner_level" src="~img/me/vip5.png" alt />
-        <img v-if="userInfo.partner_level == 6" class="partner_level" src="~img/me/vip6.png" alt />
+      <div class="head_body">
+        <div class='count'
+             v-for='(ele,i) in headData'
+             :key='i'>
+          <div>{{ele.num}}</div>
+          <div>{{ele.title}}</div>
+        </div>
       </div>
-      <!--
-      <div class="grade">{{partnerLevelObj[userInfo.partner_level]}}</div>
-      -->
-      <div class="label">
-        <div class="grade2" v-if="server_vip">VIP服务商</div>
-        <div class="grade2" v-if="region_agent">区域管理员</div>
-      </div>
-      <div class="team_no">伙伴 {{Num || 0}} 人</div>
     </div>
-    <!--
-    <div class="my_contribution">
-       <img src="~img/me/contribution_value.png" @click="tojump('/my_contribution')" />
-    </div>
-    -->
-    <div class="crosswise_tab">
-      <div class="crosswise_item" @click="tojump('/myVisitor')">
-        <img src="~img/me/fangkexiaoxi.png" alt />
-        <div class="title">访客记录</div>
-      </div>
-      <div class="gang"></div>
-      <div class="crosswise_item" @click="tojump('/myPartner')">
-        <img src="~img/me/wodehuoban.png" alt />
-        <div class="title">我的伙伴</div>
-      </div>
+    <div class="echarts">
+      <my-charts :option='option'
+                 key='1' />
     </div>
     <div class="vertical_tab">
-      <div class="vertical_item" v-for="(item,index) in tabList" :key="index">
-        <div class="left" @click="to(item.path?item.path:'')">
-          <img :src="item.img" alt />
+      <div class="vertical_item"
+           v-for="(item,index) in tabList"
+           :key="index"
+           @click="to(item.path?item.path:'')">
+        <div class="left">
+          <i class="iconfont">{{item.icon}}</i>&nbsp;
           <div class="title">{{item.tit}}</div>
         </div>
         <div class="right">
-          <img src="~img/icon/join-right.png" alt />
+          <span>{{item.afterTit}}</span>
+          <img src="~img/icon/join-right.png"
+               alt />
         </div>
       </div>
     </div>
-    <div class="quit">
-      <div class="btn-out" @click="logout">退出登录</div>
-    </div>
+    <!-- <div class="quit">
+      <div class="btn-out"
+           @click="logout">退出登录</div>
+    </div> -->
     <confirm ref="logOut">确定退出吗？</confirm>
     <notice ref="notice"></notice>
   </div>
 </template>
 <script>
 import tojump from "mixins/tojump";
-import { partnerNum, updateUserInfo, get_region_partner ,get_vip_server} from "api/me";
+import { partnerNum, updateUserInfo, get_region_partner, get_vip_server } from "api/me";
 import { mapState } from "vuex";
 import partnerLevelObj from "mixins/partner-level-obj";
 import { logout } from "api/login";
 import confirm from "base/confirm";
 import notice from "base/notice";
+import myCharts from 'com/common/echarts'
+
 export default {
   data() {
     return {
-      tabList: [
-         {
+      option: {},
+      headData: [{
+        num: 0,
+        title: '我的积分',
+        name: 'point'
+      },
+      {
+        num: 0,
+        title: '我的收益',
+        name: 'income'
+      },
+      {
+        num: 0,
+        title: '我的贡献值',
+        name: 'attribute'
+      },
+      {
+        num: 0,
+        title: '股东排名',
+        name: 'rank'
+      }],
+      /* tabList: [
+        {
           img: require("img/me/jifen.png"),
           tit: "我的积分",
           path: "/jifen"
@@ -122,14 +135,52 @@ export default {
           tit: "反馈意见",
           path: "/myOpinion"
         }
+      ], */
+      tabList: [{
+        icon: '\ue666',
+        tit: "我的订单",
+        afterTit: '查看全部订单',
+        path: "/jifen"
+      },
+      {
+        icon: '\ue60e',
+        tit: "我的积分",
+        afterTit: '积分明细',
+        path: "/jifen"
+      },
+      {
+        icon: '\ue629',
+        tit: "我的收益",
+        afterTit: '收益流水',
+        path: "/jifen"
+      },
+      {
+        icon: '\ue606',
+        tit: "我的贡献值",
+        afterTit: '贡献值明细',
+        path: "/gxz"
+      },
+      {
+        icon: '\ue621',
+        tit: "我的会员",
+        afterTit: '',
+        path: "/myvip"
+      },
+      {
+        icon: '\ue64d',
+        tit: "平台规则须知",
+        afterTit: '动态价格、积分等',
+        path: "/jifen"
+      }
       ],
       Num: "",
-      server_vip:false,
-      region_agent:false,
+      server_vip: false,
+      region_agent: false,
     };
   },
   mixins: [tojump, partnerLevelObj],
   async mounted() {
+    this.echartsInit()
     const reque = await partnerNum();
     this.Num = reque && reque.member_nums;
     console.log(reque)
@@ -138,6 +189,50 @@ export default {
     updateUserInfo();
   },
   methods: {
+    echartsInit() {
+      this.option = {
+        xAxis: {
+          type: 'category',
+          data: ['13.00', '12.01', '13.02', '13.03', '13.04', '13.05', '13.06']
+        },
+        yAxis: {
+          type: 'value',
+          max: 15,
+          axisLine: {
+            show: true,
+            symbol: ['none', 'arrow'],
+            symbolSize: [5, 10],
+            symbolOffset: [0, 8]
+          },
+          axisLabel: {
+            formatter: function (value, index) {
+              return value.toFixed(2)
+            }
+          }
+        },
+        title: {
+          show: true, //显示策略，默认值true,可选为：true（显示） | false（隐藏）
+          text: '主标题',
+          left: 'center',
+          top: '20',
+          textStyle: {
+            fontSize: 14,
+            top: 30,
+          }
+        },
+        color: '#ED3E48',
+        series: [{
+          data: [4.00, 5.00, 6.00, 1.00, 8.00, 9.00, 2.00],
+          type: 'line',
+          itemStyle: { normal: { label: { show: true } } }
+        }]
+      };
+      setInterval(() => {
+        this.option.series[0].data = Array.from({ length: 7 }, (ele, ind) => {
+          return (Math.random() * 10).toFixed(2)
+        })
+      }, 3000)
+    },
     logout() {
       this.$refs.logOut.show("", () => {
         logout().then(() => {
@@ -188,8 +283,7 @@ export default {
         this.seeFlag(url);
         return;
       }
-      if(url === "/applyVip")
-      {
+      if (url === "/applyVip") {
         this.seeVipFlag(url);
         return;
       }
@@ -201,7 +295,8 @@ export default {
   },
   components: {
     confirm,
-    notice
+    notice,
+    myCharts
   }
 };
 </script>
@@ -212,92 +307,64 @@ export default {
 .me_warp {
   padding-bottom: size(100);
   .header {
-    height: size(385);
-    overflow: hidden;
-    background-image: linear-gradient(236deg, #ef5456 0%, #e70002 100%);
-    position: relative;
-    .avater_warp {
-      margin: size(36) auto size(28) auto;
-      box-sizing: border-box;
-      width: size(169);
-      height: size(169);
-      // border: size(2) solid #0c0422;
-      border-radius: 50%;
-      // padding: size(10);
-      position: relative;
-      & > img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
+    /*  background-image: linear-gradient(236deg, #ef5456 0%, #e70002 100%); */
+    background: #f2f2f2;
+    .head_top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: size(30);
+
+      .part_left {
+        height: size(100);
+        .user {
+          font-size: size(80);
+          vertical-align: middle;
+        }
+        &:after {
+          content: "";
+          height: 100%;
+          width: 0;
+          display: inline-block;
+          vertical-align: middle;
+        }
+        & > span:nth-of-type(1) {
+          margin-left: size(30);
+        }
       }
-      .amend {
-        position: absolute;
-        right: size(2);
-        bottom: size(4);
-        width: size(44);
-        height: size(44);
-        border-radius: 50%;
-        background: #fff;
-        padding: size(4);
-        & > img {
-          width: size(36);
-          height: size(36);
-          border-radius: 50%;
+      .part_right {
+        height: size(100);
+        line-height: size(100);
+        .iconfont {
+          margin: 0 size(10);
+          font-size: size(30);
+        }
+        .code {
+          color: #ed3e48;
         }
       }
     }
-    .user_name {
-      height: size(63);
-      line-height: size(63);
-      font-size: size(46);
-      color: #0c0423;
-      text-align: center;
-    }
-    .partner_level{
-      height: size(35)
-    }
-    .grade {
-      margin: size(8) auto 0 auto;
-      width: size(158);
-      height: size(43);
-      line-height: size(43);
-      text-align: center;
-      background-color: #222;
-      color: #fff;
-      font-size: size(24);
-      border-radius: size(6);
-    }
-    .label
-    {
-      text-align: center;
-      width: 60%;
-      margin-left: 20%;
-    }
-    .grade2 {
-      width: 40%;
-      height: size(50);
-      margin-left: 5%;
-      margin-right: 5%;
-      line-height: size(50);
-      background-color: #222;
-      color: #fff;
-      font-size: size(24);
-      border-radius: size(6);
-      display: inline-block;
-    }
-    .team_no {
-      height: size(37);
-      line-height: size(37);
-      font-size: size(26);
-      color: #eee;
-      position: absolute;
-      right: size(30);
-      bottom: size(9);
+    .head_body {
+      padding: size(20);
+      display: flex;
+      justify-content: center;
+      .count {
+        border-right: 1px solid #333;
+        text-align: center;
+        padding: 0 size(15);
+        font-size: size(30);
+        color: #ed3e48;
+        & > div {
+          margin-bottom: size(10);
+        }
+      }
+      .count:nth-last-of-type(1) {
+        border-right: 0;
+      }
     }
   }
-  .my_contribution 
-  {
-    >img{
+  .my_contribution {
+    > img {
       width: 100%;
     }
   }
@@ -330,6 +397,7 @@ export default {
       }
     }
   }
+
   .vertical_tab {
     padding: 0 size(45);
     .vertical_item {
@@ -354,6 +422,10 @@ export default {
       .right {
         & > img {
           width: size(16);
+        }
+        & > span {
+          font-size: size(28);
+          margin-right: size(5);
         }
       }
     }

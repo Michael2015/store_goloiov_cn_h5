@@ -20,26 +20,30 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'hash',
-  scrollBehavior(to, from, saveTop){
+  scrollBehavior(to, from, saveTop) {
     if (saveTop) {
       return saveTop
     } else {
-      return {x: 0, y: 0}
+      return {
+        x: 0,
+        y: 0
+      }
     }
   },
-  routes: [
-    {
+  routes: [{
       path: '/index',
       // component : () => import(/* webpackChunkName: "index" */ 'com/index'),
-      component : Index,
-      meta: { haveTab: true, keepAlive: true }
+      component: Index,
+      meta: {
+        haveTab: true,
+        keepAlive: true
+      }
     },
     {
       path: '/goods/:id',
       component: Goods,
       props: true,
-      children: [
-        {
+      children: [{
           path: '',
           redirect: 'detail'
         },
@@ -72,19 +76,27 @@ export default new Router({
     {
       path: '/search',
       component: Search,
-      meta: { haveTab: true , keepAlive: true}
+      meta: {
+        haveTab: true,
+        keepAlive: true
+      }
     },
     {
       path: '/blank',
       component: Blank,
-      meta: { haveTab: true , keepAlive: true}
+      meta: {
+        haveTab: true,
+        keepAlive: true
+      }
     },
     {
       path: '/buy-goods/:id',
       component: BuyGoods,
       props: true,
       name: 'buy-goods',
-      meta: { keepAlive: true }
+      meta: {
+        keepAlive: true
+      }
     },
     {
       path: '/buy-success',
@@ -93,8 +105,11 @@ export default new Router({
     },
     {
       path: '/order/:refresh?',
-      component: () => import(/* webpackChunkName: "order" */ 'com/order'),
-      meta: { haveTab: true , keepAlive: true}
+      component: () => import( /* webpackChunkName: "order" */ 'com/order'),
+      meta: {
+        haveTab: true,
+        keepAlive: true
+      }
     },
     {
       path: '/order-detail/:id',
@@ -103,212 +118,228 @@ export default new Router({
     },
     {
       path: '/order-refund/:id',
-      component: () => import(/* webpackChunkName: "order" */ 'com/order/order-refund'),
+      component: () => import( /* webpackChunkName: "order" */ 'com/order/order-refund'),
       props: true
     },
     {
       path: '/order-remark/:id',
-      component: () => import(/* webpackChunkName: "order" */ 'com/order/order-remark'),
+      component: () => import( /* webpackChunkName: "order" */ 'com/order/order-remark'),
       props: true
     },
     {
       path: '/order-track',
-      component: () => import(/* webpackChunkName: "order" */ 'com/order/order-track'),
+      component: () => import( /* webpackChunkName: "order" */ 'com/order/order-track'),
       props: true
     },
     {
       path: '/income',
-      component: () => import(/* webpackChunkName: "income" */ 'com/income'),
-      meta: { haveTab: true }
+      component: () => import( /* webpackChunkName: "income" */ 'com/income'),
+      meta: {
+        haveTab: true
+      }
     },
     {
       path: '/record',
-      component: () => import(/* webpackChunkName: "income" */ 'com/income/record')
+      component: () => import( /* webpackChunkName: "income" */ 'com/income/record')
     },
     {
       path: '/testingMoney',
-      component: () => import(/* webpackChunkName: "income" */ 'com/me/testingMoney')
+      component: () => import( /* webpackChunkName: "income" */ 'com/me/testingMoney')
     },
     {
       path: '/withdraw',
-      component: () => import(/* webpackChunkName: "income" */ 'com/income/withdraw')
+      component: () => import( /* webpackChunkName: "income" */ 'com/income/withdraw')
     },
     {
       path: '/relevanceCard',
-      component: () => import(/* webpackChunkName: "income" */ 'com/income/relevanceCard')
+      component: () => import( /* webpackChunkName: "income" */ 'com/income/relevanceCard')
     },
     {
       path: '/allowance',
-      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/allowance')
+      component: () => import( /* webpackChunkName: "income" */ 'com/income/IncomeDetails/allowance')
     },
     {
       path: '/benifit',
-      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/benifit')
+      component: () => import( /* webpackChunkName: "income" */ 'com/income/IncomeDetails/benifit')
     },
     {
       path: '/commission',
-      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/commission')
+      component: () => import( /* webpackChunkName: "income" */ 'com/income/IncomeDetails/commission')
     },
     {
       path: '/director',
-      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/director')
+      component: () => import( /* webpackChunkName: "income" */ 'com/income/IncomeDetails/director')
     },
     {
       path: '/public',
-      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/public')
+      component: () => import( /* webpackChunkName: "income" */ 'com/income/IncomeDetails/public')
     },
     {
       path: '/supplier',
-      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/supplier')
+      component: () => import( /* webpackChunkName: "income" */ 'com/income/IncomeDetails/supplier')
     },
     {
       path: '/cultivate',
-      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/cultivate')
+      component: () => import( /* webpackChunkName: "income" */ 'com/income/IncomeDetails/cultivate')
     },
     {
       path: '/region',
-      component: () => import(/* webpackChunkName: "income" */ 'com/income/IncomeDetails/region')
+      component: () => import( /* webpackChunkName: "income" */ 'com/income/IncomeDetails/region')
     },
-    
-    
+
+
     {
       path: '/me',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me'),
-      meta: { haveTab: true }
+      component: () => import( /* webpackChunkName: "me" */ 'com/me'),
+      meta: {
+        haveTab: true
+      }
     },
     {
       path: '/jifen',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/jifen'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/jifen'),
     },
     {
+      path: '/gxz',
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/gxz'),
+    },
+    {
+      path: '/myvip',
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/myvip'),
+    },
+
+    {
       path: '/my_contribution',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/my_contribution'),
-      meta: { haveTab: true , keepAlive: true}
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/my_contribution'),
+      meta: {
+        haveTab: true,
+        keepAlive: true
+      }
     },
     {
       path: '/my_contribution_detail',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/my_contribution_detail'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/my_contribution_detail'),
     },
     {
       path: '/mymsg',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/myMsg'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/myMsg'),
     },
     {
       path: '/myPartner',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/myPartner'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/myPartner'),
     },
     {
       path: '/myVisitor',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/myVisitor'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/myVisitor'),
     },
     {
       path: '/versionsMsg',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/versionsMsg'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/versionsMsg'),
     },
     {
       path: '/bingPhone',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/bingPhone'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/bingPhone'),
     },
     {
       path: '/compileName',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/compileName'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/compileName'),
     },
     {
       path: '/myAddress',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/myAddress'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/myAddress'),
     },
     {
       path: '/addAddress',
       name: 'addAddress',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/addAddress'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/addAddress'),
     },
     {
       path: '/myDiscount',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/myDiscount'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/myDiscount'),
     },
     {
       path: '/myComment',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/myComment'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/myComment'),
     },
     {
       path: '/myStrategy',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/myStrategy'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/myStrategy'),
     },
     {
       path: '/myOpinion',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/myOpinion'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/myOpinion'),
     },
     {
       path: '/useDesc',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/useDesc'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/useDesc'),
     },
     {
       path: '/gongpaijieshao',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/jieshao/gongpai'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/jieshao/gongpai'),
     },
     {
       path: '/caozuojieshao',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/jieshao/caozuo'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/jieshao/caozuo'),
     },
     {
       path: '/partnerjieshao',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/jieshao/partner'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/jieshao/partner'),
     },
     {
       path: '/incomejieshao',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/jieshao/income'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/jieshao/income'),
     },
     {
       path: '/xieyi',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/xieyi'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/xieyi'),
     },
     {
       path: '/myhaibao',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/myhaibao'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/myhaibao'),
     },
     {
       path: '/applyVip',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/vip/index'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/vip/index'),
     },
     {
       path: '/vipApplyList',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/vip/vipApplyList'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/vip/vipApplyList'),
     },
     {
       path: '/vipApplyDetail',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/vip/vipApplyDetail'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/vip/vipApplyDetail'),
     },
     {
       path: '/vipApplyFlag',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/vip/vipApplyFlag'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/vip/vipApplyFlag'),
     },
     {
       path: '/haibaoDetali',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/haibaoDetali'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/haibaoDetali'),
     },
     {
       path: '/applyAdmin',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/admin/index'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/admin/index'),
     },
     {
       path: '/applyflag',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/admin/applyflag'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/admin/applyflag'),
     },
     {
       path: '/applylist',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/admin/applylist'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/admin/applylist'),
     },
     {
       path: '/applydetail',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/admin/applydetail'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/admin/applydetail'),
     },
     {
       path: '/applyadopt',
-      component: () => import(/* webpackChunkName: "me" */ 'com/me/admin/applyadopt'),
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/admin/applyadopt'),
     },
     {
       path: '/',
-      redirect:'/index'
+      redirect: '/index'
     }
   ]
 })
