@@ -37,12 +37,13 @@
         <span>数值</span>
       </li>
       <Load-more v-slot='{list}'>
-        <li v-for='i in 20'
+        <li v-for='i in nums'
             class="list-item"
             :key='i'><span>日期</span>
           <span>类型</span>
           <span class="num"
-                :class="i>0?'red':''">{{ale}}</span></li>
+                :class="i>0?'red':''">{{ale}}>{{i}}</span>
+        </li>
       </Load-more>
     </div>
     <notice ref="notive"
@@ -57,11 +58,13 @@ import notice from "base/notice";
 import { incomeList, platoonList, getUserAmount } from "api/income";
 import LoadMore from "base/load-more";
 import { login } from "api/login";
-import { Toast } from "lib";
+import { Toast, Loading } from "lib";
 export default {
-  data() {
+  data () {
     return {
+      nums: 10,
       ale: 0,
+      isAll: false,
       active: "earnings",
       balance: "0.00", //账户余额
       cash: "0.00", //可提现金额
@@ -82,21 +85,8 @@ export default {
       }
     };
   },
-  mounted() {
-    window.addEventListener('scroll', e => {
-      let scrollTop =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop;
-      let clientHeight =
-        window.innerHeight || document.documentElement.clientHeight;
-      let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-      // console.log(scrollTop, clientHeight, scrollHeight)
-      this.ale = scrollHeight + ',' + (scrollTop + clientHeight)
-      if (scrollHeight === scrollTop + clientHeight) {
-        console.log('到底了')
-      }
-    })
+  mounted () {
+    window.addEventListener('scroll', this.handler, true)
     getUserAmount().then(reque => {
       this.cash = reque.cash_money;
       this.balance = reque.can_withdraw;
@@ -106,11 +96,41 @@ export default {
       //this.$refs.charge.disabled = true;
     });
   },
+  destroyed () {
+    window.removeEventListener('scroll', this.handler, true)
+  },
   methods: {
-    scroll(e) {
+    handler (e) {
+      let scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+      let clientHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+      let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+      // console.log(scrollTop, clientHeight, scrollHeight)
+      this.ale = scrollHeight + '===' + (Math.ceil(scrollTop) + clientHeight)
+      if (scrollHeight === Math.ceil(scrollTop) + clientHeight) {
+
+        if (this.nums < 30 && !this.isAll) {
+          Loading.open()
+          setTimeout(() => {
+            this.nums += 10
+            console.log('执行')
+            Loading.close()
+          }, 500)
+        }
+        else {
+          this.isAll = true
+          Loading.close()
+          Toast('已经到底啦')
+        }
+      }
+    },
+    scroll (e) {
       console.log(e)
     },
-    checkShow(demo) {
+    checkShow (demo) {
       this.active = demo;
       if (this.active === "charge") {
         this.$refs.charge.disabled = false;
@@ -124,13 +144,13 @@ export default {
       //   this.loadCharge();
       // }
     },
-    loadCharge(page, size) {
+    loadCharge (page, size) {
       return platoonList(page, size);
     },
-    loadEarnings(page, size) {
+    loadEarnings (page, size) {
       return incomeList(page, size);
     },
-    record() {
+    record () {
       if (this.isLogin) {
         this.tojump("/record");
       } else {
@@ -139,7 +159,7 @@ export default {
         });
       }
     },
-    withdraw() {
+    withdraw () {
       if (this.isLogin) {
         if (this.cash === "0.00") {
           Toast('无可提现金额');
@@ -153,12 +173,12 @@ export default {
       }
     },
     // 获取订单号后六位
-    tailSix(str) {
+    tailSix (str) {
       let s = str;
       return s.substr(s.length - 6, 6);
     },
     // 收益列表点击
-    clickShouYi(type, id, sn, uid, type_num) {
+    clickShouYi (type, id, sn, uid, type_num) {
       console.log(type);
       let url;
       url = this.jumpObj[type];
@@ -170,10 +190,10 @@ export default {
       }
       this.tojump(url);
     },
-    clickMianDan(id, uid, type_num) {
+    clickMianDan (id, uid, type_num) {
       this.tojump(`/public?order_id=${id}&user_id=${uid}&type_num=${type_num}`);
     },
-    tojieshao() {
+    tojieshao () {
       if (this.active === "charge") {
         this.tojump("/gongpaijieshao");
       } else if (this.active === "earnings") {
@@ -183,7 +203,7 @@ export default {
     }
   },
   watch: {
-    active(oldVal) {
+    active (oldVal) {
       if (oldVal === "earnings") {
         this.$refs.earnings.disabled = false;
         this.$refs.charge.disabled = true;

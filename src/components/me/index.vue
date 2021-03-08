@@ -61,7 +61,7 @@ import notice from "base/notice";
 import myCharts from 'com/common/echarts'
 
 export default {
-  data() {
+  data () {
     return {
       option: {},
       headData: [{
@@ -179,17 +179,16 @@ export default {
     };
   },
   mixins: [tojump, partnerLevelObj],
-  async mounted() {
+  async mounted () {
     this.echartsInit()
     const reque = await partnerNum();
     this.Num = reque && reque.member_nums;
-    console.log(reque)
     this.server_vip = reque && reque.server_vip;
     this.region_agent = reque && reque.region_agent;
     updateUserInfo();
   },
   methods: {
-    echartsInit() {
+    echartsInit () {
       this.option = {
         xAxis: {
           type: 'category',
@@ -233,7 +232,7 @@ export default {
         })
       }, 3000)
     },
-    logout() {
+    logout () {
       this.$refs.logOut.show("", () => {
         logout().then(() => {
           this.$refs.notice.show("退出成功", () => {
@@ -242,7 +241,7 @@ export default {
         });
       });
     },
-    seeFlag(url) {
+    seeFlag (url) {
       get_region_partner().then(res => {
         //  后台查不到数据说明没有申请过
         if (res == null) {
@@ -259,7 +258,7 @@ export default {
         this.$router.push(url);
       });
     },
-    seeVipFlag(url) {
+    seeVipFlag (url) {
       get_vip_server().then(res => {
         //  后台查不到数据说明没有申请过
         if (res == null) {
@@ -278,7 +277,7 @@ export default {
     },
 
 
-    to(url) {
+    to (url) {
       if (url === "/applyAdmin") {
         this.seeFlag(url);
         return;

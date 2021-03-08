@@ -50,7 +50,7 @@ Vue.mixin({
 })
 
 router.beforeEach((to, from, next) => {
-  NProgress.start()
+ NProgress.start()
   next()
 })
 
