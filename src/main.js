@@ -11,9 +11,12 @@ import {
   Picker,
   Lazyload,
   Search,
-  Cell
+  Cell,
+  DatetimePicker
 } from 'mint-ui';
 import TopHead from 'base/top-head'
+import MoveToBottom from "base/scrollInit";
+
 import {
   Loading
 } from 'lib'
@@ -38,8 +41,10 @@ Vue.component(TabContainerItem.name, TabContainerItem)
 Vue.component(Picker.name, Picker)
 Vue.component(Search.name, Search);
 Vue.component(Cell.name, Cell);
+Vue.component(DatetimePicker.name, DatetimePicker);
 // top head
 Vue.component('TopHead', TopHead)
+Vue.component('MoveToBottom', MoveToBottom)
 
 Vue.mixin({
   beforeRouteLeave(to, from, next) {
@@ -50,7 +55,7 @@ Vue.mixin({
 })
 
 router.beforeEach((to, from, next) => {
- NProgress.start()
+  NProgress.start()
   next()
 })
 

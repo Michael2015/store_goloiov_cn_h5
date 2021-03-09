@@ -134,9 +134,6 @@ export default new Router({
     {
       path: '/income',
       component: () => import( /* webpackChunkName: "income" */ 'com/income'),
-      meta: {
-        haveTab: true
-      }
     },
     {
       path: '/record',
@@ -207,7 +204,18 @@ export default new Router({
       path: '/myvip',
       component: () => import( /* webpackChunkName: "me" */ 'com/me/myvip'),
     },
-
+    {
+      path: '/setup',
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/setup'),
+    },
+    {
+      path: '/myinfo',
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/myinfo'),
+    },
+    {
+      path: '/modifyName',
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/modifyName'),
+    },
     {
       path: '/my_contribution',
       component: () => import( /* webpackChunkName: "me" */ 'com/me/my_contribution'),

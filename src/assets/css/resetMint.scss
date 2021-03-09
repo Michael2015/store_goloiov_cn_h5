@@ -1,6 +1,14 @@
 @import 'def';
 
-/* 我的会员页 */
+/* common */
+.cell-size {
+  .mint-cell-wrapper {
+    border-bottom: 1px solid #F2F2F2;
+    font-size: size(28);
+  }
+}
+
+/* myvip */
 .cicle-img {
   border-radius: 50%;
 }
@@ -32,6 +40,47 @@
           background: #F5F5F5;
         }
       }
+    }
+  }
+}
+
+
+
+/* myinfo */
+.myinfo {
+  .user {
+    font-size: size(40);
+    vertical-align: middle;
+    margin-left: size(10);
+  }
+
+  .picker-toolbar {
+    position: relative;
+
+    >span {
+      font-weight: bold;
+      width: auto;
+    }
+
+    .mint-datetime-cancel {
+      text-align: left;
+      color: #919191;
+      padding-left: size(30);
+
+    }
+
+    .mint-datetime-confirm {
+      text-align: right;
+      padding-right: size(30);
+      color: #486EC0;
+    }
+
+    .center-title {
+      color: #5A5A5A;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
   }
 }

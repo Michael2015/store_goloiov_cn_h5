@@ -1,4 +1,7 @@
-import { Indicator, Toast as toast } from 'mint-ui'
+import {
+  Indicator,
+  Toast as toast
+} from 'mint-ui'
 import Clipboard from 'clipboard'
 
 export const Loading = {
@@ -8,7 +11,7 @@ export const Loading = {
 
 export const Toast = toast
 
-export const setClipboard = (s) => new Promise(function(resolve) {
+export const setClipboard = (s) => new Promise(function (resolve) {
   let button = document.createElement('button')
   button.setAttribute('data-clipboard-text', s)
   let clip = new Clipboard(button)
@@ -35,11 +38,11 @@ export function appSource() {
   const u = navigator.userAgent;
   const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
   if (isiOS) {
-   return "ios";
+    return "ios";
   } else {
-   return "others";
+    return "others";
   }
- }
+}
 
 
 // 获取当前日期
@@ -47,5 +50,15 @@ export function getNowDate() {
   let yy = new Date().getFullYear();
   let mm = new Date().getMonth() + 1;
   let dd = new Date().getDate();
-  return yy+''+mm+''+dd;
+  return yy + '' + mm + '' + dd;
+}
+
+//向下保留小数
+export function getFloat(num, length) {
+  let str = num.toString()
+  if (str.includes('.')) {
+    return (Math.floor(num * Math.pow(10, length)) / Math.pow(10, length)).toString()
+  } else {
+    return str + '.' + '0'.repeat(length)
+  }
 }

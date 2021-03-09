@@ -23,31 +23,26 @@
           </div>
         </div>
         <div class="withdraw-wrap">
-          <div class="withdraw"
-               @click="withdraw">提现</div>
+          <div class="withdraw">提现</div>
         </div>
       </div>
     </div>
-
-    <div class="loadmore"
-         @scroll='scroll'>
+    <move-to-bottom @reach-bottom="reach"></move-to-bottom>
+    <div class="loadmore">
       <li class="list-title">
         <span>日期</span>
         <span>类型</span>
         <span>数值</span>
       </li>
-      <Load-more v-slot='{list}'>
-        <li v-for='i in nums'
-            class="list-item"
-            :key='i'><span>日期</span>
+      <Load-more v-slot="{ list }">
+        <li v-for="i in nums" class="list-item" :key="i">
+          <span>日期</span>
           <span>类型</span>
-          <span class="num"
-                :class="i>0?'red':''">{{ale}}>{{i}}</span>
+          <span class="num" :class="i > 0 ? 'red' : ''">{{ ale }}>{{ i }}</span>
         </li>
       </Load-more>
     </div>
-    <notice ref="notive"
-            :autoClose="true"></notice>
+    <notice ref="notive" :autoClose="true"></notice>
   </div>
 </template>
 
@@ -59,8 +54,9 @@ import { incomeList, platoonList, getUserAmount } from "api/income";
 import LoadMore from "base/load-more";
 import { login } from "api/login";
 import { Toast, Loading } from "lib";
+
 export default {
-  data () {
+  data() {
     return {
       nums: 10,
       ale: 0,
@@ -81,12 +77,11 @@ export default {
         supplier: "/supplier", //开发供应商
         share_bonus: "/director", //董事分红详情
         develop_bonus: "/cultivate", //培养合伙人
-        regional_agent: '/region' //区域合伙人
+        regional_agent: "/region" //区域合伙人
       }
     };
   },
-  mounted () {
-    window.addEventListener('scroll', this.handler, true)
+  mounted() {
     getUserAmount().then(reque => {
       this.cash = reque.cash_money;
       this.balance = reque.can_withdraw;
@@ -96,41 +91,21 @@ export default {
       //this.$refs.charge.disabled = true;
     });
   },
-  destroyed () {
-    window.removeEventListener('scroll', this.handler, true)
-  },
-  methods: {
-    handler (e) {
-      let scrollTop =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop;
-      let clientHeight =
-        window.innerHeight || document.documentElement.clientHeight;
-      let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-      // console.log(scrollTop, clientHeight, scrollHeight)
-      this.ale = scrollHeight + '===' + (Math.ceil(scrollTop) + clientHeight)
-      if (scrollHeight === Math.ceil(scrollTop) + clientHeight) {
 
-        if (this.nums < 30 && !this.isAll) {
-          Loading.open()
-          setTimeout(() => {
-            this.nums += 10
-            console.log('执行')
-            Loading.close()
-          }, 500)
-        }
-        else {
-          this.isAll = true
-          Loading.close()
-          Toast('已经到底啦')
-        }
+  methods: {
+    reach() {
+      if (this.nums < 30) {
+        Loading.open();
+        setTimeout(() => {
+          this.nums += 10;
+          Loading.close();
+        }, 500);
+      } else {
+        Loading.close();
+        Toast("已经到底啦");
       }
     },
-    scroll (e) {
-      console.log(e)
-    },
-    checkShow (demo) {
+    checkShow(demo) {
       this.active = demo;
       if (this.active === "charge") {
         this.$refs.charge.disabled = false;
@@ -144,13 +119,13 @@ export default {
       //   this.loadCharge();
       // }
     },
-    loadCharge (page, size) {
+    loadCharge(page, size) {
       return platoonList(page, size);
     },
-    loadEarnings (page, size) {
+    loadEarnings(page, size) {
       return incomeList(page, size);
     },
-    record () {
+    record() {
       if (this.isLogin) {
         this.tojump("/record");
       } else {
@@ -159,10 +134,10 @@ export default {
         });
       }
     },
-    withdraw () {
+    withdraw() {
       if (this.isLogin) {
         if (this.cash === "0.00") {
-          Toast('无可提现金额');
+          Toast("无可提现金额");
           return;
         }
         this.tojump("/withdraw");
@@ -173,12 +148,12 @@ export default {
       }
     },
     // 获取订单号后六位
-    tailSix (str) {
+    tailSix(str) {
       let s = str;
       return s.substr(s.length - 6, 6);
     },
     // 收益列表点击
-    clickShouYi (type, id, sn, uid, type_num) {
+    clickShouYi(type, id, sn, uid, type_num) {
       console.log(type);
       let url;
       url = this.jumpObj[type];
@@ -190,10 +165,10 @@ export default {
       }
       this.tojump(url);
     },
-    clickMianDan (id, uid, type_num) {
+    clickMianDan(id, uid, type_num) {
       this.tojump(`/public?order_id=${id}&user_id=${uid}&type_num=${type_num}`);
     },
-    tojieshao () {
+    tojieshao() {
       if (this.active === "charge") {
         this.tojump("/gongpaijieshao");
       } else if (this.active === "earnings") {
@@ -203,7 +178,7 @@ export default {
     }
   },
   watch: {
-    active (oldVal) {
+    active(oldVal) {
       if (oldVal === "earnings") {
         this.$refs.earnings.disabled = false;
         this.$refs.charge.disabled = true;
@@ -214,7 +189,7 @@ export default {
     }
   },
   computed: {
-    showtitle: function () {
+    showtitle: function() {
       let title;
       const { active } = this;
       if (active === "earnings") {
@@ -252,7 +227,6 @@ export default {
     background: #fff;
     height: size(560);
     width: 100%;
-    z-index: 99;
     box-shadow: 0 1px 5px #eee;
     &:after {
       content: " ";
@@ -348,7 +322,7 @@ export default {
         border-radius: 50%;
         // box-sizing: border-box;
         // background: #ff0000;
-        background-image: linear-gradient(135deg, #ff0000 0%, #ff3061 100%);
+        background-image: linear-gradient(135deg, #f2f2f2 0%, #f2f2f2 100%);
         text-align: center;
         font-family: PingFangSC-Semibold;
         font-size: size(34);
@@ -356,9 +330,8 @@ export default {
         font-stretch: normal;
         letter-spacing: size(1);
         box-shadow: 0 size(2) size(16) 0 #df3032;
-        &:active {
-          box-shadow: 0 size(2) size(30) 0 #df3032;
-        }
+        color: #aaaaaa;
+        font-weight: bolder;
       }
     }
   }
@@ -529,3 +502,4 @@ export default {
   color: #666;
 }
 </style>
+© 2021 GitHub, Inc.

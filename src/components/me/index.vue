@@ -10,7 +10,8 @@
         </div>
         <div class="part_right">
           <i class="iconfont code">&#xe646;</i>
-          <i class="iconfont setup">&#xe60b;</i>
+          <i class="iconfont setup"
+             @click="$router.push('/setup')">&#xe60b;</i>
         </div>
       </div>
       <div class="head_body">
@@ -42,10 +43,7 @@
         </div>
       </div>
     </div>
-    <!-- <div class="quit">
-      <div class="btn-out"
-           @click="logout">退出登录</div>
-    </div> -->
+
     <confirm ref="logOut">确定退出吗？</confirm>
     <notice ref="notice"></notice>
   </div>
@@ -61,7 +59,7 @@ import notice from "base/notice";
 import myCharts from 'com/common/echarts'
 
 export default {
-  data () {
+  data() {
     return {
       option: {},
       headData: [{
@@ -140,7 +138,7 @@ export default {
         icon: '\ue666',
         tit: "我的订单",
         afterTit: '查看全部订单',
-        path: "/jifen"
+        path: "/order"
       },
       {
         icon: '\ue60e',
@@ -152,7 +150,7 @@ export default {
         icon: '\ue629',
         tit: "我的收益",
         afterTit: '收益流水',
-        path: "/jifen"
+        path: "/income"
       },
       {
         icon: '\ue606',
@@ -179,7 +177,7 @@ export default {
     };
   },
   mixins: [tojump, partnerLevelObj],
-  async mounted () {
+  async mounted() {
     this.echartsInit()
     const reque = await partnerNum();
     this.Num = reque && reque.member_nums;
@@ -188,7 +186,7 @@ export default {
     updateUserInfo();
   },
   methods: {
-    echartsInit () {
+    echartsInit() {
       this.option = {
         xAxis: {
           type: 'category',
@@ -232,7 +230,7 @@ export default {
         })
       }, 3000)
     },
-    logout () {
+    logout() {
       this.$refs.logOut.show("", () => {
         logout().then(() => {
           this.$refs.notice.show("退出成功", () => {
@@ -241,7 +239,7 @@ export default {
         });
       });
     },
-    seeFlag (url) {
+    seeFlag(url) {
       get_region_partner().then(res => {
         //  后台查不到数据说明没有申请过
         if (res == null) {
@@ -258,7 +256,7 @@ export default {
         this.$router.push(url);
       });
     },
-    seeVipFlag (url) {
+    seeVipFlag(url) {
       get_vip_server().then(res => {
         //  后台查不到数据说明没有申请过
         if (res == null) {
@@ -277,7 +275,7 @@ export default {
     },
 
 
-    to (url) {
+    to(url) {
       if (url === "/applyAdmin") {
         this.seeFlag(url);
         return;
@@ -302,7 +300,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "~css/def";
-
 .me_warp {
   padding-bottom: size(100);
   .header {
@@ -427,22 +424,6 @@ export default {
           margin-right: size(5);
         }
       }
-    }
-  }
-  .quit {
-    width: 100%;
-    height: size(100);
-    margin-top: size(30);
-    text-align: center;
-    .btn-out {
-      display: inline-block;
-      padding: size(10) size(50);
-      margin: 0 auto;
-      text-align: center;
-      border-radius: size(50);
-      background: #777;
-      color: #ddd;
-      font-size: size(26);
     }
   }
 }

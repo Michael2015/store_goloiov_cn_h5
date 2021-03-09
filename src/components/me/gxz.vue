@@ -10,24 +10,22 @@
         </div>
       </div>
     </div>
-
+    <move-to-bottom @reach-bottom="reach"></move-to-bottom>
     <div class="loadmore">
       <li class="list-title">
         <span>日期</span>
         <span>类型</span>
         <span>数值</span>
       </li>
-      <Load-more v-slot='{list}'>
-        <li v-for='i in 20'
-            class="list-item"
-            :key='i'><span>日期</span>
+      <Load-more v-slot="{ list }">
+        <li v-for="i in nums" class="list-item" :key="i">
+          <span>日期</span>
           <span>类型</span>
-          <span class="num"
-                :class="i>0?'red':''">{{i-10}}</span></li>
+          <span class="num" :class="i > 0 ? 'red' : ''">{{ i }}</span>
+        </li>
       </Load-more>
     </div>
-    <notice ref="notive"
-            :autoClose="true"></notice>
+    <notice ref="notive" :autoClose="true"></notice>
   </div>
 </template>
 
@@ -38,11 +36,13 @@ import notice from "base/notice";
 import { incomeList, platoonList, getUserAmount } from "api/income";
 import LoadMore from "base/load-more";
 import { login } from "api/login";
-import { Toast } from "lib";
+import { Toast, Loading } from "lib";
 export default {
   data() {
     return {
-
+      loading: false,
+      nums: 10,
+      isAll: false,
       active: "earnings",
       balance: "0.00", //账户余额
       cash: "0.00", //可提现金额
@@ -59,7 +59,7 @@ export default {
         supplier: "/supplier", //开发供应商
         share_bonus: "/director", //董事分红详情
         develop_bonus: "/cultivate", //培养合伙人
-        regional_agent: '/region' //区域合伙人
+        regional_agent: "/region" //区域合伙人
       }
     };
   },
@@ -73,8 +73,20 @@ export default {
       //this.$refs.charge.disabled = true;
     });
   },
-  methods: {
 
+  methods: {
+    reach() {
+      if (this.nums < 30) {
+        Loading.open();
+        setTimeout(() => {
+          this.nums += 10;
+          Loading.close();
+        }, 500);
+      } else {
+        Loading.close();
+        Toast("到底啦");
+      }
+    },
     checkShow(demo) {
       this.active = demo;
       if (this.active === "charge") {
@@ -107,7 +119,7 @@ export default {
     withdraw() {
       if (this.isLogin) {
         if (this.cash === "0.00") {
-          Toast('无可提现金额');
+          Toast("无可提现金额");
           return;
         }
         this.tojump("/withdraw");
@@ -159,7 +171,7 @@ export default {
     }
   },
   computed: {
-    showtitle: function () {
+    showtitle: function() {
       let title;
       const { active } = this;
       if (active === "earnings") {
@@ -198,7 +210,6 @@ export default {
     background: #fff;
     height: size(380);
     width: 100%;
-    z-index: 99;
     box-shadow: 0 1px 5px #eee;
     &:after {
       content: " ";
@@ -299,7 +310,7 @@ export default {
     }
   }
   .loadmore {
-    margin-top: size(420);
+    margin-top: size(480);
     padding: 0 size(30);
     li {
       list-style: none;

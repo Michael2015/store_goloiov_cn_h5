@@ -1,108 +1,48 @@
 <template>
   <div class="income_warp">
+    <top-head>我的收益</top-head>
+
     <div class="topbox">
       <div class="banner">
+        <i class="iconfont wenhao">&#xe605;</i>
         <div class="content">
-          <div class="title">账户总余额:</div>
-          <div class="all_money">
-            <span>¥</span>
-            {{isLogin?cash:'0.00'}}
+          <div class="remain">账号总余额</div>
+          <div class="jifen-num">￥{{ getFloat(10000000000, 2) }}</div>
+        </div>
+        <div class="cumulat">
+          <div class="left">
+            <p>待结算</p>
+            <p>{{ getFloat(999, 2) }}</p>
           </div>
-          <div class="tixi_money">
-            可提现：¥ {{isLogin?balance:'0.00'}}
-          </div>
-          <div class="xf_money">
-            购物金：¥ {{isLogin?cons:'0.00'}}
-          </div>
-          <div class="record" @click="record">提现记录</div> 
-          <div class="detail">
-            <div class="left">
-              <span>待结算</span>
-              <span class="money">
-                <span>¥</span>
-                {{isLogin?uncash:'0.00'}}
-              </span>
-            </div>
-            <div class="right">
-              <span>总收入</span>
-              <span class="money">
-                <span>¥</span>
-                {{isLogin?all:'0.00'}}
-              </span>
-            </div>
+          <div class="right">
+            <p>累计收入</p>
+            <p>{{ getFloat(1000, 2) }}</p>
           </div>
         </div>
         <div class="withdraw-wrap">
           <div class="withdraw" @click="withdraw">提现</div>
         </div>
       </div>
-      <div class="in-title">
-        <span :class="{active: active === 'charge'}" @click="checkShow('charge')">免单</span>
-        <span :class="{active: active === 'earnings'}" @click="checkShow('earnings')">收益</span>
-        <div class="showtitle" @click="tojieshao">{{showtitle}}</div>
-      </div>
     </div>
-    <keep-alive>
-      <mt-tab-container v-model="active" swipeable>
-        <!-- 免单列 -->
-        <mt-tab-container-item id="charge" class="touch-no">
-          <load-more v-slot="{list}" :getData="isLogin?loadCharge:null" ref="charge">
-            <div class="pub_list">
-              <div
-                class="item"
-                v-for="(item,index) in list"
-                :key="index"
-                @click="clickMianDan(item.order_id,item.user_id,item.type_num)"
-              >
-                <div class="queue border-bottom" v-if="item.left&&item.left !== ''">{{item.left}}</div>
-                <div class="detail">
-                  <div class="img_warp">
-                    <img :src="item.image" alt />
-                  </div>
-                  <div class="desc border-bottom">
-                    <div class="name">{{item.store_name}}</div>
-                    <div class="ordernum">{{item.right}}</div>
-                  </div>
-                </div>
-                <div class="footer">
-                  <div class="txt-count">
-                    <span>订单尾号{{tailSix(item.order_sn)}}</span>
-                    <span>|</span>
-                    <span v-if="item.coupon_price">已优惠金额 ¥{{item.coupon_price}}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </load-more>
-          <div class="no_login" v-if="!isLogin">暂无数据</div>
-        </mt-tab-container-item>
-
-        <!-- 收益列 -->
-        <mt-tab-container-item id="earnings" class="touch-no">
-          <load-more v-slot="{list}" :getData="isLogin?loadEarnings:null" ref="earnings">
-            <div class="in_record">
-              <div
-                class="item"
-                v-for="(item,index) in list"
-                :key="index"
-                @click="clickShouYi(item.type,item.order_id,item.order_sn, item.user_id,item.type_num)"
-              >
-                <div class="left">
-                  <div class="name">
-                    {{item.type_text}}
-                    <!-- {{item.type}} -->
-                    <!-- <span>/待结算</span> -->
-                  </div>
-                  <div class="reason">{{item.title}}</div>
-                </div>
-                <div class="right">{{item.pm?'+':'-'}}{{item.number}}元</div>
-              </div>
-            </div>
-          </load-more>
-          <div class="no_login" v-if="!isLogin">暂无数据</div>
-        </mt-tab-container-item>
-      </mt-tab-container>
-    </keep-alive>
+    <move-to-bottom @reach-bottom="reach"></move-to-bottom>
+    <div class="loadmore">
+      <li class="list-title">
+        <span>日期</span>
+        <span>类型</span>
+        <span>说明</span>
+        <span>数值</span>
+        <span>状态</span>
+      </li>
+      <Load-more v-slot="{ list }">
+        <li v-for="i in nums" class="list-item" :key="i">
+          <span>日期</span>
+          <span>类型</span>
+          <span>说明</span>
+          <span class="num" :class="i > 0 ? 'red' : ''">{{ i }}</span>
+          <span class="blue">待结算</span>
+        </li>
+      </Load-more>
+    </div>
     <notice ref="notive" :autoClose="true"></notice>
   </div>
 </template>
@@ -114,10 +54,12 @@ import notice from "base/notice";
 import { incomeList, platoonList, getUserAmount } from "api/income";
 import LoadMore from "base/load-more";
 import { login } from "api/login";
-import { Toast } from "lib";
+import { Toast, Loading, getFloat } from "lib";
 export default {
   data() {
     return {
+      nums: 10,
+      loading: false,
       active: "earnings",
       balance: "0.00", //账户余额
       cash: "0.00", //可提现金额
@@ -134,7 +76,7 @@ export default {
         supplier: "/supplier", //开发供应商
         share_bonus: "/director", //董事分红详情
         develop_bonus: "/cultivate", //培养合伙人
-        regional_agent:'/region' //区域合伙人
+        regional_agent: "/region" //区域合伙人
       }
     };
   },
@@ -145,10 +87,24 @@ export default {
       this.cons = reque.can_consume;
       this.uncash = reque.unsettled_money;
       this.all = reque.total_money;
-      this.$refs.charge.disabled = true;
+      //this.$refs.charge.disabled = true;
     });
   },
+
   methods: {
+    getFloat,
+    reach() {
+      if (this.nums < 30) {
+        Loading.open();
+        setTimeout(() => {
+          this.nums += 10;
+          Loading.close();
+        }, 500);
+      } else {
+        Loading.close();
+        Toast("已经到底啦");
+      }
+    },
     checkShow(demo) {
       this.active = demo;
       if (this.active === "charge") {
@@ -181,7 +137,7 @@ export default {
     withdraw() {
       if (this.isLogin) {
         if (this.cash === "0.00") {
-          Toast('无可提现金额');
+          Toast("无可提现金额");
           return;
         }
         this.tojump("/withdraw");
@@ -197,7 +153,7 @@ export default {
       return s.substr(s.length - 6, 6);
     },
     // 收益列表点击
-    clickShouYi(type, id, sn, uid,type_num) {
+    clickShouYi(type, id, sn, uid, type_num) {
       console.log(type);
       let url;
       url = this.jumpObj[type];
@@ -209,7 +165,7 @@ export default {
       }
       this.tojump(url);
     },
-    clickMianDan(id,uid,type_num) {
+    clickMianDan(id, uid, type_num) {
       this.tojump(`/public?order_id=${id}&user_id=${uid}&type_num=${type_num}`);
     },
     tojieshao() {
@@ -256,21 +212,21 @@ export default {
 
 <style lang="scss" scoped>
 @import "~css/def";
-
 .income_warp {
   padding-bottom: size(96);
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
   .topbox {
     // padding: size(24) size(24) 0;
     position: fixed;
+    top: size(88);
     overflow: hidden;
     background: #fff;
     height: size(560);
     width: 100%;
-    z-index: 99;
     box-shadow: 0 1px 5px #eee;
     &:after {
       content: " ";
@@ -292,6 +248,7 @@ export default {
       color: #fff;
       line-height: 1;
       position: relative;
+      z-index: 99;
       &:after {
         content: " ";
         display: block;
@@ -300,82 +257,51 @@ export default {
         background-image: linear-gradient(49deg, #ef5456 0%, #ea1b1d 66%);
         top: size(-(486 - 240));
         right: size(-(486 - 214));
+        z-index: -1;
+      }
+      .wenhao {
+        position: absolute;
+        top: size(20);
+        right: size(30);
+        z-index: 99;
       }
       .content {
-        position: relative;
-        z-index: 3;
-        height: 100%;
-        .title {
+        text-align: center;
+        .remain {
           font-size: size(28);
-          padding-top: size(40);
-          color: #ffe9ef;
+          margin: size(50) 0 size(30);
         }
-        .all_money {
-          font-size: size(59);
-          font-weight: normal;
-          font-family: Helvetica;
-          font-stretch: normal;
-          letter-spacing: size(1);
-          padding-top: size(0);
-          text-align: center;
-          line-height: 1;
-          & > span {
-            margin-right: size(10);
-            font-size: size(35);
-            font-weight: 500;
-            vertical-align: middle;
+        .jifen-num {
+          display: inline-block;
+          font-size: size(52);
+          font-weight: bolder;
+          position: relative;
+          white-space: nowrap;
+          > span {
+            font-size: size(28);
+            font-weight: normal;
+            position: absolute;
+            bottom: size(4);
+            right: size(-10);
+            transform: translate(100%, 0);
+            white-space: nowrap;
           }
         }
-        .tixi_money{
-          text-align: center;
-          color: #ffe9ef;
-          font-size: size(20);
-          padding-top: size(12);
-          margin-bottom: size(15);
+      }
+      .cumulat {
+        position: absolute;
+        bottom: size(30);
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 size(40);
+        font-size: size(28);
+        p {
+          margin: size(20) 0;
         }
-        .xf_money{
-          text-align: center;
-          color: #ffe9ef;
-          font-size: size(20);
-        }
-        .record {
-          font-family: PingFangSC-Light;
-          text-decoration: underline;
-          position: absolute  ;
-          top: size(32);
-          right: size(10);
-          font-size: size(26);
-          font-weight: normal;
-          font-stretch: normal;
-          text-align: center;
-          color: #ffe9ef;
-          margin-top: size(12);
-        }
-        .detail {
-          font-size: size(24);
-          position: absolute;
-          width: 100%;
-          bottom: size(12);
-          left: 0;
-          display: flex;
-          justify-content: space-between;
-          & div > span {
-            display: block;
-            font-size: size(24);
-            text-align: center;
-            height: size(33);
-            line-height: size(33);
-            &.money {
-              font-family: PingFangSC-Medium;
-              margin-top: size(6);
-              font-size: size(32);
-              height: size(45);
-              line-height: size(45);
-              & > span {
-                font-size: size(20);
-              }
-            }
-          }
+        .right {
+          text-align: right;
         }
       }
       .withdraw-wrap {
@@ -409,45 +335,34 @@ export default {
         }
       }
     }
-    .in-title {
-      font-size: 0;
+  }
+  .loadmore {
+    margin-top: size(560);
+    padding: 0 size(30);
+    li {
+      list-style: none;
+      height: size(100);
+      line-height: size(100);
+      border-bottom: 1px solid #d7d7d7;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 size(10);
+      font-size: size(28);
       color: #666;
-      padding: size(105) 0 size(15) size(9);
-      line-height: 1;
-      position: relative;
-      & > span {
-        font-size: size(34);
-        display: inline-block;
-        margin-left: size(43);
-        height: size(48);
-        line-height: size(48);
-        font-family: PingFangSC-Regular;
-        &.active {
-          color: #333;
-          position: relative;
-          font-family: PingFangSC-Medium;
-          font-weight: 800;
-          &:after {
-            content: " ";
-            display: block;
-            width: 100%;
-            height: size(8);
-            background: #ff1f3d;
-            position: absolute;
-            border-radius: size(4);
-            left: 50%;
-            transform: translateX(-50%)
-          }
-        }
+      > span {
+        text-align: center;
+        min-width: size(100);
       }
-      .showtitle {
-        position: absolute;
-        right: size(30);
-        top: size(142);
-        height: size(33);
-        line-height: size(33);
-        color: #ff0000;
-        font-size: size(24);
+      .red {
+        color: #ea1f21;
+      }
+      .num {
+        font-weight: bold;
+      }
+      .blue {
+        color: #8400ff;
+        text-decoration: underline;
       }
     }
   }
@@ -458,9 +373,8 @@ export default {
     width: 100%;
     top: size(560);
     bottom: size(100);
-    .touch-no{
+    .touch-no {
       padding-bottom: size(10);
-
     }
     .border-bottom {
       position: relative;
