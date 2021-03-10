@@ -2,10 +2,14 @@
 
 /* common */
 .cell-size {
-  .mint-cell-wrapper {
+  &>.mint-cell-wrapper {
     border-bottom: 1px solid #F2F2F2;
     font-size: size(28);
   }
+}
+
+.border-bot {
+  border-bottom: 1px solid #F2F2F2;
 }
 
 /* myvip */

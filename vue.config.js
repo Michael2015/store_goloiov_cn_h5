@@ -34,12 +34,12 @@ class GenHeadAndBody {
 }
 
 module.exports = {
-  productionSourceMap: true,
+  productionSourceMap: false,
   filenameHashing: true,
   // publicPath: './public',
   assetsDir,
   devServer: {
-    //host: '192.168.0.162', //万车品wify测试
+    host: '192.168.0.162', //万车品wify测试
     proxy: {
       '/api|/app': {
         target: url,
@@ -55,6 +55,9 @@ module.exports = {
   },
   lintOnSave: process.env.NODE_ENV !== 'production',
   configureWebpack: {
+    externals: {
+      'echarts': 'echarts' // 配置使用CDN
+    },
     resolve: {
       alias: {
         'com': path.resolve(__dirname, './src/components'),

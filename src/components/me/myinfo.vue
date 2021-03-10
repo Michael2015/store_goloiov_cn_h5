@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import moment from "moment";
+import { formatDate } from "lib/index";
 export default {
   components: {},
   data() {
@@ -71,7 +71,7 @@ export default {
       }
     },
     handleConfirm(e) {
-      let value = moment(e).format("YYYY-MM-DD");
+      let value = formatDate(e);
       let index = this.list.findIndex(item => item.type === "date");
       if (index !== -1) {
         this.$set(this.list[index], "toname", value);

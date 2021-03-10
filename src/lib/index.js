@@ -62,3 +62,11 @@ export function getFloat(num, length) {
     return str + '.' + '0'.repeat(length)
   }
 }
+
+//格式化日期
+export function formatDate(date, type = 'YYYY-MM-DD') {
+  let yy = new Date(date).getFullYear();
+  let mm = (new Date(date).getMonth() + 1).toString().padStart(2, '0');
+  let dd = (new Date(date).getDate()).toString().padStart(2, '0');
+  return type.replace('YYYY', yy).replace('MM', mm).replace('DD', dd)
+}

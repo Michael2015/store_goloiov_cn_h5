@@ -1,6 +1,6 @@
 <template>
   <div class="me_warp">
-    <div class='header'>
+    <div class="header">
       <div class="head_top">
         <div class="part_left">
           <i class="iconfont user">&#xe640;</i>
@@ -10,36 +10,34 @@
         </div>
         <div class="part_right">
           <i class="iconfont code">&#xe646;</i>
-          <i class="iconfont setup"
-             @click="$router.push('/setup')">&#xe60b;</i>
+          <i class="iconfont setup" @click="$router.push('/setup')">&#xe60b;</i>
         </div>
       </div>
       <div class="head_body">
-        <div class='count'
-             v-for='(ele,i) in headData'
-             :key='i'>
-          <div>{{ele.num}}</div>
-          <div>{{ele.title}}</div>
+        <div class="count" v-for="(ele, i) in headData" :key="i">
+          <div>{{ ele.num }}</div>
+          <div>{{ ele.title }}</div>
         </div>
       </div>
     </div>
     <div class="echarts">
-      <my-charts :option='option'
-                 key='1' />
+      <my-charts :option="option" key="1" />
     </div>
     <div class="vertical_tab">
-      <div class="vertical_item"
-           v-for="(item,index) in tabList"
-           :key="index"
-           @click="to(item.path?item.path:'')">
+      <div
+        class="vertical_item"
+        v-for="(item, index) in tabList"
+        :key="index"
+        @click="to(item.path ? item.path : '')"
+      >
         <div class="left">
-          <i class="iconfont">{{item.icon}}</i>&nbsp;
-          <div class="title">{{item.tit}}</div>
+          <i class="iconfont">{{ item.icon }}</i
+          >&nbsp;
+          <div class="title">{{ item.tit }}</div>
         </div>
         <div class="right">
-          <span>{{item.afterTit}}</span>
-          <img src="~img/icon/join-right.png"
-               alt />
+          <span>{{ item.afterTit }}</span>
+          <img src="~img/icon/join-right.png" alt />
         </div>
       </div>
     </div>
@@ -50,38 +48,45 @@
 </template>
 <script>
 import tojump from "mixins/tojump";
-import { partnerNum, updateUserInfo, get_region_partner, get_vip_server } from "api/me";
+import {
+  partnerNum,
+  updateUserInfo,
+  get_region_partner,
+  get_vip_server
+} from "api/me";
 import { mapState } from "vuex";
 import partnerLevelObj from "mixins/partner-level-obj";
 import { logout } from "api/login";
 import confirm from "base/confirm";
 import notice from "base/notice";
-import myCharts from 'com/common/echarts'
+import myCharts from "com/common/echarts";
 
 export default {
   data() {
     return {
       option: {},
-      headData: [{
-        num: 0,
-        title: '我的积分',
-        name: 'point'
-      },
-      {
-        num: 0,
-        title: '我的收益',
-        name: 'income'
-      },
-      {
-        num: 0,
-        title: '我的贡献值',
-        name: 'attribute'
-      },
-      {
-        num: 0,
-        title: '股东排名',
-        name: 'rank'
-      }],
+      headData: [
+        {
+          num: 0,
+          title: "我的积分",
+          name: "point"
+        },
+        {
+          num: 0,
+          title: "我的收益",
+          name: "income"
+        },
+        {
+          num: 0,
+          title: "我的贡献值",
+          name: "attribute"
+        },
+        {
+          num: 0,
+          title: "股东排名",
+          name: "rank"
+        }
+      ],
       /* tabList: [
         {
           img: require("img/me/jifen.png"),
@@ -134,51 +139,52 @@ export default {
           path: "/myOpinion"
         }
       ], */
-      tabList: [{
-        icon: '\ue666',
-        tit: "我的订单",
-        afterTit: '查看全部订单',
-        path: "/order"
-      },
-      {
-        icon: '\ue60e',
-        tit: "我的积分",
-        afterTit: '积分明细',
-        path: "/jifen"
-      },
-      {
-        icon: '\ue629',
-        tit: "我的收益",
-        afterTit: '收益流水',
-        path: "/income"
-      },
-      {
-        icon: '\ue606',
-        tit: "我的贡献值",
-        afterTit: '贡献值明细',
-        path: "/gxz"
-      },
-      {
-        icon: '\ue621',
-        tit: "我的会员",
-        afterTit: '',
-        path: "/myvip"
-      },
-      {
-        icon: '\ue64d',
-        tit: "平台规则须知",
-        afterTit: '动态价格、积分等',
-        path: "/jifen"
-      }
+      tabList: [
+        {
+          icon: "\ue666",
+          tit: "我的订单",
+          afterTit: "查看全部订单",
+          path: "/order"
+        },
+        {
+          icon: "\ue60e",
+          tit: "我的积分",
+          afterTit: "积分明细",
+          path: "/jifen"
+        },
+        {
+          icon: "\ue629",
+          tit: "我的收益",
+          afterTit: "收益流水",
+          path: "/income"
+        },
+        {
+          icon: "\ue606",
+          tit: "我的贡献值",
+          afterTit: "贡献值明细",
+          path: "/gxz"
+        },
+        {
+          icon: "\ue621",
+          tit: "我的会员",
+          afterTit: "",
+          path: "/myvip"
+        },
+        {
+          icon: "\ue64d",
+          tit: "平台规则须知",
+          afterTit: "动态价格、积分等",
+          path: "/jifen"
+        }
       ],
       Num: "",
       server_vip: false,
-      region_agent: false,
+      region_agent: false
     };
   },
   mixins: [tojump, partnerLevelObj],
   async mounted() {
-    this.echartsInit()
+    this.echartsInit();
     const reque = await partnerNum();
     this.Num = reque && reque.member_nums;
     this.server_vip = reque && reque.server_vip;
@@ -189,46 +195,48 @@ export default {
     echartsInit() {
       this.option = {
         xAxis: {
-          type: 'category',
-          data: ['13.00', '12.01', '13.02', '13.03', '13.04', '13.05', '13.06']
+          type: "category",
+          data: ["13.00", "12.01", "13.02", "13.03", "13.04", "13.05", "13.06"]
         },
         yAxis: {
-          type: 'value',
+          type: "value",
           max: 15,
           axisLine: {
             show: true,
-            symbol: ['none', 'arrow'],
+            symbol: ["none", "arrow"],
             symbolSize: [5, 10],
             symbolOffset: [0, 8]
           },
           axisLabel: {
-            formatter: function (value, index) {
-              return value.toFixed(2)
+            formatter: function(value, index) {
+              return value.toFixed(2);
             }
           }
         },
         title: {
           show: true, //显示策略，默认值true,可选为：true（显示） | false（隐藏）
-          text: '主标题',
-          left: 'center',
-          top: '20',
+          text: "主标题",
+          left: "center",
+          top: "20",
           textStyle: {
             fontSize: 14,
-            top: 30,
+            top: 30
           }
         },
-        color: '#ED3E48',
-        series: [{
-          data: [4.00, 5.00, 6.00, 1.00, 8.00, 9.00, 2.00],
-          type: 'line',
-          itemStyle: { normal: { label: { show: true } } }
-        }]
+        color: "#ED3E48",
+        series: [
+          {
+            data: [4.0, 5.0, 6.0, 1.0, 8.0, 9.0, 2.0],
+            type: "line",
+            itemStyle: { normal: { label: { show: true } } }
+          }
+        ]
       };
       setInterval(() => {
         this.option.series[0].data = Array.from({ length: 7 }, (ele, ind) => {
-          return (Math.random() * 10).toFixed(2)
-        })
-      }, 3000)
+          return (Math.random() * 10).toFixed(2);
+        });
+      }, 3000);
     },
     logout() {
       this.$refs.logOut.show("", () => {
@@ -273,7 +281,6 @@ export default {
         this.$router.push(url);
       });
     },
-
 
     to(url) {
       if (url === "/applyAdmin") {
