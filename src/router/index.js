@@ -183,7 +183,13 @@ export default new Router({
       path: '/region',
       component: () => import( /* webpackChunkName: "income" */ 'com/income/IncomeDetails/region')
     },
-
+    {
+      path: '/game',
+      component: () => import( /* webpackChunkName: "me" */ 'com/game'),
+      meta: {
+        haveTab: true
+      }
+    },
 
     {
       path: '/me',
@@ -215,6 +221,10 @@ export default new Router({
     {
       path: '/modifyName',
       component: () => import( /* webpackChunkName: "me" */ 'com/me/modifyName'),
+    },
+    {
+      path: '/departCount',
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/departCount'),
     },
     {
       path: '/my_contribution',

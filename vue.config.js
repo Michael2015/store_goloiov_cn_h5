@@ -7,6 +7,9 @@ const assetsDir = 'public/h5'
 // 测试地址
 const url = 'https://storemp.golodata.com/'
 
+//后台地址
+//const url = 'http://test.yijie.com/'
+
 class GenHeadAndBody {
   apply(compiler) {
     compiler.hooks.compilation.tap('GenHeadAndBody', function (compilation) {
@@ -39,7 +42,7 @@ module.exports = {
   // publicPath: './public',
   assetsDir,
   devServer: {
-    host: '192.168.0.162', //万车品wify测试
+    // host: '192.168.0.162', //万车品wify测试
     proxy: {
       '/api|/app': {
         target: url,

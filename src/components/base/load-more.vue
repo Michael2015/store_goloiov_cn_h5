@@ -1,22 +1,25 @@
 <template>
-  <div class="load-more" >
+  <div class="load-more">
     <slot :list="list"></slot>
-    <div class="status-text" v-if="loading">加载中...</div>
-    <div class="no-data" v-else-if="list.length === 0 || loaded">
-      <img src="~img/no_data.png" alt="">
+    <div class="status-text"
+         v-if="loading">加载中...</div>
+    <div class="no-data"
+         v-else-if="list.length === 0 || loaded">
+      <img src="~img/no_data.png"
+           alt="">
       <div class="status-text">暂无数据</div>
     </div>
-    </div>
+  </div>
 </template>
 <script>
-import {SIZE} from 'api/request'
+import { SIZE } from 'api/request'
 export default {
   props: {
     getData: {
       type: Function,
       default: null
     },
-    setSize:{
+    setSize: {
       type: Number,
       default: SIZE
     },
@@ -24,11 +27,11 @@ export default {
       type: Boolean,
       default: false
     },
-     isShowMore: {
+    isShowMore: {
       type: Boolean,
       default: false
     },
-     fliter: {
+    fliter: {
       type: String,
       default: ''
     },
@@ -48,7 +51,7 @@ export default {
       this.loadMore()
     }
   },
-  created(){
+  created() {
     // 设置默认值
     this._disabled = null
     if (!this.getData) {
@@ -56,7 +59,7 @@ export default {
     }
     // 手动触发第一次加载
     this.loadMore()
-    
+
   },
   activated() {
     // 激活时恢复
@@ -71,18 +74,18 @@ export default {
     this.disabled = true
   },
   methods: {
-    toLoadMore(){
-   //   console.log('触底');
-   // this.loadMore();
+    toLoadMore() {
+      //   console.log('触底');
+      // this.loadMore();
     },
     loadMore() {
-     
+
       if (this.disabled || this.loading || this.loaded || this.paused) {
         return
       }
       this.loading = true
       this.getData(this.page, this.size).then(data => {
-        if ( this.size == 0) {
+        if (this.size == 0) {
           this.list = data
           this.loading = false
           this.loaded = true
@@ -104,21 +107,22 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "~css/def";
-.status-text,.lmore{
+.status-text,
+.lmore {
   padding: size(20) 0;
   line-height: 1.6;
   font-size: size(35);
   text-align: center;
   color: #888;
 }
-.no-data{
+.no-data {
   width: size(260);
   margin: size(20) auto;
-  img{
+  img {
     width: 100%;
   }
 }
-.list{
-  padding-bottom: 0!important;
+.list {
+  padding-bottom: 0 !important;
 }
 </style>

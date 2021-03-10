@@ -12,8 +12,7 @@ import {
   Lazyload,
   Search,
   Cell,
-  DatetimePicker,
-  Button
+  DatetimePicker
 } from 'mint-ui';
 import TopHead from 'base/top-head'
 import MoveToBottom from "base/scrollInit";
@@ -43,7 +42,6 @@ Vue.component(Picker.name, Picker)
 Vue.component(Search.name, Search);
 Vue.component(Cell.name, Cell);
 Vue.component(DatetimePicker.name, DatetimePicker);
-Vue.component(Button.name, Button);
 // top head
 Vue.component('TopHead', TopHead)
 Vue.component('MoveToBottom', MoveToBottom)

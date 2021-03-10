@@ -1,7 +1,9 @@
 <template>
   <div :class="[wrap,(isLogin && role === 1)?wrap_pad_bot:'']"
        ref="wrap">
+
     <div class="top-wrap">
+      首页
       <div class="top"
            ref="top">
         <!-- 合伙人端 -->

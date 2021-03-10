@@ -3,16 +3,19 @@
     <top-head>修改昵称</top-head>
     <div class="username border-bot">
       <p>用户名：</p>
-      <input type="text" placeholder="请输入用户名" />
+      <input type="text"
+             placeholder="请输入用户名"
+             v-model="username" />
     </div>
     <div class="tip">以英文字母或汉字开头，限4-16个字符，一个汉字为2个字符</div>
-    <mt-button type="danger" style="width:100%;background:#D7001A"
-      >确认</mt-button
-    >
+    <div class="sure"
+         @click="sure">确认</div>
   </div>
 </template>
 
 <script>
+import { Toast } from "lib";
+let reg = /^([a-zA-Z]|[\u4e00-\u9fa5])/;
 export default {
   components: {},
   data() {
@@ -20,8 +23,24 @@ export default {
       username: ""
     };
   },
-  methods: {},
-  mounted() {}
+  methods: {
+    sure() {
+      let front = reg.test(this.username);
+      if (!this.username) {
+        Toast("请输入用户名");
+      } else if (front) {
+        let len = this.username.replace(/[\u4e00-\u9fa5]/g, "**").length;
+        if (len >= 4 && len <= 16) {
+          console.log("通过");
+        } else {
+          Toast("长度必须在4-16个字符内");
+        }
+      } else {
+        Toast("必须以英文字母或汉字开头");
+      }
+    }
+  },
+  mounted() { }
 };
 </script>
 <style lang="scss" scoped>
@@ -44,6 +63,17 @@ export default {
   .tip {
     line-height: size(50);
     margin: size(10) 0 size(30) 0;
+  }
+  .sure {
+    line-height: size(80);
+    height: size(80);
+    text-align: center;
+    width: 100%;
+    background: #e31336;
+    color: #fff;
+    font-size: size(30);
+    margin-top: size(60);
+    border-radius: size(8);
   }
 }
 </style>

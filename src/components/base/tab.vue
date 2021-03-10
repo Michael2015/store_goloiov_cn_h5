@@ -7,7 +7,7 @@
       <div class="icon home"></div>
       <div class="name">首页</div>
     </router-link>
-    <router-link to="/order"
+    <router-link to="/game"
                  tag="div"
                  replace>
       <div class="icon order"></div>
@@ -19,8 +19,7 @@
     </router-link> -->
     <router-link to="/me"
                  tag="div"
-                 replace
-                 v-if="role === 1">
+                 replace>
       <div class="icon me"></div>
       <div class="name">我的</div>
     </router-link>
