@@ -32,11 +32,11 @@ export default {
   },
   mounted() {
     window.addEventListener("scroll", this.handler, true);
-    window.addEventListener("resize", this.handler, true);
+    // window.addEventListener("resize", this.handler, true);
   },
   destroyed() {
     window.removeEventListener("scroll", this.handler, true);
-    window.removeEventListener("resize", this.handler, true);
+    // window.removeEventListener("resize", this.handler, true);
   }
 };
 </script>
