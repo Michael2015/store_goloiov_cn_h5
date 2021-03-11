@@ -5,9 +5,7 @@
     <div class="topbox">
       <div class="banner">
         <i class="iconfont wenhao">&#xe605;</i>
-        <div class="content">
-          10000000000
-        </div>
+        <div class="content">{{ contribution }}</div>
       </div>
     </div>
 
@@ -21,11 +19,18 @@
         v-slot="{ list }"
         :getData="getScoreContribution"
         :setSize="20"
+        :passObj="{
+          list: 'list',
+          other: 'contribution'
+        }"
+        @passData="passData"
       >
-        <li v-for="i in list" class="list-item" :key="i">
-          <span>{{ i }}</span>
-          <span>类型</span>
-          <span class="num" :class="i > 0 ? 'red' : ''">{{ i }}</span>
+        <li v-for="i in list" class="list-item" :key="i.id">
+          <span>{{ formatDate(i.add_time) }}</span>
+          <span>{{ formatType(i.type) }}</span>
+          <span class="num" :class="Number(i.contribution) > 0 ? 'red' : ''">{{
+            formatNum(i.contribution)
+          }}</span>
         </li>
       </Load-more>
     </div>
@@ -40,10 +45,11 @@ import notice from "base/notice";
 import { getScoreContribution } from "api/me";
 import LoadMore from "base/load-more";
 import { login } from "api/login";
-import { Toast, Loading } from "lib";
+import { Toast, Loading, formatDate } from "lib";
 export default {
   data() {
     return {
+      contribution: 0,
       loading: false,
       nums: 10,
       isAll: false,
@@ -79,6 +85,9 @@ export default {
   },
 
   methods: {
+    passData(e) {
+      this.contribution = e.contribution;
+    },
     checkShow(demo) {
       this.active = demo;
       if (this.active === "charge") {
@@ -163,9 +172,29 @@ export default {
     }
   },
   computed: {
+    formatType() {
+      return n => {
+        switch (Number(n)) {
+          case 0:
+            return "消费";
+          default:
+            return "";
+        }
+      };
+    },
+    formatDate() {
+      return formatDate;
+    },
+    formatNum() {
+      return n => {
+        let a = Number(n);
+        if (a > 0) return "+" + n;
+        else return n;
+      };
+    },
     getScoreContribution() {
       return (page, size) => {
-        getScoreContribution(page, size);
+        return getScoreContribution(page, size);
       };
     },
     showtitle: function() {
@@ -322,7 +351,15 @@ export default {
       color: #666;
       > span {
         text-align: center;
-        min-width: size(100);
+        width: 33%;
+      }
+      > span:nth-of-type(1) {
+        text-align: left;
+        padding-left: size(10);
+      }
+      > span:nth-of-type(3) {
+        text-align: right;
+        padding-right: size(10);
       }
       .red {
         color: #ea1f21;

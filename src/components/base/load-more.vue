@@ -38,6 +38,10 @@ export default {
     fliter: {
       type: String,
       default: ""
+    },
+    passObj: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -119,21 +123,32 @@ export default {
       this.loading = true;
       this.getData(this.page, this.size)
         .then(data => {
+          //这里要判断返回的data是不是数组，有些返回的是对象需要处理
+          let list = this.passObj ? data[this.passObj["list"]] : data;
+          if (this.passObj) {
+            this.$emit("passData", JSON.parse(JSON.stringify(data)));
+          }
+
           if (this.size == 0) {
-            this.list = data;
+            this.list = list;
             this.loading = false;
             this.loaded = true;
             return;
           }
-          if (data) {
-            this.list.push(...data);
-            if (data.length < this.size || this.isShowMore) {
+          if (list) {
+            this.list.push(...list);
+            if (list.length < this.size || this.isShowMore) {
               this.loaded = true;
             } else {
               this.page++;
             }
             this.loading = false;
           }
+        })
+        .catch(e => {
+          this.$notice.show(e, () => {
+            this.$router.back();
+          });
         })
         .finally(() => {
           Loading.close();
