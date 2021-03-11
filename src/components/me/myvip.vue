@@ -3,15 +3,22 @@
     <top-head>我的会员</top-head>
     <mt-cell title="我的会员">
       <span>{{ list.length }}人</span>
-      <img slot="icon" class="cicle-img" :src="getImg" width="24" height="24" />
+      <img slot="icon"
+           class="cicle-img"
+           :src="getImg"
+           width="24"
+           height="24" />
     </mt-cell>
     <div class="search">
-      <mt-search v-model="value" cancel-text="×" placeholder="搜索">
+      <mt-search v-model="value"
+                 cancel-text="×"
+                 placeholder="搜索">
       </mt-search>
     </div>
 
     <div class="list">
-      <ul v-for="i in searchList" :key="i.uid">
+      <ul v-for="i in searchList"
+          :key="i.uid">
         <img :src="i.avatar" />
         <li>{{ i.nickname }}</li>
       </ul>
@@ -24,7 +31,7 @@ import { getMyFriends } from "api/me.js";
 
 export default {
   components: {},
-  data() {
+  data () {
     return {
       value: "",
       list: [],
@@ -32,7 +39,7 @@ export default {
     };
   },
   watch: {
-    value(val) {
+    value (val) {
       if (val) {
         this.searchList = this.list.filter(item => item.nickname.includes(val));
       } else {
@@ -41,13 +48,13 @@ export default {
     }
   },
   computed: {
-    getImg() {
+    getImg () {
       let info = this.$store.state.userInfo;
       return info ? info.avatar : "";
     }
   },
   methods: {
-    getMyFriends() {
+    getMyFriends () {
       getMyFriends()
         .then(res => {
           this.list = res || [];
@@ -60,7 +67,7 @@ export default {
         });
     }
   },
-  mounted() {
+  mounted () {
     this.getMyFriends();
   }
 };

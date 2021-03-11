@@ -1,12 +1,17 @@
 <template>
-  <div class="load-more" v-infinite-scroll="loadMore">
+  <div class="load-more"
+       v-infinite-scroll="loadMore">
     <slot :list="list"></slot>
-    <div class="status-text" v-if="loading">加载中...</div>
-    <div class="no-data" v-else-if="list.length === 0">
-      <img src="~img/no_data.png" alt="" />
+    <div class="status-text"
+         v-if="loading">加载中...</div>
+    <div class="no-data"
+         v-else-if="list.length === 0">
+      <img src="~img/no_data.png"
+           alt="" />
       <div class="status-text">暂无数据</div>
     </div>
-    <div class="status-text" v-else>已加载全部</div>
+    <div class="status-text"
+         v-else>已加载全部</div>
   </div>
 </template>
 <script>
@@ -39,12 +44,12 @@ export default {
       type: String,
       default: ""
     },
-    passObj: {
-      type: Object,
-      default: null
+    useListName: {
+      type: String,
+      default: ''
     }
   },
-  data() {
+  data () {
     return {
       disabled: false,
       loading: false,
@@ -55,11 +60,11 @@ export default {
     };
   },
   watch: {
-    paused() {
+    paused () {
       this.loadMore();
     }
   },
-  created() {
+  created () {
     // 设置默认值
     this._disabled = null;
     if (!this.getData) {
@@ -68,27 +73,27 @@ export default {
     // 手动触发第一次加载
     this.loadMore();
   },
-  activated() {
+  activated () {
     // 激活时恢复
     if (this._disabled !== null) {
       this.disabled = this._disabled;
       this._disabled = null;
     }
   },
-  deactivated() {
+  deactivated () {
     // 非激活时禁用
     this._disabled = this.disabled;
     this.disabled = true;
   },
-  mounted() {
+  mounted () {
     window.addEventListener("scroll", this.handler);
   },
-  destroyed() {
+  destroyed () {
     window.removeEventListener("scroll", this.handler);
   },
   computed: {
     //判断是否出现了滚动条，若没有，说明还未撑满屏幕，继续加载到出现滚动条或者加载完数据为止
-    hasScrollbar() {
+    hasScrollbar () {
       let scrollHeight =
         document.documentElement.scrollHeight || document.body.scrollHeight;
       let clientHeight =
@@ -97,11 +102,11 @@ export default {
     }
   },
   methods: {
-    handler() {
+    handler () {
       this.scrollTop = Math.ceil(
         window.pageYOffset ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop
+        document.documentElement.scrollTop ||
+        document.body.scrollTop
       );
       this.clientHeight =
         window.innerHeight || document.documentElement.clientHeight;
@@ -115,7 +120,7 @@ export default {
         this.loadMore();
       }
     },
-    loadMore() {
+    loadMore () {
       if (this.disabled || this.loading || this.loaded || this.paused) {
         return;
       }
@@ -124,9 +129,9 @@ export default {
       this.getData(this.page, this.size)
         .then(data => {
           //这里要判断返回的data是不是数组，有些返回的是对象需要处理
-          let list = this.passObj ? data[this.passObj["list"]] : data;
-          if (this.passObj) {
-            this.$emit("passData", JSON.parse(JSON.stringify(data)));
+          let list = this.useListName ? data[this.useListName] : data;
+          if (this.useListName) {
+            this.$emit("getResData", JSON.parse(JSON.stringify(data)));
           }
 
           if (this.size == 0) {
