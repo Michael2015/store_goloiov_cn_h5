@@ -1,10 +1,16 @@
 import store from '@/store'
-import {getToken, nativeLogin, nativeLogout} from './native'
-import {getUserInfo} from 'api'
+import {
+  getToken,
+  nativeLogin,
+  nativeLogout
+} from './native'
+import {
+  getUserInfo
+} from 'api'
 
 export function login() {
   store.commit('setToken', '')
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     getToken().then(token => {
       let calledNative = false
       if (token) {
@@ -17,7 +23,7 @@ export function login() {
         })
       }
 
-      function _getUserInfo (token) {
+      function _getUserInfo(token) {
         getUserInfo(token).then(data => {
           if (data) {
             store.commit('setToken', token)
@@ -56,7 +62,8 @@ export function login() {
 export function tryLogin() {
   let saveToken = ''
   return getToken().then(token => {
-    return token ? saveToken=token : Promise.reject('没有token')
+    console.log('进来', token) //199b67345294167c0fad6fa9b2d5ab23
+    return token ? saveToken = token : Promise.reject('没有token')
   }).then(getUserInfo).then(data => {
     if (data) {
       store.commit('setToken', saveToken)

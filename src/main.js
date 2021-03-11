@@ -15,8 +15,7 @@ import {
   DatetimePicker
 } from 'mint-ui';
 import TopHead from 'base/top-head'
-import MoveToBottom from "base/scrollInit";
-
+import notice from 'com/global/notice'
 import {
   Loading
 } from 'lib'
@@ -30,6 +29,7 @@ NProgress.configure({
 
 Vue.use(InfiniteScroll)
 Vue.use(Lazyload)
+Vue.use(notice)
 
 Vue.config.productionTip = false
 
@@ -44,7 +44,6 @@ Vue.component(Cell.name, Cell);
 Vue.component(DatetimePicker.name, DatetimePicker);
 // top head
 Vue.component('TopHead', TopHead)
-Vue.component('MoveToBottom', MoveToBottom)
 
 Vue.mixin({
   beforeRouteLeave(to, from, next) {

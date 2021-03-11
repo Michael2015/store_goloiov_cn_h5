@@ -9,17 +9,17 @@
 </template>
 
 <script>
-import tab from 'com/base/tab.vue'
-import { tryLogin } from 'api/login'
+import tab from "com/base/tab.vue";
+import { tryLogin } from "api/login";
 export default {
-  name: 'app',
+  name: "app",
   components: {
     tab
   },
-  beforeCreate () {
-    tryLogin()
+  beforeCreate() {
+    tryLogin();
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -38,4 +38,3 @@ export default {
   ) !important;
 }
 </style>
-

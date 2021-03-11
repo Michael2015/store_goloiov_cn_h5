@@ -27,18 +27,17 @@
         </div>
       </div>
     </div>
-    <move-to-bottom @reach-bottom="reach"></move-to-bottom>
     <div class="loadmore">
       <li class="list-title">
         <span>日期</span>
         <span>类型</span>
         <span>数值</span>
       </li>
-      <Load-more v-slot="{ list }">
-        <li v-for="i in nums" class="list-item" :key="i">
-          <span>日期</span>
+      <Load-more v-slot="{ list }" :getData="reach">
+        <li v-for="i in list" class="list-item" :key="i">
+          <span>{{ i }}</span>
           <span>类型</span>
-          <span class="num" :class="i > 0 ? 'red' : ''">{{ ale }}>{{ i }}</span>
+          <span class="num" :class="i > 0 ? 'red' : ''">{{ i }}</span>
         </li>
       </Load-more>
     </div>
@@ -50,7 +49,7 @@
 import tojump from "mixins/tojump";
 import { mapState } from "vuex";
 import notice from "base/notice";
-import { incomeList, platoonList, getUserAmount } from "api/income";
+import { getScore } from "api/me";
 import LoadMore from "base/load-more";
 import { login } from "api/login";
 import { Toast, Loading } from "lib";
@@ -58,9 +57,7 @@ import { Toast, Loading } from "lib";
 export default {
   data() {
     return {
-      nums: 10,
-      ale: 0,
-      isAll: false,
+      nums: 0,
       active: "earnings",
       balance: "0.00", //账户余额
       cash: "0.00", //可提现金额
@@ -82,28 +79,30 @@ export default {
     };
   },
   mounted() {
-    getUserAmount().then(reque => {
-      this.cash = reque.cash_money;
-      this.balance = reque.can_withdraw;
-      this.cons = reque.can_consume;
-      this.uncash = reque.unsettled_money;
-      this.all = reque.total_money;
-      //this.$refs.charge.disabled = true;
-    });
+    getScore()
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
 
   methods: {
     reach() {
-      if (this.nums < 30) {
-        Loading.open();
-        setTimeout(() => {
-          this.nums += 10;
+      return new Promise((resolve, reject) => {
+        if (this.nums < 30) {
+          Loading.open();
+          setTimeout(() => {
+            Loading.close();
+            this.nums += 10;
+            resolve(Array.from({ length: 10 }, (e, i) => i + this.nums));
+          }, 500);
+        } else {
           Loading.close();
-        }, 500);
-      } else {
-        Loading.close();
-        Toast("已经到底啦");
-      }
+          resolve([]);
+        }
+      });
     },
     checkShow(demo) {
       this.active = demo;
@@ -338,6 +337,7 @@ export default {
   .loadmore {
     margin-top: size(560);
     padding: 0 size(30);
+
     li {
       list-style: none;
       height: size(100);

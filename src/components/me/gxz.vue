@@ -10,16 +10,16 @@
         </div>
       </div>
     </div>
-    <move-to-bottom @reach-bottom="reach"></move-to-bottom>
+
     <div class="loadmore">
       <li class="list-title">
         <span>日期</span>
         <span>类型</span>
         <span>数值</span>
       </li>
-      <Load-more v-slot="{ list }">
-        <li v-for="i in nums" class="list-item" :key="i">
-          <span>日期</span>
+      <Load-more v-slot="{ list }" :getData="reach">
+        <li v-for="i in list" class="list-item" :key="i">
+          <span>{{ i }}</span>
           <span>类型</span>
           <span class="num" :class="i > 0 ? 'red' : ''">{{ i }}</span>
         </li>
@@ -76,16 +76,19 @@ export default {
 
   methods: {
     reach() {
-      if (this.nums < 30) {
-        Loading.open();
-        setTimeout(() => {
-          this.nums += 10;
+      return new Promise((resolve, reject) => {
+        if (this.nums < 30) {
+          Loading.open();
+          setTimeout(() => {
+            Loading.close();
+            this.nums += 10;
+            resolve(Array.from({ length: 10 }, (e, i) => i + this.nums));
+          }, 2500);
+        } else {
           Loading.close();
-        }, 500);
-      } else {
-        Loading.close();
-        Toast("到底啦");
-      }
+          resolve([]);
+        }
+      });
     },
     checkShow(demo) {
       this.active = demo;

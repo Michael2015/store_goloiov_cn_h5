@@ -107,7 +107,6 @@ export default new Router({
       path: '/order/:refresh?',
       component: () => import( /* webpackChunkName: "order" */ 'com/order'),
       meta: {
-        haveTab: true,
         keepAlive: true
       }
     },

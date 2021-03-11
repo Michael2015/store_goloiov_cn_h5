@@ -1,6 +1,13 @@
-import { req } from './request'
-import { clean, special} from './index'
-import { getUserInfo } from 'api'
+import {
+  req
+} from './request'
+import {
+  clean,
+  special
+} from './index'
+import {
+  getUserInfo
+} from 'api'
 import store from '@/store'
 
 // 更新全局用户信息
@@ -56,7 +63,8 @@ export function addAddress(params) {
 export function lowerBrowsing(page, limit) {
   return req.get('/api/partner.partner/lowerBrowsing', {
     params: {
-      page, limit
+      page,
+      limit
     }
   }).then(clean)
 }
@@ -73,7 +81,8 @@ export function member(keyword) {
 
 //  获取我的业绩（计入管理津贴业绩以及晋升业绩）
 export function sales() {
-  return req.get('/api/partner/partner/getMyselfSales', {params: {}
+  return req.get('/api/partner/partner/getMyselfSales', {
+    params: {}
   }).then(clean)
 }
 
@@ -152,42 +161,42 @@ export function joinTeam(data) {
 }
 
 // 升级攻略相关 ===============
-export function getmyteamincome(user_id){
-  return req.get('/api/partner.partner/getmyteamincome',{
-    params:{
+export function getmyteamincome(user_id) {
+  return req.get('/api/partner.partner/getmyteamincome', {
+    params: {
       user_id
     }
   }).then(special)
 }
 
 // 修改用户名字,头像通用
-export function edituserinfo(userinfo){
-  return req.post('/app/user/edituserinfo',{
+export function edituserinfo(userinfo) {
+  return req.post('/app/user/edituserinfo', {
     ...userinfo
   }).then(special)
 }
 //vip服务商相关
-export function apply_vip(applyObj){
-  return req.post('/api/partner/home/server_vip_apply',{
-      ...applyObj
+export function apply_vip(applyObj) {
+  return req.post('/api/partner/home/server_vip_apply', {
+    ...applyObj
   }).then(clean)
 }
 
 //vip服务商记录
-export function get_vip_apply_log(){
+export function get_vip_apply_log() {
   return req.get('/api/partner/home/server_vip_apply_log').then(clean)
 }
 
 // vip服务商详情
-export function get_vip_apply_log_detail(id){
-  return req.get('/api/partner/home/server_vip_apply_detail',{
-    params:{
+export function get_vip_apply_log_detail(id) {
+  return req.get('/api/partner/home/server_vip_apply_detail', {
+    params: {
       id
     }
   }).then(clean)
 }
 //查看vip申请状态
-export function get_vip_server(){
+export function get_vip_server() {
   return req.get('/api/partner/home/get_vip_server').then(clean)
 }
 
@@ -196,28 +205,28 @@ export function get_vip_server(){
 // 区域管理员相关=======================
 
 // 申请区域管理员相关
-export function region_partner_applye(applyObj){
-  return req.get('/api/partner/home/region_partner_apply',{
-    params:{
+export function region_partner_applye(applyObj) {
+  return req.get('/api/partner/home/region_partner_apply', {
+    params: {
       ...applyObj
     }
   }).then(clean)
 }
 
 //  记录
-export function get_my_region_log(){
+export function get_my_region_log() {
   return req.get('/api/partner/home/get_my_region_log').then(clean)
 }
 
 //  查看用户申请状态
-export function get_region_partner(){
+export function get_region_partner() {
   return req.get('/api/partner/home/get_region_partner').then(clean)
 }
 
 // 详情
-export function get_my_region_log_detail(id){
-  return req.get('/api/partner/home/get_my_region_log_detail',{
-    params:{
+export function get_my_region_log_detail(id) {
+  return req.get('/api/partner/home/get_my_region_log_detail', {
+    params: {
       id
     }
   }).then(clean)
@@ -225,36 +234,44 @@ export function get_my_region_log_detail(id){
 
 // 海报=======================
 //  获取海报列表
-export function getposterlist(){
+export function getposterlist() {
   return req.get('/api/partner.partner/getposterlist').then(clean)
 }
 
-export function createPosterImage(imgObj){
-  return req.get('/api/partner.partner/createPosterImage',{
-    params:{
+export function createPosterImage(imgObj) {
+  return req.get('/api/partner.partner/createPosterImage', {
+    params: {
       ...imgObj
     }
   }).then(clean)
 }
 
 //金卡贝积分
-export function getUserIntegralList(){
-  return req.get('/api/partner.partner/getUserIntegralList',{
-    limit:1000
+export function getUserIntegralList() {
+  return req.get('/api/partner.partner/getUserIntegralList', {
+    limit: 1000
   }).then()
 }
 
 //获取贡献值详情
-export function getUserContributionDetail(){
-  return req.get('/api/partner.partner/getUserContributionDetail',{
-  }).then()
+export function getUserContributionDetail() {
+  return req.get('/api/partner.partner/getUserContributionDetail', {}).then()
 }
 //贡献值流水
-export function getUserContributionList(page, limit){
-  return req.get('/api/partner.partner/getUserContributionList',{
+export function getUserContributionList(page, limit) {
+  return req.get('/api/partner.partner/getUserContributionList', {
     page,
     limit
   }).then(clean)
 }
 
 
+//我的会员接口
+export function getMyFriends() {
+  return req.get('/api/v1/User/getMyFriends').then(clean)
+}
+
+//获取积分接口
+export function getScore() {
+  return req.post('/api/v1/Score/getScore').then(clean)
+}

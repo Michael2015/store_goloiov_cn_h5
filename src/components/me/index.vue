@@ -9,39 +9,37 @@
           <span>原始股东</span>
         </div>
         <div class="part_right">
-          <router-link to='/myhaibao'
-                       tag='i'
-                       class="iconfont code">&#xe646;</router-link>
-          <i class="iconfont setup"
-             @click="$router.push('/setup')">&#xe60b;</i>
+          <router-link to="/myhaibao" tag="i" class="iconfont code"
+            >&#xe646;</router-link
+          >
+          <i class="iconfont setup" @click="$router.push('/setup')">&#xe60b;</i>
         </div>
       </div>
       <div class="head_body">
-        <div class="count"
-             v-for="(ele, i) in headData"
-             :key="i">
+        <div class="count" v-for="(ele, i) in headData" :key="i">
           <div>{{ ele.num }}</div>
           <div>{{ ele.title }}</div>
         </div>
       </div>
     </div>
     <div class="echarts">
-      <my-charts :option="option"
-                 key="1" />
+      <my-charts :option="option" key="1" />
     </div>
     <div class="vertical_tab">
-      <div class="vertical_item"
-           v-for="(item, index) in tabList"
-           :key="index"
-           @click="to(item.path ? item.path : '')">
+      <div
+        class="vertical_item"
+        v-for="(item, index) in tabList"
+        :key="index"
+        @click="to(item.path ? item.path : '')"
+      >
         <div class="left">
-          <i class="iconfont">{{ item.icon }}</i>&nbsp;
+          <i class="iconfont">{{ item.icon }}</i
+          >&nbsp;
           <div class="title">{{ item.tit }}</div>
         </div>
         <div class="right">
           <span>{{ item.afterTit }}</span>
-          <img src="~img/icon/join-right.png"
-               alt />
+          <img src="~img/icon/join-right.png" alt />
         </div>
       </div>
     </div>
@@ -212,7 +210,7 @@ export default {
             symbolOffset: [0, 8]
           },
           axisLabel: {
-            formatter: function (value, index) {
+            formatter: function(value, index) {
               return value.toFixed(2);
             }
           }
@@ -298,7 +296,6 @@ export default {
       if (url) {
         this.$router.push(url);
       }
-
     }
   },
   computed: {

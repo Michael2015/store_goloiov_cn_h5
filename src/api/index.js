@@ -1,10 +1,18 @@
-import {req, OK, SIZE} from './request'
+import {
+  req,
+  OK,
+  SIZE
+} from './request'
 
-export const clean = ({data}) => {
+export const clean = ({
+  data
+}) => {
   return data && data.code === OK ? (data.data ? data.data : true) : Promise.reject(data.msg || '')
 }
 
-export const special = ({ data }) => {
+export const special = ({
+  data
+}) => {
   return data
 }
 
@@ -52,8 +60,8 @@ export function getCategory() {
 }
 
 //获取首页广告数据
-export function getAdv(type,page) {
-  return req.get('/api/Marketing/getAdv',{
+export function getAdv(type, page) {
+  return req.get('/api/Marketing/getAdv', {
     params: {
       type,
       page
@@ -64,7 +72,7 @@ export function getAdv(type,page) {
 export function getCategoryProducts(cate_id, keyword) {
   return req.post('/api/marketing/getCategoryProducts', {
     cate_id,
-    keyword 
+    keyword
   }).then(clean)
 }
 // 获取首页滚动消息列表
@@ -73,7 +81,7 @@ export function getIndexNotice() {
 }
 
 // 获取首页商品列表（非合伙人）
-export function CustomerGetProducts(page,limit) {
+export function CustomerGetProducts(page, limit) {
   return req.get('/api/customer/mall/getProductList', {
     params: {
       page,
@@ -83,7 +91,7 @@ export function CustomerGetProducts(page,limit) {
 }
 
 // 获取首页爆款商品列表（非合伙人）
-export function CustomerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_field = 'order',order_sort = 'desc',cate_id = 0,page =1) {
+export function CustomerGetBlastProducts(keyword, is_blast = 1, limit = 8, order_field = 'order', order_sort = 'desc', cate_id = 0, page = 1) {
   return req.get('/api/customer/mall/getProductList', {
     params: {
       keyword,
@@ -99,7 +107,7 @@ export function CustomerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_fi
 
 
 // 获取首页商品列表（合伙人）
-export function PartnerGetProducts(page,limit) {
+export function PartnerGetProducts(page, limit) {
   return req.get('/api/partner/home/storelist', {
     params: {
       page,
@@ -110,7 +118,7 @@ export function PartnerGetProducts(page,limit) {
 
 
 // 获取首页爆款商品列表（合伙人）
-export function PartnerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_field = 'order',order_sort = 'desc',cate_id = 0,page=1) {
+export function PartnerGetBlastProducts(keyword, is_blast = 1, limit = 8, order_field = 'order', order_sort = 'desc', cate_id = 0, page = 1) {
   return req.get('/api/partner/home/storelist', {
     params: {
       keyword,
@@ -119,13 +127,13 @@ export function PartnerGetBlastProducts(keyword,is_blast = 1,limit = 8,order_fie
       order_sort,
       cate_id,
       limit,
-      page:page,
+      page: page,
     }
   }).then(clean)
 }
 
 //广告商品
-export function getAdvProducts(keyword,is_blast = 1,limit = 8,order_field = 'order',order_sort = 'desc',cate_id = 0,page=1) {
+export function getAdvProducts(keyword, is_blast = 1, limit = 8, order_field = 'order', order_sort = 'desc', cate_id = 0, page = 1) {
   return req.get('/api/Marketing/getAdvProducts', {
     params: {
       keyword,
@@ -134,14 +142,14 @@ export function getAdvProducts(keyword,is_blast = 1,limit = 8,order_field = 'ord
       order_sort,
       cate_id,
       limit,
-      page:page,
+      page: page,
     }
   }).then(clean)
 }
 
 
 // 获取首页新人专区信息
-export function getNewbornZoneStore(){
+export function getNewbornZoneStore() {
   return req.get('/api/marketing/getNewbornZoneStore').then(clean)
 }
 
@@ -230,7 +238,7 @@ export function PartnerGetGoodsVisitor(id, page = 1, size = SIZE) {
 }
 
 // 加入合伙人
-export function joinPartner_old(uid){
+export function joinPartner_old(uid) {
   console.log(uid)
   return req.get('/api/partner/index/join', {
     params: {
@@ -239,7 +247,7 @@ export function joinPartner_old(uid){
   }).then(clean)
 }
 
-export function joinPartner(phone){
+export function joinPartner(phone) {
   return req.get('/app/user/addInviter', {
     params: {
       invitMobile: phone
@@ -248,7 +256,7 @@ export function joinPartner(phone){
 }
 
 // 获取省市区 ==================================
-export function getAreaInfo(id = 0){
+export function getAreaInfo(id = 0) {
   return req.get('/api/address/getArea', {
     params: {
       pid: id
@@ -275,14 +283,12 @@ export function getQrcode(scene) {
 // 获取首页弹框内容
 export function getPop() {
   return req.get('/api/marketing/getNewbornZoneStore', {
-    params: {
-    }
+    params: {}
   }).then(clean)
 }
 
 export function indexGetPop() {
   return req.get('/api/marketing/getpop', {
-    params: {
-    }
+    params: {}
   }).then(clean)
 }

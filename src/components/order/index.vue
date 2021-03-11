@@ -4,35 +4,42 @@
     <div class="top">
       <div>
         <div class="types">
-          <div v-for="(item,index) in types"
-               :key="index"
-               :class="{active: index===activeType }"
-               @click="type(index)">{{item.name}}</div>
+          <div
+            v-for="(item, index) in types"
+            :key="index"
+            :class="{ active: index === activeType }"
+            @click="type(index)"
+          >
+            {{ item.name }}
+          </div>
         </div>
       </div>
     </div>
-    <div class="no-data"
-         v-if="!isLogin">暂无数据</div>
-    <load-more v-else
-               v-slot="{list}"
-               class="list-wrap"
-               :getData="getList"
-               :key="activeType + '-' + triggerRefresh">
+    <div class="no-data" v-if="!isLogin">暂无数据</div>
+    <load-more
+      v-else
+      v-slot="{ list }"
+      class="list-wrap"
+      :getData="getList"
+      :key="activeType + '-' + triggerRefresh"
+    >
       <div class="list">
-        <order-item class="item"
-                    v-for="(item) in list"
-                    :key="item.id"
-                    :item="item"></order-item>
+        <order-item
+          class="item"
+          v-for="item in list"
+          :key="item.id"
+          :item="item"
+        ></order-item>
       </div>
     </load-more>
   </div>
 </template>
 
 <script>
-import OrderItem from './order-item'
-import { getOrderList } from 'api/order'
-import LoadMore from 'base/load-more'
-import { mapState } from 'vuex'
+import OrderItem from "./order-item";
+import { getOrderList } from "api/order";
+import LoadMore from "base/load-more";
+import { mapState } from "vuex";
 export default {
   components: {
     OrderItem,
@@ -40,48 +47,54 @@ export default {
   },
   data() {
     return {
-      types: [{ name: '全部', type: '' }, { name: '待付款', type: 0 }, { name: '待发货', type: 1 }, { name: '已发货', type: 2 }, { name: '退款', type: -3 }],
+      types: [
+        { name: "全部", type: "" },
+        { name: "待付款", type: 0 },
+        { name: "待发货", type: 1 },
+        { name: "已发货", type: 2 },
+        { name: "退款", type: -3 }
+      ],
       activeType: 0,
-      keyword: '',
-      triggerRefresh: 0,
-    }
+      keyword: "",
+      triggerRefresh: 0
+    };
   },
   computed: {
-    ...mapState(['isLogin', 'refreshOrder']),
+    ...mapState(["isLogin", "refreshOrder"]),
     getList() {
-      return (page, size) => getOrderList(this.types[this.activeType].type, page, size)
+      return (page, size) =>
+        getOrderList(this.types[this.activeType].type, page, size);
     }
   },
   watch: {
     isLogin() {
-      this.triggerRefresh++
+      this.triggerRefresh++;
     },
     refreshOrder() {
       // 检测到删除订单，需要刷新
-      this.triggerRefresh++
+      this.triggerRefresh++;
     }
   },
-  created() {
-  },
+  created() {},
   activated() {
-    const params = this.$route.params
+    const params = this.$route.params;
     if (params.refresh) {
       // 触发组件重新创建 从而刷新数据
-      this.activeType = 0
-      this.triggerRefresh++
+      this.activeType = 0;
+      this.triggerRefresh++;
       // 清除刷新标志，为了从订单详情回到列表，列表不刷新
-      delete params.refresh
+      delete params.refresh;
       this.$router.push({
         params
-      })
+      });
     }
   },
   methods: {
     type(i) {
-      this.activeType = i
+      this.activeType = i;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -128,7 +141,6 @@ export default {
 }
 .list-wrap {
   padding-top: size(96);
-  padding-bottom: size(100);
 }
 .list {
   padding: size(26) 0;

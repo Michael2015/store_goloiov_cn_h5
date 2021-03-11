@@ -42,7 +42,7 @@ module.exports = {
   // publicPath: './public',
   assetsDir,
   devServer: {
-    // host: '192.168.0.162', //万车品wify测试
+    host: '192.168.0.162', //万车品wify测试
     proxy: {
       '/api|/app': {
         target: url,

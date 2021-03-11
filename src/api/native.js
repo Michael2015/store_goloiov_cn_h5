@@ -20,9 +20,9 @@ function callNative(obj = {}) {
 let n = 0
 
 function api(action, data = {}) {
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     const cbName = '_native_cb_' + n++
-    const wrap = function(json) {
+    const wrap = function (json) {
       let r = json
       if (json !== undefined) {
         try {
@@ -35,7 +35,7 @@ function api(action, data = {}) {
       window[cbName] = null
     }
     window[cbName] = wrap
-  
+
     callNative({
       action,
       callback: cbName,
@@ -63,13 +63,13 @@ export function nativeLogin() {
 export function nativeLogout() {
   if (process.env.NODE_ENV !== 'production') {
     return Promise.resolve()
-  } 
+  }
   return api('appLogout')
 }
 
 // 邀请合伙人
 export function invitePartner(uid, name) {
-  return import(/* webpackChunkName: "mini-img" */ 'img/mini.png').then((res) => {
+  return import( /* webpackChunkName: "mini-img" */ 'img/mini.png').then((res) => {
     return res.default
   }).then(img => {
     const len = 'data:image/png;base64,'.length
