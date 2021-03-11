@@ -42,6 +42,14 @@
 
         >input {
           background: #F5F5F5;
+          padding: size(10);
+          box-sizing: content-box;
+        }
+
+        >input::-webkit-input-placeholder {
+          height: 100%;
+          vertical-align: middle;
+          line-height: 1.5;
         }
       }
     }
