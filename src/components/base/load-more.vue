@@ -115,6 +115,7 @@ export default {
       if (this.disabled || this.loading || this.loaded || this.paused) {
         return;
       }
+      Loading.open();
       this.loading = true;
       this.getData(this.page, this.size)
         .then(data => {
@@ -135,6 +136,7 @@ export default {
           }
         })
         .finally(() => {
+          Loading.close();
           //若未出现滚动条，继续加载loadmore
           if (this.isAppearScroll && !this.loaded && !this.hasScrollbar) {
             this.loadMore();

@@ -17,7 +17,11 @@
         <span>类型</span>
         <span>数值</span>
       </li>
-      <Load-more v-slot="{ list }" :getData="reach">
+      <Load-more
+        v-slot="{ list }"
+        :getData="getScoreContribution"
+        :setSize="20"
+      >
         <li v-for="i in list" class="list-item" :key="i">
           <span>{{ i }}</span>
           <span>类型</span>
@@ -33,7 +37,7 @@
 import tojump from "mixins/tojump";
 import { mapState } from "vuex";
 import notice from "base/notice";
-import { incomeList, platoonList, getUserAmount } from "api/income";
+import { getScoreContribution } from "api/me";
 import LoadMore from "base/load-more";
 import { login } from "api/login";
 import { Toast, Loading } from "lib";
@@ -64,32 +68,17 @@ export default {
     };
   },
   mounted() {
-    getUserAmount().then(reque => {
+    /*  getUserAmount().then(reque => {
       this.cash = reque.cash_money;
       this.balance = reque.can_withdraw;
       this.cons = reque.can_consume;
       this.uncash = reque.unsettled_money;
       this.all = reque.total_money;
       //this.$refs.charge.disabled = true;
-    });
+    }); */
   },
 
   methods: {
-    reach() {
-      return new Promise((resolve, reject) => {
-        if (this.nums < 30) {
-          Loading.open();
-          setTimeout(() => {
-            Loading.close();
-            this.nums += 10;
-            resolve(Array.from({ length: 10 }, (e, i) => i + this.nums));
-          }, 2500);
-        } else {
-          Loading.close();
-          resolve([]);
-        }
-      });
-    },
     checkShow(demo) {
       this.active = demo;
       if (this.active === "charge") {
@@ -174,6 +163,11 @@ export default {
     }
   },
   computed: {
+    getScoreContribution() {
+      return (page, size) => {
+        getScoreContribution(page, size);
+      };
+    },
     showtitle: function() {
       let title;
       const { active } = this;

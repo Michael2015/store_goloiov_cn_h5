@@ -275,3 +275,19 @@ export function getMyFriends() {
 export function getScore() {
   return req.post('/api/v1/Score/getScore').then(clean)
 }
+
+//获取积分列表
+export function getScoreList(page, limit) {
+  return req.post('/api/v1/Score/getList', {
+    page,
+    limit
+  }).then(clean)
+}
+
+//获取贡献值记录接口
+export function getScoreContribution(page, limit) {
+  return req.post('/api/v1/Score/getContribution', {
+    page,
+    limit
+  }).then(clean)
+}

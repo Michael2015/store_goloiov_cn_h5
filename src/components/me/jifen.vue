@@ -8,18 +8,18 @@
         <div class="content">
           <div class="remain">剩余总积分</div>
           <div class="jifen-num">
-            10000000000
+            {{ info.score }}
             <span>≈2653.1元</span>
           </div>
         </div>
         <div class="cumulat">
           <div class="left">
             <p>累计获得</p>
-            <p>999999</p>
+            <p>{{ info.get_score_total }}</p>
           </div>
           <div class="right">
             <p>累计消耗</p>
-            <p>999999</p>
+            <p>{{ info.use_score_total }}</p>
           </div>
         </div>
         <div class="withdraw-wrap">
@@ -33,11 +33,13 @@
         <span>类型</span>
         <span>数值</span>
       </li>
-      <Load-more v-slot="{ list }" :getData="reach">
-        <li v-for="i in list" class="list-item" :key="i">
-          <span>{{ i }}</span>
-          <span>类型</span>
-          <span class="num" :class="i > 0 ? 'red' : ''">{{ i }}</span>
+      <Load-more v-slot="{ list }" :getData="getScoreList" :setSize="20">
+        <li v-for="i in list" class="list-item" :key="i.id">
+          <span>{{ formatDate(i.add_time) }}</span>
+          <span>{{ i.get_type }}</span>
+          <span class="num" :class="Number(i.num) > 0 ? 'red' : ''">{{
+            formatNum(i.num)
+          }}</span>
         </li>
       </Load-more>
     </div>
@@ -49,14 +51,15 @@
 import tojump from "mixins/tojump";
 import { mapState } from "vuex";
 import notice from "base/notice";
-import { getScore } from "api/me";
+import { getScore, getScoreList } from "api/me";
 import LoadMore from "base/load-more";
 import { login } from "api/login";
-import { Toast, Loading } from "lib";
+import { Toast, Loading, formatDate } from "lib";
 
 export default {
   data() {
     return {
+      info: {},
       nums: 0,
       active: "earnings",
       balance: "0.00", //账户余额
@@ -79,16 +82,21 @@ export default {
     };
   },
   mounted() {
-    getScore()
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.getScore();
   },
 
   methods: {
+    getScore() {
+      getScore()
+        .then(res => {
+          this.info = res || {};
+        })
+        .catch(e => {
+          this.$notice.show(e, () => {
+            this.$router.back();
+          });
+        });
+    },
     reach() {
       return new Promise((resolve, reject) => {
         if (this.nums < 30) {
@@ -188,6 +196,21 @@ export default {
     }
   },
   computed: {
+    formatDate() {
+      return formatDate;
+    },
+    formatNum() {
+      return n => {
+        let a = Number(n);
+        if (a > 0) return "+" + n;
+        else return n;
+      };
+    },
+    getScoreList() {
+      return (page, size) => {
+        return getScoreList(page, size);
+      };
+    },
     showtitle: function() {
       let title;
       const { active } = this;
@@ -351,7 +374,15 @@ export default {
       color: #666;
       > span {
         text-align: center;
-        min-width: size(100);
+        width: 33%;
+      }
+      > span:nth-of-type(1) {
+        text-align: left;
+        padding-left: size(10);
+      }
+      > span:nth-of-type(3) {
+        text-align: right;
+        padding-right: size(10);
       }
       .red {
         color: #ea1f21;
