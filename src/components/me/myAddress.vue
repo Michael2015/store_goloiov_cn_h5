@@ -1,35 +1,46 @@
 <template>
   <div class="wrap">
     <top-head>收货地址</top-head>
-    <div class="addr-wrap" v-for="item in addrList" :key="item.id" @click="select(item)">
+    <div class="addr-wrap"
+         v-for="item in addrList"
+         :key="item.id"
+         @click="select(item)">
       <div class="base">
-        <img src="~img/icon/location.png" alt="">
+        <img src="~img/icon/location.png"
+             alt="">
         <span>{{item.province}} {{item.city}} {{item.district}}</span>
       </div>
       <div class="detail">
         {{item.detail}}
-        <img src="~img/icon/del.png" alt="" class="del" v-if="canEdit" @click.stop="deleteAddress(item.id)">
-        <img src="~img/icon/edit-1.png" alt="" class="edit" v-if="canEdit" @click.stop="edit(item)">
+        <img src="~img/icon/del.png"
+             alt=""
+             class="del"
+             v-if="canEdit"
+             @click.stop="deleteAddress(item.id)">
+        <img src="~img/icon/edit-1.png"
+             alt=""
+             class="edit"
+             v-if="canEdit"
+             @click.stop="edit(item)">
       </div>
-      <div class="contact">{{item.real_name}}    {{item.phone}}</div>
+      <div class="contact">{{item.real_name}} {{item.phone}}</div>
     </div>
-    <div v-if="addrList.length === 0" class="no-data">
+    <div v-if="addrList.length === 0"
+         class="no-data">
       暂无数据
     </div>
-    <confirm ref="confirm">是否删除该地址？</confirm>
     <div class="blank"></div>
-    <router-link class="add" tag="div" to="/addAddress">新增地址</router-link>
+    <router-link class="add"
+                 tag="div"
+                 to="/addAddress">新增地址</router-link>
   </div>
 </template>
 
 <script>
-import {getAddressList, delAddress} from 'api/me'
-import {Loading} from 'lib'
-import Confirm from "base/confirm"
+import { getAddressList, delAddress } from 'api/me'
+import { Loading } from 'lib'
 export default {
-  components: {
-    Confirm
-  },
+
   data() {
     return {
       // 买商品是选择地址要禁用编辑
@@ -50,12 +61,17 @@ export default {
       getAddressList().then(data => {
         if (data) {
           this.addrList = data
-          Loading.close()
         }
+      }).catch(e => {
+        this.$notice.show(e, () => {
+          this.$router.back();
+        });
+      }).finally(() => {
+        Loading.close()
       })
     },
     deleteAddress(id) {
-      this.$refs.confirm.show('', () => {
+      this.$confirm.show('是否删除该地址？', () => {
         delAddress(id).then(() => {
           this.loaddata()
         })
@@ -81,30 +97,30 @@ export default {
 
 <style lang="scss" scoped>
 @import "~css/def";
-.wrap{
+.wrap {
   min-height: 100vh;
   background-color: $color-body-bg;
   position: relative;
-  .blank{
+  .blank {
     height: size(110);
   }
 }
-.addr-wrap{
+.addr-wrap {
   background: #fff;
   padding: size(20) size(30);
   margin-top: size(20);
-  .base{
+  .base {
     line-height: size(46);
-    img{
+    img {
       float: left;
       width: size(46);
       margin-right: size(12);
     }
-    span{
+    span {
       font-size: size(26);
     }
   }
-  .detail{
+  .detail {
     font-size: size(24);
     line-height: 1.4;
     word-break: break-all;
@@ -113,22 +129,22 @@ export default {
     margin: size(9) 0 size(16);
     padding-right: size(120);
     position: relative;
-    img{
+    img {
       width: size(38);
       position: absolute;
       top: 0;
       right: 0;
     }
-    .del{
+    .del {
       right: size(36 + 38);
     }
   }
-  .contact{
+  .contact {
     font-size: size(26);
     line-height: 1.4;
   }
   position: relative;
-  .right{
+  .right {
     position: absolute;
     right: size(30);
     top: 50%;
@@ -136,13 +152,13 @@ export default {
     margin-top: -8px;
   }
 }
-.no-data{
+.no-data {
   text-align: center;
   padding: size(50) 0;
   color: #999;
   font-size: size(30);
 }
-.add{
+.add {
   position: fixed;
   z-index: 1;
   left: 0;

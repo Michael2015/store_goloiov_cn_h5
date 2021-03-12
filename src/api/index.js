@@ -257,7 +257,7 @@ export function joinPartner(phone) {
 
 // 获取省市区 ==================================
 export function getAreaInfo(id = 0) {
-  return req.get('/api/address/getArea', {
+  return req.get('/api/Address/getArea', {
     params: {
       pid: id
     }

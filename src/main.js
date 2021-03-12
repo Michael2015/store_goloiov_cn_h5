@@ -16,6 +16,8 @@ import {
 } from 'mint-ui';
 import TopHead from 'base/top-head'
 import notice from 'com/global/notice'
+import confirm from 'com/global/confirm'
+
 import {
   Loading
 } from 'lib'
@@ -30,6 +32,7 @@ NProgress.configure({
 Vue.use(InfiniteScroll)
 Vue.use(Lazyload)
 Vue.use(notice)
+Vue.use(confirm)
 
 Vue.config.productionTip = false
 

@@ -46,7 +46,7 @@ import LoadMore from "base/load-more";
 import { login } from "api/login";
 import { Toast, Loading, formatDate } from "lib";
 export default {
-  data () {
+  data() {
     return {
       contribution: 0,
       loading: false,
@@ -72,7 +72,7 @@ export default {
       }
     };
   },
-  mounted () {
+  mounted() {
     /*  getUserAmount().then(reque => {
       this.cash = reque.cash_money;
       this.balance = reque.can_withdraw;
@@ -84,10 +84,10 @@ export default {
   },
 
   methods: {
-    getResData (e) {
+    getResData(e) {
       this.contribution = e.contribution;
     },
-    checkShow (demo) {
+    checkShow(demo) {
       this.active = demo;
       if (this.active === "charge") {
         this.$refs.charge.disabled = false;
@@ -101,13 +101,13 @@ export default {
       //   this.loadCharge();
       // }
     },
-    loadCharge (page, size) {
+    loadCharge(page, size) {
       return platoonList(page, size);
     },
-    loadEarnings (page, size) {
+    loadEarnings(page, size) {
       return incomeList(page, size);
     },
-    record () {
+    record() {
       if (this.isLogin) {
         this.tojump("/record");
       } else {
@@ -116,7 +116,7 @@ export default {
         });
       }
     },
-    withdraw () {
+    withdraw() {
       if (this.isLogin) {
         if (this.cash === "0.00") {
           Toast("无可提现金额");
@@ -130,12 +130,12 @@ export default {
       }
     },
     // 获取订单号后六位
-    tailSix (str) {
+    tailSix(str) {
       let s = str;
       return s.substr(s.length - 6, 6);
     },
     // 收益列表点击
-    clickShouYi (type, id, sn, uid, type_num) {
+    clickShouYi(type, id, sn, uid, type_num) {
       console.log(type);
       let url;
       url = this.jumpObj[type];
@@ -147,10 +147,10 @@ export default {
       }
       this.tojump(url);
     },
-    clickMianDan (id, uid, type_num) {
+    clickMianDan(id, uid, type_num) {
       this.tojump(`/public?order_id=${id}&user_id=${uid}&type_num=${type_num}`);
     },
-    tojieshao () {
+    tojieshao() {
       if (this.active === "charge") {
         this.tojump("/gongpaijieshao");
       } else if (this.active === "earnings") {
@@ -160,7 +160,7 @@ export default {
     }
   },
   watch: {
-    active (oldVal) {
+    active(oldVal) {
       if (oldVal === "earnings") {
         this.$refs.earnings.disabled = false;
         this.$refs.charge.disabled = true;
@@ -171,7 +171,7 @@ export default {
     }
   },
   computed: {
-    formatType () {
+    formatType() {
       return n => {
         switch (Number(n)) {
           case 0:
@@ -181,17 +181,17 @@ export default {
         }
       };
     },
-    formatDate () {
+    formatDate() {
       return formatDate;
     },
-    formatNum () {
+    formatNum() {
       return n => {
         let a = Number(n);
         if (a > 0) return "+" + n;
         else return n;
       };
     },
-    getScoreContribution () {
+    getScoreContribution() {
       return (page, size) => {
         return getScoreContribution(page, size);
       };

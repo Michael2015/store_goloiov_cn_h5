@@ -1,35 +1,30 @@
 <template>
   <div class="wrap">
-    <top-head>订单列表</top-head>
+    <top-head>我的提货券</top-head>
     <div class="top">
       <div>
         <div class="types">
-          <div
-            v-for="(item, index) in types"
-            :key="index"
-            :class="{ active: index === activeType }"
-            @click="type(index)"
-          >
+          <div v-for="(item, index) in types"
+               :key="index"
+               :class="{ active: index === activeType }"
+               @click="type(index)">
             {{ item.name }}
           </div>
         </div>
       </div>
     </div>
-    <div class="no-data" v-if="!isLogin">暂无数据</div>
-    <load-more
-      v-else
-      v-slot="{ list }"
-      class="list-wrap"
-      :getData="getList"
-      :key="activeType + '-' + triggerRefresh"
-    >
+    <div class="no-data"
+         v-if="!isLogin">暂无数据</div>
+    <load-more v-else
+               v-slot="{ list }"
+               class="list-wrap"
+               :getData="getList"
+               :key="activeType + '-' + triggerRefresh">
       <div class="list">
-        <order-item
-          class="item"
-          v-for="item in list"
-          :key="item.id"
-          :item="item"
-        ></order-item>
+        <order-item class="item"
+                    v-for="item in list"
+                    :key="item.id"
+                    :item="item"></order-item>
       </div>
     </load-more>
   </div>
@@ -75,7 +70,7 @@ export default {
       this.triggerRefresh++;
     }
   },
-  created() {},
+  created() { },
   activated() {
     const params = this.$route.params;
     if (params.refresh) {

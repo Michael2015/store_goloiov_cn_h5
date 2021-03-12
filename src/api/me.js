@@ -33,29 +33,19 @@ export function getAddressList() {
 
 // 删除一个地址
 export function delAddress(id) {
-  return req.get('/api/address/deladdress', {
-    params: {
-      address_id: id
-    }
-  }).then(clean)
+  return req.post('/api/Address/delAddress', {
+    address_id: id
+  }).then(special)
 }
 
 // 编辑一个地址
 export function editAddress(params) {
-  return req.get('/api/address/editaddress', {
-    params: {
-      ...params
-    }
-  }).then(clean)
+  return req.post('/api/Address/editAddress', params).then(clean)
 }
 
 // 新增一个地址
 export function addAddress(params) {
-  return req.get('/api/Address/addAddress', {
-    params: {
-      ...params
-    }
-  }).then(clean)
+  return req.post('/api/Address/addAddress', params).then(clean)
 }
 
 //  我的访客记录管理 =====================
@@ -267,8 +257,12 @@ export function getUserContributionList(page, limit) {
 
 
 //我的会员接口
-export function getMyFriends() {
-  return req.get('/api/v1/User/getMyFriends').then(clean)
+export function getMyFriends(page) {
+  return req.get('/api/v1/User/getMyFriends', {
+    params: {
+      page
+    }
+  }).then(clean)
 }
 
 //获取积分接口

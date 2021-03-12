@@ -31,7 +31,7 @@ import { getMyFriends } from "api/me.js";
 
 export default {
   components: {},
-  data () {
+  data() {
     return {
       value: "",
       list: [],
@@ -39,7 +39,7 @@ export default {
     };
   },
   watch: {
-    value (val) {
+    value(val) {
       if (val) {
         this.searchList = this.list.filter(item => item.nickname.includes(val));
       } else {
@@ -48,14 +48,14 @@ export default {
     }
   },
   computed: {
-    getImg () {
+    getImg() {
       let info = this.$store.state.userInfo;
       return info ? info.avatar : "";
     }
   },
   methods: {
-    getMyFriends () {
-      getMyFriends()
+    getMyFriends(page, limit) {
+      getMyFriends(page, limit)
         .then(res => {
           this.list = res || [];
           this.searchList = res || [];
@@ -67,8 +67,8 @@ export default {
         });
     }
   },
-  mounted () {
-    this.getMyFriends();
+  mounted() {
+    this.getMyFriends(1);
   }
 };
 </script>

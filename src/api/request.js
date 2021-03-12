@@ -5,7 +5,7 @@ import store from '@/store'
 export const OK = 200
 export const SIZE = 10
 const headers = {
-  'Content-Type': 'application/x-www-form-urlencoded'
+  'Content-Type': 'application/json '
 }
 
 // 通用参数
@@ -21,14 +21,14 @@ export const req = axios.create({
   baseURL: '/',
   params,
   headers,
-  transformRequest: [
+  /* transformRequest: [
     function (data) {
       if (data instanceof FormData) {
         return data
       }
       return qs.stringify(data)
     }
-  ]
+  ] */
 })
 
 req.interceptors.request.use(

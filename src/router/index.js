@@ -198,6 +198,10 @@ export default new Router({
       }
     },
     {
+      path: '/rule',
+      component: () => import( /* webpackChunkName: "me" */ 'com/me/rule'),
+    },
+    {
       path: '/jifen',
       component: () => import( /* webpackChunkName: "me" */ 'com/me/jifen'),
     },
