@@ -33,17 +33,23 @@
         <span>类型</span>
         <span>数值</span>
       </li>
-      <Load-more v-slot="{ list }" :getData="getScoreList" :setSize="20">
-        <li v-for="i in list" class="list-item" :key="i.id">
+      <Load-more v-slot="{ list }"
+                 :getData="getScoreList"
+                 :setSize="20">
+        <li v-for="i in list"
+            class="list-item"
+            :key="i.id">
           <span>{{ formatDate(i.add_time) }}</span>
           <span>{{ i.get_type }}</span>
-          <span class="num" :class="Number(i.num) > 0 ? 'red' : ''">{{
+          <span class="num"
+                :class="Number(i.num) > 0 ? 'red' : ''">{{
             formatNum(i.num)
           }}</span>
         </li>
       </Load-more>
     </div>
-    <notice ref="notive" :autoClose="true"></notice>
+    <notice ref="notive"
+            :autoClose="true"></notice>
   </div>
 </template>
 
@@ -211,7 +217,7 @@ export default {
         return getScoreList(page, size);
       };
     },
-    showtitle: function() {
+    showtitle: function () {
       let title;
       const { active } = this;
       if (active === "earnings") {
@@ -380,7 +386,7 @@ export default {
         text-align: left;
         padding-left: size(10);
       }
-      > span:nth-of-type(3) {
+      > span:nth-last-of-type(1) {
         text-align: right;
         padding-right: size(10);
       }

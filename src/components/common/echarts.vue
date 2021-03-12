@@ -1,5 +1,6 @@
 <template>
-  <div ref="echarts" class="echarts"></div>
+  <div ref="echarts"
+       class="echarts"></div>
 </template>
 
 <script>
@@ -25,7 +26,7 @@ export default {
       myChart.setOption(val);
     }
   },
-  mounted() {}
+  mounted() { }
 };
 </script>
 <style lang="scss" scoped>

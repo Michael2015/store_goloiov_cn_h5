@@ -58,7 +58,9 @@ export default {
 @import "~css/def";
 
 .content {
-  white-space: pre-wrap;
+  white-space: pre-line;
   font-size: size(28);
+  padding: 0 size(20);
+  line-height: 1.2;
 }
 </style>

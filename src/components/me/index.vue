@@ -147,7 +147,7 @@ export default {
         {
           icon: "\ue666",
           tit: "我的提货券",
-          afterTit: "查看全部订单",
+          afterTit: "查看提货券",
           path: "/order"
         },
         {

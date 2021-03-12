@@ -16,12 +16,22 @@ export function getOrderList(status, page, size) {
   }).then(clean)
 }
 
+
+// 获取我的提货券
+export function getMyCoupon(status, page, size) {
+  return req.get('/api/v1/User/getMyCoupon', {
+    params: {
+      status,
+      page,
+      limit: size
+    }
+  }).then(clean)
+}
 // 根据订单号获取订单的详情
-export function getOrderDetail(id, uid) {
+export function getOrderDetail(id) {
   return req.get('/api/v1/Order/getOrderById', {
     params: {
-      order_id: id,
-      user_id: uid
+      order_id: id
     }
   }).then(clean)
 }

@@ -7,21 +7,22 @@
         <i class="iconfont wenhao">&#xe605;</i>
         <div class="content">
           <div class="remain">账号总余额</div>
-          <div class="jifen-num">￥{{ getFloat(10000000000, 2) }}</div>
+          <div class="jifen-num">￥{{ getFloat(info.profit||0, 2) }}</div>
         </div>
         <div class="cumulat">
           <div class="left">
-            <p>待结算</p>
-            <p>{{ getFloat(999, 2) }}</p>
+            <p>已提现</p>
+            <p>{{ getFloat(info.get_withdrawal_total||0, 2) }}</p>
           </div>
           <div class="right">
             <p>累计收入</p>
-            <p>{{ getFloat(1000, 2) }}</p>
+            <p>{{ getFloat(info.get_income_total||0, 2) }}</p>
           </div>
         </div>
-        <div class="withdraw-wrap">
-          <div class="withdraw" @click="withdraw">提现</div>
-        </div>
+        <!-- <div class="withdraw-wrap">
+          <div class="withdraw"
+               @click="withdraw">提现</div>
+        </div> -->
       </div>
     </div>
 
@@ -33,17 +34,29 @@
         <span>数值</span>
         <span>状态</span>
       </li>
-      <Load-more v-slot="{ list }" :getData="reach">
-        <li v-for="i in list" class="list-item" :key="i">
-          <span>日期</span>
-          <span>类型</span>
-          <span>说明</span>
-          <span class="num" :class="i > 0 ? 'red' : ''">{{ i }}</span>
-          <span class="blue">待结算</span>
+      <Load-more v-slot="{ list }"
+                 :getData="getMyProfit"
+                 :setSize='20'
+                 @getResData='getResData'
+                 useListName='list'>
+        <li v-for="i in list"
+            class="list-item"
+            :key="i.id">
+          <span>{{ formatDate(i.add_time) }}</span>
+          <span>{{i.type}}</span>
+          <span>{{i.explain}}</span>
+
+          <span class="num"
+                :class="Number(i.amount) > 0 ? 'red' : ''">{{
+            formatNum(i.amount)
+          }}</span>
+          <span class="blue"
+                :class="i.status==='去提现'?'redBtn':''">{{i.status}}</span>
         </li>
       </Load-more>
     </div>
-    <notice ref="notive" :autoClose="true"></notice>
+    <notice ref="notive"
+            :autoClose="true"></notice>
   </div>
 </template>
 
@@ -51,14 +64,15 @@
 import tojump from "mixins/tojump";
 import { mapState } from "vuex";
 import notice from "base/notice";
-import { incomeList, platoonList, getUserAmount } from "api/income";
+import { getMyProfit } from "api/income";
 import LoadMore from "base/load-more";
 import { login } from "api/login";
-import { Toast, Loading, getFloat } from "lib";
+import { Toast, Loading, getFloat, formatDate } from "lib";
 export default {
   data() {
     return {
       nums: 10,
+      info: {},
       loading: false,
       active: "earnings",
       balance: "0.00", //账户余额
@@ -81,32 +95,20 @@ export default {
     };
   },
   mounted() {
-    getUserAmount().then(reque => {
-      this.cash = reque.cash_money;
-      this.balance = reque.can_withdraw;
-      this.cons = reque.can_consume;
-      this.uncash = reque.unsettled_money;
-      this.all = reque.total_money;
-      //this.$refs.charge.disabled = true;
-    });
+    /*  getUserAmount().then(reque => {
+       this.cash = reque.cash_money;
+       this.balance = reque.can_withdraw;
+       this.cons = reque.can_consume;
+       this.uncash = reque.unsettled_money;
+       this.all = reque.total_money;
+       this.$refs.charge.disabled = true;
+     }); */
   },
 
   methods: {
     getFloat,
-    reach() {
-      return new Promise((resolve, reject) => {
-        if (this.nums < 30) {
-          Loading.open();
-          setTimeout(() => {
-            Loading.close();
-            this.nums += 10;
-            resolve(Array.from({ length: 10 }, (e, i) => i + this.nums));
-          }, 2500);
-        } else {
-          Loading.close();
-          resolve([]);
-        }
-      });
+    getResData(e) {
+      this.info = e
     },
     checkShow(demo) {
       this.active = demo;
@@ -192,7 +194,20 @@ export default {
     }
   },
   computed: {
-    showtitle: function() {
+    formatNum() {
+      return n => {
+        let a = Number(n);
+        if (a > 0) return "+" + n;
+        else return n;
+      };
+    },
+    formatDate() {
+      return formatDate;
+    },
+    getMyProfit() {
+      return getMyProfit
+    },
+    showtitle: function () {
       let title;
       const { active } = this;
       if (active === "earnings") {
@@ -228,7 +243,7 @@ export default {
     top: size(88);
     overflow: hidden;
     background: #fff;
-    height: size(560);
+    height: size(500);
     width: 100%;
     box-shadow: 0 1px 5px #eee;
     &:after {
@@ -340,7 +355,7 @@ export default {
     }
   }
   .loadmore {
-    margin-top: size(560);
+    margin-top: size(500);
     padding: 0 size(30);
     li {
       list-style: none;
@@ -357,15 +372,31 @@ export default {
         text-align: center;
         min-width: size(100);
       }
-      .red {
-        color: #ea1f21;
+      > span:nth-of-type(1) {
+        text-align: left;
+        padding-left: size(10);
       }
+      > span:nth-last-of-type(1) {
+        text-align: right;
+        padding-right: size(10);
+      }
+
       .num {
         font-weight: bold;
       }
+      .red {
+        color: #ea1f21;
+      }
       .blue {
-        color: #8400ff;
-        text-decoration: underline;
+        color: gray;
+        border: 1px solid gray;
+        height: size(50);
+        line-height: size(50);
+        border-radius: size(25);
+      }
+      .redBtn {
+        background: #ea1f21;
+        color: white;
       }
     }
   }
@@ -374,7 +405,7 @@ export default {
     overflow: auto;
     position: absolute;
     width: 100%;
-    top: size(560);
+    top: size(500);
     bottom: size(100);
     .touch-no {
       padding-bottom: size(10);

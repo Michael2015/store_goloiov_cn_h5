@@ -16,7 +16,7 @@ export default {
   components: {
     tab
   },
-  async beforeCreate() {
+  beforeCreate() {
     tryLogin();
   }
 };

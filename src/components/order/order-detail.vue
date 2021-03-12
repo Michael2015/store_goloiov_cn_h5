@@ -8,28 +8,21 @@
         <span v-if="orderInfo.status_of_order === 2">退款中</span>
         <span v-if="orderInfo.status_of_order === 3">已发货</span>
         <span v-if="orderInfo.status_of_order === 4">已退款</span>
-        <span
-          v-if="
+        <span v-if="
             orderInfo.status_of_order === 5 &&
               (orderInfo.status == 2 || orderInfo.status == 4)
-          "
-          >已收货</span
-        >
-        <span v-if="orderInfo.status_of_order === 5 && orderInfo.status == 3"
-          >已评价</span
-        >
+          ">已收货</span>
+        <span v-if="orderInfo.status_of_order === 5 && orderInfo.status == 3">已评价</span>
       </div>
-      <div
-        class="icon"
-        :class="{
+      <div class="icon"
+           :class="{
           daizhifu: orderInfo.status_of_order === 0,
           daifahuo: orderInfo.status_of_order === 1,
           yifahuo: orderInfo.status_of_order === 3,
           yishouhuo:
             orderInfo.status_of_order === 5 &&
             (orderInfo.status == 2 || orderInfo.status == 4)
-        }"
-      >
+        }">
         <div class="img-wrap"></div>
       </div>
     </div>
@@ -37,7 +30,8 @@
       <div class="address">
         <div class="table">
           <div class="location-icon">
-            <img src="~img/icon/location.png" alt="" />
+            <img src="~img/icon/location.png"
+                 alt="" />
           </div>
           <div>
             <div class="detail">{{ orderInfo.user_address }}</div>
@@ -50,7 +44,8 @@
       <div class="goods">
         <div class="con table border-bottom">
           <div class="goods-pic">
-            <div><img :src="orderInfo.image" alt="" /></div>
+            <div><img :src="orderInfo.image"
+                   alt="" /></div>
           </div>
           <div class="goods-desc">
             <div class="name">{{ orderInfo.store_name }}</div>
@@ -71,41 +66,43 @@
         <div class="line">订单来源：&nbsp;&nbsp;{{ orderInfo.nickname }}</div>
         <div class="line">
           订单编号：&nbsp;&nbsp;{{ orderInfo.order_id }}
-          <div class="btn-inline" @click="copy">复制</div>
+          <div class="btn-inline"
+               @click="copy">复制</div>
         </div>
         <div class="line">下单时间：&nbsp;&nbsp;{{ orderInfo.add_time }}</div>
         <div class="line">
-          物流信息：&nbsp;&nbsp;<!--
+          物流信息：&nbsp;&nbsp;
+          <!--
           -->{{
             orderInfo.delivery_id
               ? orderInfo.delivery_name + " (" + orderInfo.delivery_id + ")"
               : "暂无物流信息"
           }}
-          <div
-            class="btn-inline where"
-            v-if="orderInfo.delivery_id"
-            @click="goTrack"
-          >
+          <div class="btn-inline where"
+               v-if="orderInfo.delivery_id"
+               @click="goTrack">
             查看
           </div>
         </div>
         <div class="line">支付方式：&nbsp;&nbsp;{{ orderInfo.pay_type }}</div>
-        <div class="line" v-if="orderInfo.status_of_order === 4">
+        <div class="line"
+             v-if="orderInfo.status_of_order === 4">
           退款时间：&nbsp;&nbsp;{{ orderInfo.refund_reason_time }}
         </div>
         <div class="line">获得积分：&nbsp;&nbsp;20</div>
         <div class="line">股东排名：&nbsp;&nbsp;20名</div>
       </div>
     </div>
-    <div class="panel" v-if="orderInfo.is_allow_operation == 1">
-      <div class="btn-inline" @click="contact" v-if="partnerInfo.phone">
+    <div class="panel"
+         v-if="orderInfo.is_allow_operation == 1">
+      <div class="btn-inline"
+           @click="contact"
+           v-if="partnerInfo.phone">
         联系卖家
       </div>
-      <div
-        class="btn-inline"
-        v-if="orderInfo.status_of_order === 0"
-        @click="delOrder"
-      >
+      <div class="btn-inline"
+           v-if="orderInfo.status_of_order === 0"
+           @click="delOrder">
         删除订单
       </div>
       <!-- <div
@@ -115,41 +112,34 @@
       >
         重新支付
       </div> -->
-      <div
-        class="btn-inline warn"
-        v-if="orderInfo.status_of_order === 1"
-        @click="fastRefund"
-      >
+      <div class="btn-inline warn"
+           v-if="orderInfo.status_of_order === 1"
+           @click="fastRefund">
         申请退款
       </div>
-      <div
-        class="btn-inline warn"
-        v-if="orderInfo.status_of_order === 3"
-        @click="confirmOrder"
-      >
+      <div class="btn-inline warn"
+           v-if="orderInfo.status_of_order === 3"
+           @click="confirmOrder">
         确认收货
       </div>
-      <div
-        class="btn-inline"
-        v-if="
+      <div class="btn-inline"
+           v-if="
           (orderInfo.status_of_order === 5 &&
             orderInfo.is_allow_refund !== 0) ||
             orderInfo.status_of_order === 3
         "
-        @click="goRefund"
-      >
+           @click="goRefund">
         申请退货
       </div>
-      <div
-        class="btn-inline"
-        v-if="orderInfo.status_of_order === 5 && orderInfo.status !== 3"
-        @click="goRemark"
-      >
+      <div class="btn-inline"
+           v-if="orderInfo.status_of_order === 5 && orderInfo.status !== 3"
+           @click="goRemark">
         去评价
       </div>
     </div>
     <!-- 卖家信息 -->
-    <contact ref="contact" :data="partnerInfo"></contact>
+    <contact ref="contact"
+             :data="partnerInfo"></contact>
     <!-- 确认收货弹窗 -->
     <join-free ref="joinFree"></join-free>
     <confirm ref="confirm"></confirm>

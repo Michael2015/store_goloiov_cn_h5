@@ -1,12 +1,14 @@
-import {req} from 'api/request'
+import {
+  req
+} from 'api/request'
 
-export default class Poster{
+export default class Poster {
   constructor(canvas) {
     this.canvas = canvas ? canvas : document.createElement('canvas')
     // this.canvas.width = 560
     // this.canvas.height = 800
     this.ctx = this.canvas.getContext('2d')
-    
+
     const ctx = this.ctx
   }
   downloadImg(path) {
@@ -22,7 +24,9 @@ export default class Poster{
         // 替换域名是为了下载图片走webpack的代理
         req.get(path.replace('https://storemp.golodata.com/', ''), {
           responseType: 'arraybuffer'
-        }).then(({data}) => {
+        }).then(({
+          data
+        }) => {
           img.src = 'data:image/png;base64,' + transformArrayBufferToBase64(data)
         })
       } else {
@@ -47,11 +51,11 @@ export default class Poster{
   }
 }
 
-function transformArrayBufferToBase64 (buffer) {
+function transformArrayBufferToBase64(buffer) {
   var binary = ''
   var bytes = new Uint8Array(buffer)
   for (var len = bytes.byteLength, i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i])
+    binary += String.fromCharCode(bytes[i])
   }
   return window.btoa(binary);
 }

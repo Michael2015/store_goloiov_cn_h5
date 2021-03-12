@@ -32,7 +32,7 @@
 
 <script>
 import OrderItem from "./order-item";
-import { getOrderList } from "api/order";
+import { getMyCoupon } from "api/order";
 import LoadMore from "base/load-more";
 import { mapState } from "vuex";
 export default {
@@ -43,11 +43,10 @@ export default {
   data() {
     return {
       types: [
-        { name: "全部", type: "" },
-        { name: "待付款", type: 0 },
-        { name: "待发货", type: 1 },
-        { name: "已发货", type: 2 },
-        { name: "退款", type: -3 }
+        { name: "可用", type: 1 },
+        { name: "已用", type: 2 },
+        { name: "过期", type: 3 },
+
       ],
       activeType: 0,
       keyword: "",
@@ -58,7 +57,7 @@ export default {
     ...mapState(["isLogin", "refreshOrder"]),
     getList() {
       return (page, size) =>
-        getOrderList(this.types[this.activeType].type, page, size);
+        getMyCoupon(this.types[this.activeType].type, page, size);
     }
   },
   watch: {

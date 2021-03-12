@@ -2,9 +2,11 @@
   <div class="wrap">
     <top-head>海报</top-head>
     <div class="thunder">
-      <img :src="url" class="icon" />
+      <img :src="url"
+           class="icon" />
     </div>
-    <div class="save_btn" @click="createPoster">保存到相册</div>
+    <div class="save_btn"
+         @click="createPoster">保存到相册</div>
   </div>
 </template>
 
@@ -78,9 +80,9 @@ export default {
         // this.downloadIamge(this.poster.base64, 'haibao')
         return;
       }
-      
+
     },
-    downloadIamge(imgsrc, name) { 
+    downloadIamge(imgsrc, name) {
       // //下载图片地址和图片名
       var image = new Image();
       // // 解决跨域 Canvas 污染问题

@@ -49,7 +49,7 @@ export default {
       default: ''
     }
   },
-  data () {
+  data() {
     return {
       disabled: false,
       loading: false,
@@ -60,11 +60,11 @@ export default {
     };
   },
   watch: {
-    paused () {
+    paused() {
       this.loadMore();
     }
   },
-  created () {
+  created() {
     // 设置默认值
     this._disabled = null;
     if (!this.getData) {
@@ -73,27 +73,27 @@ export default {
     // 手动触发第一次加载
     this.loadMore();
   },
-  activated () {
+  activated() {
     // 激活时恢复
     if (this._disabled !== null) {
       this.disabled = this._disabled;
       this._disabled = null;
     }
   },
-  deactivated () {
+  deactivated() {
     // 非激活时禁用
     this._disabled = this.disabled;
     this.disabled = true;
   },
-  mounted () {
+  mounted() {
     window.addEventListener("scroll", this.handler);
   },
-  destroyed () {
+  destroyed() {
     window.removeEventListener("scroll", this.handler);
   },
   computed: {
     //判断是否出现了滚动条，若没有，说明还未撑满屏幕，继续加载到出现滚动条或者加载完数据为止
-    hasScrollbar () {
+    hasScrollbar() {
       let scrollHeight =
         document.documentElement.scrollHeight || document.body.scrollHeight;
       let clientHeight =
@@ -102,7 +102,7 @@ export default {
     }
   },
   methods: {
-    handler () {
+    handler() {
       this.scrollTop = Math.ceil(
         window.pageYOffset ||
         document.documentElement.scrollTop ||
@@ -120,7 +120,7 @@ export default {
         this.loadMore();
       }
     },
-    loadMore () {
+    loadMore() {
       if (this.disabled || this.loading || this.loaded || this.paused) {
         return;
       }
@@ -133,7 +133,6 @@ export default {
           if (this.useListName) {
             this.$emit("getResData", JSON.parse(JSON.stringify(data)));
           }
-
           if (this.size == 0) {
             this.list = list;
             this.loading = false;

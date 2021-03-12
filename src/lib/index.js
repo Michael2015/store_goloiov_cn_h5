@@ -65,7 +65,8 @@ export function getFloat(num, length) {
 
 //格式化日期
 export function formatDate(date, type = 'YYYY-MM-DD') {
-  let _date = new Date(date.replace(/-/g, '/'))
+  let init = !isNaN(date) ? date : date.replace(/-/g, '/')
+  let _date = new Date(init)
   let yy = _date.getFullYear();
   let mm = (_date.getMonth() + 1).toString().padStart(2, '0');
   let dd = (_date.getDate()).toString().padStart(2, '0');

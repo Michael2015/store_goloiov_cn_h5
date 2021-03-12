@@ -356,7 +356,7 @@ export default {
         text-align: left;
         padding-left: size(10);
       }
-      > span:nth-of-type(3) {
+      > span:nth-last-of-type(1) {
         text-align: right;
         padding-right: size(10);
       }

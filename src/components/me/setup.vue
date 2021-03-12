@@ -37,7 +37,7 @@ export default {
           toname: "实时分账"
         },
         {
-          title: "隐私协议",
+          title: "用户协议",
           path: "/xieyi",
           toname: ""
         },
