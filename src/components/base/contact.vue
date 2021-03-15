@@ -3,17 +3,21 @@
     <popup @mask-click="hide">
       <div class="wrap">
         <div class="head">
-          <img :src="data.avatar" alt="">
+          <img :src="data.avatar||require('img/me/Administrator.png')"
+               alt="">
         </div>
         <div class="col border-bottom">
           <div class="name">昵称</div>
           <div class="value">{{nickname}}</div>
-          <div class="btn-inline" @click="copy">复制</div>
+          <div class="btn-inline"
+               @click="copy">复制</div>
         </div>
         <div class="col">
           <div class="name">手机</div>
           <div class="value">{{data.phone}}</div>
-          <a class="btn-inline" href="javascript:;" @click="handleCall(data.phone)">呼叫</a>
+          <a class="btn-inline"
+             href="javascript:;"
+             @click="handleCall(data.phone)">呼叫</a>
         </div>
       </div>
     </popup>
@@ -23,9 +27,9 @@
 <script>
 import showHide from 'mixins/show-hide'
 import popup from 'ui/popup'
-import {setClipboard, Toast} from 'lib'
-import {mapState} from 'vuex'
-import {telephone} from 'api/native'
+import { setClipboard, Toast } from 'lib'
+import { mapState } from 'vuex'
+import { telephone } from 'api/native'
 export default {
   props: {
     data: {
@@ -40,13 +44,14 @@ export default {
   computed: {
     ...mapState(['isLogin']),
     nickname() {
-      if (this.isLogin && this.data.uid === 0) {
-        // 这里主要是当用户登录了，发现他是顶级合伙人，上级是uid为0的用户，他的昵称是未登录
-        // 此时用户已经登录，显示未登录不行
-        return '万车品'
-      } else {
-        return this.data.nickname
-      }
+      /*  if (this.isLogin && this.data.uid === 0) {
+         // 这里主要是当用户登录了，发现他是顶级合伙人，上级是uid为0的用户，他的昵称是未登录
+         // 此时用户已经登录，显示未登录不行
+         return '万车品'
+       } else {
+         return this.data.nickname
+       } */
+      return this.data.nickname
     }
   },
   methods: {
@@ -63,22 +68,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~css/def';
-.wrap{
+@import "~css/def";
+.wrap {
   width: p(600/750);
   background: #fff;
   min-height: 100px;
   border-radius: 10px;
   padding: size(50);
   position: relative;
-  .col{
+  .col {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: size(40) 0;
     line-height: 1.1;
   }
-  .head{
+  .head {
     position: absolute;
     left: 50%;
     top: size(-90);
@@ -87,16 +92,16 @@ export default {
     border: 3px solid #fff;
     background: #fff;
     overflow: hidden;
-    img{
+    img {
       display: block;
       @include fill;
     }
   }
-  .name{
+  .name {
     font-size: size(28);
     color: #666;
   }
-  .value{
+  .value {
     font-weight: 800;
     font-size: size(28);
     color: #333;

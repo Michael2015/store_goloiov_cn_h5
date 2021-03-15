@@ -285,3 +285,8 @@ export function getScoreContribution(page, limit) {
     limit
   }).then(clean)
 }
+
+//用户首页信息接口
+export function getUserHomeInfo() {
+  return req.post('/api/v1/user/getUserHomeInfo').then(clean)
+}

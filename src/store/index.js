@@ -21,20 +21,21 @@ export default new Vuex.Store({
     // 发生订单操作,触发刷新，比如删除订单，支付成功订单，重新下单
     refreshOrder: 0,
     // 是否第一次进入首页
-    isFirst:false,
+    isFirst: false,
     // 储存结算页显示个数,多数情况用不上,解决用户在结算页重选地址丢失个数问题
-    buyTotalNum:1,
+    buyTotalNum: 1,
     // 虚拟资产标识
     is_testing_money: false,
     topNum: 0,
     //首页scrollTop高度
-    indexScrollTop:0,
+    indexScrollTop: 0,
+    meInfo: null
   },
   mutations: {
-    setIndexScrollTop( state, h) {
+    setIndexScrollTop(state, h) {
       state.indexScrollTop = h
     },
-    topNum( state, h) {
+    topNum(state, h) {
       state.topNum = h
     },
     testingMoney(state, flag) {
@@ -52,6 +53,12 @@ export default new Vuex.Store({
       state.isLogin = true
       state.role = info.is_promoter === 1 ? 1 : 0
     },
+    setMeInfo(state, info) {
+      state.meInfo = info
+    },
+    clearMeInfo(state) {
+      state.meInfo = null
+    },
     clearUserInfo(state) {
       // 退出登录用
       state.userInfo = {}
@@ -64,10 +71,10 @@ export default new Vuex.Store({
     refreshOrder(state) {
       state.refreshOrder++
     },
-    setFirst(state,falg){
+    setFirst(state, falg) {
       state.isFirst = falg
     },
-    setBuyTotalNum(state,totalnum){
+    setBuyTotalNum(state, totalnum) {
       state.buyTotalNum = totalnum
     }
   },

@@ -1,9 +1,10 @@
 <template>
   <div class="wrap">
-    <top-head>订单详情</top-head>
+    <top-head>提货券详情</top-head>
     <div class="big-status table">
       <div class="status">
-        <span v-if="orderInfo.status_of_order === 0">待支付</span>
+        <span>{{formatStatus(orderInfo.status_of_coupon)}}</span>
+        <!-- <span v-if="orderInfo.status_of_order === 0">待支付</span>
         <span v-if="orderInfo.status_of_order === 1">待发货</span>
         <span v-if="orderInfo.status_of_order === 2">退款中</span>
         <span v-if="orderInfo.status_of_order === 3">已发货</span>
@@ -12,22 +13,21 @@
             orderInfo.status_of_order === 5 &&
               (orderInfo.status == 2 || orderInfo.status == 4)
           ">已收货</span>
-        <span v-if="orderInfo.status_of_order === 5 && orderInfo.status == 3">已评价</span>
+        <span v-if="orderInfo.status_of_order === 5 && orderInfo.status == 3">已评价</span> -->
       </div>
       <div class="icon"
            :class="{
-          daizhifu: orderInfo.status_of_order === 0,
-          daifahuo: orderInfo.status_of_order === 1,
-          yifahuo: orderInfo.status_of_order === 3,
-          yishouhuo:
-            orderInfo.status_of_order === 5 &&
-            (orderInfo.status == 2 || orderInfo.status == 4)
+          daizhifu: orderInfo.status_of_coupon === 1,
+          daifahuo: orderInfo.status_of_coupon === 2,
+          yifahuo: orderInfo.status_of_coupon === 3,
+          yishouhuo:orderInfo.status_of_coupon === 4
         }">
         <div class="img-wrap"></div>
       </div>
     </div>
     <div class="con-p">
-      <div class="address">
+      <div class="address"
+           v-if='orderInfo.user_address'>
         <div class="table">
           <div class="location-icon">
             <img src="~img/icon/location.png"
@@ -41,6 +41,29 @@
           </div>
         </div>
       </div>
+      <router-link class="address"
+                   v-else-if='selectAddress'
+                   tag='div'
+                   to='/myAddress?select=1'>
+        <div class="table">
+          <div class="location-icon">
+            <img src="~img/icon/location.png"
+                 alt="" />
+          </div>
+          <div>
+            <div class="detail">{{ selectAddress.province+selectAddress.city+selectAddress.district }}</div>
+            <div class="name">
+              {{ selectAddress.real_name }} {{ selectAddress.phone }}
+            </div>
+          </div>
+        </div>
+      </router-link>
+      <router-link v-else
+                   tag='div'
+                   to='/myAddress?select=1'
+                   class="no-address">
+        <i class="iconfont">&#xe61e;</i><span>请添加提货地址</span>
+      </router-link>
       <div class="goods">
         <div class="con table border-bottom">
           <div class="goods-pic">
@@ -49,27 +72,27 @@
           </div>
           <div class="goods-desc">
             <div class="name">{{ orderInfo.store_name }}</div>
-            <div class="spec">{{ "暂无规格" || orderInfo.suk }}</div>
+            <div class="spec">{{orderInfo.attach_product}}</div>
           </div>
           <div class="price-num">
-            <div class="price">¥{{ orderInfo.per_price }}</div>
+            <div class="price">¥{{ orderInfo.price }}</div>
             <div class="num">x{{ orderInfo.total_num }}</div>
           </div>
         </div>
         <div class="sum">
           <!--  <span class="cut">优惠:¥{{ orderInfo.coupon_price }} |</span>
           <span class="cut"> 积分:{{ orderInfo.used_golo_points }} | </span> -->
-          合计:<span class="price">￥{{ orderInfo.pay_price }}</span>
+          合计:<span class="price">￥{{ orderInfo.total_price }}</span>
         </div>
       </div>
       <div class="order-detail">
-        <div class="line">订单来源：&nbsp;&nbsp;{{ orderInfo.nickname }}</div>
+        <div class="line">持有人：&nbsp;&nbsp;{{ orderInfo.nickname }}</div>
         <div class="line">
           订单编号：&nbsp;&nbsp;{{ orderInfo.order_id }}
           <div class="btn-inline"
                @click="copy">复制</div>
         </div>
-        <div class="line">下单时间：&nbsp;&nbsp;{{ orderInfo.add_time }}</div>
+        <div class="line">下单时间：&nbsp;&nbsp;{{ formatDate(orderInfo.starttime) }}-{{ formatDate(orderInfo.endtime) }}</div>
         <div class="line">
           物流信息：&nbsp;&nbsp;
           <!--
@@ -89,13 +112,25 @@
              v-if="orderInfo.status_of_order === 4">
           退款时间：&nbsp;&nbsp;{{ orderInfo.refund_reason_time }}
         </div>
-        <div class="line">获得积分：&nbsp;&nbsp;20</div>
-        <div class="line">股东排名：&nbsp;&nbsp;20名</div>
+        <div class="line">获得积分：&nbsp;&nbsp;{{orderInfo.points}}</div>
+        <div class="line">股东排名：&nbsp;&nbsp;{{orderInfo.shareholder_ranking}}名</div>
+        <div class="line">贡献值：&nbsp;&nbsp;{{orderInfo.contribution}}</div>
       </div>
+      <div class="tip">注意：请在提货券有限期内兑换，逾期作废</div>
     </div>
-    <div class="panel"
-         v-if="orderInfo.is_allow_operation == 1">
+
+    <!-- v-if="orderInfo.is_allow_operation == 1" -->
+    <div class="panel">
       <div class="btn-inline"
+           @click="contact">
+        联系平台
+      </div>
+      <div class="btn-inline btn-red"
+           v-if="allTrue([orderInfo.status_of_coupon],[1])"
+           @click='tihuo'>
+        立即提货
+      </div>
+      <!-- <div class="btn-inline"
            @click="contact"
            v-if="partnerInfo.phone">
         联系卖家
@@ -105,13 +140,11 @@
            @click="delOrder">
         删除订单
       </div>
-      <!-- <div
-        class="btn-inline warn"
-        v-if="orderInfo.status_of_order === 0"
-        @click="goPay"
-      >
+      <div class="btn-inline warn"
+           v-if="orderInfo.status_of_order === 0"
+           @click="goPay">
         重新支付
-      </div> -->
+      </div>
       <div class="btn-inline warn"
            v-if="orderInfo.status_of_order === 1"
            @click="fastRefund">
@@ -135,11 +168,11 @@
            v-if="orderInfo.status_of_order === 5 && orderInfo.status !== 3"
            @click="goRemark">
         去评价
-      </div>
+      </div> -->
     </div>
     <!-- 卖家信息 -->
     <contact ref="contact"
-             :data="partnerInfo"></contact>
+             :data="plateData"></contact>
     <!-- 确认收货弹窗 -->
     <join-free ref="joinFree"></join-free>
     <confirm ref="confirm"></confirm>
@@ -156,9 +189,12 @@ import {
   getOrderDetail,
   confirmOrder,
   delOrder,
-  fastOrderRefund
+  fastOrderRefund,
+  pickUpGoods
 } from "api/order";
-import { Loading, setClipboard, Toast } from "lib";
+import { Loading, setClipboard, Toast, formatDate, allTrue, allFalse } from "lib";
+import { mapState } from 'vuex'
+
 export default {
   components: {
     JoinFree,
@@ -176,7 +212,12 @@ export default {
     return {
       orderInfo: {},
       // 卖家信息
-      partnerInfo: {}
+      partnerInfo: {},
+      //联系平台
+      plateData: {
+        nickname: '杨先生',
+        phone: '13794888292'
+      }
     };
   },
   created() {
@@ -185,7 +226,35 @@ export default {
   mounted() {
     // this.$refs.joinFree.show()
   },
+  beforeDestroy() {
+    this.$store.commit('setAddress', null)
+  },
   methods: {
+    tihuo() {
+      if (this.orderInfo.user_address || this.selectAddress
+      ) {        this.$confirm.show(`核销该提货券可以兑换${this.orderInfo.total_num}瓶饮料？`, () => {
+          Loading.open()
+          pickUpGoods({
+            order_id: this.orderInfo.order_id,
+            address_id: this.selectAddress.id
+          }).then(res => {
+            if (res.code == 200) {
+              this.$notice(res.msg, () => {
+                this.$router.replace('/order')
+              })
+            }
+          }).finally(() => {
+            Loading.close()
+          })
+        })
+      }
+      else {
+        this.$confirm.show('请添加提货地址', () => {
+          this.$router.push('/myAddress?select=1')
+        })
+      }
+
+    },
     loaddata() {
       // 加载订单数据
       Loading.open();
@@ -353,6 +422,32 @@ export default {
         Toast("复制成功");
       });
     }
+  },
+  computed: {
+    ...mapState(['selectAddress']),
+    allTrue() {
+      return allTrue
+    },
+    allFalse() {
+      return allFalse
+    },
+    formatDate() {
+      return n => {
+        return formatDate(n * 1000 || 0, 'YYYY.MM.DD')
+      }
+    },
+    formatStatus() {
+      return n => {
+        switch (Number(n)) {
+          case 1: return '待提货'
+          case 2: return '待发货'
+          case 3: return '已发货'
+          case 4: return '已收货'
+          case 5: return '已过期'
+          default: return ''
+        }
+      }
+    }
   }
 };
 </script>
@@ -434,6 +529,16 @@ export default {
     @include txt-overflow(2);
   }
 }
+.no-address {
+  background: #fff;
+  padding: size(50) 0;
+  font-size: size(28);
+  color: #666;
+  text-align: center;
+  .iconfont {
+    margin-right: size(10);
+  }
+}
 .goods {
   background: #fff;
   padding-left: size(20);
@@ -469,7 +574,7 @@ export default {
       }
       .spec {
         font-size: size(24);
-        color: #999;
+        color: #d7001a;
         @include txt-overflow;
       }
     }
@@ -480,7 +585,8 @@ export default {
       min-width: size(120);
       line-height: size(40);
       .price {
-        color: #000;
+        color: #d7001a;
+        font-weight: bolder;
       }
       .num {
         color: #666;
@@ -548,6 +654,12 @@ export default {
   .where {
   }
 }
+.tip {
+  color: #d7001a;
+  font-size: size(24);
+  text-align: center;
+  padding: size(30) 0;
+}
 .panel {
   background: #fff;
   position: fixed;
@@ -568,6 +680,11 @@ export default {
       color: #e31436;
       border-color: #e31436;
     }
+  }
+  .btn-red {
+    background-color: #e31436;
+    border-color: #e31436;
+    color: white;
   }
 }
 </style>

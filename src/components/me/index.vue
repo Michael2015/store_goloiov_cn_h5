@@ -3,10 +3,14 @@
     <div class="header">
       <div class="head_top">
         <div class="part_left">
-          <i class="iconfont user">&#xe640;</i>
-          <span>赵子龙</span>
+          <i class="iconfont user"
+             v-if='!userinfo.avatar'>&#xe640;</i>
+          <img :src="userinfo.avatar"
+               v-else
+               class="user" />
+          <span>{{userinfo.nickname||'未登录'}}</span>
           <span>&nbsp;|&nbsp;</span>
-          <span>原始股东</span>
+          <span>{{userinfo.grade||'无'}}</span>
         </div>
         <div class="part_right">
           <router-link to="/myhaibao"
@@ -25,7 +29,7 @@
         </div>
       </div>
     </div>
-    <div class="echarts">
+    <div>
       <my-charts :option="option"
                  key="1" />
     </div>
@@ -56,7 +60,8 @@ import {
   partnerNum,
   updateUserInfo,
   get_region_partner,
-  get_vip_server
+  get_vip_server,
+  getUserHomeInfo
 } from "api/me";
 import { mapState } from "vuex";
 import partnerLevelObj from "mixins/partner-level-obj";
@@ -64,31 +69,32 @@ import { logout } from "api/login";
 import confirm from "base/confirm";
 import notice from "base/notice";
 import myCharts from "com/common/echarts";
-
+import { Loading } from 'lib/index'
 export default {
   data() {
     return {
       option: {},
+      userinfo: {},
       headData: [
         {
           num: 0,
           title: "我的积分",
-          name: "point"
+          name: "score"
         },
         {
           num: 0,
           title: "我的收益",
-          name: "income"
+          name: "profit"
         },
         {
           num: 0,
           title: "我的贡献值",
-          name: "attribute"
+          name: "contribution"
         },
         {
           num: 0,
           title: "股东排名",
-          name: "rank"
+          name: "grade_rank"
         }
       ],
       /* tabList: [
@@ -182,20 +188,51 @@ export default {
         }
       ],
       Num: "",
+      getInfoTime: 0,
       server_vip: false,
       region_agent: false
     };
   },
   mixins: [tojump, partnerLevelObj],
-  async mounted() {
+  mounted() {
     this.echartsInit();
-    const reque = await partnerNum();
-    this.Num = reque && reque.member_nums;
-    this.server_vip = reque && reque.server_vip;
-    this.region_agent = reque && reque.region_agent;
-    updateUserInfo();
+    this.getUserHomeInfo()
+
+    /*  const reque = await partnerNum();
+     this.Num = reque && reque.member_nums;
+     this.server_vip = reque && reque.server_vip;
+     this.region_agent = reque && reque.region_agent;
+     updateUserInfo(); */
   },
   methods: {
+    setHeadData(data) {
+      for (let i of this.headData) {
+        i.num = data[i.name]
+      }
+    },
+    getUserHomeInfo() {
+      let meInfo = this.$store.state.meInfo
+      if (meInfo) {
+        this.userinfo = meInfo
+        this.setHeadData(meInfo)
+        return
+      }
+      Loading.open()
+      getUserHomeInfo().then(res => {
+        this.$store.commit('setMeInfo', res || null)
+        this.userinfo = res || {}
+        this.setHeadData(res)
+      }).catch(e => {
+        this.$notice.show(e, () => {
+          if (this.getInfoTime < 1) {
+            this.getInfoTime++;
+            this.getUserHomeInfo()
+          }
+        });
+      }).finally(() => {
+        Loading.close()
+      })
+    },
     echartsInit() {
       this.option = {
         xAxis: {
@@ -232,15 +269,12 @@ export default {
           {
             data: [4.0, 5.0, 6.0, 1.0, 8.0, 9.0, 2.0],
             type: "line",
-            itemStyle: { normal: { label: { show: true } } }
+            label: {
+              position: 'top'
+            }
           }
         ]
       };
-      setInterval(() => {
-        this.option.series[0].data = Array.from({ length: 7 }, (ele, ind) => {
-          return (Math.random() * 10).toFixed(2);
-        });
-      }, 3000);
     },
     logout() {
       this.$refs.logOut.show("", () => {
@@ -326,9 +360,15 @@ export default {
 
       .part_left {
         height: size(100);
+        line-height: size(100);
         .user {
-          font-size: size(80);
+          width: size(100);
+          height: size(100);
+          border-radius: 50%;
           vertical-align: middle;
+        }
+        .iconfont {
+          font-size: size(100);
         }
         &:after {
           content: "";

@@ -88,3 +88,7 @@ export function getOrderTrack(id, name) {
     }
   }).then(clean)
 }
+
+export function pickUpGoods(data) {
+  return req.post('/api/v1/Order/pickUpGoods', data).then()
+}

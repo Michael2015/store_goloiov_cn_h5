@@ -1,14 +1,26 @@
 <template>
-  <div ref="echarts"
+  <div :ref="refName"
        class="echarts"></div>
 </template>
 
 <script>
 export default {
   components: {},
-  props: ["option"],
+  props: {
+    option: {
+      type: Object,
+      default: () => { }
+    },
+    refName: {
+      type: String,
+      default: () => 'echarts'
+    }
+
+  },
   data() {
-    return {};
+    return {
+      myChart: null
+    };
   },
   watch: {
     option: {
@@ -20,16 +32,20 @@ export default {
   },
   methods: {
     setData(val) {
-      let element = this.$refs.echarts;
-      let myChart = echarts.init(element);
+      if (this.myChart != null && this.myChart != "" && this.myChart != undefined) {
+        this.myChart.dispose();
+      }
+      let element = this.$refs[this.refName];
+
+      this.myChart = echarts.init(element);
       // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(val);
+      this.myChart.setOption(val);
     }
   },
   mounted() { }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
 @import "~css/def";
 .echarts {
   width: 90%;

@@ -72,3 +72,27 @@ export function formatDate(date, type = 'YYYY-MM-DD') {
   let dd = (_date.getDate()).toString().padStart(2, '0');
   return type.replace('YYYY', yy).replace('MM', mm).replace('DD', dd)
 }
+
+
+export function allTrue(nameArr, valueArr) {
+  let flag = true
+  for (let i in nameArr) {
+    if (nameArr[i] !== valueArr[i]) {
+      flag = false
+      break
+    }
+  }
+  return flag
+}
+
+
+export function allFalse(nameArr, valueArr) {
+  let flag = true
+  for (let i in nameArr) {
+    if (nameArr[i] === valueArr[i]) {
+      flag = false
+      break
+    }
+  }
+  return flag
+}
