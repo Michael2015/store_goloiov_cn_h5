@@ -3,18 +3,18 @@
     <div class="img">
       <img :src="info.image" />
     </div>
-    <div class="info">
-      <div class="top">{{info.store_info}}</div>
+    <router-link tag="div" :to="'/goods/' + info.id" class="info">
+      <div class="top">{{ info.store_info }}</div>
       <div class="bottom">
-        <span class="price">￥{{$parent.goodsPrice}}</span>
+        <span class="price">￥{{ $parent.goodsPrice }}</span>
         <span class="go">立即抢购GO <i class="iconfont">&#xe770;</i></span>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 
 <script>
-import { getIndexProduct } from 'api'
+import { getIndexProduct } from "api";
 export default {
   components: {},
   data() {
@@ -24,20 +24,19 @@ export default {
   },
   methods: {
     async getIndexProduct() {
-      let res = await getIndexProduct()
-      this.info = res || {}
-      this.$store.commit('setCommonFlag', {
+      let res = await getIndexProduct();
+      this.info = res || {};
+      this.$store.commit("setCommonFlag", {
         id: res.id
-      })
+      });
     }
   },
   mounted() {
-    this.getIndexProduct()
-
-  },
-}
+    this.getIndexProduct();
+  }
+};
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "~css/def";
 .goods {
   height: size(180);
@@ -47,7 +46,7 @@ export default {
   .img {
     width: size(180);
     > img {
-      height: 100%;
+      width: 100%;
     }
   }
   .info {

@@ -5,10 +5,10 @@
       <template v-if="addr">
         <div class="base">
           <img src="~img/icon/location.png" alt />
-          <span>{{addr.province}} {{addr.city}} {{addr.district}}</span>
+          <span>{{ addr.province }} {{ addr.city }} {{ addr.district }}</span>
         </div>
-        <div class="detail">{{addr.detail}}</div>
-        <div class="contact">{{addr.real_name}} {{addr.phone}}</div>
+        <div class="detail">{{ addr.detail }}</div>
+        <div class="contact">{{ addr.real_name }} {{ addr.phone }}</div>
         <img src="~img/icon/join-right.png" alt class="right" />
         <div class="line">
           <!-- 地址线 -->
@@ -24,46 +24,64 @@
     </div>
     <div class="goods table">
       <div class="img">
-        <img :src="info.image?info.image:info.slider_image&&info.slider_image[0]" alt />
+        <img
+          :src="
+            info.image ? info.image : info.slider_image && info.slider_image[0]
+          "
+          alt
+        />
       </div>
       <div class="con">
-        <div class="name">{{info.store_name}}</div>
-        <div class="type">{{preInfo.attr}}</div>
+        <div class="name">{{ info.store_info }}</div>
         <div class="price-num">
-          <span class="price">￥{{unitPrice}}</span>
-          <span class="num">x{{total_num}}</span>
+          <span class="price">￥{{ unitPrice }}</span>
+          <div class="setcount">
+            <div class="reduce" @click="reduce">-</div>
+            <input class="count" type="number" v-model="total_num" />
+            <div class="add" @click="add">+</div>
+          </div>
         </div>
       </div>
     </div>
     <div class="spec">
       <div class="col clearfix">
         <div class="left">商品单价</div>
-        <div class="right">¥{{unitPrice}}</div>
+        <div class="right">¥{{ unitPrice }}</div>
       </div>
       <div class="col clearfix">
         <div class="left">优惠金额</div>
-        <div class="right">¥{{discountPrice}}</div>
+        <div class="right">¥{{ discountPrice }}</div>
       </div>
     </div>
-    <div class="spec" v-show='!$route.params.hiddenDiscount'>
+    <div class="spec" v-show="!$route.params.hiddenDiscount">
       <div class="col clearfix">
         <div class="left jifen">
           <img src="~img/me/jifen.png" class="one" />
-          可用{{golo_points}}积分抵扣{{golo_points_money}}元
+          可用{{ golo_points }}积分抵扣{{ golo_points_money }}元
           <img src="~img/question.png" @click="showinfo" alt />
         </div>
         <div class="right">
-          <img v-if="!used_golo_points" src="~img/radio.png" @click="check_golo_points" alt />
-          <img v-else src="~img/radio-checked.png" @click="check_golo_points" alt />
+          <img
+            v-if="!used_golo_points"
+            src="~img/radio.png"
+            @click="check_golo_points"
+            alt
+          />
+          <img
+            v-else
+            src="~img/radio-checked.png"
+            @click="check_golo_points"
+            alt
+          />
         </div>
       </div>
     </div>
 
-    <div class="spec" v-show='!$route.params.hiddenDiscount'>
-      <div class="col clearfix" @click="yhq_show=yhq.length?true:false">
+    <div class="spec" v-show="!$route.params.hiddenDiscount">
+      <div class="col clearfix" @click="yhq_show = yhq.length ? true : false">
         <div class="left jifen">
           <img src="~img/yhq.png" class="one yhq_icon" />
-          {{yhq_title}}
+          {{ yhq_title }}
         </div>
         <div class="right">
           <img src="~img/icon/yhq_rght.png" />
@@ -72,17 +90,25 @@
     </div>
 
     <div class="remark">
-      <text-area class="input" placeholder="留言内容/备注" v-model="remark"></text-area>
+      <text-area
+        class="input"
+        placeholder="留言内容/备注"
+        v-model="remark"
+      ></text-area>
     </div>
     <div class="opts table">
       <div class="price">
-        <span>实付金额：¥{{pay_price}}</span>
+        <span>实付金额：¥{{ pay_price }}</span>
       </div>
       <div class="buy">
-        <span @click="doPay">{{this.paying ? '支付中...('+status+')' : '立即购买'}}</span>
+        <span @click="doPay">{{
+          this.paying ? "支付中...(" + status + ")" : "立即购买"
+        }}</span>
       </div>
     </div>
-    <pay-method ref="payMethod" :is_jf="is_jf" :now_money="now_money">{{pay_price}}</pay-method>
+    <pay-method ref="payMethod" :is_jf="is_jf" :now_money="now_money">{{
+      pay_price
+    }}</pay-method>
     <notice ref="notice" :autoClose="false"></notice>
     <confirm ref="leaveConfirm" :autoClose="false">
       <span slot="btn-left">我已支付</span>
@@ -96,19 +122,19 @@
           <img src="~img/closeTip.png" @click="close" />
         </div>
         <div class="main">
-          <div class="list" v-for="(item,index) in yhq" :key="index">
+          <div class="list" v-for="(item, index) in yhq" :key="index">
             <div class="one">
               <img src="~img/yhq1.png" />
               <div class="ti">
-                <span>{{parseInt(item.discount_price)}}</span>
+                <span>{{ parseInt(item.discount_price) }}</span>
               </div>
             </div>
             <div class="two">
-              <div class="title">{{item.title}}</div>
-              <div class="date">有效期至{{item.end_date}}</div>
+              <div class="title">{{ item.title }}</div>
+              <div class="date">有效期至{{ item.end_date }}</div>
             </div>
             <div class="three">
-              <button @click='userYhq(item)'>立即使用</button>
+              <button @click="userYhq(item)">立即使用</button>
             </div>
           </div>
         </div>
@@ -127,6 +153,8 @@ import { getAddressList } from "api/me";
 import { nativePay } from "api/native";
 import { mapState } from "vuex";
 import { Toast, Loading } from "lib";
+import { getProductPrice } from "api/index";
+
 export default {
   components: {
     TextArea,
@@ -142,11 +170,13 @@ export default {
   },
   data() {
     return {
+      total_num: 1,
+      unitPrice: "",
       yhq: [],
-      discount_type:0,
-      ID:'',
+      discount_type: 0,
+      ID: "",
       yhq_title: "",
-      yhq_price:0,
+      yhq_price: 0,
       yhq_show: false,
       isReClick: true, // 点击标识
       remark: "",
@@ -213,10 +243,10 @@ export default {
     }
   },
   activated() {
-   
     // 这里用了上一个页面传进来的数据
     // 判断是否需要刷新页面
     if (this.$route.params.info) {
+      this.getProductPrice(this.$route.params.info.id);
       this.paying = false;
       this.status = 0;
       this.remark = "";
@@ -248,14 +278,34 @@ export default {
     }
   },
   methods: {
-    userYhq(args){
-      var {discount_price,title,discount_type,id}=args;
+    reduce() {
+      if (this.total_num > 1) {
+        this.total_num--;
+      }
+    },
+    add() {
+      this.total_num++;
+    },
+    getProductPrice(id) {
+      Loading.open();
+      getProductPrice({
+        product_id: id
+      })
+        .then(({ product_price }) => {
+          this.unitPrice = product_price;
+        })
+        .finally(() => {
+          Loading.close();
+        });
+    },
+    userYhq(args) {
+      var { discount_price, title, discount_type, id } = args;
       this.yhq_show = false;
-      this.yhq_price=discount_price;
-      this.used_golo_points=false;
-      this.yhq_title=title;
-      this.discount_type=discount_type;
-      this.ID=id;
+      this.yhq_price = discount_price;
+      this.used_golo_points = false;
+      this.yhq_title = title;
+      this.discount_type = discount_type;
+      this.ID = id;
     },
     close() {
       this.yhq_show = false;
@@ -264,7 +314,7 @@ export default {
       getPreOrderProductInfo(
         this.id,
         this.orderId,
-       this.$route.params.unique
+        this.$route.params.unique
       ).then(data => {
         if (data) {
           this.preInfo = data;
@@ -272,12 +322,12 @@ export default {
           this.golo_points = data.golo_intergal.golo_points;
           this.golo_points_money = data.golo_intergal.golo_points_money;
           this.yhq_title = data.discount.length + "张优惠券可用";
-          this.yhq_title_copy=data.discount.length + "张优惠券可用";
+          this.yhq_title_copy = data.discount.length + "张优惠券可用";
           this.yhq = data.discount;
-          this.yhq_price=data.discount_price||0;
-          this.discount_type=0;
-          this.ID=0;
-          this.used_golo_points=false;
+          this.yhq_price = data.discount_price || 0;
+          this.discount_type = 0;
+          this.ID = 0;
+          this.used_golo_points = false;
         }
       });
       if (!this.orderId) {
@@ -319,12 +369,11 @@ export default {
         this.pay_price = parseFloat(
           this.pay_price - this.golo_points_money
         ).toFixed(2);
-        this.yhq_title =this.yhq_title_copy;
-        this.yhq_price=0;
-        this.discount_type=this.used_golo_points?4:0;
-        this.ID=0;
+        this.yhq_title = this.yhq_title_copy;
+        this.yhq_price = 0;
+        this.discount_type = this.used_golo_points ? 4 : 0;
+        this.ID = 0;
       }
-      
     },
     goSelectAddr() {
       if (this.show_model) {
@@ -387,9 +436,9 @@ export default {
           miandan_type,
           total_num: this.total_num,
           //used_golo_points: this.used_golo_points,
-          unique: this.$route.params.sku_id||'',
-          discount_type:this.discount_type,
-          discount_id:this.ID
+          unique: this.$route.params.sku_id || "",
+          discount_type: this.discount_type,
+          discount_id: this.ID
         }).then(
           data => {
             this.isReClick = true;
@@ -501,25 +550,14 @@ export default {
     show_model() {
       return !!this.$route.params.orderId;
     },
-    //不同进入情况取的单价
-    unitPrice() {
-      return this.show_model
-        ? this.preInfo.price
-        : this.info.newbornzone && this.info.newbornzone.is_newborn
-        ? this.info.newbornzone.price
-        : this.preInfo.price;
-    },
 
-    //不同进入情况取的个数
-    total_num() {
-      let num = this.show_model
-        ? this.info.total_num
-        : this.$route.params.total_num;
-      return num ? num : this.buyTotalNum;
-    },
     //计算优惠
     discountPrice() {
-      let discount_price = this.used_golo_points ? this.golo_points_money : (this.yhq_price ? this.yhq_price:0);
+      let discount_price = this.used_golo_points
+        ? this.golo_points_money
+        : this.yhq_price
+        ? this.yhq_price
+        : 0;
       return this.formatPrice(discount_price);
     },
     //保留小数
@@ -550,8 +588,10 @@ export default {
         ? this.info.pay_price
         : this.used_golo_points
         ? parseFloat(this.unitPrice * this.total_num - this.golo_points_money)
-        : parseFloat(this.unitPrice * this.total_num - this.discountPrice).toFixed(2);
-          pay_price_temp = pay_price_temp < 0.01 ? 0.01 : pay_price_temp;
+        : parseFloat(
+            this.unitPrice * this.total_num - this.discountPrice
+          ).toFixed(2);
+      pay_price_temp = pay_price_temp < 0.01 ? 0.01 : pay_price_temp;
       return parseFloat(pay_price_temp).toFixed(2);
     },
     //是否满足积分支付
@@ -643,7 +683,7 @@ body {
   }
   .name {
     font-size: size(26);
-    @include txt-overflow;
+    @include txt-overflow(2);
   }
   .type {
     font-size: size(26);
@@ -652,14 +692,44 @@ body {
   }
   .price-num {
     margin-top: size(16);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: size(20);
     .price {
       font-size: size(26);
+      font-weight: bold;
     }
-    .num {
-      font-size: size(24);
-      float: right;
-      margin-right: size(60);
-      margin-top: size(10);
+    .setcount {
+      width: size(220);
+      height: size(50);
+      line-height: size(50);
+      display: flex;
+      justify-content: space-between;
+      font-size: size(28);
+      border-radius: size(2);
+      box-sizing: border-box;
+      .add,
+      .reduce {
+        height: size(50);
+        width: size(60);
+        line-height: size(50);
+        text-align: center;
+        color: #696969;
+        border: size(1) solid #878787;
+        box-sizing: content-box;
+      }
+      .count {
+        height: size(50);
+        flex: 1;
+        text-align: center;
+        color: #363636;
+        border-top: size(1) solid #878787;
+        border-bottom: size(1) solid #878787;
+        box-sizing: content-box;
+        padding: 0;
+        border-radius: 0;
+      }
     }
   }
 }

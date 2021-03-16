@@ -304,3 +304,12 @@ export function getProductPrice(params) {
 export function getIndexProduct() {
   return req.get('/api/v1/index/getProduct').then(clean)
 }
+
+//商品详情
+export function getIndexProductDetail(id) {
+  return req.get('/api/v1/product/detail', {
+    params: {
+      product_id: id
+    }
+  }).then(clean)
+}

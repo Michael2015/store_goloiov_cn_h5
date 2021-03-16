@@ -1,43 +1,47 @@
 <template>
   <div>
     <!-- 商品下面的图文详情页面 -->
+    <img class="img" v-lazy="all.image" />
     <div v-html="all.description" id="goodsDesc"></div>
   </div>
 </template>
 
 <script>
-import {CustomerGetGoodsDesc, PartnerGetGoodsDesc} from 'api'
-import {mapState} from 'vuex'
+import { getIndexProductDetail } from "api";
+import { mapState } from "vuex";
 export default {
-  props: ['id'],
+  props: ["id"],
   data() {
     return {
       all: {}
-    }
+    };
   },
   computed: {
-    ...mapState(['role'])
+    ...mapState(["role"])
   },
   created() {
-    const func = this.role === 1 ? PartnerGetGoodsDesc : CustomerGetGoodsDesc
+    const func = getIndexProductDetail;
     func(this.id).then(data => {
       if (data) {
-        this.all = data
+        this.all = data;
       }
-    })
+    });
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 @import "~css/def";
-#goodsDesc{
+#goodsDesc {
   padding: 0 size(20);
+}
+.img {
+  width: 100%;
 }
 </style>
 
 <style>
-#goodsDesc img{
+#goodsDesc img {
   width: 100%;
 }
 </style>

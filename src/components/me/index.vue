@@ -3,49 +3,44 @@
     <div class="header">
       <div class="head_top">
         <div class="part_left">
-          <i class="iconfont user"
-             v-if='!userinfo.avatar'>&#xe640;</i>
-          <img :src="userinfo.avatar"
-               v-else
-               class="user" />
-          <span>{{userinfo.nickname||'未登录'}}</span>
+          <i class="iconfont user" v-if="!userinfo.avatar">&#xe640;</i>
+          <img :src="userinfo.avatar" v-else class="user" />
+          <span>{{ userinfo.nickname || "未登录" }}</span>
           <span>&nbsp;|&nbsp;</span>
-          <span>{{userinfo.grade||'无'}}</span>
+          <span>{{ userinfo.grade || "无" }}</span>
         </div>
         <div class="part_right">
-          <router-link to="/myhaibao"
-                       tag="i"
-                       class="iconfont code">&#xe646;</router-link>
-          <i class="iconfont setup"
-             @click="$router.push('/setup')">&#xe60b;</i>
+          <router-link to="/myhaibao" tag="i" class="iconfont code"
+            >&#xe646;</router-link
+          >
+          <i class="iconfont setup" @click="$router.push('/setup')">&#xe60b;</i>
         </div>
       </div>
       <div class="head_body">
-        <div class="count"
-             v-for="(ele, i) in headData"
-             :key="i">
+        <div class="count" v-for="(ele, i) in headData" :key="i">
           <div>{{ ele.num }}</div>
           <div>{{ ele.title }}</div>
         </div>
       </div>
     </div>
     <div>
-      <my-charts :option="option"
-                 key="1" />
+      <my-charts :option="option" key="1" />
     </div>
     <div class="vertical_tab">
-      <div class="vertical_item"
-           v-for="(item, index) in tabList"
-           :key="index"
-           @click="to(item.path ? item.path : '')">
+      <div
+        class="vertical_item"
+        v-for="(item, index) in tabList"
+        :key="index"
+        @click="to(item.path ? item.path : '')"
+      >
         <div class="left">
-          <i class="iconfont">{{ item.icon }}</i>&nbsp;
+          <i class="iconfont">{{ item.icon }}</i
+          >&nbsp;
           <div class="title">{{ item.tit }}</div>
         </div>
         <div class="right">
           <span>{{ item.afterTit }}</span>
-          <img src="~img/icon/join-right.png"
-               alt />
+          <img src="~img/icon/join-right.png" alt />
         </div>
       </div>
     </div>
@@ -70,7 +65,7 @@ import { logout } from "api/login";
 import confirm from "base/confirm";
 import notice from "base/notice";
 import myCharts from "com/common/echarts";
-import { Loading } from 'lib/index'
+import { Loading } from "lib/index";
 export default {
   data() {
     return {
@@ -196,17 +191,17 @@ export default {
   },
   mixins: [tojump, partnerLevelObj],
   watch: {
-    '$store.state.token': {
+    "$store.state.token": {
       handler(val) {
         if (val) {
-          this.init()
+          this.init();
         }
       }
     }
   },
   mounted() {
     if (this.$store.state.token) {
-      this.init()
+      this.init();
     }
     /*  const reque = await partnerNum();
      this.Num = reque && reque.member_nums;
@@ -217,80 +212,84 @@ export default {
   methods: {
     init() {
       this.echartsInit();
-      this.getUserHomeInfo()
+      this.getUserHomeInfo();
     },
     setHeadData(data) {
       for (let i of this.headData) {
-        i.num = data[i.name]
+        i.num = data[i.name];
       }
     },
     getUserHomeInfo() {
-      let meInfo = this.$store.state.meInfo
+      let meInfo = this.$store.state.meInfo;
       if (meInfo) {
-        this.userinfo = meInfo
-        this.setHeadData(meInfo)
-        return
+        this.userinfo = meInfo;
+        this.setHeadData(meInfo);
+        return;
       }
-      Loading.open()
-      getUserHomeInfo().then(res => {
-        this.$store.commit('setMeInfo', res || null)
-        this.userinfo = res || {}
-        this.setHeadData(res)
-      }).catch(e => {
-        this.$notice.show(e);
-      }).finally(() => {
-        Loading.close()
-      })
+      Loading.open();
+      getUserHomeInfo()
+        .then(res => {
+          this.$store.commit("setMeInfo", res || null);
+          this.userinfo = res || {};
+          this.setHeadData(res);
+        })
+        .catch(e => {
+          this.$notice.show(e);
+        })
+        .finally(() => {
+          Loading.close();
+        });
     },
     echartsInit() {
-      Loading.open()
-      getScorePrice().then((res) => {
-        let { date: xData, price: yData } = res
-        this.option = {
-          xAxis: {
-            type: "category",
-            data: xData
-          },
-          yAxis: {
-            type: "value",
-            //max: 15,
-            axisLine: {
-              show: true,
-              symbol: ["none", "arrow"],
-              symbolSize: [5, 10],
-              symbolOffset: [0, 8]
+      Loading.open();
+      getScorePrice()
+        .then(res => {
+          let { date: xData, price: yData } = res;
+          this.option = {
+            xAxis: {
+              type: "category",
+              data: xData
             },
-            axisLabel: {
-              formatter: function (value, index) {
-                return value.toFixed(2);
+            yAxis: {
+              type: "value",
+              //max: 15,
+              axisLine: {
+                show: true,
+                symbol: ["none", "arrow"],
+                symbolSize: [5, 10],
+                symbolOffset: [0, 8]
+              },
+              axisLabel: {
+                formatter: function(value, index) {
+                  return value.toFixed(2);
+                }
               }
-            }
-          },
-          title: {
-            show: true, //显示策略，默认值true,可选为：true（显示） | false（隐藏）
-            text: "每1积分价值变化",
-            left: "center",
-            top: "20",
-            textStyle: {
-              fontSize: 14,
-              top: 30
-            }
-          },
-          color: "#ED3E48",
-          series: [
-            {
-              data: yData,
-              type: "line",
-              label: {
-                position: 'top'
+            },
+            title: {
+              show: true, //显示策略，默认值true,可选为：true（显示） | false（隐藏）
+              text: "每1积分价值变化",
+              left: "center",
+              top: "20",
+              textStyle: {
+                fontSize: 14,
+                top: 30
               }
-            }
-          ]
-        };
-      }).finally(() => {
-        Loading.close()
-      })
-
+            },
+            color: "#ED3E48",
+            series: [
+              {
+                data: yData,
+                type: "line",
+                label: {
+                  position: "top"
+                }
+              }
+            ]
+          };
+        })
+        .finally(() => {
+          Loading.close();
+        });
     },
     logout() {
       this.$refs.logOut.show("", () => {
