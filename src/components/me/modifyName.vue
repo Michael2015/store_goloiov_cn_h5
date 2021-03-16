@@ -23,6 +23,9 @@ export default {
       username: ""
     };
   },
+  mounted() {
+    this.$store.commit('setRouterFlag', false)
+  },
   methods: {
     sure() {
       let front = reg.test(this.username);
@@ -31,7 +34,10 @@ export default {
       } else if (front) {
         let len = this.username.replace(/[\u4e00-\u9fa5]/g, "**").length;
         if (len >= 4 && len <= 16) {
-          console.log("通过");
+          let obj = JSON.parse(JSON.stringify(this.$store.state.currentData))
+          obj.nickname = this.username
+          this.$store.commit('setCurrentData', obj)
+          this.$router.back()
         } else {
           Toast("长度必须在4-16个字符内");
         }
@@ -39,8 +45,7 @@ export default {
         Toast("必须以英文字母或汉字开头");
       }
     }
-  },
-  mounted() { }
+  }
 };
 </script>
 <style lang="scss" scoped>

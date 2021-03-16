@@ -292,3 +292,15 @@ export function indexGetPop() {
     params: {}
   }).then(clean)
 }
+
+//获取商品实时价格接口
+export function getProductPrice(params) {
+  return req.get('/api/v1/index/getProductPrice', {
+    params
+  }).then(clean)
+}
+
+//首页获取商品接口
+export function getIndexProduct() {
+  return req.get('/api/v1/index/getProduct').then(clean)
+}

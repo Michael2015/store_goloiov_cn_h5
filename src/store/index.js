@@ -29,9 +29,21 @@ export default new Vuex.Store({
     topNum: 0,
     //首页scrollTop高度
     indexScrollTop: 0,
-    meInfo: null
+    meInfo: null,
+    routeFlag: false,
+    currentData: null,
+    commonFlag: false
   },
   mutations: {
+    setCurrentData(state, data) {
+      state.currentData = data
+    },
+    setRouterFlag(state, flag) {
+      state.routeFlag = flag
+    },
+    setCommonFlag(state, data) {
+      state.commonFlag = data || false
+    },
     setIndexScrollTop(state, h) {
       state.indexScrollTop = h
     },

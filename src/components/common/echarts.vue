@@ -4,6 +4,7 @@
 </template>
 
 <script>
+import { Loading } from 'lib'
 export default {
   components: {},
   props: {
@@ -42,7 +43,9 @@ export default {
       this.myChart.setOption(val);
     }
   },
-  mounted() { }
+  mounted() {
+
+  }
 };
 </script>
 <style lang="scss" >

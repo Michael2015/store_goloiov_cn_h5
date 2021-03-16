@@ -7,12 +7,12 @@
             :key='index'>{{i}}</span>
 
     </div>
-    <div v-for='(i,index) in tab'
+    <div v-for='(i,index) in filterTab'
          class="tab"
-         :style='{opacity:index===cur?1:0}'
          :key='index'>
       <slot :name="'list'+index"></slot>
     </div>
+    <slot name='bott'></slot>
   </div>
 </template>
 
@@ -31,7 +31,11 @@ export default {
 
     };
   },
-
+  computed: {
+    filterTab() {
+      return this.tab.slice(this.cur, 1)
+    }
+  },
   methods: {
     change(e) {
       this.cur = e
@@ -74,12 +78,6 @@ export default {
       z-index: 10;
       background: #e2552a;
     }
-  }
-  .tab {
-    position: absolute;
-    top: size(80);
-    left: 0;
-    width: 100%;
   }
 }
 </style>

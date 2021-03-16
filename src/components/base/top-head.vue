@@ -1,22 +1,30 @@
 <template>
   <div class="top-head-wrap">
-    <div class="top-head border-bottom" :class="{transparent: transparent&&!noTransparent}" :style="bg">
-      <div class="left" @click="$router.back()">
-        <img src="~img/icon/back.png" alt="" class="back">
+    <div class="top-head border-bottom"
+         :class="{transparent: transparent&&!noTransparent}"
+         :style="bg">
+      <div class="left"
+           @click="$router.back()">
+        <img src="~img/icon/back.png"
+             alt=""
+             class="back">
       </div>
       <div class="mid">
-        <div class="text"><slot></slot>&nbsp;</div>
+        <div class="text">
+          <slot></slot>&nbsp;
+        </div>
       </div>
       <div class="right">
-          <slot name="right"></slot>
+        <slot name="right"></slot>
       </div>
     </div>
-    <div class="blank" v-if="!transparent"></div>
+    <div class="blank"
+         v-if="!transparent"></div>
   </div>
 </template>
 
 <script>
-import {getScrollTop} from 'lib'
+import { getScrollTop } from 'lib'
 export default {
   props: {
     transparent: {
@@ -42,7 +50,7 @@ export default {
         } else {
           this.noTransparent = true
         }
-        this.bg = 'background:rgba(256,256,256, '+ opacity +');'
+        this.bg = 'background:rgba(256,256,256, ' + opacity + ');'
       }
       window.addEventListener('scroll', this.scroll)
     }
@@ -57,11 +65,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "~css/def";
-.top-head-wrap{
-  .blank{
+.top-head-wrap {
+  .blank {
     height: size(88);
   }
-  .top-head{
+  .top-head {
     position: fixed;
     left: 0;
     top: 0;
@@ -69,14 +77,14 @@ export default {
     background: #fff;
     z-index: 9;
     width: 100%;
-    &.transparent{
+    &.transparent {
       background: transparent;
-      &:after{
+      &:after {
         background: transparent;
       }
     }
   }
-  .left{
+  .left {
     width: size(100);
     text-align: left;
     position: absolute;
@@ -84,22 +92,22 @@ export default {
     top: 50%;
     transform: translateY(-50%);
   }
-  .mid{
+  .mid {
     text-align: center;
     font-size: size(30);
     color: #000;
     line-height: size(88);
     padding: 0 size(100);
-    .text{
+    .text {
       @include txt-overflow;
     }
   }
-  .back{
+  .back {
     width: size(34);
     display: inline-block;
     margin-left: size(20);
   }
-  .right{
+  .right {
     position: absolute;
     right: size(32);
     top: 50%;

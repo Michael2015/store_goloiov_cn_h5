@@ -12,36 +12,14 @@
                      key="list0" />
         </div>
       </template>
-      <template v-slot:list1>
-        <div>
-          <my-charts :option="option"
-                     refName='list1'
-                     key="list1" />
-        </div>
-      </template>
-      <template v-slot:list2>
-        <div>
-          <my-charts :option="option"
-                     refName='list2'
-                     key="list2" />
-        </div>
-      </template>
-      <template v-slot:list3>
-        <div>
-          <my-charts :option="option"
-                     refName='list3'
-                     key="list3" />
-        </div>
-      </template>
-      <template v-slot:list4>
-        <div>
-          <my-charts :option="option"
-                     refName='list4'
-                     key="list4" />
-        </div>
+      <template v-slot:bott>
+        <div class="suanfa">*价格波动算法：以24小时（1440分钟）为时间区间，计算任何时刻提货券价格。假定当前的前1440分钟平均价格P1，时间区间T1，T1之前1440分钟平均价格为P2,时间区间T2；那么当前价格
+          P3=D1*0.5*T1销量/T2销量，D2不可为0，初始值1。 P3最低值为4，不设上限。</div>
       </template>
     </tab-list>
-
+    <div class="line"></div>
+    <indexGoodsItem></indexGoodsItem>
+    <div class="line_s"></div>
   </div>
 </template>
 
@@ -49,22 +27,25 @@
 import Clock from './index-clock'
 import Info from './index-info'
 import myCharts from "com/common/echarts";
-import tabList from "com/base/tab-list";
+import tabList from "com/index/tab-list";
+import indexGoodsItem from 'com/index/index-goods-item'
+
 
 export default {
   components: {
-    Clock, Info, myCharts, tabList
+    Clock, Info, myCharts, tabList, indexGoodsItem
   },
   data() {
     return {
       option: {},
       current: 0,
-      tab: ['分钟', '小时', '日K', '周K', '年K']
+      tab: ['分钟', '小时', '日K', '周K', '年K'],
+      goodsPrice: ''
     };
   },
   methods: {
     change(e) {
-      console.log(e)
+
     },
     echartsInit() {
       this.option = {
@@ -129,4 +110,27 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~css/def";
+@mixin line($h) {
+  height: size($h);
+  background: #f6f6f6;
+  margin: size(44) 0;
+}
+.index {
+  padding-bottom: size(100);
+  .line {
+    @include line(14);
+  }
+  .line_s {
+    @include line(2);
+  }
+  .suanfa {
+    font-size: size(20);
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #b2b6bf;
+    line-height: size(32);
+    margin: 0 size(40);
+    text-align: justify;
+  }
+}
 </style>

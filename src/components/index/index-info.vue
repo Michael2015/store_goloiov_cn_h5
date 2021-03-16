@@ -1,7 +1,7 @@
 <template>
   <div class="info">
     <div class="info-first">
-      <span>123.21</span>
+      <span>{{getFloat(product_price,2)}}</span>
       <span>+2.00</span>
       <span>+2.40</span>
       <i class="before"></i>
@@ -19,19 +19,37 @@
 </template>
 
 <script>
-
+import { getProductPrice } from 'api/index'
+import { Loading, getFloat } from 'lib/index'
 export default {
   components: {},
   data() {
     return {
-
+      product_price: ''
     };
   },
-  methods: {
-
+  watch: {
+    '$store.state.commonFlag': {
+      handler(val) {
+        if (val) {
+          this.getProductPrice(val.id)
+        }
+      }
+    }
   },
-  mounted() {
-
+  methods: {
+    async getProductPrice(id) {
+      Loading.open()
+      let { product_price } = await getProductPrice({
+        product_id: id
+      })
+      Loading.close()
+      this.product_price = product_price
+      this.$parent.goodsPrice = product_price
+    }
+  },
+  computed: {
+    getFloat: () => getFloat
   },
 }
 </script>

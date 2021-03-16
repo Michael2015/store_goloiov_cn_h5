@@ -159,12 +159,7 @@ export function getmyteamincome(user_id) {
   }).then(special)
 }
 
-// 修改用户名字,头像通用
-export function edituserinfo(userinfo) {
-  return req.post('/app/user/edituserinfo', {
-    ...userinfo
-  }).then(special)
-}
+
 //vip服务商相关
 export function apply_vip(applyObj) {
   return req.post('/api/partner/home/server_vip_apply', {
@@ -289,4 +284,21 @@ export function getScoreContribution(page, limit) {
 //用户首页信息接口
 export function getUserHomeInfo() {
   return req.post('/api/v1/user/getUserHomeInfo').then(clean)
+}
+
+//积分价值变化接口
+export function getScorePrice() {
+  return req.post('/api/v1/user/getScorePrice').then(clean)
+}
+
+
+//获取个人信息接口
+export function getMyUserInfo() {
+  return req.get('/api/v1/User/getUserInfo').then(clean)
+}
+
+
+// 设置个人信息接口
+export function editUserInfo(userinfo) {
+  return req.post('/api/v1/User/editUserInfo', userinfo).then(special)
 }

@@ -61,7 +61,8 @@ import {
   updateUserInfo,
   get_region_partner,
   get_vip_server,
-  getUserHomeInfo
+  getUserHomeInfo,
+  getScorePrice
 } from "api/me";
 import { mapState } from "vuex";
 import partnerLevelObj from "mixins/partner-level-obj";
@@ -194,10 +195,19 @@ export default {
     };
   },
   mixins: [tojump, partnerLevelObj],
+  watch: {
+    '$store.state.token': {
+      handler(val) {
+        if (val) {
+          this.init()
+        }
+      }
+    }
+  },
   mounted() {
-    this.echartsInit();
-    this.getUserHomeInfo()
-
+    if (this.$store.state.token) {
+      this.init()
+    }
     /*  const reque = await partnerNum();
      this.Num = reque && reque.member_nums;
      this.server_vip = reque && reque.server_vip;
@@ -205,6 +215,10 @@ export default {
      updateUserInfo(); */
   },
   methods: {
+    init() {
+      this.echartsInit();
+      this.getUserHomeInfo()
+    },
     setHeadData(data) {
       for (let i of this.headData) {
         i.num = data[i.name]
@@ -223,58 +237,60 @@ export default {
         this.userinfo = res || {}
         this.setHeadData(res)
       }).catch(e => {
-        this.$notice.show(e, () => {
-          if (this.getInfoTime < 1) {
-            this.getInfoTime++;
-            this.getUserHomeInfo()
-          }
-        });
+        this.$notice.show(e);
       }).finally(() => {
         Loading.close()
       })
     },
     echartsInit() {
-      this.option = {
-        xAxis: {
-          type: "category",
-          data: ["13.00", "12.01", "13.02", "13.03", "13.04", "13.05", "13.06"]
-        },
-        yAxis: {
-          type: "value",
-          max: 15,
-          axisLine: {
-            show: true,
-            symbol: ["none", "arrow"],
-            symbolSize: [5, 10],
-            symbolOffset: [0, 8]
+      Loading.open()
+      getScorePrice().then((res) => {
+        let { date: xData, price: yData } = res
+        this.option = {
+          xAxis: {
+            type: "category",
+            data: xData
           },
-          axisLabel: {
-            formatter: function (value, index) {
-              return value.toFixed(2);
+          yAxis: {
+            type: "value",
+            //max: 15,
+            axisLine: {
+              show: true,
+              symbol: ["none", "arrow"],
+              symbolSize: [5, 10],
+              symbolOffset: [0, 8]
+            },
+            axisLabel: {
+              formatter: function (value, index) {
+                return value.toFixed(2);
+              }
             }
-          }
-        },
-        title: {
-          show: true, //显示策略，默认值true,可选为：true（显示） | false（隐藏）
-          text: "主标题",
-          left: "center",
-          top: "20",
-          textStyle: {
-            fontSize: 14,
-            top: 30
-          }
-        },
-        color: "#ED3E48",
-        series: [
-          {
-            data: [4.0, 5.0, 6.0, 1.0, 8.0, 9.0, 2.0],
-            type: "line",
-            label: {
-              position: 'top'
+          },
+          title: {
+            show: true, //显示策略，默认值true,可选为：true（显示） | false（隐藏）
+            text: "每1积分价值变化",
+            left: "center",
+            top: "20",
+            textStyle: {
+              fontSize: 14,
+              top: 30
             }
-          }
-        ]
-      };
+          },
+          color: "#ED3E48",
+          series: [
+            {
+              data: yData,
+              type: "line",
+              label: {
+                position: 'top'
+              }
+            }
+          ]
+        };
+      }).finally(() => {
+        Loading.close()
+      })
+
     },
     logout() {
       this.$refs.logOut.show("", () => {

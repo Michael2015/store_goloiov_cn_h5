@@ -1,142 +1,89 @@
 <template>
-  <div class="goods-item" :class="{free: item.is_platoon === 1,news:item.newbornzone.is_newborn}">
-    <router-link tag="div" class="img-wrap" :to="'/goods/'+item.id">
-      <img v-lazy="item.image" alt />
-    </router-link>
-    <router-link tag="div" class="con" :to="'/goods/'+item.id">
-      <div class="name" >{{item.store_name}}</div>
-      <div class="price-num">
-        <span class="price">¥{{item.newbornzone.is_newborn?item.newbornzone.price:item.price}}</span>
-        <span class="pre_price">{{item.ot_price}}</span>
+  <div class="goods">
+    <div class="img">
+      <img :src="info.image" />
+    </div>
+    <div class="info">
+      <div class="top">{{info.store_info}}</div>
+      <div class="bottom">
+        <span class="price">￥{{$parent.goodsPrice}}</span>
+        <span class="go">立即抢购GO <i class="iconfont">&#xe770;</i></span>
       </div>
-      <div class="price-mount">
-        <span class="num">销量{{item.sales}}</span>
-        <span class="buy">购买</span>
-      </div>
-      
-    </router-link>
+    </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    item: {
-      type: Object,
-      default: () => ({})
-    }
-  }
-};
-</script>
 
-<style lang="scss" scoped>
+<script>
+import { getIndexProduct } from 'api'
+export default {
+  components: {},
+  data() {
+    return {
+      info: {}
+    };
+  },
+  methods: {
+    async getIndexProduct() {
+      let res = await getIndexProduct()
+      this.info = res || {}
+      this.$store.commit('setCommonFlag', {
+        id: res.id
+      })
+    }
+  },
+  mounted() {
+    this.getIndexProduct()
+
+  },
+}
+</script>
+<style lang='scss' scoped>
 @import "~css/def";
-.goods-item {
-  border-radius: 6px;
-  background: #fff;
-  overflow: hidden;
-  width: 47%;
-  margin-left: 2.95%;
-  .img-wrap {
-    position: relative;
-    padding-bottom: 100%;
-    img {
-      position: absolute;
-      @include fill;
-      left: 0;
-      top: 0;
+.goods {
+  height: size(180);
+  background: white;
+  margin: size(20) size(40);
+  display: flex;
+  .img {
+    width: size(180);
+    > img {
+      height: 100%;
     }
   }
-  .con {
-    padding: 0 size(16);
-  }
-  .name {
-    margin-top: size(20);
-    font-size: size(26);
-    color: #4a4a4a;
-    line-height: size(34);
-    height: size(68);
-    @include txt-overflow(2);
-  }
-  .price-num {
-    line-height: size(42);
-    margin: size(14) 0;
-    .price {
-      font-size: size(26);
-      color: #ff5500;
-    }
-    .pre_price {
-      font-size: size(26);
+  .info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: size(28);
+    .top {
+      font-size: size(24);
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: rgba(132, 132, 132, 1);
-      line-height: size(33);
-      text-decoration: line-through;
-      margin-left: size(10);
+      color: #4a4a4a;
+      line-height: size(34);
     }
-    
-  }
-
-  .price-mount{
-    display: flex;
-    height: size(40);
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: size(14);
-    .num {
-      font-size:size(24);
-font-family:PingFangSC-Regular,PingFang SC;
-font-weight:400;
-color:rgba(132,132,132,1);
-line-height:size(28);
-text-shadow:0 size(2) size(7) rgba(0,0,0,0.06);
-    }
-    .buy{
-      width:size(80);
-height:size(38);
-background:rgba(231,55,42,1);
-box-shadow:0 size(2) size(7) 0 rgba(0,0,0,0.06);
-border-radius:size(2);
-font-size:size(22);
-text-align: center;
-line-height: size(38);
-font-family:PingFangSC-Regular,PingFang SC;
-font-weight:400;
-color:rgba(255,255,255,1);
-    }
-  }
-  // 免单标签
-  position: relative;
-  &.free {
-    &:after {
-      content: "免单";
-      position: absolute;
-      height: size(32);
-      line-height: size(32);
-      background: #ff0000;
-      right: size(-62);
-      top: size(-28);
-      color: #fff;
-      font-size: size(22);
-      width: size(120);
-      text-align: center;
-      transform-origin: 0% 0%;
-      transform: rotateZ(45deg);
-    }
-  }
-  // 新人专享标签
-  &.news {
-    &:before {
-      content: "新人专享";
-      position: absolute;
-      height: size(32);
-      line-height: size(32);
-      background: #ff0000;
-      color: #fff;
-      font-size: size(22);
-      width: size(120);
-      text-align: center;
-      transform-origin: 0% 0%;
-      z-index: 1;
+    .bottom {
+      height: size(56);
+      > .price {
+        font-size: size(30);
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        color: #ff5500;
+        line-height: size(42);
+        float: left;
+      }
+      > .go {
+        height: size(48);
+        line-height: size(28);
+        background: #e31336;
+        border-radius: size(24);
+        font-weight: 400;
+        color: #ffffff;
+        font-size: size(20);
+        padding: size(10) size(16);
+        float: right;
+      }
     }
   }
 }

@@ -31,7 +31,7 @@ export default {
         let date = new Date()
         this.showTime = `${date.getFullYear()}-${this.doubleNum(date.getMonth() + 1)}-${this.doubleNum(date.getDate())}
          ${this.doubleNum(date.getHours())}:${this.doubleNum(date.getMinutes())}:${this.doubleNum(date.getSeconds())}`
-      })
+      }, 1000)
     }
 
   },
