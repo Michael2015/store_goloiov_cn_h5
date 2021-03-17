@@ -33,7 +33,8 @@
         <span>类型</span>
         <span>数值</span>
       </li>
-      <Load-more v-slot="{ list }"
+      <Load-more v-if="token"
+                 v-slot="{ list }"
                  :getData="getScoreList"
                  :setSize="20">
         <li v-for="i in list"
@@ -55,6 +56,7 @@
 
 <script>
 import tojump from "mixins/tojump";
+import hasToken from "mixins/hasToken";
 import { mapState } from "vuex";
 import notice from "base/notice";
 import { getScore, getScoreList } from "api/me";
@@ -87,21 +89,15 @@ export default {
       }
     };
   },
-  mounted() {
-    this.getScore();
-  },
 
   methods: {
+    mixinInit() {
+      this.getScore();
+    },
     getScore() {
-      getScore()
-        .then(res => {
-          this.info = res || {};
-        })
-        .catch(e => {
-          this.$notice.show(e, () => {
-            this.$router.back();
-          });
-        });
+      getScore().then(res => {
+        this.info = res || {};
+      });
     },
     reach() {
       return new Promise((resolve, reject) => {
@@ -202,6 +198,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(["token"]),
     formatDate() {
       return formatDate;
     },
@@ -230,7 +227,7 @@ export default {
     },
     ...mapState(["isLogin"])
   },
-  mixins: [tojump],
+  mixins: [tojump, hasToken],
   components: {
     notice,
     LoadMore

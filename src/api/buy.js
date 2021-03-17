@@ -1,5 +1,10 @@
-import {req} from './request'
-import {clean, special} from './index'
+import {
+  req
+} from './request'
+import {
+  clean,
+  special
+} from './index'
 
 // 购买页，购物，下单
 
@@ -17,7 +22,7 @@ export function getPreOrderProductInfo(id, lastOrderId, unique) {
 
 // 下单接口
 export function createOrder(params) {
-  return req.post('/api/order/createOrder', params).then(clean)
+  return req.post('/api/v1/Order/createOrder', params).then(clean)
 }
 
 // 支付，获取支付参数触发微信或支付宝支付

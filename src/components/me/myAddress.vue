@@ -7,23 +7,23 @@
          @click="select(item)">
       <div class="base">
         <img src="~img/icon/location.png"
-             alt="">
-        <span>{{item.province}} {{item.city}} {{item.district}}</span>
+             alt="" />
+        <span>{{ item.province }} {{ item.city }} {{ item.district }}</span>
       </div>
       <div class="detail">
-        {{item.detail}}
+        {{ item.detail }}
         <img src="~img/icon/del.png"
              alt=""
              class="del"
              v-if="canEdit"
-             @click.stop="deleteAddress(item.id)">
+             @click.stop="deleteAddress(item.id)" />
         <img src="~img/icon/edit-1.png"
              alt=""
              class="edit"
              v-if="canEdit"
-             @click.stop="edit(item)">
+             @click.stop="edit(item)" />
       </div>
-      <div class="contact">{{item.real_name}} {{item.phone}}</div>
+      <div class="contact">{{ item.real_name }} {{ item.phone }}</div>
     </div>
     <div v-if="addrList.length === 0"
          class="no-data">
@@ -37,62 +37,62 @@
 </template>
 
 <script>
-import { getAddressList, delAddress } from 'api/me'
-import { Loading } from 'lib'
-export default {
+import { getAddressList, delAddress } from "api/me";
+import { Loading } from "lib";
+import hasToken from "mixins/hasToken";
 
+export default {
+  mixins: [hasToken],
   data() {
     return {
       // 买商品是选择地址要禁用编辑
       canEdit: true,
       addrList: []
-    }
-  },
-  created() {
-    if (this.$route.query.select) {
-      // 选择地址模式，禁用编辑和删除按钮（这个暂时不做）
-      // this.canEdit = false
-    }
-    this.loaddata()
+    };
   },
   methods: {
+    mixinInit() {
+      if (this.$route.query.select) {
+        // 选择地址模式，禁用编辑和删除按钮（这个暂时不做）
+        // this.canEdit = false
+      }
+      this.loaddata();
+    },
     loaddata() {
-      Loading.open()
-      getAddressList().then(data => {
-        if (data) {
-          this.addrList = data
-        }
-      }).catch(e => {
-        this.$notice.show(e, () => {
-          this.$router.back();
+      Loading.open();
+      getAddressList()
+        .then(data => {
+          if (data) {
+            this.addrList = data;
+          }
+        })
+        .finally(() => {
+          Loading.close();
         });
-      }).finally(() => {
-        Loading.close()
-      })
     },
     deleteAddress(id) {
-      this.$confirm.show('是否删除该地址？', () => {
+      this.$confirm.show("是否删除该地址？", () => {
         delAddress(id).then(() => {
-          this.loaddata()
-        })
-      })
+          this.loaddata();
+        });
+      });
     },
     edit(item) {
       this.$router.push({
-        name: 'addAddress',
+        name: "addAddress",
         params: {
           data: item
         }
-      })
+      });
     },
     select(item) {
       if (this.$route.query.select) {
-        this.$store.commit('setAddress', item)
-        this.$router.back()
+        this.$store.commit("setAddress", item);
+        this.$router.back();
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

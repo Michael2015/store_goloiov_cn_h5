@@ -28,8 +28,10 @@
 
 <script>
 import { getMyFriends } from "api/me.js";
+import hasToken from "mixins/hasToken";
 
 export default {
+  mixins: [hasToken],
   components: {},
   data() {
     return {
@@ -54,22 +56,14 @@ export default {
     }
   },
   methods: {
+    mixinInit() { this.getMyFriends(1); },
     getMyFriends(page, limit) {
-      getMyFriends(page, limit)
-        .then(res => {
-          this.list = res || [];
-          this.searchList = res || [];
-        })
-        .catch(e => {
-          this.$notice.show(e, () => {
-            this.$router.back();
-          });
-        });
+      getMyFriends(page, limit).then(res => {
+        this.list = res || [];
+        this.searchList = res || [];
+      });
     }
   },
-  mounted() {
-    this.getMyFriends(1);
-  }
 };
 </script>
 <style lang="scss" scoped>

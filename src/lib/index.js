@@ -96,3 +96,70 @@ export function allFalse(nameArr, valueArr) {
   }
   return flag
 }
+
+
+//运算 处理精度缺失
+export function formatFloat(a, b, flag) {
+  var n = a.toString().indexOf('.') == -1 ? 0 : a.toString().split('.')[1].length;
+  var t = b.toString().indexOf('.') == -1 ? 0 : b.toString().split('.')[1].length;
+  var m = Math.max(n, t);
+  switch (flag) {
+    case '+':
+      return (a * Math.pow(10, m) + b * Math.pow(10, m)) / Math.pow(10, m);
+    case '-':
+      return (a * Math.pow(10, m) - b * Math.pow(10, m)) / Math.pow(10, m);
+    case '*':
+      return (a * Math.pow(10, n + t) * b) / Math.pow(10, n + t);
+    case '/':
+      return ((a * Math.pow(10, n)) / (b * Math.pow(10, t))) * (Math.pow(10, t) / Math.pow(10, n));
+    default:
+      return null
+  }
+}
+
+//保留小数 ：num为数字,cutnum为保留的小数位数,updown为0向下取(默认),为1向上取,2为四舍五入
+export function remainPoint(num, cutnum, updown) {
+  var Num = num.toString(),
+    arr = Num.split('.'),
+    N = Number(cutnum),
+    R = Number(updown);
+  if (arr.length === 1) {
+    return Num + (N ? '.' : '') + Array.from({
+      length: N
+    }, () => {
+      return "0";
+    }).join("");
+  } else {
+    if (arr[1].length < N) {
+      return Num + Array.from({
+        length: N - arr[1].length
+      }, () => {
+        return "0";
+      }).join("");
+    } else if (arr[1].length === N) {
+      return Num;
+    } else {
+      if (!R) {
+        return arr[0] + (N ? '.' : '') + arr[1].substring(0, N);
+      } else if (R == 1) {
+        return Math.ceil(Number(num) * Math.pow(10, N)) / Math.pow(10, N);
+      } else {
+        return Math.round(Number(num) * Math.pow(10, N)) / Math.pow(10, N);
+      }
+    }
+  }
+}
+
+
+export const _S = {
+  set(name, val) {
+    let doVal = typeof val === 'string' ? val : JSON.stringify(val)
+    sessionStorage.setItem(name, doVal)
+  },
+  get(name) {
+    return JSON.parse(sessionStorage.getItem(name))
+  },
+  remove(name) {
+    sessionStorage.removeItem(name)
+  }
+}

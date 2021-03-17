@@ -1,57 +1,83 @@
 <template>
   <div class="departCount">
     <top-head>绑定支付宝账号</top-head>
-    <div class="content"
-         v-for='(item,i) in list'
-         :key='i'>
-      <i class="iconfont">{{item.icon}}</i>
-      <input type="text"
-             :placeholder="item.placeholder"
-             v-model='item.value'>
+    <div class="content" v-for="(item, i) in list" :key="i">
+      <i class="iconfont">{{ item.icon }}</i>
+      <input type="text" :placeholder="item.placeholder" v-model="item.value" />
     </div>
 
     <div class="tip">
       <div><i class="iconfont">&#xe649;</i>提示</div>
-      <p>1、打开支付宝App,点击菜单栏“我的”，点击左上角头像即可查看支付宝账号以及实名姓名。</p>
+      <p>
+        1、打开支付宝App,点击菜单栏“我的”，点击左上角头像即可查看支付宝账号以及实名姓名。
+      </p>
       <p>2、绑定支付账号用于平台奖励实时分账，必须填写支付宝真实信息。</p>
     </div>
-    <div class="sure">我已确认</div>
+    <div class="sure" @click="sure">我已确认</div>
   </div>
 </template>
 
 <script>
-
+import { bindZfb } from "api/me";
+import { Loading, Toast } from "lib";
 export default {
   components: {},
   data() {
     return {
-      username: '',
-      list: [{
-        placeholder: '输入支付宝绑定手机号',
-        icon: '\ue608',
-        value: ''
-      },
-      {
-        placeholder: '输入支付宝真实账号',
-        icon: '\ue68a',
-        value: ''
-      },
-      {
-        placeholder: '输入支付宝认证姓名',
-        icon: '\ue625',
-        value: ''
-      }]
+      username: "",
+      list: [
+        {
+          placeholder: "输入支付宝绑定手机号",
+          icon: "\ue608",
+          value: "",
+          name: "mobile"
+        },
+        {
+          placeholder: "输入支付宝真实账号",
+          icon: "\ue68a",
+          value: "",
+          name: "account"
+        },
+        {
+          placeholder: "输入支付宝认证姓名",
+          icon: "\ue625",
+          value: "",
+          name: "name"
+        }
+      ]
     };
   },
   methods: {
-
+    async sure() {
+      Loading.open();
+      let { code, msg } = await bindZfb(this.createObj(this.list));
+      Loading.close();
+      if (code == 200) {
+        Toast({
+          message: msg,
+          duration: 1500
+        });
+        setTimeout(() => {
+          this.$router.push("/me");
+        }, 1500);
+      }
+    }
   },
-  mounted() {
-
+  computed: {
+    createObj() {
+      return arr => {
+        let obj = {};
+        for (let i of arr) {
+          obj[i.name] = i.value;
+        }
+        return obj;
+      };
+    }
   },
-}
+  mounted() {}
+};
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "~css/def";
 .departCount {
   margin: 0 size(40);

@@ -302,3 +302,8 @@ export function getMyUserInfo() {
 export function editUserInfo(userinfo) {
   return req.post('/api/v1/User/editUserInfo', userinfo).then(special)
 }
+
+//绑定支付宝接口
+export function bindZfb(userinfo) {
+  return req.post('/api/v1/user/bindZfb', userinfo).then(special)
+}

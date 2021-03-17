@@ -5,6 +5,7 @@ function callNative(obj = {}) {
   if (process.env.NODE_ENV !== 'production') {
     // 开发只要打印
     console.log(obj)
+    // window[obj.callback]('199b67345294167c0fad6fa9b2d5ab23')
     return
   }
 

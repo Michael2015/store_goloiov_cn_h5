@@ -14,29 +14,43 @@
         </span>
       </div>
       <div class="tip">{{ info.attach_product }}</div>
-      <div class="free-intro table" v-if="info.is_platoon === 1">
+      <div class="free-intro table"
+           v-if="info.is_platoon === 1">
         <div class="icon-wrap">
-          <img src="~img/icon/tips.png" alt />
+          <img src="~img/icon/tips.png"
+               alt />
         </div>
       </div>
     </div>
     <div class="navs border-bottom">
-      <router-link tag="span" to="detail" replace>产品详情</router-link>
-      <router-link tag="span" to="buy-records" replace>购买记录</router-link>
-      <router-link tag="span" to="visitor" replace>收益排行</router-link>
-      <router-link tag="span" to="comment" replace>股东排名</router-link>
+      <router-link tag="span"
+                   to="detail"
+                   replace>产品详情</router-link>
+      <router-link tag="span"
+                   to="buy-records"
+                   replace>购买记录</router-link>
+      <router-link tag="span"
+                   to="visitor"
+                   replace>收益排行</router-link>
+      <router-link tag="span"
+                   to="comment"
+                   replace>股东排名</router-link>
     </div>
     <div style="padding-bottom:60px;">
       <keep-alive>
-        <router-view :id="id" :goodsName="info.store_name"></router-view>
+        <router-view :id="id"
+                     :goodsName="info.store_name"></router-view>
       </keep-alive>
     </div>
-    <div class="action-bar table border-top" @click="buy">
+    <div class="action-bar table border-top"
+         @click="buy">
       立即购买
     </div>
-    <notice ref="notice" :autoClose="true"></notice>
+    <notice ref="notice"
+            :autoClose="true"></notice>
     <!-- 免单奖励介绍 -->
-    <free-intro ref="showFreeIntro" :info="info"></free-intro>
+    <free-intro ref="showFreeIntro"
+                :info="info"></free-intro>
   </div>
 </template>
 
@@ -85,8 +99,10 @@ export default {
     Promise.all([
       getIndexProductDetail(this.id).then(data => {
         if (data) {
-          this.info = data;
-          this.info.slider_image = JSON.parse(data.slider_image);
+          let { product_info, discount_list } = data;
+          this.info = product_info;
+          this.info.slider_image = JSON.parse(product_info.slider_image);
+          this.info.discount_list = discount_list;
         }
       }),
       this.getProductPrice(this.id)

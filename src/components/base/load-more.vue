@@ -1,17 +1,12 @@
 <template>
-  <div class="load-more"
-       v-infinite-scroll="loadMore">
+  <div class="load-more" v-infinite-scroll="loadMore">
     <slot :list="list"></slot>
-    <div class="status-text"
-         v-if="loading">加载中...</div>
-    <div class="no-data"
-         v-else-if="list.length === 0">
-      <img src="~img/no_data.png"
-           alt="" />
+    <div class="status-text" v-if="loading">加载中...</div>
+    <div class="no-data" v-else-if="list.length === 0">
+      <img src="~img/no_data.png" alt="" />
       <div class="status-text">暂无数据</div>
     </div>
-    <div class="status-text"
-         v-else>已加载全部</div>
+    <div class="status-text" v-else>已加载全部</div>
   </div>
 </template>
 <script>
@@ -46,7 +41,7 @@ export default {
     },
     useListName: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   data() {
@@ -105,8 +100,8 @@ export default {
     handler() {
       this.scrollTop = Math.ceil(
         window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop
+          document.documentElement.scrollTop ||
+          document.body.scrollTop
       );
       this.clientHeight =
         window.innerHeight || document.documentElement.clientHeight;
@@ -148,11 +143,6 @@ export default {
             }
             this.loading = false;
           }
-        })
-        .catch(e => {
-          this.$notice.show(e, () => {
-            this.$router.back();
-          });
         })
         .finally(() => {
           Loading.close();

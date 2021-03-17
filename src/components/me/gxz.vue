@@ -15,30 +15,30 @@
         <span>类型</span>
         <span>数值</span>
       </li>
-      <Load-more v-slot="{ list }"
-                 :getData="getScoreContribution"
-                 :setSize="20"
-                 useListName="list"
-                 @getResData="getResData">
-        <li v-for="i in list"
-            class="list-item"
-            :key="i.id">
+      <Load-more
+        v-slot="{ list }"
+        v-if="uniqueNum"
+        :getData="getScoreContribution"
+        :setSize="20"
+        useListName="list"
+        @getResData="getResData"
+      >
+        <li v-for="i in list" class="list-item" :key="i.id">
           <span>{{ formatDate(i.add_time) }}</span>
           <span>{{ formatType(i.type) }}</span>
-          <span class="num"
-                :class="Number(i.contribution) > 0 ? 'red' : ''">{{
+          <span class="num" :class="Number(i.contribution) > 0 ? 'red' : ''">{{
             formatNum(i.contribution)
           }}</span>
         </li>
       </Load-more>
     </div>
-    <notice ref="notive"
-            :autoClose="true"></notice>
+    <notice ref="notive" :autoClose="true"></notice>
   </div>
 </template>
 
 <script>
 import tojump from "mixins/tojump";
+import hasToken from "mixins/hasToken";
 import { mapState } from "vuex";
 import notice from "base/notice";
 import { getScoreContribution } from "api/me";
@@ -171,6 +171,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(["token"]),
     formatType() {
       return n => {
         switch (Number(n)) {
@@ -196,7 +197,7 @@ export default {
         return getScoreContribution(page, size);
       };
     },
-    showtitle: function () {
+    showtitle: function() {
       let title;
       const { active } = this;
       if (active === "earnings") {
@@ -209,7 +210,7 @@ export default {
     },
     ...mapState(["isLogin"])
   },
-  mixins: [tojump],
+  mixins: [tojump, hasToken],
   components: {
     notice,
     LoadMore

@@ -23,7 +23,7 @@ export default {
     const func = getIndexProductDetail;
     func(this.id).then(data => {
       if (data) {
-        this.all = data;
+        this.all = data.product_info;
       }
     });
   }

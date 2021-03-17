@@ -1,128 +1,131 @@
 <template>
   <div class="wrap">
     <top-head>结算</top-head>
-    <div class="addr-wrap" @click="goSelectAddr">
+    <div class="addr-wrap"
+         @click="goSelectAddr">
       <template v-if="addr">
         <div class="base">
-          <img src="~img/icon/location.png" alt />
+          <img src="~img/icon/location.png"
+               alt />
           <span>{{ addr.province }} {{ addr.city }} {{ addr.district }}</span>
         </div>
         <div class="detail">{{ addr.detail }}</div>
         <div class="contact">{{ addr.real_name }} {{ addr.phone }}</div>
-        <img src="~img/icon/join-right.png" alt class="right" />
+        <img src="~img/icon/join-right.png"
+             alt
+             class="right" />
         <div class="line">
           <!-- 地址线 -->
         </div>
       </template>
       <template v-else>
         <div class="base">
-          <img src="~img/icon/location.png" alt />
+          <img src="~img/icon/location.png"
+               alt />
           <span>请选择收货地址</span>
         </div>
-        <img src="~img/icon/join-right.png" alt class="right" />
+        <img src="~img/icon/join-right.png"
+             alt
+             class="right" />
       </template>
     </div>
     <div class="goods table">
       <div class="img">
-        <img
-          :src="
+        <img :src="
             info.image ? info.image : info.slider_image && info.slider_image[0]
           "
-          alt
-        />
+             alt />
       </div>
       <div class="con">
         <div class="name">{{ info.store_info }}</div>
         <div class="price-num">
-          <span class="price">￥{{ unitPrice }}</span>
+          <span class="price">￥{{ comput(unitPrice,2) }}</span>
           <div class="setcount">
-            <div class="reduce" @click="reduce">-</div>
-            <input class="count" type="number" v-model="total_num" />
-            <div class="add" @click="add">+</div>
+            <div class="reduce"
+                 @click="reduce">-</div>
+            <input class="count"
+                   type="number"
+                   v-model="total_num" />
+            <div class="add"
+                 @click="add">+</div>
           </div>
         </div>
       </div>
     </div>
     <div class="spec">
-      <div class="col clearfix">
+      <div class="co clearfix">
         <div class="left">商品单价</div>
-        <div class="right">¥{{ unitPrice }}</div>
+        <div class="right">¥{{ remainPoint(unitPrice||0,2) }}</div>
       </div>
-      <div class="col clearfix">
+      <div class="co clearfix">
         <div class="left">优惠金额</div>
+        <div class="right">¥{{ comDiscount }}</div>
+      </div>
+      <div class="co clearfix">
+        <div class="left">实付金额</div>
         <div class="right">¥{{ discountPrice }}</div>
       </div>
     </div>
-    <div class="spec" v-show="!$route.params.hiddenDiscount">
-      <div class="col clearfix">
-        <div class="left jifen">
-          <img src="~img/me/jifen.png" class="one" />
-          可用{{ golo_points }}积分抵扣{{ golo_points_money }}元
-          <img src="~img/question.png" @click="showinfo" alt />
-        </div>
-        <div class="right">
-          <img
-            v-if="!used_golo_points"
-            src="~img/radio.png"
-            @click="check_golo_points"
-            alt
-          />
-          <img
-            v-else
-            src="~img/radio-checked.png"
-            @click="check_golo_points"
-            alt
-          />
-        </div>
+    <div class="col table border-bottom"
+         @click="active = 0">
+      <div class="icon">
+        <img src="~img/alipay.png"
+             alt="" />
+      </div>
+      <div class="name">
+        <div class="">支付宝</div>
+      </div>
+      <div class="check-icon"
+           :class="{ active: active === 0 }">
+        <span></span>
       </div>
     </div>
-
-    <div class="spec" v-show="!$route.params.hiddenDiscount">
-      <div class="col clearfix" @click="yhq_show = yhq.length ? true : false">
-        <div class="left jifen">
-          <img src="~img/yhq.png" class="one yhq_icon" />
-          {{ yhq_title }}
-        </div>
-        <div class="right">
-          <img src="~img/icon/yhq_rght.png" />
-        </div>
+    <div class="col table border-bottom"
+         @click="active = 1">
+      <div class="icon">
+        <img src="~img/wxpay.png"
+             alt="" />
       </div>
-    </div>
-
-    <div class="remark">
-      <text-area
-        class="input"
-        placeholder="留言内容/备注"
-        v-model="remark"
-      ></text-area>
+      <div class="name">
+        <div class="">微信支付</div>
+      </div>
+      <div class="check-icon"
+           :class="{ active: active === 1 }">
+        <span></span>
+      </div>
     </div>
     <div class="opts table">
-      <div class="price">
-        <span>实付金额：¥{{ pay_price }}</span>
-      </div>
       <div class="buy">
         <span @click="doPay">{{
           this.paying ? "支付中...(" + status + ")" : "立即购买"
         }}</span>
       </div>
     </div>
-    <pay-method ref="payMethod" :is_jf="is_jf" :now_money="now_money">{{
+    <pay-method ref="payMethod"
+                :is_jf="is_jf"
+                :now_money="now_money">{{
       pay_price
     }}</pay-method>
-    <notice ref="notice" :autoClose="false"></notice>
-    <confirm ref="leaveConfirm" :autoClose="false">
+    <notice ref="notice"
+            :autoClose="false"></notice>
+    <confirm ref="leaveConfirm"
+             :autoClose="false">
       <span slot="btn-left">我已支付</span>
       <span slot="btn-right">离开</span>
     </confirm>
 
-    <div class="yhq_pop" v-show="yhq_show">
+    <div class="yhq_pop"
+         v-show="yhq_show">
       <div class="yhq">
         <div class="header">
           <span>优惠券</span>
-          <img src="~img/closeTip.png" @click="close" />
+          <img src="~img/closeTip.png"
+               @click="close" />
         </div>
         <div class="main">
-          <div class="list" v-for="(item, index) in yhq" :key="index">
+          <div class="list"
+               v-for="(item, index) in yhq"
+               :key="index">
             <div class="one">
               <img src="~img/yhq1.png" />
               <div class="ti">
@@ -152,7 +155,7 @@ import { getPreOrderProductInfo, createOrder, pay, queryOrder } from "api/buy";
 import { getAddressList } from "api/me";
 import { nativePay } from "api/native";
 import { mapState } from "vuex";
-import { Toast, Loading } from "lib";
+import { Toast, Loading, formatFloat, remainPoint } from "lib";
 import { getProductPrice } from "api/index";
 
 export default {
@@ -170,6 +173,7 @@ export default {
   },
   data() {
     return {
+      active: 0,
       total_num: 1,
       unitPrice: "",
       yhq: [],
@@ -179,7 +183,6 @@ export default {
       yhq_price: 0,
       yhq_show: false,
       isReClick: true, // 点击标识
-      remark: "",
       addr: null,
       // 接口获取的信息
       preInfo: {},
@@ -246,10 +249,10 @@ export default {
     // 这里用了上一个页面传进来的数据
     // 判断是否需要刷新页面
     if (this.$route.params.info) {
+      // console.log(this.$route.params.info);
       this.getProductPrice(this.$route.params.info.id);
       this.paying = false;
       this.status = 0;
-      this.remark = "";
       this.addr = null;
       this.preInfo = {};
       this.info = this.$route.params.info;
@@ -355,8 +358,6 @@ export default {
           phone: this.info.user_phone
         };
         this.addr = addr;
-        // 重写备注
-        this.remark = this.info.mark;
       }
     },
     //showinfo显示提示
@@ -401,44 +402,37 @@ export default {
         Toast("请选择地址");
         return;
       }
-      this.$refs.payMethod.show(type => {
-        // 去支付
-        Loading.open();
-        this.paying = true;
-        if (this.orderId || this.createdOrderId) {
-          // 已经有订单了,或者已经创建过订单了
-          this.status = 1;
-          // 发起支付
-          getNativePayParams(this.orderId || this.createdOrderId, type);
-        } else {
-          let miandan_type;
-          if (this.info.is_platoon == 1 && this.info.is_self_buy_platoon == 1) {
-            miandan_type = 1;
-          }
-          // 创建订单, 避免并发
-          if (this.isReClick) {
-            getCreateOrder(type, miandan_type);
-            this.isReClick = false;
-          } else {
-            Toast("请勿重复提交订单");
-            return;
-          }
+      // 去支付
+      let type = ['alipay', 'wechat', 'yue'][this.active]
+      Loading.open();
+      this.paying = true;
+      if (this.orderId || this.createdOrderId) {
+        // 已经有订单了,或者已经创建过订单了
+        this.status = 1;
+        // 发起支付
+        getNativePayParams(this.orderId || this.createdOrderId, type);
+      } else {
+        let miandan_type;
+        if (this.info.is_platoon == 1 && this.info.is_self_buy_platoon == 1) {
+          miandan_type = 1;
         }
-      });
+        // 创建订单, 避免并发
+        if (this.isReClick) {
+          getCreateOrder(type, miandan_type);
+          this.isReClick = false;
+        } else {
+          Toast("请勿重复提交订单");
+          return;
+        }
+      }
 
       // 创建订单
       const getCreateOrder = (type, miandan_type) => {
         createOrder({
           product_id: this.id,
-          address_id: this.addr.id,
-          mark: this.remark,
           paytype: type,
-          miandan_type,
           total_num: this.total_num,
-          //used_golo_points: this.used_golo_points,
           unique: this.$route.params.sku_id || "",
-          discount_type: this.discount_type,
-          discount_id: this.ID
         }).then(
           data => {
             this.isReClick = true;
@@ -545,7 +539,24 @@ export default {
     }
   },
   computed: {
-    ...mapState(["selectAddress", "buyTotalNum", "is_testing_money"]),
+    ...mapState(["selectAddress", "buyTotalNum", "is_testing_money", 'currentData']),
+    //加减乘除运算，处理精度缺失
+    comput() {
+      return formatFloat;
+    },
+    remainPoint() {
+      return remainPoint
+    },
+    //优惠金额
+    comDiscount() {
+      let price = Number(this.unitPrice);
+      for (let i of this.info.discount_list || []) {
+        if (price >= i.min && price <= i.max) {
+          return this.formatPrice(this.comput(this.comput(1, i.discount, '-'), price, "*"));
+        }
+      }
+      return this.formatPrice(0);
+    },
     //true为从现有的订单进入支付页,flase为商品详情进入
     show_model() {
       return !!this.$route.params.orderId;
@@ -553,16 +564,13 @@ export default {
 
     //计算优惠
     discountPrice() {
-      let discount_price = this.used_golo_points
-        ? this.golo_points_money
-        : this.yhq_price
-        ? this.yhq_price
-        : 0;
-      return this.formatPrice(discount_price);
+      return this.formatPrice(
+        this.comput(this.unitPrice, this.comDiscount, "-")
+      );
     },
     //保留小数
     formatPrice() {
-      return function(pri, flag) {
+      return function (pri, flag) {
         if (!flag) {
           var arr = pri.toString().split("."),
             len = arr.length;
@@ -587,8 +595,8 @@ export default {
       let pay_price_temp = this.show_model
         ? this.info.pay_price
         : this.used_golo_points
-        ? parseFloat(this.unitPrice * this.total_num - this.golo_points_money)
-        : parseFloat(
+          ? parseFloat(this.unitPrice * this.total_num - this.golo_points_money)
+          : parseFloat(
             this.unitPrice * this.total_num - this.discountPrice
           ).toFixed(2);
       pay_price_temp = pay_price_temp < 0.01 ? 0.01 : pay_price_temp;
@@ -702,8 +710,7 @@ body {
     }
     .setcount {
       width: size(220);
-      height: size(50);
-      line-height: size(50);
+      height: 100%;
       display: flex;
       justify-content: space-between;
       font-size: size(28);
@@ -739,7 +746,7 @@ body {
   font-size: size(26);
   padding: size(24) size(30);
   line-height: 1.42;
-  .col {
+  .co {
     .left {
       float: left;
       position: relative;
@@ -769,12 +776,50 @@ body {
     }
   }
 }
-.remark {
-  background: #fff;
-  margin-top: size(18);
-  padding: size(30);
-  > .input {
-    padding: size(16) size(20);
+.col {
+  height: size(120);
+  padding-left: size(38);
+  padding-right: size(42);
+  > div {
+    vertical-align: middle;
+    display: table-cell;
+  }
+  .icon {
+    width: size(32);
+    img {
+      width: 100%;
+      height: size(32);
+      display: block;
+    }
+  }
+  .name {
+    padding-left: size(28);
+    font-size: size(30);
+    color: #333;
+    .jifen {
+      font-size: size(26);
+      color: #666;
+    }
+  }
+  .check-icon {
+    text-align: right;
+    span {
+      display: inline-block;
+      width: size(40);
+      height: size(40);
+      @include bg("~img/icon/check.png");
+    }
+    &.active {
+      span {
+        @include bg("~img/icon/checked.png");
+      }
+    }
+    &.no_disab {
+      span {
+        background: #ccc;
+        border-radius: 50%;
+      }
+    }
   }
 }
 .opts {
@@ -801,11 +846,15 @@ body {
     color: #fff;
   }
 }
-.spec .col .yhq_icon {
-  width: size(36);
-  height: size(36);
-  top: size(2);
-  left: size(-2) !important;
+.spec {
+  > .co {
+    > .yhq_icon {
+      width: size(36);
+      height: size(36);
+      top: size(2);
+      left: size(-2) !important;
+    }
+  }
 }
 .yhq_pop {
   position: absolute;

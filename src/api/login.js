@@ -60,6 +60,7 @@ export function login() {
 
 // app有免登陆功能，app会缓存token到本地
 export function tryLogin() {
+  store.commit('clearUniqueNum')
   let saveToken = ''
   return getToken().then(token => {
     //console.log('进来', token) //199b67345294167c0fad6fa9b2d5ab23
@@ -69,6 +70,11 @@ export function tryLogin() {
       store.commit('setToken', saveToken)
       store.commit('setUserInfo', data)
     }
+  }).catch(() => {
+    login()
+  }).finally(() => {
+    //tryLogin执行完后设置标识
+    store.commit('setUniqueNum')
   })
 }
 

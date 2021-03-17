@@ -7,16 +7,16 @@
         <i class="iconfont wenhao">&#xe605;</i>
         <div class="content">
           <div class="remain">账号总余额</div>
-          <div class="jifen-num">￥{{ getFloat(info.profit||0, 2) }}</div>
+          <div class="jifen-num">￥{{ getFloat(info.profit || 0, 2) }}</div>
         </div>
         <div class="cumulat">
           <div class="left">
             <p>已提现</p>
-            <p>{{ getFloat(info.get_withdrawal_total||0, 2) }}</p>
+            <p>{{ getFloat(info.get_withdrawal_total || 0, 2) }}</p>
           </div>
           <div class="right">
             <p>累计收入</p>
-            <p>{{ getFloat(info.get_income_total||0, 2) }}</p>
+            <p>{{ getFloat(info.get_income_total || 0, 2) }}</p>
           </div>
         </div>
         <!-- <div class="withdraw-wrap">
@@ -34,34 +34,36 @@
         <span>数值</span>
         <span>状态</span>
       </li>
-      <Load-more v-slot="{ list }"
-                 :getData="getMyProfit"
-                 :setSize='20'
-                 @getResData='getResData'
-                 useListName='list'>
-        <li v-for="i in list"
-            class="list-item"
-            :key="i.id">
+      <Load-more
+        v-if="uniqueNum"
+        v-slot="{ list }"
+        :getData="getMyProfit"
+        :setSize="20"
+        @getResData="getResData"
+        useListName="list"
+      >
+        <li v-for="i in list" class="list-item" :key="i.id">
           <span>{{ formatDate(i.add_time) }}</span>
-          <span>{{i.type}}</span>
-          <span>{{i.explain}}</span>
+          <span>{{ i.type }}</span>
+          <span>{{ i.explain }}</span>
 
-          <span class="num"
-                :class="Number(i.amount) > 0 ? 'red' : ''">{{
+          <span class="num" :class="Number(i.amount) > 0 ? 'red' : ''">{{
             formatNum(i.amount)
           }}</span>
-          <span class="blue"
-                :class="i.status==='去提现'?'redBtn':''">{{i.status}}</span>
+          <span class="blue" :class="i.status === '去提现' ? 'redBtn' : ''">{{
+            i.status
+          }}</span>
         </li>
       </Load-more>
     </div>
-    <notice ref="notive"
-            :autoClose="true"></notice>
+    <notice ref="notive" :autoClose="true"></notice>
   </div>
 </template>
 
 <script>
 import tojump from "mixins/tojump";
+import hasToken from "mixins/hasToken";
+
 import { mapState } from "vuex";
 import notice from "base/notice";
 import { getMyProfit } from "api/income";
@@ -108,7 +110,7 @@ export default {
   methods: {
     getFloat,
     getResData(e) {
-      this.info = e
+      this.info = e;
     },
     checkShow(demo) {
       this.active = demo;
@@ -205,9 +207,9 @@ export default {
       return formatDate;
     },
     getMyProfit() {
-      return getMyProfit
+      return getMyProfit;
     },
-    showtitle: function () {
+    showtitle: function() {
       let title;
       const { active } = this;
       if (active === "earnings") {
@@ -218,9 +220,9 @@ export default {
       }
       return title;
     },
-    ...mapState(["isLogin"])
+    ...mapState(["isLogin", "token"])
   },
-  mixins: [tojump],
+  mixins: [tojump, hasToken],
   components: {
     notice,
     LoadMore

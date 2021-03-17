@@ -3,22 +3,23 @@
     <div class="header">
       <div class="head_top">
         <div class="part_left">
-          <i class="iconfont user" v-if="!userinfo.avatar">&#xe640;</i>
+          <i class="iconfont user" v-if="!token">&#xe640;</i>
           <img :src="userinfo.avatar" v-else class="user" />
-          <span>{{ userinfo.nickname || "未登录" }}</span>
+          <span>{{ userinfo.nickname || "游客" }}</span>
           <span>&nbsp;|&nbsp;</span>
-          <span>{{ userinfo.grade || "无" }}</span>
+          <span>{{ userinfo.grade || "普通用户" }}</span>
         </div>
-        <div class="part_right">
+        <div class="part_right" v-if="token">
           <router-link to="/myhaibao" tag="i" class="iconfont code"
             >&#xe646;</router-link
           >
           <i class="iconfont setup" @click="$router.push('/setup')">&#xe60b;</i>
         </div>
+        <div class="login-btn" v-else @click="login">登录/注册</div>
       </div>
       <div class="head_body">
         <div class="count" v-for="(ele, i) in headData" :key="i">
-          <div>{{ ele.num }}</div>
+          <div>{{ token ? ele.num : 0 }}</div>
           <div>{{ ele.title }}</div>
         </div>
       </div>
@@ -61,7 +62,7 @@ import {
 } from "api/me";
 import { mapState } from "vuex";
 import partnerLevelObj from "mixins/partner-level-obj";
-import { logout } from "api/login";
+import { login, logout } from "api/login";
 import confirm from "base/confirm";
 import notice from "base/notice";
 import myCharts from "com/common/echarts";
@@ -73,7 +74,7 @@ export default {
       userinfo: {},
       headData: [
         {
-          num: 0,
+          num: 1,
           title: "我的积分",
           name: "score"
         },
@@ -191,18 +192,14 @@ export default {
   },
   mixins: [tojump, partnerLevelObj],
   watch: {
-    "$store.state.token": {
-      handler(val) {
-        if (val) {
-          this.init();
-        }
+    token(val) {
+      if (val) {
+        this.getUserHomeInfo();
       }
     }
   },
-  mounted() {
-    if (this.$store.state.token) {
-      this.init();
-    }
+  created() {
+    this.init();
     /*  const reque = await partnerNum();
      this.Num = reque && reque.member_nums;
      this.server_vip = reque && reque.server_vip;
@@ -210,9 +207,15 @@ export default {
      updateUserInfo(); */
   },
   methods: {
+    //未登录就调原生登录
+    login() {
+      login();
+    },
     init() {
       this.echartsInit();
-      this.getUserHomeInfo();
+      if (this.token) {
+        this.getUserHomeInfo();
+      }
     },
     setHeadData(data) {
       for (let i of this.headData) {
@@ -232,9 +235,6 @@ export default {
           this.$store.commit("setMeInfo", res || null);
           this.userinfo = res || {};
           this.setHeadData(res);
-        })
-        .catch(e => {
-          this.$notice.show(e);
         })
         .finally(() => {
           Loading.close();
@@ -267,7 +267,7 @@ export default {
             },
             title: {
               show: true, //显示策略，默认值true,可选为：true（显示） | false（隐藏）
-              text: "每1积分价值变化",
+              text: "一周内每1积分价值变化",
               left: "center",
               top: "20",
               textStyle: {
@@ -350,7 +350,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(["userInfo", "token"])
   },
   components: {
     confirm,
@@ -406,6 +406,13 @@ export default {
         .code {
           color: #ed3e48;
         }
+      }
+      .login-btn {
+        background: $color-main;
+        color: white;
+        font-size: size(28);
+        padding: size(10) size(20);
+        border-radius: size(24);
       }
     }
     .head_body {
