@@ -281,6 +281,38 @@ export default {
     }
   },
   methods: {
+    getCreateOrder(type) {
+      createOrder({
+        product_id: this.id,
+        paytype: type,
+        total_num: this.total_num,
+        unique: Date.now(),
+        source_type: 'app'
+      }).then(
+        data => {
+          this.isReClick = true;
+          if (data && data.order_id) {
+            // 下单成功，触发支付
+            this.createdOrderId = data.order_id;
+            this.status = 1;
+            getNativePayParams(data.order_id, type);
+            // 成功下单，这里出发刷新订单列表
+            this.$store.commit("refreshOrder");
+          } else {
+            Loading.close();
+            this.paying = false;
+            Toast("下单失败,请稍后再试");
+          }
+        },
+        () => {
+          // 下单失败
+          Loading.close();
+          this.isReClick = true;
+          this.paying = false;
+          Toast("下单失败,请稍后再试");
+        }
+      );
+    },
     reduce() {
       if (this.total_num > 1) {
         this.total_num--;
@@ -418,46 +450,13 @@ export default {
         }
         // 创建订单, 避免并发
         if (this.isReClick) {
-          getCreateOrder(type, miandan_type);
+          this.getCreateOrder(type);
           this.isReClick = false;
         } else {
           Toast("请勿重复提交订单");
           return;
         }
       }
-
-      // 创建订单
-      const getCreateOrder = (type, miandan_type) => {
-        createOrder({
-          product_id: this.id,
-          paytype: type,
-          total_num: this.total_num,
-          unique: this.$route.params.sku_id || "",
-        }).then(
-          data => {
-            this.isReClick = true;
-            if (data && data.order_id) {
-              // 下单成功，触发支付
-              this.createdOrderId = data.order_id;
-              this.status = 1;
-              getNativePayParams(data.order_id, type);
-              // 成功下单，这里出发刷新订单列表
-              this.$store.commit("refreshOrder");
-            } else {
-              Loading.close();
-              this.paying = false;
-              Toast("下单失败,请稍后再试");
-            }
-          },
-          () => {
-            // 下单失败
-            Loading.close();
-            this.isReClick = true;
-            this.paying = false;
-            Toast("下单失败,请稍后再试");
-          }
-        );
-      };
 
       // 获取支付参数
       const getNativePayParams = (id, type) => {
