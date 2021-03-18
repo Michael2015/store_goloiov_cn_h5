@@ -8,12 +8,15 @@
     <goods-banner :imgs="info.slider_image"></goods-banner>
     <div class="intro-wrap">
       <div class="goods-name">{{ info.store_info }}</div>
+      <div class="product_attr"><span>1件({{info.product_attr}} * 12)</span></div>
       <div class="price-num">
-        <span class="price">
-          <span>¥{{ product_price }}</span>
-        </span>
+        <div class="bot">
+          <div class="price">￥{{remainPoint(formatFloat(product_price,info.sku_num||0,'*'),2)}}</div>
+          <div class="cur-price">￥{{ remainPoint(product_price,2) }}/支</div>
+        </div>
+        <div class="tip">{{ info.attach_product }}</div>
       </div>
-      <div class="tip">{{ info.attach_product }}</div>
+
       <div class="free-intro table"
            v-if="info.is_platoon === 1">
         <div class="icon-wrap">
@@ -58,7 +61,7 @@
 import GoodsBanner from "./goods-banner";
 import FreeIntro from "base/free-intro";
 import Notice from "base/notice";
-import { Loading, Toast, getFloat } from "lib";
+import { Loading, Toast, getFloat, formatFloat, remainPoint } from "lib";
 import { getIndexProductDetail, getQrcode } from "api";
 import { mapState, mapMutations } from "vuex";
 import { login } from "api/login";
@@ -92,7 +95,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(["isLogin", "userInfo"])
+    ...mapState(["isLogin", "userInfo"]),
+    remainPoint() {
+      return remainPoint
+    },
+    formatFloat() {
+      return formatFloat
+    }
   },
   created() {
     Loading.open();
@@ -215,42 +224,38 @@ export default {
   background: #fff;
   padding-top: size(20);
   .price-num {
-    line-height: size(66);
-    .price {
-      color: #333333;
-      font-family: PingFangSC-Medium;
-      font-weight: normal;
-      font-stretch: normal;
-      font-size: size(36);
-      > span {
-        font-size: size(48);
-        color: #fe0000;
+    .bot {
+      height: 100%;
+      .price {
+        font-size: size(32);
+        font-weight: 600;
+        color: #fb5555;
+        line-height: size(37);
+        float: left;
+        line-height: size(50);
+        margin-right: size(10);
       }
-      > em {
-        color: #999;
-        font-size: size(30);
-        text-decoration: line-through;
-        font-style: normal;
+      .cur-price {
+        height: size(40);
+        line-height: size(40);
+        background: #ff5061;
+        border-radius: 0 size(20) size(20) size(20);
+        float: left;
+        color: #ffdbd6;
+        padding: 0 size(5);
+        font-size: size(22);
+        margin-top: size(4);
       }
     }
-    .news {
-      display: inline-block;
-      color: #ffffff;
-      background: red;
-      height: size(40);
-      line-height: size(40);
-      padding: 0 size(10);
-      margin-left: size(20);
-      font-size: size(28);
+    .tip {
+      font-size: size(20);
+      font-weight: 400;
+      color: #999999;
+      line-height: size(50);
+      text-align: right;
     }
   }
-  .tip {
-    font-size: size(20);
-    font-weight: 400;
-    color: #999999;
-    line-height: size(40);
-    text-align: right;
-  }
+
   .price-cut {
     font-size: size(26);
   }
@@ -268,6 +273,18 @@ export default {
     @include txt-overflow(2);
     font-weight: 800;
     margin: size(20) 0;
+  }
+  .product_attr {
+    > span {
+      border-radius: size(4);
+      opacity: 0.7;
+      font-size: size(20);
+      color: #fc976f;
+      border: 1px solid #fc976f;
+      padding: size(4);
+      white-space: nowrap;
+    }
+    margin-bottom: size(20);
   }
   .free-intro {
     height: size(78);

@@ -1,5 +1,8 @@
 <template>
-  <div class="clock">{{showTime}}</div>
+  <div class="clock">
+    <div class="title">解酒饮料</div>
+    <div class="time">{{showTime}}</div>
+  </div>
 </template>
 
 <script>
@@ -42,9 +45,16 @@ export default {
 <style lang='scss' scoped>
 @import "~css/def";
 .clock {
-  margin: size(20) size(30);
-  font-size: size(24);
-  text-align: right;
-  color: gray;
+  text-align: center;
+  color: white;
+  background: $color-main;
+  .title {
+    font-size: size(30);
+    line-height: size(42);
+  }
+  .time {
+    font-size: size(20);
+    line-height: size(30);
+  }
 }
 </style>

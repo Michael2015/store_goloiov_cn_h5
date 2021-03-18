@@ -1,30 +1,58 @@
 <template>
-  <load-more v-slot="{list}" :getData="getGoodsVisitor">
-    <div class="visitor clearfix">
-      <div class="item" v-for="(item,index) in list" :key="index">
-        <div class="head-wrap"><img :src="item.avatar" alt=""></div>
-        <div class="name">{{item.nickname}}</div>
-      </div>
-    </div>
-  </load-more>
+
+  <div class="loadmore">
+    <li class="list-title">
+      <span>名称</span>
+      <span>贡献值</span>
+      <span>排名</span>
+    </li>
+    <load-more v-slot="{list}"
+               :getData="getGoodsVisitor">
+
+      <li v-for="(i,j) in list"
+          class="list-item"
+          :key="i.uid">
+        <span>
+          <img v-lazy="i.avatar" />
+          {{ i.nickname }}
+        </span>
+        <span>{{ i.profit }}</span>
+        <span>{{getRank(i,j)}}</span>
+      </li>
+    </load-more>
+  </div>
+
 </template>
 
 <script>
 import LoadMore from 'base/load-more'
-import {PartnerGetGoodsVisitor} from 'api'
+import { getGoodsVisitor } from 'api'
 export default {
   components: {
     LoadMore
   },
   props: ['id'],
-  data () {
+  data() {
     return {
-      list: []
+      list: [],
+      num: -1,
+      current: -1
     }
   },
   computed: {
+    getRank() {
+      return (obj, i) => {
+        if (i === 0 || Number(obj && obj.profit) < Number(this.list[i - 1] && this.list[i - 1].profit)) {
+          this.current = i + 1
+          return i + 1
+        }
+        else {
+          return this.current
+        }
+      }
+    },
     getGoodsVisitor() {
-      return (page, size) => PartnerGetGoodsVisitor(this.id, page, size)
+      return (page, size) => getGoodsVisitor(this.id, page, size)
     }
   },
   created() {
@@ -34,37 +62,45 @@ export default {
 
 <style lang="scss" scoped>
 @import "~css/def";
-$w : 750 - 40*2;
-$l : p(($w - 100*5 - 3)/5/$w);
-.visitor{
-  padding: size(20) size(40);
-  margin-left: -$l;
-}
-.item{
-  float: left;
-  width: p(100/$w);
-  margin-left: $l;
-  padding-bottom: size(24);
-  .head-wrap{
-    position: relative;
-    padding-bottom: 100%;
-    border-radius: 50%;
-    overflow: hidden;
-    background: #ddd;
-    img{
-      position: absolute;
-      left: 0;
-      top: 0;
-      @include fill;
-    }
-  }
-  .name{
-    text-align: center;
-    @include txt-overflow;
-    font-size: size(20);
+.loadmore {
+  padding: 0 size(30);
+  li {
+    list-style: none;
+    height: size(100);
+    line-height: size(100);
+    border-bottom: 1px solid #d7d7d7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 size(10);
+    font-size: size(28);
     color: #666;
-    height: size(42);
-    line-height: size(42);
+    img {
+      height: size(50);
+      width: size(50);
+      vertical-align: middle;
+      border-radius: 50%;
+    }
+    > span {
+      text-align: center;
+      width: 33%;
+    }
+
+    > span:nth-of-type(1) {
+      padding-left: size(10);
+      @include txt-overflow(1);
+      text-align: left;
+    }
+    > span:nth-last-of-type(1) {
+      padding-right: size(10);
+      text-align: right;
+    }
+    .red {
+      color: #ea1f21;
+    }
+    .num {
+      font-weight: bold;
+    }
   }
 }
 </style>

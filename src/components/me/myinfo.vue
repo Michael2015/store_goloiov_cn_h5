@@ -118,7 +118,6 @@ export default {
         //headImg: obj.avatar,
         birthday: obj.birthday
       };
-      this.$store.commit("setMeInfo", null);
       this.editUserInfo(pams);
     },
     getMyUserInfo() {

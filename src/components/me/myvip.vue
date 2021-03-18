@@ -29,6 +29,7 @@
 <script>
 import { getMyFriends } from "api/me.js";
 import hasToken from "mixins/hasToken";
+import { Loading } from 'lib'
 
 export default {
   mixins: [hasToken],
@@ -58,10 +59,13 @@ export default {
   methods: {
     mixinInit() { this.getMyFriends(1); },
     getMyFriends(page, limit) {
+      Loading.open()
       getMyFriends(page, limit).then(res => {
         this.list = res || [];
         this.searchList = res || [];
-      });
+      }).finally(() => {
+        Loading.close()
+      })
     }
   },
 };

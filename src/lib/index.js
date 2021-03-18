@@ -63,14 +63,24 @@ export function getFloat(num, length) {
   }
 }
 
-//格式化日期
+//格式化日期 YYYY-MM-DD hh:mm:ss
 export function formatDate(date, type = 'YYYY-MM-DD') {
   let init = !isNaN(date) ? date : date.replace(/-/g, '/')
   let _date = new Date(init)
   let yy = _date.getFullYear();
   let mm = (_date.getMonth() + 1).toString().padStart(2, '0');
   let dd = (_date.getDate()).toString().padStart(2, '0');
-  return type.replace('YYYY', yy).replace('MM', mm).replace('DD', dd)
+  let hh = _date.getHours().toString().padStart(2, '0');
+  let _mm = _date.getMinutes().toString().padStart(2, '0');
+  let ss = _date.getSeconds().toString().padStart(2, '0');
+
+  let names = ['YYYY', 'MM', 'DD', 'hh', 'mm', 'ss']
+  let values = [yy, mm, dd, hh, _mm, ss]
+
+  for (let i = 0; i < names.length; i++) {
+    type = type.replace(names[i], values[i])
+  }
+  return type
 }
 
 

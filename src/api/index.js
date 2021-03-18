@@ -52,7 +52,7 @@ export function getPartnerInfo(share_id) {
 
 // 获取首页 banner 数据
 export function getBanner() {
-  return req.get('/api/marketing/getbanner').then(clean)
+  return req.get('/api/v1/index/banner').then(clean)
 }
 // 获取首页标签数据
 export function getCategory() {
@@ -175,8 +175,8 @@ export function CustomerGetGoodsDesc(id) {
 }
 
 // 获取商品下面的购买记录
-export function CustomerGetGoodsBuyRecords(id, page = 1, size = SIZE) {
-  return req.get('/api/customer/product/buyRecord', {
+export function GetGoodsBuyRecords(id, page = 1, size = SIZE) {
+  return req.get('/api/v1/product/productOrderList', {
     params: {
       product_id: id,
       page,
@@ -227,8 +227,8 @@ export function PartnerGetGoodsBuyRecords(id, page = 1, size = SIZE) {
 }
 
 // 获取商品下面的访客记录
-export function PartnerGetGoodsVisitor(id, page = 1, size = SIZE) {
-  return req.get('/api/partner/store/visitor', {
+export function getGoodsVisitor(id, page = 1, size = SIZE) {
+  return req.get('/api/v1/product/productProfitRanking', {
     params: {
       product_id: id,
       page,

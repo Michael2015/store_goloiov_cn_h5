@@ -1,9 +1,12 @@
 <template>
   <div class="banner">
     <mt-swipe :show-indicators="true">
-      <mt-swipe-item v-for="(item,index) in banner" :key="index">
-        <router-link class="img" :to="item.app_url">
-          <img :src="item.pic" alt="">
+      <mt-swipe-item v-for="(item,index) in banner"
+                     :key="index">
+        <router-link class="img"
+                     :to="item.app_url||''">
+          <img :src="item.image"
+               alt="">
         </router-link>
       </mt-swipe-item>
     </mt-swipe>
@@ -11,7 +14,7 @@
 </template>
 
 <script>
-import {getBanner} from 'api'
+import { getBanner } from 'api'
 export default {
   props: {
     imgs: {
@@ -36,17 +39,17 @@ export default {
 
 <style lang="scss" scoped>
 @import "~css/def";
-.banner{
-  padding: size(20);
-  height: size(340);
-  .img{
+.banner {
+  height: size(110);
+  background: #fff;
+  margin-top: size(20);
+  .img {
     height: 100%;
     background: #fff;
-    img{
-        border-top-left-radius: size(30);
-        border-bottom-right-radius: size(30);
-        display: block;
-        @include fill;
+    img {
+      border-radius: size(16);
+      display: block;
+      @include fill;
     }
   }
 }

@@ -12,7 +12,6 @@
          :key='index'>
       <slot :name="'list'+index"></slot>
     </div>
-    <slot name='bott'></slot>
   </div>
 </template>
 
@@ -53,6 +52,9 @@ export default {
 
 .tabList {
   position: relative;
+  margin: size(20) 0;
+  background: white;
+  border-radius: size(16);
   .top {
     height: size(80);
     display: flex;

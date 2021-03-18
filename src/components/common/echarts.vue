@@ -1,6 +1,9 @@
 <template>
-  <div :ref="refName"
-       class="echarts"></div>
+  <div>
+    <div :ref="refName"
+         class="echarts"></div>
+    <slot></slot>
+  </div>
 </template>
 
 <script>

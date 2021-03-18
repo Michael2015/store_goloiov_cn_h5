@@ -39,7 +39,7 @@
       <div class="con">
         <div class="name">{{ info.store_info }}</div>
         <div class="price-num">
-          <span class="price">￥{{ comput(unitPrice,2) }}</span>
+          <span class="price">¥{{ remainPoint(unitPrice||0,2) }}</span>
           <div class="setcount">
             <div class="reduce"
                  @click="reduce">-</div>
@@ -66,7 +66,7 @@
         <div class="right">¥{{ discountPrice }}</div>
       </div>
     </div>
-    <div class="col table border-bottom"
+    <div class="col table border-bottom payType"
          @click="active = 0">
       <div class="icon">
         <img src="~img/alipay.png"
@@ -92,6 +92,20 @@
       <div class="check-icon"
            :class="{ active: active === 1 }">
         <span></span>
+      </div>
+    </div>
+    <div class="tip">
+      <div class="title">提货券价格变化说明</div>
+      <div class="content">价格波动算法：以24小时（1440分钟）为时间区间，计算任何时刻商品价格。假定当前的前1440分钟平均价格P1，时间区间T1，T1之前1440分钟平均价格为P2,时间区间T2；那么当前价格P3=D1*0.5*T1销量/T2销量，D2不可为0，初始值1。P3最低值为4，不设上限。</div>
+    </div>
+    <div class="tip">
+      <div class="title">提货券使用说明</div>
+      <div class="content">1.提货券仅限于易解商城使用；
+        2.提货券作为虚拟商品，一旦购买概不退款；
+        3.券码是兑换商品的唯一识别码，请自行保管好；
+        4.本商城在法律允许范围内拥有提货券的最终解释权；
+        5.一张提货券只能兑换一瓶解酒饮料
+
       </div>
     </div>
     <div class="opts table">
@@ -621,6 +635,7 @@ body {
   min-height: 100vh;
   background-color: $color-body-bg;
   position: relative;
+  padding-bottom: size(100);
 }
 .addr-wrap {
   background: #fff;
@@ -779,6 +794,7 @@ body {
   height: size(120);
   padding-left: size(38);
   padding-right: size(42);
+  background: white;
   > div {
     vertical-align: middle;
     display: table-cell;
@@ -819,6 +835,25 @@ body {
         border-radius: 50%;
       }
     }
+  }
+}
+.payType {
+  margin-top: size(20);
+}
+.tip {
+  margin: size(20) size(40);
+  text-align: justify;
+  > .title {
+    font-size: size(26);
+    font-weight: 600;
+    color: #666666;
+    line-height: size(40);
+  }
+  > .content {
+    font-size: size(20);
+    font-weight: 400;
+    color: #b2b6bf;
+    line-height: size(36);
   }
 }
 .opts {

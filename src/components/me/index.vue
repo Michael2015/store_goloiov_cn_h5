@@ -3,45 +3,53 @@
     <div class="header">
       <div class="head_top">
         <div class="part_left">
-          <i class="iconfont user" v-if="!token">&#xe640;</i>
-          <img :src="userinfo.avatar" v-else class="user" />
+          <i class="iconfont user"
+             v-if="!token">&#xe640;</i>
+          <img :src="userinfo.avatar"
+               v-else
+               class="user" />
           <span>{{ userinfo.nickname || "游客" }}</span>
           <span>&nbsp;|&nbsp;</span>
           <span>{{ userinfo.grade || "普通用户" }}</span>
         </div>
-        <div class="part_right" v-if="token">
-          <router-link to="/myhaibao" tag="i" class="iconfont code"
-            >&#xe646;</router-link
-          >
-          <i class="iconfont setup" @click="$router.push('/setup')">&#xe60b;</i>
+        <div class="part_right"
+             v-if="token">
+          <router-link to="/myhaibao"
+                       tag="i"
+                       class="iconfont code">&#xe646;</router-link>
+          <i class="iconfont setup"
+             @click="$router.push('/setup')">&#xe60b;</i>
         </div>
-        <div class="login-btn" v-else @click="login">登录/注册</div>
+        <div class="login-btn"
+             v-else
+             @click="login">登录/注册</div>
       </div>
       <div class="head_body">
-        <div class="count" v-for="(ele, i) in headData" :key="i">
+        <div class="count"
+             v-for="(ele, i) in headData"
+             :key="i">
           <div>{{ token ? ele.num : 0 }}</div>
           <div>{{ ele.title }}</div>
         </div>
       </div>
     </div>
     <div>
-      <my-charts :option="option" key="1" />
+      <my-charts :option="option"
+                 key="1" />
     </div>
     <div class="vertical_tab">
-      <div
-        class="vertical_item"
-        v-for="(item, index) in tabList"
-        :key="index"
-        @click="to(item.path ? item.path : '')"
-      >
+      <div class="vertical_item"
+           v-for="(item, index) in tabList"
+           :key="index"
+           @click="to(item.path ? item.path : '')">
         <div class="left">
-          <i class="iconfont">{{ item.icon }}</i
-          >&nbsp;
+          <i class="iconfont">{{ item.icon }}</i>&nbsp;
           <div class="title">{{ item.tit }}</div>
         </div>
         <div class="right">
           <span>{{ item.afterTit }}</span>
-          <img src="~img/icon/join-right.png" alt />
+          <img src="~img/icon/join-right.png"
+               alt />
         </div>
       </div>
     </div>
@@ -191,13 +199,6 @@ export default {
     };
   },
   mixins: [tojump, partnerLevelObj],
-  watch: {
-    token(val) {
-      if (val) {
-        this.getUserHomeInfo();
-      }
-    }
-  },
   created() {
     this.init();
     /*  const reque = await partnerNum();
@@ -223,16 +224,9 @@ export default {
       }
     },
     getUserHomeInfo() {
-      let meInfo = this.$store.state.meInfo;
-      if (meInfo) {
-        this.userinfo = meInfo;
-        this.setHeadData(meInfo);
-        return;
-      }
       Loading.open();
       getUserHomeInfo()
         .then(res => {
-          this.$store.commit("setMeInfo", res || null);
           this.userinfo = res || {};
           this.setHeadData(res);
         })
@@ -260,7 +254,7 @@ export default {
                 symbolOffset: [0, 8]
               },
               axisLabel: {
-                formatter: function(value, index) {
+                formatter: function (value, index) {
                   return value.toFixed(2);
                 }
               }
@@ -363,7 +357,7 @@ export default {
 <style lang="scss" scoped>
 @import "~css/def";
 .me_warp {
-  padding-bottom: size(100);
+  padding-bottom: size(150);
   .header {
     /*  background-image: linear-gradient(236deg, #ef5456 0%, #e70002 100%); */
     background: #f2f2f2;

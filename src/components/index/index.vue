@@ -1,39 +1,38 @@
 <template>
   <div class="index">
-
     <Clock />
-    <Info />
-    <tab-list @current-change='change'
-              :tab='tab'>
-      <template v-slot:list0>
-        <div>
-          <my-charts :option="option"
-                     refName='list0'
-                     key="list0" />
-        </div>
-      </template>
-      <template v-slot:bott>
-        <div class="suanfa">*价格波动算法：以24小时（1440分钟）为时间区间，计算任何时刻提货券价格。假定当前的前1440分钟平均价格P1，时间区间T1，T1之前1440分钟平均价格为P2,时间区间T2；那么当前价格
-          P3=D1*0.5*T1销量/T2销量，D2不可为0，初始值1。 P3最低值为4，不设上限。</div>
-      </template>
-    </tab-list>
-    <div class="line"></div>
-    <indexGoodsItem></indexGoodsItem>
-    <div class="line_s"></div>
+    <div class="margin">
+      <index-banner></index-banner>
+      <Info />
+      <tab-list @current-change='change'
+                :tab='tab'>
+        <template v-slot:list0>
+          <div>
+            <my-charts :option="option"
+                       refName='list0'
+                       key="list0">
+              <tip></tip>
+            </my-charts>
+          </div>
+        </template>
+      </tab-list>
+      <indexGoodsItem></indexGoodsItem>
+    </div>
   </div>
 </template>
 
 <script>
+import indexBanner from './index-banner'
 import Clock from './index-clock'
 import Info from './index-info'
 import myCharts from "com/common/echarts";
 import tabList from "com/index/tab-list";
 import indexGoodsItem from 'com/index/index-goods-item'
-
+import tip from 'com/index/index-tip'
 
 export default {
   components: {
-    Clock, Info, myCharts, tabList, indexGoodsItem
+    indexBanner, Clock, Info, myCharts, tip, tabList, indexGoodsItem
   },
   data() {
     return {
@@ -70,7 +69,7 @@ export default {
         },
         title: {
           show: true, //显示策略，默认值true,可选为：true（显示） | false（隐藏）
-          text: "主标题",
+          text: "",
           left: "center",
           top: "20",
           textStyle: {
@@ -116,12 +115,10 @@ export default {
   margin: size(44) 0;
 }
 .index {
-  padding-bottom: size(100);
-  .line {
-    @include line(14);
-  }
-  .line_s {
-    @include line(2);
+  background: #f7f7f7;
+  padding-bottom: size(166);
+  .margin {
+    margin: 0 size(20);
   }
   .suanfa {
     font-size: size(20);

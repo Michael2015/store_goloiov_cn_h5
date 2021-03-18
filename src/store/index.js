@@ -31,7 +31,6 @@ export default new Vuex.Store({
     topNum: 0,
     //首页scrollTop高度
     indexScrollTop: 0,
-    meInfo: null,
     routeFlag: false,
     currentData: _S.get('currentData') || null,
     commonFlag: false,
@@ -74,12 +73,6 @@ export default new Vuex.Store({
       state.userInfo = info
       state.isLogin = true
       state.role = info.is_promoter === 1 ? 1 : 0
-    },
-    setMeInfo(state, info) {
-      state.meInfo = info
-    },
-    clearMeInfo(state) {
-      state.meInfo = null
     },
     clearUserInfo(state) {
       // 退出登录用
