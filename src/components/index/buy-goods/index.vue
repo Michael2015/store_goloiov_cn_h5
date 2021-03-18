@@ -173,6 +173,7 @@ export default {
   },
   data() {
     return {
+      currentNum: 0,
       active: 0,
       total_num: 1,
       unitPrice: "",
@@ -281,21 +282,67 @@ export default {
     }
   },
   methods: {
+    //流程：下单生成订单id》获取支付参数》调用原生支付》查询订单
+    // 获取支付参数
+    getNativePayParams(id, type) {
+      pay(id, type)
+        .then(
+          data => {
+            if (data) {
+              console.log('支付参数获取成功', data)
+              // 支付参数获取成功
+              this.status = 2;
+              nativePay(type, data).then(result => {
+                if (result == 0) {
+                  // app 捕获到支付成功
+                  this.status = 3;
+                  this.queryOrder();
+                } else {
+                  this.status = 4;
+                  this.$refs.notice.show("支付失败", () => {
+                    this.paying = false;
+                    if (this.orderId) {
+                      // 从订单详情进来的，也就是发起的重新支付
+                      // 这里直接跳回原来的的页面
+                      this.$router.back();
+                    } else {
+                      // 是从商品详情页来的，发起的是一笔新的订单
+                      // 那就调整订单详情页面
+                      this.$router.replace("/order-detail/" + id);
+                    }
+                  });
+                }
+              });
+            } else {
+              Toast("获取支付参数失败,请稍后再试");
+              this.paying = false;
+            }
+          },
+          () => {
+            Toast("获取支付参数失败,请稍后再试");
+            this.paying = false;
+          }
+        )
+        .finally(() => {
+          Loading.close();
+        });
+    },
     getCreateOrder(type) {
       createOrder({
         product_id: this.id,
         paytype: type,
         total_num: this.total_num,
-        unique: Date.now(),
+        unique: Date.now() + '-' + (++this.currentNum),
         source_type: 'app'
       }).then(
         data => {
           this.isReClick = true;
           if (data && data.order_id) {
+            console.log('下单成功', data)
             // 下单成功，触发支付
             this.createdOrderId = data.order_id;
             this.status = 1;
-            getNativePayParams(data.order_id, type);
+            this.getNativePayParams(data.order_id, type);
             // 成功下单，这里出发刷新订单列表
             this.$store.commit("refreshOrder");
           } else {
@@ -442,7 +489,7 @@ export default {
         // 已经有订单了,或者已经创建过订单了
         this.status = 1;
         // 发起支付
-        getNativePayParams(this.orderId || this.createdOrderId, type);
+        this.getNativePayParams(this.orderId || this.createdOrderId, type);
       } else {
         let miandan_type;
         if (this.info.is_platoon == 1 && this.info.is_self_buy_platoon == 1) {
@@ -458,54 +505,7 @@ export default {
         }
       }
 
-      // 获取支付参数
-      const getNativePayParams = (id, type) => {
-        pay(id, type)
-          .then(
-            data => {
-              if (data) {
-                // 发起积分支付
-                if (type == "yue") {
-                  this.queryOrder("y");
-                  return;
-                }
-                // 支付参数获取成功
-                this.status = 2;
-                nativePay(type, data).then(result => {
-                  if (result == 0) {
-                    // app 捕获到支付成功
-                    this.status = 3;
-                    this.queryOrder();
-                  } else {
-                    this.status = 4;
-                    this.$refs.notice.show("支付失败", () => {
-                      this.paying = false;
-                      if (this.orderId) {
-                        // 从订单详情进来的，也就是发起的重新支付
-                        // 这里直接跳回原来的的页面
-                        this.$router.back();
-                      } else {
-                        // 是从商品详情页来的，发起的是一笔新的订单
-                        // 那就调整订单详情页面
-                        this.$router.replace("/order-detail/" + id);
-                      }
-                    });
-                  }
-                });
-              } else {
-                Toast("获取支付参数失败,请稍后再试");
-                this.paying = false;
-              }
-            },
-            () => {
-              Toast("获取支付参数失败,请稍后再试");
-              this.paying = false;
-            }
-          )
-          .finally(() => {
-            Loading.close();
-          });
-      };
+
     },
     queryOrder(t) {
       const id = this.orderId || this.createdOrderId;

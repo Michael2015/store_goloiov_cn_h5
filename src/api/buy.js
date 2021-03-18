@@ -27,7 +27,7 @@ export function createOrder(params) {
 
 // 支付，获取支付参数触发微信或支付宝支付
 export function pay(id, type) {
-  return req.get('/api/customer/pay/pay', {
+  return req.get('/api/v1/pay/pay', {
     params: {
       order_id: id,
       pay_type: type
